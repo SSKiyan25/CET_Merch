@@ -22,7 +22,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: "/admin",
-    name: "adminDasboard",
+    name: "adminDashboard",
     component: AdminDashboard,
   },
 ];

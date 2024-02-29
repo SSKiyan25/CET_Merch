@@ -55,7 +55,7 @@
           </div>
 
           <!-- Form -->
-          <form @submit.prevent="handleLogin">
+          <form action="" @submit.prevent="handleLogin">
             <div class="grid gap-y-4">
               <!-- Form Group -->
               <div>
@@ -178,32 +178,18 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { onMounted } from "vue";
-import { initFlowbite } from "flowbite";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../models/auth.ts";
-
-onMounted(() => {
-  initFlowbite();
-});
+import {
+  email,
+  password,
+  handleLogin as handleLoginController,
+} from "../controllers/login_controller.ts";
 
 const router = useRouter();
-const email = ref("");
-const password = ref("");
 
 const handleLogin = () => {
-  signInWithEmailAndPassword(auth, email.value, password.value)
-    .then((credential) => {
-      const user = credential.user;
-      console.log(user);
-      router.push({ name: "Dashboard" });
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
+  handleLoginController(router);
 };
 </script>
