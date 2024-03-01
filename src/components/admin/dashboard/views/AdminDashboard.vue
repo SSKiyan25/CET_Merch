@@ -100,17 +100,54 @@
       <div class="flex flex-row">
         <h1 class="font-bold text-xl tracking-wide">Featured Images</h1>
         <div class="p-1">
-          <Popover>
+          <!-- Upload Featured Image -->
+          <Popover v-model="isUploadPopoverOpen">
             <PopoverTrigger>
-              <span class="material-symbols-outlined">
-                add_box
-              </span></PopoverTrigger
-            >
+              <button title="Add a Featured Image">
+                <span class="material-symbols-outlined"> add_box </span>
+              </button>
+            </PopoverTrigger>
             <PopoverContent>
               <div class="border-b-2 border-accent px-1 py-1">
                 <h2>Upload Image</h2>
               </div>
-              <div></div>
+              <form @submit.prevent="uploadFeaturedImage">
+                <div class="flex flex-col items-center py-2 space-y-4">
+                  <Input
+                    id="picture"
+                    type="file"
+                    accept="image/*"
+                    class="border-none items-center h-15"
+                    @change="onFileChange"
+                  />
+                  <!--Popup for success-->
+                  <AlertDialog v-model="isSuccessPopoverOpen">
+                    <AlertDialogTrigger>
+                      <button
+                        type="submit"
+                        @click=""
+                        class="border-2 bg-secondary border-horder rounded-lg p-2 text-sm text-secondary-foreground"
+                      >
+                        Add Featured Image
+                      </button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Image Uploaded Successfully
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Your image has been uploaded successfully. You can now
+                          view it in the featured images section.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogAction>Continue</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+              </form>
             </PopoverContent>
           </Popover>
         </div>
@@ -128,7 +165,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { initFlowbite } from "flowbite";
 import NavBar from "../views/AdminNavBar.vue";
 import {
@@ -136,8 +173,26 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Input } from "@/components/ui/input";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { setup as setupController } from "../controllers/admin_dashboard_controller.ts";
+
+const { onFileChange, uploadFeaturedImage } = setupController();
 
 onMounted(() => {
   initFlowbite();
 });
+
+let isUploadPopoverOpen = ref(false);
+let isSuccessPopoverOpen = ref(false);
 </script>
