@@ -26,7 +26,7 @@
             </svg>
           </button>
           <router-link
-            to="/admin"
+            to="/"
             class="flex items-center md:space-x-3 space-x-1 rtl:space-x-reverse"
           >
             <img src="/logo-3.png" class="h-8" alt="Logo" />
@@ -72,26 +72,27 @@
             <li>
               <a
                 href="#"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                class="block px-4 py-2 text-sm text-muted-foreground hover:bg-primary/20"
                 role="menuitem"
                 >Dashboard</a
               >
             </li>
             <li>
               <a
-                href="#"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                class="block px-4 py-2 text-sm text-muted-foreground hover:bg-primary/20 pointer-events-auto cursor-pointer"
                 role="menuitem"
-                >Settings</a
               >
+                Settings
+              </a>
             </li>
             <li>
               <a
-                href="#"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                @click.prevent="handleSignout"
+                class="block px-4 py-2 text-sm text-muted-foreground hover:bg-primary/20 pointer-events-auto cursor-pointer"
                 role="menuitem"
-                >Sign out</a
               >
+                Sign out
+              </a>
             </li>
           </ul>
         </div>
@@ -107,12 +108,16 @@ import { auth } from "@/firebase/init.ts";
 import type { User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase/init.ts";
+import { useRouter } from "vue-router";
+import { signOut } from "firebase/auth";
+
+const router = useRouter();
 
 onMounted(() => {
   initFlowbite();
 });
 
-const user = ref<User | null>(null); // explicitly declare the type of user ref
+const user = ref<User | null>(null);
 const userEmail = ref("");
 const username = ref("");
 
@@ -122,12 +127,12 @@ auth.onAuthStateChanged(async (currentUser) => {
     userEmail.value = currentUser.email || "";
 
     // Fetch the user's document from Firestore
-    const userDoc = doc(db, "users", currentUser.uid); // replace "users" with your collection name
+    const userDoc = doc(db, "users", currentUser.uid);
     const userSnap = await getDoc(userDoc);
 
     if (userSnap.exists()) {
       // The document exists, update the user data
-      username.value = userSnap.data().username || ""; // replace "username" with your field name
+      username.value = userSnap.data().username || "";
     } else {
       console.error("No such document!");
     }
@@ -137,4 +142,15 @@ auth.onAuthStateChanged(async (currentUser) => {
     username.value = "";
   }
 });
+
+const handleSignout = () => {
+  signOut(auth)
+    .then(() => {
+      console.log("User signed out");
+      router.push({ name: "login" });
+    })
+    .catch((error) => {
+      console.log("Error signing out: ", error);
+    });
+};
 </script>

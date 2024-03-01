@@ -9,7 +9,7 @@ import { RouterView } from "vue-router";
   <main>
     <RouterView />
   </main>
-  <Footer />
+  <Footer :class="{ 'is-hidden': $route.name === 'adminDashboard' }" />
 </template>
 
 <style scoped>
@@ -24,5 +24,8 @@ import { RouterView } from "vue-router";
 }
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
+}
+.is-hidden {
+  display: none;
 }
 </style>
