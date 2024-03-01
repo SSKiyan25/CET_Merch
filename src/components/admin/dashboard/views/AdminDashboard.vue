@@ -142,7 +142,9 @@
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogAction>Continue</AlertDialogAction>
+                        <AlertDialogAction @click="handleContinueClick"
+                          >Continue</AlertDialogAction
+                        >
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
@@ -152,12 +154,36 @@
           </Popover>
         </div>
       </div>
-      <div class="flex flex-col md:max-w-2xl md:mx-auto">
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          <div class="space-y-2">
-            <img />
-            test
-          </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 p-5">
+        <div
+          v-for="url in imageUrls"
+          :key="url"
+          class="relative flex items-end"
+        >
+          <img class="h-auto max-w-full rounded-lg" :src="url" alt="" />
+          <button
+            class="absolute text-end p-3 text-destructive hover:text-destructive-foreground hover:bg-destructive hover:opacity-90 w-full"
+            title="Delete Image"
+            @click="() => deleteFeaturedImage(url)"
+          >
+            <span class="material-symbols-outlined"> delete </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="p-4 ml-2 sm:ml-64">
+    <div class="flex flex-col p-4 border-2 rounded-lg py-14">
+      <div class="flex flex-row">
+        <h1 class="font-bold text-xl tracking-wide">Products Images</h1>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 p-5">
+        <div class="">
+          <img
+            class="h-auto max-w-full rounded-lg"
+            src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg"
+            alt=""
+          />
         </div>
       </div>
     </div>
@@ -165,8 +191,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { initFlowbite } from "flowbite";
+import { ref } from "vue";
 import NavBar from "../views/AdminNavBar.vue";
 import {
   Popover,
@@ -185,14 +210,19 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { setup as setupController } from "../controllers/admin_dashboard_controller.ts";
+import { setup as setupControllerFeatured } from "../controllers/adminUploadFeatured.ts";
+import { useRouter } from "vue-router";
 
-const { onFileChange, uploadFeaturedImage } = setupController();
+const { onFileChange, uploadFeaturedImage, imageUrls, deleteFeaturedImage } =
+  setupControllerFeatured();
 
-onMounted(() => {
-  initFlowbite();
-});
+const router = useRouter();
 
 let isUploadPopoverOpen = ref(false);
 let isSuccessPopoverOpen = ref(false);
+
+const handleContinueClick = () => {
+  isSuccessPopoverOpen.value = false;
+  router.go(0);
+};
 </script>
