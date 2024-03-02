@@ -115,7 +115,7 @@
                           <span
                             class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                           >
-                            Image
+                            Cover Photo
                           </span>
                         </div>
                       </th>
@@ -125,7 +125,17 @@
                           <span
                             class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                           >
-                            Product Name
+                            Photo/s
+                          </span>
+                        </div>
+                      </th>
+
+                      <th scope="col" class="px-6 py-3 text-start">
+                        <div class="flex items-center gap-x-2">
+                          <span
+                            class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
+                          >
+                            Name
                           </span>
                         </div>
                       </th>
@@ -145,7 +155,7 @@
                           <span
                             class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                           >
-                            Stocks
+                            Description
                           </span>
                         </div>
                       </th>
@@ -155,17 +165,16 @@
                           <span
                             class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                           >
-                            Created
+                            Price
                           </span>
                         </div>
                       </th>
-
                       <th scope="col" class="px-6 py-3 text-start">
                         <div class="flex items-center gap-x-2">
                           <span
                             class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                           >
-                            Actions
+                            Sizes
                           </span>
                         </div>
                       </th>
@@ -183,19 +192,82 @@
                                 src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
                                 alt="Image Description"
                               />
-                              <span
-                                class="text-sm px-2 text-gray-600 dark:text-gray-400"
-                                >View</span
+                              <button
+                                data-popover-target="popover-right"
+                                data-popover-placement="right"
+                                type="button"
+                                class="font-sm text-primary/90 hover:underline pl-2 text-sm text-center"
                               >
+                                View Image
+                              </button>
+                              <div
+                                data-popover
+                                id="popover-right"
+                                role="tooltip"
+                                class="absolute z-10 invicible bg-accent border border-primary/80 invisible inline-block w-64 text-sm transition-opacity duration-300 borde rounded-lg shadow-sm opacity-0"
+                              >
+                                <div
+                                  class="px-3 py-2 border-b-1 text-center font-bold"
+                                >
+                                  Image Title
+                                </div>
+                                <div class="px-3 py-2">
+                                  <img
+                                    class="inline-block"
+                                    src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
+                                    alt="Image Description"
+                                  />
+                                </div>
+                                <div data-popper-arrow></div>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </td>
                       <td class="size-px whitespace-nowrap">
                         <div class="px-6 py-3">
-                          <span class="text-sm text-gray-600 dark:text-gray-400"
-                            >Streamlab</span
+                          <button
+                            data-popover-target="popover-bottom"
+                            data-popover-placement="bottom"
+                            type="button"
+                            class="font-sm text-secondary-foreground hover:underline pl-2 text-sm text-center"
                           >
+                            View Photos
+                          </button>
+                          <div
+                            data-popover
+                            id="popover-bottom"
+                            role="tooltip"
+                            class="absolute z-50 invicible bg-accent border border-primary/80 invisible inline-block w-64 text-sm transition-opacity duration-300 borde rounded-lg shadow-sm opacity-0"
+                          >
+                            <div class="px-3 py-2 text-center rounded-t-lg">
+                              <h3
+                                class="font-semibold text-gray-900 dark:text-white"
+                              >
+                                Photos
+                              </h3>
+                            </div>
+                            <div class="px-3 py-2">
+                              <img
+                                class="inline-block"
+                                src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
+                                alt="Image Description"
+                              />
+                            </div>
+                            <div data-popper-arrow></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="size-px whitespace-nowrap">
+                        <div class="px-6 py-3">
+                          <div class="flex items-center gap-x-2">
+                            <div class="grow">
+                              <span
+                                class="text-sm text-gray-600 dark:text-gray-400"
+                                >CS New Merch</span
+                              >
+                            </div>
+                          </div>
                         </div>
                       </td>
                       <td class="size-px whitespace-nowrap">
@@ -212,24 +284,104 @@
                       </td>
                       <td class="size-px whitespace-nowrap">
                         <div class="px-6 py-3">
-                          <button>View</button>
+                          <button
+                            data-popover-target="popover-top"
+                            data-popover-placement="top"
+                            type="button"
+                            class="font-sm text-secondary-foreground hover:underline pl-2 text-sm text-center"
+                          >
+                            Read Description
+                          </button>
+                          <div
+                            data-popover
+                            id="popover-top"
+                            role="tooltip"
+                            class="absolute z-50 invicible bg-accent border border-primary/80 invisible inline-block w-80 text-xs transition-opacity duration-300 borde rounded-lg shadow-sm opacity-0"
+                          >
+                            <div class="px-3 py-2 text-center rounded-t-lg">
+                              <h3
+                                class="font-semibold text-gray-900 dark:text-white"
+                              >
+                                Description
+                              </h3>
+                            </div>
+                            <div class="px-3 py-2">
+                              <p
+                                class="text-xs w-full max-w-full whitespace-normal"
+                              >
+                                This is a new product from CS Shoppee. It is a
+                                T-Shirt with a unique design and a comfortable
+                                fit.
+                              </p>
+                            </div>
+                            <div data-popper-arrow></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="size-px whitespace-nowrap">
+                        <div class="px-6 py-3">
+                          <div class="flex items-center gap-x-2">
+                            <div class="grow">
+                              <span
+                                class="text-sm text-gray-600 dark:text-gray-400"
+                                >P500</span
+                              >
+                            </div>
+                          </div>
                         </div>
                       </td>
                       <td class="size-px whitespace-nowrap">
                         <div class="px-6 py-3">
                           <span class="text-sm text-gray-600 dark:text-gray-400"
-                            >28 Dec, 12:12</span
+                            >XS,S,M,L,XL...</span
                           >
                         </div>
                       </td>
-                      <td class="size-px whitespace-nowrap text-start px-5">
-                        <div class="px-6 py-1.5">
+                      <td class="size-px whitespace-nowrap text-center px-5">
+                        <div class="px-6 py-1">
                           <div
                             class="hs-dropdown relative inline-block [--placement:bottom-right]"
                           >
-                            <button class="">
-                              <span class="">...</span>
-                            </button>
+                            <div
+                              class="flex flex-row space-y-2 space-x-2 text-sm"
+                            >
+                              <div class="rounded-sm cursor-pointer mt-2">
+                                <button
+                                  class="bg-emerald-600 text-white p-2 rounded-sm"
+                                  title="Edit Product"
+                                >
+                                  <span
+                                    class="material-symbols-outlined text-sm"
+                                  >
+                                    edit
+                                  </span>
+                                </button>
+                              </div>
+                              <div class="rounded-sm cursor-pointer">
+                                <button
+                                  class="bg-blue-600 text-white p-2 rounded-sm"
+                                  title="View Product"
+                                >
+                                  <span
+                                    class="material-symbols-outlined text-sm"
+                                  >
+                                    visibility
+                                  </span>
+                                </button>
+                              </div>
+                              <div class="rounded-sm cursor-pointer">
+                                <button
+                                  class="bg-red-600 text-white p-2 rounded-sm"
+                                  title="Delete Product"
+                                >
+                                  <span
+                                    class="material-symbols-outlined text-sm"
+                                  >
+                                    delete_forever
+                                  </span>
+                                </button>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </td>
@@ -257,7 +409,7 @@
                     <div class="inline-flex gap-x-2">
                       <button
                         type="button"
-                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-primary/20 bg-muted text-secondary-foreground shadow-sm hover:bg-primary/50 hover:border-muted disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
                       >
                         <svg
                           class="flex-shrink-0 size-4"
@@ -278,7 +430,7 @@
 
                       <button
                         type="button"
-                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-primary/20 bg-muted text-secondary-foreground shadow-sm hover:bg-primary/50 hover:border-muted disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
                       >
                         Next
                         <svg
@@ -333,6 +485,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { onMounted } from "vue";
+import { initFlowbite } from "flowbite";
+
+onMounted(() => {
+  initFlowbite();
+});
 
 const frameworks = [
   { value: "T-Shirt", label: "T-Shirt" },
