@@ -3,7 +3,18 @@ import Dashboard from "../components/feature/dashboard/views/DashboardView.vue";
 import Login from "../components/feature/authentication/views/LoginView.vue";
 import Signup from "../components/feature/authentication/views/SignupView.vue";
 import AdminDashboard from "../components/admin/dashboard/views/AdminDashboard.vue";
+import AdminProducts from "../components/admin/dashboard/views/AdminProducts.vue";
 import { auth } from "../firebase/init.ts";
+
+function requireAdminAuth(to: any, from: any, next: any) {
+  auth.onAuthStateChanged((user) => {
+    if (user && user.email === "admin@gmail.com") {
+      next();
+    } else {
+      next({ name: "dashboard" });
+    }
+  });
+}
 
 const routes: RouteRecordRaw[] = [
   {
@@ -25,16 +36,13 @@ const routes: RouteRecordRaw[] = [
     path: "/admin",
     name: "adminDashboard",
     component: AdminDashboard,
-    beforeEnter: (_, __, next: any) => {
-      auth.onAuthStateChanged((user) => {
-        if (user && user.email === "admin@gmail.com") {
-          // replace with your admin's email
-          next();
-        } else {
-          next({ name: "dashboard" });
-        }
-      });
-    },
+    beforeEnter: requireAdminAuth, // use the guard function here
+    meta: { requiresAdmin: true }, // add metadata indicating this route requires admin access
+  },
+  {
+    path: "/admin/products",
+    name: "adminProducts",
+    component: AdminProducts,
   },
 ];
 

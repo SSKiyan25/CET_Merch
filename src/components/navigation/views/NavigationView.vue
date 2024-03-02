@@ -1,6 +1,6 @@
 <template>
   <nav class="min-w-screen bg-secondary border-accent md:px-10 border-b-2 z-50">
-    <div class="flex items-center justify-between p-4">
+    <div class="flex items-center justify-between p-3">
       <div class="flex">
         <router-link
           to="/"
@@ -16,13 +16,13 @@
         <div class="flex-auto justify-end md:space-x-1">
           <router-link
             to="/login"
-            class="bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5"
+            class="font-medium rounded-lg md:text-sm text-xs px-4 py-2 md:px-5 md:py-2.5"
           >
             Login
           </router-link>
           <router-link
             to="/signup"
-            class="font-medium rounded-lg md:text-sm text-xs px-4 py-2 md:px-5 md:py-2.5"
+            class="bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5"
           >
             Sign up
           </router-link>
