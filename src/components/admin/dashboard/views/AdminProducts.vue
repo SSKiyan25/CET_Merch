@@ -22,10 +22,267 @@
         <div class="flex flex-row">
           <h1 class="font-bold text-xl tracking-wide mt-1">Products</h1>
         </div>
-        <div class="flex flex-row mb-2 space-x-2">
-          <button class="bg-green-500 px-3 py-2 rounded-lg">
+        <div class="flex flex-row">
+          <button
+            data-modal-target="crud-modal"
+            data-modal-toggle="crud-modal"
+            class="bg-green-500 px-3 py-2 rounded-lg mr-2 mb-2"
+            type="button"
+          >
             + Add a Product
           </button>
+          <!-- Main modal -->
+          <div
+            id="crud-modal"
+            tabindex="-1"
+            aria-hidden="true"
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 max-h-full bg-muted/80"
+          >
+            <div class="relative p-4 w-full max-w-lg max-h-full">
+              <!-- Modal content -->
+              <div
+                class="relative bg-secondary rounded-lg shadow border border-primary/40"
+              >
+                <!-- Modal header -->
+                <div
+                  class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-primary/40"
+                >
+                  <h3 class="text-lg font-semibold text-secondary-foreground">
+                    Add New Product
+                  </h3>
+                  <button
+                    type="button"
+                    class="text-primary/80 bg-transparent hover:bg-primary/50 hover:text-secondary rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+                    data-modal-toggle="crud-modal"
+                  >
+                    <svg
+                      class="w-3 h-3"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 14 14"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                      />
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                  </button>
+                </div>
+                <!-- Modal body -->
+                <form class="p-4 md:p-5">
+                  <div class="grid gap-4 mb-4 grid-cols-2">
+                    <div class="col-span-2">
+                      <label
+                        for="name"
+                        class="block mb-2 text-sm font-medium text-secondary-foreground"
+                        >Name</label
+                      >
+                      <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        class="bg-secondary border border-primary/40 text-secondary-foreground text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder-gray-400"
+                        placeholder="Type product name"
+                        required
+                      />
+                    </div>
+                    <div class="col-span-2 sm:col-span-1">
+                      <label
+                        for="price"
+                        class="block mb-2 text-sm font-medium text-secondary-foreground"
+                        >Price</label
+                      >
+                      <input
+                        type="number"
+                        name="price"
+                        id="price"
+                        class="bg-secondary border border-primary/40 text-secondary-foreground text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder-gray-400"
+                        placeholder="P000.00"
+                        required
+                      />
+                    </div>
+                    <div class="col-span-2 sm:col-span-1">
+                      <label
+                        for="category"
+                        class="block mb-2 text-sm font-medium text-secondary-foreground"
+                        >Category</label
+                      >
+                      <select
+                        id="category"
+                        class="bg-secondary border border-primary/40 text-secondary-foreground text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder-gray-400"
+                      >
+                        <option value="" disabled>Select category</option>
+                        <option value="T-Shirt">T-Shirt</option>
+                        <option value="Polo-Shirt">Polo-Shirt</option>
+                        <option value="Lace">Lace</option>
+                        <option value="Hoodie">Hoodie</option>
+                        <option value="Stickers">Stickers</option>
+                      </select>
+                    </div>
+                    <div class="w-full">
+                      <label
+                        for="sizes"
+                        class="block mb-2 text-sm font-medium text-secondary-foreground"
+                      >
+                        Sizes</label
+                      >
+
+                      <div class="flex flex-row size-max w-full">
+                        <div class="flex flex-auto items-center me-2">
+                          <input
+                            id="inline-checkbox"
+                            type="checkbox"
+                            value=""
+                            class="w-4 h-4 text-primary bg-secondary border-primary/50 rounded focus:ring-primary/80 focus:ring-2"
+                          />
+                          <label
+                            for="inline-checkbox"
+                            class="ms-1 text-sm font-medium text-gray-900 dark:text-gray-300"
+                            >XS</label
+                          >
+                        </div>
+                        <div class="flex flex-auto items-center me-2">
+                          <input
+                            id="inline-2-checkbox"
+                            type="checkbox"
+                            value=""
+                            class="w-4 h-4 text-primary bg-secondary border-primary/50 rounded focus:ring-primary/80 focus:ring-2"
+                          />
+                          <label
+                            for="inline-2-checkbox"
+                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                            >S</label
+                          >
+                        </div>
+                        <div class="flex flex-auto items-center me-2">
+                          <input
+                            checked
+                            id="inline-checked-checkbox"
+                            type="checkbox"
+                            value=""
+                            class="w-4 h-4 text-primary bg-secondary border-primary/50 rounded focus:ring-primary/80 focus:ring-2"
+                          />
+                          <label
+                            for="inline-checked-checkbox"
+                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                            >L</label
+                          >
+                        </div>
+                        <div class="flex flex-auto items-center me-2">
+                          <input
+                            checked
+                            id="inline-checked-checkbox"
+                            type="checkbox"
+                            value=""
+                            class="w-4 h-4 text-primary bg-secondary border-primary/50 rounded focus:ring-primary/80 focus:ring-2"
+                          />
+                          <label
+                            for="inline-checked-checkbox"
+                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                            >XL</label
+                          >
+                        </div>
+                        <div class="flex flex-auto items-center me-2">
+                          <input
+                            checked
+                            id="inline-checked-checkbox"
+                            type="checkbox"
+                            value=""
+                            class="w-4 h-4 text-primary bg-secondary border-primary/50 rounded focus:ring-primary/80 focus:ring-2"
+                          />
+                          <label
+                            for="inline-checked-checkbox"
+                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                          >
+                            2XL
+                          </label>
+                        </div>
+
+                        <div class="flex flex-auto items-center me-2">
+                          <input
+                            checked
+                            id="inline-checked-checkbox"
+                            type="checkbox"
+                            value=""
+                            class="w-4 h-4 text-primary bg-secondary border-primary/50 rounded focus:ring-primary/80 focus:ring-2"
+                          />
+                          <label
+                            for="inline-checked-checkbox"
+                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                          >
+                            3XL
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-span-2">
+                      <label
+                        for="description"
+                        class="block mb-2 text-sm font-medium text-secondary-foreground"
+                        >Product Description</label
+                      >
+                      <textarea
+                        id="description"
+                        rows="4"
+                        class="block p-2.5 w-full text-sm text-secondary-foreground bg-secondary rounded-lg border border-primary/40 focus:ring-primary/80 focus:border-primary"
+                        placeholder="Write product description here"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="pb-2">
+                    <label
+                      for="cover_photo"
+                      class="block mb-2 text-sm font-medium text-secondary-foreground"
+                      >Upload Cover Photo</label
+                    >
+                    <input
+                      class="block w-3/4 h-9 text-xs text-secondary-foreground border border-primary rounded-lg cursor-pointer bg-secondary focus:outline-none placeholder-secondary-foreground"
+                      accept="image/*"
+                      id="cover_photo"
+                      type="file"
+                    />
+                  </div>
+                  <div class="pb-3">
+                    <label
+                      class="block mb-2 text-sm font-medium text-secondary-foreground"
+                      for="multiple_files"
+                      >Upload Product Photos</label
+                    >
+                    <input
+                      class="block w-3/4 h-9 text-xs text-secondary-foreground border border-primary rounded-lg cursor-pointer bg-secondary focus:outline-none placeholder-secondary-foreground"
+                      accept="image/*"
+                      id="multiple_files"
+                      type="file"
+                      multiple
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    class="text-primary-foreground inline-flex items-center bg-primary/80 hover:bg-primary/90 focus:ring-4 focus:outline-none focus:ring-primary font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    <svg
+                      class="me-1 -ms-1 w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    Add new product
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
           <form>
             <div class="flex relative w-full max-w-sm items-center">
               <Input
@@ -187,11 +444,6 @@
                         <div class="px-6 py-3">
                           <div class="flex items-center gap-x-2">
                             <div class="grow">
-                              <img
-                                class="inline-block size-6 rounded-full"
-                                src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-                                alt="Image Description"
-                              />
                               <button
                                 data-popover-target="popover-right"
                                 data-popover-placement="right"
@@ -225,12 +477,12 @@
                         </div>
                       </td>
                       <td class="size-px whitespace-nowrap">
-                        <div class="px-6 py-3">
+                        <div class="px-3 py-3">
                           <button
                             data-popover-target="popover-bottom"
                             data-popover-placement="bottom"
                             type="button"
-                            class="font-sm text-secondary-foreground hover:underline pl-2 text-sm text-center"
+                            class="font-sm text-primary/70 hover:underline pl-2 text-xs text-center"
                           >
                             View Photos
                           </button>
@@ -258,37 +510,42 @@
                           </div>
                         </div>
                       </td>
-                      <td class="size-px whitespace-nowrap">
-                        <div class="px-6 py-3">
+                      <td class="size-2/12 whitespace-nowrap">
+                        <div class="px-4 py-3">
                           <div class="flex items-center gap-x-2">
                             <div class="grow">
-                              <span
-                                class="text-sm text-gray-600 dark:text-gray-400"
-                                >CS New Merch</span
-                              >
+                              <p class="w-full whitespace-normal">
+                                <span
+                                  class="text-sm text-gray-600 dark:text-gray-400"
+                                >
+                                  CS New Merch</span
+                                >
+                              </p>
                             </div>
                           </div>
                         </div>
                       </td>
                       <td class="size-px whitespace-nowrap">
-                        <div class="px-6 py-3">
+                        <div class="px-8 py-3">
                           <div class="flex items-center gap-x-2">
                             <div class="grow">
-                              <span
-                                class="text-sm text-gray-600 dark:text-gray-400"
-                                >T-Shirt</span
-                              >
+                              <p class="">
+                                <span
+                                  class="text-sm text-gray-600 dark:text-gray-400"
+                                  >T-Shirt</span
+                                >
+                              </p>
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td class="size-px whitespace-nowrap">
-                        <div class="px-6 py-3">
+                      <td class="size-px whitespace-nowrap text-start">
+                        <div class="px-1 py-3">
                           <button
                             data-popover-target="popover-top"
                             data-popover-placement="top"
                             type="button"
-                            class="font-sm text-secondary-foreground hover:underline pl-2 text-sm text-center"
+                            class="font-sm text-primary/70 hover:underline pl-2 text-sm text-center"
                           >
                             Read Description
                           </button>
@@ -332,9 +589,12 @@
                       </td>
                       <td class="size-px whitespace-nowrap">
                         <div class="px-6 py-3">
-                          <span class="text-sm text-gray-600 dark:text-gray-400"
-                            >XS,S,M,L,XL...</span
-                          >
+                          <p class="w-full whitespace-normal">
+                            <span
+                              class="text-sm text-gray-600 dark:text-gray-400"
+                              >XS,S,M,L,XL...</span
+                            >
+                          </p>
                         </div>
                       </td>
                       <td class="size-px whitespace-nowrap text-center px-5">
@@ -360,7 +620,7 @@
                               <div class="rounded-sm cursor-pointer">
                                 <button
                                   class="bg-blue-600 text-white p-2 rounded-sm"
-                                  title="View Product"
+                                  title="View Full Details"
                                 >
                                   <span
                                     class="material-symbols-outlined text-sm"

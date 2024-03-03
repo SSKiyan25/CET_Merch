@@ -10,6 +10,9 @@
           <router-link
             to="/admin"
             class="flex items-center p-2 text-secondary-foreground rounded-lg hover:bg-primary/10 group"
+            :class="{
+              'text-primary-foreground bg-primary/80': $route.path === '/admin',
+            }"
           >
             <svg
               class="w-5 h-5 text-secondary-foreground transition duration-75 group-hover:text-primary"
@@ -33,6 +36,7 @@
           <a
             href="#"
             class="flex items-center p-2 text-secondary-foreground rounded-lg hover:bg-primary/10 group"
+            active-class="active-link"
           >
             <svg
               class="flex-shrink-0 w-5 h-5 text-secondary-foreground transition duration-75 group-hover:text-primary"
@@ -56,6 +60,11 @@
           <router-link
             to="/admin/products"
             class="flex items-center p-2 text-secondary-foreground rounded-lg hover:bg-primary/10 group"
+            active-class="active-link"
+            :class="{
+              'text-primary-foreground bg-primary/80':
+                $route.path === '/admin/products',
+            }"
           >
             <svg
               class="flex-shrink-0 w-5 h-5 text-secondary-foreground transition duration-75 group-hover:text-primary"
