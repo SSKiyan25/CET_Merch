@@ -14,7 +14,8 @@ import { RouterView } from "vue-router";
       'is-hidden':
         $route.name === 'adminDashboard' ||
         $route.name === 'adminProducts' ||
-        $route.name === 'adminAddProduct',
+        $route.name === 'adminAddProduct' ||
+        $route.name === 'adminEditProduct',
     }"
   />
 </template>

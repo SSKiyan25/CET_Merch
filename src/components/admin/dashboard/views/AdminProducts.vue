@@ -119,21 +119,13 @@
                   <thead class="bg-secondary-50">
                     <tr>
                       <th scope="col" class="px-6 py-3 text-start">
-                        <div class="flex items-center gap-x-2">
+                        <div
+                          class="flex items-center gap-x-2 whitespace-nowrap"
+                        >
                           <span
                             class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                           >
                             Cover Photo
-                          </span>
-                        </div>
-                      </th>
-
-                      <th scope="col" class="px-6 py-3 text-start">
-                        <div class="flex items-center gap-x-2">
-                          <span
-                            class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
-                          >
-                            Photo/s
                           </span>
                         </div>
                       </th>
@@ -163,16 +155,6 @@
                           <span
                             class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                           >
-                            Description
-                          </span>
-                        </div>
-                      </th>
-
-                      <th scope="col" class="px-6 py-3 text-start">
-                        <div class="flex items-center gap-x-2">
-                          <span
-                            class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
-                          >
                             Price
                           </span>
                         </div>
@@ -186,90 +168,48 @@
                           </span>
                         </div>
                       </th>
+                      <th scope="col" class="px-6 py-3 text-end justify-end">
+                        <div class="flex text-end justify-end pr-10 gap-x-2">
+                          <span
+                            class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
+                          >
+                            Actions
+                          </span>
+                        </div>
+                      </th>
                     </tr>
                   </thead>
 
                   <tbody class="divide-y divide-primary/50">
-                    <tr class="hover:bg-primary/10">
+                    <tr
+                      v-for="product in products"
+                      :key="product.id"
+                      class="hover:bg-primary/10"
+                    >
                       <td class="size-px whitespace-nowrap">
                         <div class="px-6 py-3">
-                          <div class="flex items-center gap-x-2">
+                          <div class="flex items-center justify-start gap-x-2">
                             <div class="grow">
-                              <button
-                                data-popover-target="popover-right"
-                                data-popover-placement="right"
-                                type="button"
-                                class="font-sm text-primary/90 hover:underline pl-2 text-sm text-center"
-                              >
-                                View Image
-                              </button>
-                              <div
-                                data-popover
-                                id="popover-right"
-                                role="tooltip"
-                                class="absolute z-10 invicible bg-accent border border-primary/80 invisible inline-block w-64 text-sm transition-opacity duration-300 borde rounded-lg shadow-sm opacity-0"
-                              >
-                                <div
-                                  class="px-3 py-2 border-b-1 text-center font-bold"
-                                >
-                                  Image Title
-                                </div>
-                                <div class="px-3 py-2">
-                                  <img
-                                    class="inline-block"
-                                    src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-                                    alt="Image Description"
-                                  />
-                                </div>
-                                <div data-popper-arrow></div>
+                              <div class="px-5 py-3">
+                                <img
+                                  class="inline-block"
+                                  :src="product.coverPhoto"
+                                  alt="Image Description"
+                                />
                               </div>
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td class="size-px whitespace-nowrap">
-                        <div class="px-3 py-3">
-                          <button
-                            data-popover-target="popover-bottom"
-                            data-popover-placement="bottom"
-                            type="button"
-                            class="font-sm text-primary/70 hover:underline pl-2 text-xs text-center"
-                          >
-                            View Photos
-                          </button>
-                          <div
-                            data-popover
-                            id="popover-bottom"
-                            role="tooltip"
-                            class="absolute z-50 invicible bg-accent border border-primary/80 invisible inline-block w-64 text-sm transition-opacity duration-300 borde rounded-lg shadow-sm opacity-0"
-                          >
-                            <div class="px-3 py-2 text-center rounded-t-lg">
-                              <h3
-                                class="font-semibold text-gray-900 dark:text-white"
-                              >
-                                Photos
-                              </h3>
-                            </div>
-                            <div class="px-3 py-2">
-                              <img
-                                class="inline-block"
-                                src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-                                alt="Image Description"
-                              />
-                            </div>
-                            <div data-popper-arrow></div>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="size-2/12 whitespace-nowrap">
-                        <div class="px-4 py-3">
+                      <td class="size-2/12">
+                        <div class="py-3">
                           <div class="flex items-center gap-x-2">
                             <div class="grow">
                               <p class="w-full whitespace-normal">
                                 <span
-                                  class="text-sm text-gray-600 dark:text-gray-400"
+                                  class="text-base text-secondary-foreground"
                                 >
-                                  CS New Merch</span
+                                  {{ product.name }}</span
                                 >
                               </p>
                             </div>
@@ -290,66 +230,37 @@
                           </div>
                         </div>
                       </td>
-                      <td class="size-px whitespace-nowrap text-start">
-                        <div class="px-1 py-3">
-                          <button
-                            data-popover-target="popover-top"
-                            data-popover-placement="top"
-                            type="button"
-                            class="font-sm text-primary/70 hover:underline pl-2 text-sm text-center"
-                          >
-                            Read Description
-                          </button>
-                          <div
-                            data-popover
-                            id="popover-top"
-                            role="tooltip"
-                            class="absolute z-50 invicible bg-accent border border-primary/80 invisible inline-block w-80 text-xs transition-opacity duration-300 borde rounded-lg shadow-sm opacity-0"
-                          >
-                            <div class="px-3 py-2 text-center rounded-t-lg">
-                              <h3
-                                class="font-semibold text-gray-900 dark:text-white"
-                              >
-                                Description
-                              </h3>
-                            </div>
-                            <div class="px-3 py-2">
-                              <p
-                                class="text-xs w-full max-w-full whitespace-normal"
-                              >
-                                This is a new product from CS Shoppee. It is a
-                                T-Shirt with a unique design and a comfortable
-                                fit.
-                              </p>
-                            </div>
-                            <div data-popper-arrow></div>
-                          </div>
-                        </div>
-                      </td>
+
                       <td class="size-px whitespace-nowrap">
                         <div class="px-6 py-3">
                           <div class="flex items-center gap-x-2">
                             <div class="grow">
                               <span
                                 class="text-sm text-gray-600 dark:text-gray-400"
-                                >P500</span
+                                >{{ product.price }}</span
                               >
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td class="size-px whitespace-nowrap">
+                      <td class="size-2/12 whitespace-nowrap">
                         <div class="px-6 py-3">
                           <p class="w-full whitespace-normal">
                             <span
+                              v-for="(size, index) in product.sizes"
+                              :key="index"
                               class="text-sm text-gray-600 dark:text-gray-400"
-                              >XS,S,M,L,XL...</span
                             >
+                              {{ size
+                              }}<span v-if="index < product.sizes.length - 1">
+                                |
+                              </span>
+                            </span>
                           </p>
                         </div>
                       </td>
-                      <td class="size-px whitespace-nowrap text-center px-5">
-                        <div class="px-6 py-1">
+                      <td class="size-1/12 text-end whitespace-nowrap px-5">
+                        <div class="py-1">
                           <div
                             class="hs-dropdown relative inline-block [--placement:bottom-right]"
                           >
@@ -358,8 +269,12 @@
                             >
                               <div class="rounded-sm cursor-pointer mt-2">
                                 <button
-                                  class="bg-emerald-600 text-white p-2 rounded-sm"
+                                  class="bg-emerald-600 text-white p-3 rounded-sm"
                                   title="Edit Product"
+                                  @click.prevent="
+                                    console.log(product.id);
+                                    editProduct(product.id, product);
+                                  "
                                 >
                                   <span
                                     class="material-symbols-outlined text-sm"
@@ -368,21 +283,151 @@
                                   </span>
                                 </button>
                               </div>
-                              <div class="rounded-sm cursor-pointer">
-                                <button
-                                  class="bg-blue-600 text-white p-2 rounded-sm"
-                                  title="View Full Details"
+
+                              <div class="">
+                                <div
+                                  class="hs-dropdown relative inline-block [--placement:bottom-right]"
                                 >
-                                  <span
-                                    class="material-symbols-outlined text-sm"
-                                  >
-                                    visibility
-                                  </span>
-                                </button>
+                                  <div class="flex flex-row text-sm">
+                                    <div class="rounded-sm cursor-pointer">
+                                      <button
+                                        @click.prevent="showProductModal = true"
+                                        class="bg-blue-600 text-white p-3 rounded-sm"
+                                        title="View Full Details"
+                                      >
+                                        <span
+                                          class="material-symbols-outlined text-sm"
+                                        >
+                                          visibility
+                                        </span>
+                                      </button>
+                                    </div>
+                                    <div
+                                      v-if="showProductModal"
+                                      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                                    >
+                                      <div
+                                        class="relative p-4 w-full max-w-2xl max-h-full bg-secondary rounded-lg shadow"
+                                      >
+                                        <div
+                                          class="modal-header flex items-center justify-between p-4 md:p-5 border-b rounded-t border-secondary-foreground/90"
+                                        >
+                                          <div class="flex justify-start">
+                                            <span
+                                              class="material-symbols-outlined p-1"
+                                            >
+                                              grid_on
+                                            </span>
+                                            <h3
+                                              class="font-bold text-xl text-primary/80"
+                                            >
+                                              {{ product.name }}
+                                            </h3>
+                                          </div>
+
+                                          <button
+                                            @click.prevent="
+                                              showProductModal = false
+                                            "
+                                            class="modal-close"
+                                          >
+                                            <span
+                                              class="material-symbols-outlined text-sm"
+                                              >close</span
+                                            >
+                                          </button>
+                                        </div>
+                                        <div
+                                          class="modal-body pt-4 flex flex-row justify-between"
+                                        >
+                                          <div
+                                            class="flex flex-col items-start w-1/2"
+                                          >
+                                            <span
+                                              class="text-secondary-foreground font-semibold text-base"
+                                              >Cover Photo</span
+                                            >
+
+                                            <img
+                                              :src="product.coverPhoto"
+                                              class="p-10"
+                                            />
+                                          </div>
+                                          <div
+                                            class="flex flex-col w-1/2 items-start"
+                                          >
+                                            <p>
+                                              <span
+                                                class="font-bold text-base text-primary/90"
+                                                >Description:</span
+                                              >
+                                            </p>
+                                            <p
+                                              class="whitespace-normal text-sm text-secondary-foreground text-justify"
+                                            >
+                                              {{ product.description }}
+                                            </p>
+                                            <p class="pt-4">
+                                              <span
+                                                class="font-bold text-base text-primary/90"
+                                                >Price:
+                                              </span>
+                                              P
+                                              <span
+                                                class="text-sm text-secondary-foreground underline"
+                                              >
+                                                {{ product.price }}</span
+                                              >
+                                            </p>
+                                            <p class="pt-4">
+                                              <span
+                                                class="font-normal text-base text-primary/90"
+                                                >Sizes Available:
+                                              </span>
+                                              <span
+                                                v-for="(
+                                                  size, index
+                                                ) in product.sizes"
+                                                :key="index"
+                                                class="text-xs text-secondary-foreground"
+                                              >
+                                                {{ size
+                                                }}<span
+                                                  v-if="
+                                                    index <
+                                                    product.sizes.length - 1
+                                                  "
+                                                  >,
+                                                </span>
+                                              </span>
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="flex flex-col w-full justify-start items-start"
+                                        >
+                                          <h2
+                                            class="font-medium text-base text-primary"
+                                          >
+                                            Photos
+                                          </h2>
+                                          <div class="flex flex-row flex-wrap">
+                                            <img
+                                              v-for="photo in product.photos"
+                                              :src="photo"
+                                              class="p-2 w-32 h-auto"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
+
                               <div class="rounded-sm cursor-pointer">
                                 <button
-                                  class="bg-red-600 text-white p-2 rounded-sm"
+                                  class="bg-red-600 text-white p-3 rounded-sm"
                                   title="Delete Product"
                                 >
                                   <span
@@ -479,7 +524,7 @@ import NavBar from "../views/AdminNavBar.vue";
 import AdminSidebar from "../views/AdminSidebar.vue";
 import { MagnifyingGlassIcon } from "@radix-icons/vue";
 import { Input } from "@/components/ui/input";
-import { ref } from "vue";
+import { ref, defineExpose } from "vue";
 import { Check, ChevronsUpDown } from "lucide-vue-next";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -496,12 +541,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { onMounted } from "vue";
-import { initFlowbite } from "flowbite";
-
-onMounted(() => {
-  initFlowbite();
-});
+import { setup as setupProductController } from "../controllers/adminProducts.ts";
 
 const frameworks = [
   { value: "T-Shirt", label: "T-Shirt" },
@@ -513,4 +553,9 @@ const frameworks = [
 
 const open = ref(false);
 const value = ref<string>("");
+
+const showProductModal = ref(false);
+const { products, editProduct } = setupProductController();
+
+defineExpose({ showProductModal });
 </script>
