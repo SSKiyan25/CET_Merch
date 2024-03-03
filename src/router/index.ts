@@ -4,9 +4,10 @@ import Login from "../components/feature/authentication/views/LoginView.vue";
 import Signup from "../components/feature/authentication/views/SignupView.vue";
 import AdminDashboard from "../components/admin/dashboard/views/AdminDashboard.vue";
 import AdminProducts from "../components/admin/dashboard/views/AdminProducts.vue";
+import AdminAddProduct from "../components/admin/dashboard/views/products/AddProduct.vue";
 import { auth } from "../firebase/init.ts";
 
-function requireAdminAuth(to: any, from: any, next: any) {
+function requireAdminAuth(next: any) {
   auth.onAuthStateChanged((user) => {
     if (user && user.email === "admin@gmail.com") {
       next();
@@ -43,6 +44,11 @@ const routes: RouteRecordRaw[] = [
     path: "/admin/products",
     name: "adminProducts",
     component: AdminProducts,
+  },
+  {
+    path: "/admin/products/addproduct",
+    name: "adminAddProduct",
+    component: AdminAddProduct,
   },
 ];
 

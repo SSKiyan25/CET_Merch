@@ -12,7 +12,9 @@ import { RouterView } from "vue-router";
   <Footer
     :class="{
       'is-hidden':
-        $route.name === 'adminDashboard' || $route.name === 'adminProducts',
+        $route.name === 'adminDashboard' ||
+        $route.name === 'adminProducts' ||
+        $route.name === 'adminAddProduct',
     }"
   />
 </template>
