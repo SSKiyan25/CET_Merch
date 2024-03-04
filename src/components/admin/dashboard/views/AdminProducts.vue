@@ -182,7 +182,7 @@
 
                   <tbody class="divide-y divide-primary/50">
                     <tr
-                      v-for="product in products"
+                      v-for="(product, index) in products"
                       :key="product.id"
                       class="hover:bg-primary/10"
                     >
@@ -291,7 +291,9 @@
                                   <div class="flex flex-row text-sm">
                                     <div class="rounded-sm cursor-pointer">
                                       <button
-                                        @click.prevent="showProductModal = true"
+                                        @click.prevent="
+                                          showProductModal[index] = true
+                                        "
                                         class="bg-blue-600 text-white p-3 rounded-sm"
                                         title="View Full Details"
                                       >
@@ -303,7 +305,7 @@
                                       </button>
                                     </div>
                                     <div
-                                      v-if="showProductModal"
+                                      v-if="showProductModal[index]"
                                       class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
                                     >
                                       <div
@@ -327,7 +329,7 @@
 
                                           <button
                                             @click.prevent="
-                                              showProductModal = false
+                                              showProductModal[index] = false
                                             "
                                             class="modal-close"
                                           >
@@ -425,17 +427,45 @@
                                 </div>
                               </div>
 
-                              <div class="rounded-sm cursor-pointer">
-                                <button
-                                  class="bg-red-600 text-white p-3 rounded-sm"
-                                  title="Delete Product"
-                                >
-                                  <span
-                                    class="material-symbols-outlined text-sm"
+                              <div class="rounded-sm cursor-pointer mr-2">
+                                <AlertDialog>
+                                  <AlertDialogTrigger class="w-full"
+                                    ><button
+                                      class="bg-red-600 text-white p-3 rounded-sm"
+                                      title="Delete Product"
+                                    >
+                                      <span
+                                        class="material-symbols-outlined text-sm"
+                                      >
+                                        delete_forever
+                                      </span>
+                                    </button></AlertDialogTrigger
                                   >
-                                    delete_forever
-                                  </span>
-                                </button>
+                                  <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                      <AlertDialogTitle
+                                        >Delete Image</AlertDialogTitle
+                                      >
+                                      <AlertDialogDescription>
+                                        Are you sure you want to delete this
+                                        image?
+                                      </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                      <AlertDialogAction
+                                        @click.prevent=""
+                                        class="bg-destructive text-destructive-foreground"
+                                      >
+                                        Delete
+                                      </AlertDialogAction>
+                                      <AlertDialogAction
+                                        class="bg-secondary text-secondary-foreground"
+                                      >
+                                        Cancel
+                                      </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                  </AlertDialogContent>
+                                </AlertDialog>
                               </div>
                             </div>
                           </div>
@@ -542,6 +572,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { setup as setupProductController } from "../controllers/adminProducts.ts";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const frameworks = [
   { value: "T-Shirt", label: "T-Shirt" },
@@ -554,8 +594,8 @@ const frameworks = [
 const open = ref(false);
 const value = ref<string>("");
 
-const showProductModal = ref(false);
 const { products, editProduct } = setupProductController();
+const showProductModal = ref(products.value.map(() => false));
 
 defineExpose({ showProductModal });
 </script>

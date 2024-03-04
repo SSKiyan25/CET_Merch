@@ -7,11 +7,13 @@ import {
   doc,
   updateDoc,
   getDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import {
   uploadBytesResumable,
   getDownloadURL,
   ref as storageRef,
+  deleteObject,
 } from "firebase/storage";
 import { useRouter, useRoute } from "vue-router";
 

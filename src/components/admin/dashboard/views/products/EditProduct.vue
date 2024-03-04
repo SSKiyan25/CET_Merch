@@ -236,7 +236,13 @@
               </div>
             </div>
           </div>
-          <div class="flex items-center justify-end w-full py-8">
+          <div class="flex items-center justify-end w-full space-x-2 py-8">
+            <button
+              @click.prevent="cancel"
+              class="p-2 text-sm rounded-lg text-secondary-foreground bg-red-500"
+            >
+              Cancel
+            </button>
             <button
               type="submit"
               class="p-2 bg-primary text-sm text-primary-foreground hover:bg-primary/80 font-semibold rounded-lg"
@@ -275,5 +281,8 @@ const editProduct = async (id: string, product: any) => {
   }
 };
 
+const cancel = () => {
+  router.push({ name: "adminProducts" });
+};
 console.log(product);
 </script>
