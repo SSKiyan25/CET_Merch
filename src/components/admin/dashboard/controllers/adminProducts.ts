@@ -14,6 +14,7 @@ import {
   getDownloadURL,
   ref as storageRef,
   deleteObject,
+  listAll,
 } from "firebase/storage";
 import { useRouter, useRoute } from "vue-router";
 
@@ -108,5 +109,29 @@ export const setup = () => {
     router.push({ name: "adminEditProduct", params: { id } });
   };
 
-  return { products, product, editProduct, handleFileUpload };
+  const deleteProduct = async (id: string, productName: string) => {
+    // Reference to the product folder in Storage
+    const storageReference = storageRef(storage, `products/${productName}`);
+
+    // List all files in the product folder
+    const { items } = await listAll(storageReference);
+
+    // Delete each file in the product folder
+    for (const item of items) {
+      await deleteObject(item).catch((error) => {
+        console.error("Error deleting file:", error);
+      });
+    }
+
+    // Delete the product document in Firestore
+    const productRef = doc(db, "products", id);
+    await deleteDoc(productRef).catch((error) => {
+      console.error("Error deleting document:", error);
+    });
+
+    // Remove the product from the products array
+    products.value = products.value.filter((product) => product.id !== id);
+  };
+
+  return { products, product, editProduct, handleFileUpload, deleteProduct };
 };

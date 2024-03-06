@@ -25,14 +25,12 @@
         <div class="flex flex-row">
           <router-link to="/admin/products/addproduct"
             ><button
-              data-modal-target="crud-modal"
-              data-modal-toggle="crud-modal"
-              class="bg-green-500 px-3 py-2 rounded-lg mr-2 mb-2"
+              class="bg-green-500 px-3 py-2 rounded-lg mr-2 mb-2 hover:bg-green-400"
               type="button"
+              title="Add Product"
             >
-              + Add a Product
-            </button></router-link
-          >
+              <Plus class="text-secondary" /></button
+          ></router-link>
 
           <form>
             <div class="flex relative w-full max-w-sm items-center">
@@ -118,19 +116,20 @@
                 <table class="min-w-full divide-y divide-primary/50">
                   <thead class="bg-secondary-50">
                     <tr>
-                      <th scope="col" class="px-6 py-3 text-start">
-                        <div
-                          class="flex items-center gap-x-2 whitespace-nowrap"
-                        >
+                      <th scope="col" class="pl-4 py-2 text-start">
+                        <div class="flex gap-x-1 whitespace-nowrap">
                           <span
                             class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                           >
-                            Cover Photo
+                            Status
                           </span>
+                          <span class="text-xs text-gray-400">
+                            (If posted)</span
+                          >
                         </div>
                       </th>
 
-                      <th scope="col" class="px-6 py-3 text-start">
+                      <th scope="col" class="pr-6 py-3 text-start">
                         <div class="flex items-center gap-x-2">
                           <span
                             class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
@@ -140,7 +139,7 @@
                         </div>
                       </th>
 
-                      <th scope="col" class="px-6 py-3 text-start">
+                      <th scope="col" class="pr-2 py-3 text-start">
                         <div class="flex items-center gap-x-2">
                           <span
                             class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
@@ -186,29 +185,17 @@
                       :key="product.id"
                       class="hover:bg-primary/10"
                     >
-                      <td class="size-px whitespace-nowrap">
-                        <div class="px-6 py-3">
-                          <div class="flex items-center justify-start gap-x-2">
-                            <div class="grow">
-                              <div class="px-5 py-3">
-                                <img
-                                  class="inline-block"
-                                  :src="product.coverPhoto"
-                                  alt="Image Description"
-                                />
-                              </div>
-                            </div>
-                          </div>
+                      <td class="size-0.5 whitespace-nowrap">
+                        <div class="pl-4 py-3">
+                          <Switch class="" />
                         </div>
                       </td>
-                      <td class="size-2/12">
+                      <td class="size-4/12">
                         <div class="py-3">
                           <div class="flex items-center gap-x-2">
                             <div class="grow">
                               <p class="w-full whitespace-normal">
-                                <span
-                                  class="text-base text-secondary-foreground"
-                                >
+                                <span class="text-sm text-secondary-foreground">
                                   {{ product.name }}</span
                                 >
                               </p>
@@ -217,7 +204,7 @@
                         </div>
                       </td>
                       <td class="size-px whitespace-nowrap">
-                        <div class="px-8 py-3">
+                        <div class="pl-2 pr-8 py-3">
                           <div class="flex items-center gap-x-2">
                             <div class="grow">
                               <p class="">
@@ -346,7 +333,7 @@
                                             class="flex flex-col items-start w-1/2"
                                           >
                                             <span
-                                              class="text-secondary-foreground font-semibold text-base"
+                                              class="text-secondary-foreground font-semibold text-base round-sm"
                                               >Cover Photo</span
                                             >
 
@@ -403,6 +390,25 @@
                                                 </span>
                                               </span>
                                             </p>
+                                            <p class="py-4 text-sm">
+                                              <span v-if="product.isPublished"
+                                                >This product is currently
+                                                published in the market.</span
+                                              >
+                                              <span v-else
+                                                >This product is currently
+                                                hidden in the market.</span
+                                              >
+                                            </p>
+                                            <div class="flex flex-row pt-4">
+                                              <span v-if="product.isPublished">
+                                                Hide</span
+                                              >
+                                              <span v-else> Publish </span>
+                                              <div class="flex px-2">
+                                                <Switch class="" />
+                                              </div>
+                                            </div>
                                           </div>
                                         </div>
                                         <div
@@ -444,22 +450,27 @@
                                   <AlertDialogContent>
                                     <AlertDialogHeader>
                                       <AlertDialogTitle
-                                        >Delete Image</AlertDialogTitle
+                                        >Delete Product</AlertDialogTitle
                                       >
                                       <AlertDialogDescription>
                                         Are you sure you want to delete this
-                                        image?
+                                        product?
                                       </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                       <AlertDialogAction
-                                        @click.prevent=""
-                                        class="bg-destructive text-destructive-foreground"
+                                        @click.prevent="
+                                          deleteProduct(
+                                            product.id,
+                                            product.name
+                                          )
+                                        "
+                                        class="bg-destructive text-destructive-foreground hover:bg-destructive/80"
                                       >
                                         Delete
                                       </AlertDialogAction>
                                       <AlertDialogAction
-                                        class="bg-secondary text-secondary-foreground"
+                                        class="bg-secondary text-secondary-foreground hover:bg-secondary/80"
                                       >
                                         Cancel
                                       </AlertDialogAction>
@@ -555,7 +566,7 @@ import AdminSidebar from "../views/AdminSidebar.vue";
 import { MagnifyingGlassIcon } from "@radix-icons/vue";
 import { Input } from "@/components/ui/input";
 import { ref, defineExpose } from "vue";
-import { Check, ChevronsUpDown } from "lucide-vue-next";
+import { Check, ChevronsUpDown, Plus } from "lucide-vue-next";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -582,6 +593,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Switch } from "@/components/ui/switch";
 
 const frameworks = [
   { value: "T-Shirt", label: "T-Shirt" },
@@ -594,7 +606,7 @@ const frameworks = [
 const open = ref(false);
 const value = ref<string>("");
 
-const { products, editProduct } = setupProductController();
+const { products, editProduct, deleteProduct } = setupProductController();
 const showProductModal = ref(products.value.map(() => false));
 
 defineExpose({ showProductModal });

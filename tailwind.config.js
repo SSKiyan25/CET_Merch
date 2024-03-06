@@ -16,6 +16,11 @@ module.exports = {
   ],
 
   theme: {
+    extend: {
+      fontSize: {
+        xxs: "0.25rem",
+      },
+    },
     container: {
       center: true,
       padding: "2rem",

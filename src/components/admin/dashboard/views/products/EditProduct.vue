@@ -203,7 +203,7 @@
               >
               <img
                 :src="product.coverPhoto"
-                class="w-40 h-40 rounded-lg pt-3"
+                class="w-40 h-auto rounded-lg pt-3"
               />
             </div>
           </div>

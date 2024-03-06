@@ -78,6 +78,20 @@
                 <input
                   id="inline-checkbox-xs"
                   type="checkbox"
+                  value="none"
+                  v-model="newProduct.sizes"
+                  class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
+                />
+                <label
+                  for="inline-checkbox-xs"
+                  class="ms-2 text-sm font-medium text-secondary-foreground"
+                  >N/A</label
+                >
+              </div>
+              <div class="flex items-center me-4">
+                <input
+                  id="inline-checkbox-xs"
+                  type="checkbox"
                   value="XS"
                   v-model="newProduct.sizes"
                   class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
@@ -212,13 +226,38 @@
               multiple
             />
           </div>
-          <div class="flex items-center justify-end w-full py-8">
-            <button
-              type="submit"
-              class="p-2 bg-primary text-sm text-primary-foreground hover:bg-primary/80 font-semibold rounded-lg"
-            >
-              + Add Product
-            </button>
+          <div class="flex items-center justify-between pt-6">
+            <div class="flex items-center">
+              <input
+                id="is-hidden"
+                type="checkbox"
+                v-model="newProduct.isPublished"
+                class="w-8 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
+              />
+              <label
+                for="is-hidden"
+                class="ms-2 text-sm font-medium text-secondary-foreground"
+              >
+                Publish Product
+              </label>
+            </div>
+            <div class="flex items-center justify-end space-x-2">
+              <button
+                type="submit"
+                class="p-2 bg-primary text-sm text-primary-foreground hover:bg-primary/80 font-semibold rounded-lg"
+              >
+                Add Product
+              </button>
+              <button
+                class="p-2 pr-2 rounded-lg text-sm border-none border-secondary-foreground/40"
+              >
+                <router-link
+                  to="/admin/products"
+                  class="p-2 text-sm text-secondary-foreground hover:bg-secondary/80 font-semibold rounded-lg"
+                  >Cancel</router-link
+                >
+              </button>
+            </div>
           </div>
         </form>
       </div>
@@ -255,6 +294,7 @@ interface ProductData {
   description: string;
   coverPhoto: File;
   photos: File[];
+  isPublished: boolean;
 }
 
 const newProduct = ref<ProductData>({
@@ -265,6 +305,7 @@ const newProduct = ref<ProductData>({
   description: "",
   coverPhoto: new File([], ""),
   photos: [],
+  isPublished: false,
 });
 
 const coverPhotoInput = ref<HTMLInputElement | null>(null);
@@ -301,16 +342,17 @@ const handleFormSubmit = async (): Promise<boolean> => {
     console.log("Cover photo URL:", coverPhotoURL);
 
     // Upload other product photos
-    const photosUploadPromises = newProduct.value.photos.map((photo: File) => {
-      const photoRef = storageRef(
-        storage,
-        `gs://csshoppee-76342.appspot.com/products/${newProduct.value.name}/${photo.name}`
-      );
-      return uploadBytes(photoRef, photo).then((uploadResult) => {
+    const photosUploadPromises = newProduct.value.photos.map(
+      async (photo: File) => {
+        const photoRef = storageRef(
+          storage,
+          `gs://csshoppee-76342.appspot.com/products/${newProduct.value.name}/${photo.name}`
+        );
+        const uploadResult = await uploadBytes(photoRef, photo);
         console.log("Photo upload result:", uploadResult);
-        return getDownloadURL(photoRef);
-      });
-    });
+        return await getDownloadURL(photoRef);
+      }
+    );
 
     const photosURLs = await Promise.all(photosUploadPromises);
     console.log("Photo URLs:", photosURLs);
@@ -324,6 +366,7 @@ const handleFormSubmit = async (): Promise<boolean> => {
       description: newProduct.value.description,
       coverPhoto: coverPhotoURL,
       photos: photosURLs,
+      isPublished: newProduct.value.isPublished,
     };
     const docRef = await addDoc(collection(db, "products"), productData);
     console.log("Document reference:", docRef);
@@ -337,6 +380,7 @@ const handleFormSubmit = async (): Promise<boolean> => {
       description: "",
       coverPhoto: new File([], ""),
       photos: [],
+      isPublished: false,
     };
     router.push("/admin/products");
     alert("Product added successfully");
