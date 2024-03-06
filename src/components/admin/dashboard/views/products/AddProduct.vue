@@ -1,7 +1,7 @@
 <template>
   <NavBar />
   <AdminSidebar />
-  <div class="p-4 ml-2 sm:ml-64">
+  <div class="p-4 ml-2 sm:ml-64 pb-16">
     <div class="flex flex-row justify-start py-10">
       <div class="flex">
         <span class="material-symbols-outlined py-2 px-2 text-5xl">
@@ -26,7 +26,8 @@
         <form @submit.prevent="handleFormSubmit">
           <div class="flex flex-col">
             <label for="product-name" class="text-sm font-medium py-2">
-              Product Name*
+              Product Name
+              <span class="text-red-400 font-bold text-sm">*</span>
             </label>
             <input
               type="text"
@@ -40,7 +41,8 @@
           <div class="flex mt-4">
             <div class="flex flex-col w-1/2 pr-2">
               <label for="product-category" class="text-sm font-medium py-2">
-                Product Category*
+                Product Category
+                <span class="text-red-400 font-bold text-sm">*</span>
                 <span class="text-xs text-secondary-foreground/70"
                   >(T-Shirt, Polo-Shirt, Hoodie, Stickers, etc..)</span
                 >
@@ -56,7 +58,8 @@
             </div>
             <div class="flex flex-col w-1/2 pl-2">
               <label for="product-price" class="text-sm font-medium py-2">
-                Product Price*
+                Product Price
+                <span class="text-red-400 font-bold text-sm">*</span>
               </label>
               <input
                 type="number"
@@ -76,10 +79,10 @@
             <div class="flex flex-row">
               <div class="flex items-center me-4">
                 <input
-                  id="inline-checkbox-xs"
+                  id="inline-checkbox-na"
                   type="checkbox"
                   value="none"
-                  v-model="newProduct.sizes"
+                  v-model="naChecked"
                   class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
                 />
                 <label
@@ -94,6 +97,7 @@
                   type="checkbox"
                   value="XS"
                   v-model="newProduct.sizes"
+                  v-bind:disabled="naChecked"
                   class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
                 />
                 <label
@@ -108,6 +112,7 @@
                   type="checkbox"
                   value="S"
                   v-model="newProduct.sizes"
+                  v-bind:disabled="naChecked"
                   class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
                 />
                 <label
@@ -122,6 +127,7 @@
                   type="checkbox"
                   value="M"
                   v-model="newProduct.sizes"
+                  v-bind:disabled="naChecked"
                   class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
                 />
                 <label
@@ -136,6 +142,7 @@
                   type="checkbox"
                   value="L"
                   v-model="newProduct.sizes"
+                  v-bind:disabled="naChecked"
                   class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
                 />
                 <label
@@ -150,6 +157,7 @@
                   type="checkbox"
                   value="XL"
                   v-model="newProduct.sizes"
+                  v-bind:disabled="naChecked"
                   class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
                 />
                 <label
@@ -164,6 +172,7 @@
                   type="checkbox"
                   value="2XL"
                   v-model="newProduct.sizes"
+                  v-bind:disabled="naChecked"
                   class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
                 />
                 <label
@@ -178,6 +187,7 @@
                   type="checkbox"
                   value="3XL"
                   v-model="newProduct.sizes"
+                  v-bind:disabled="naChecked"
                   class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
                 />
                 <label
@@ -202,7 +212,8 @@
           </div>
           <div class="flex flex-col mt-4">
             <label for="product-image" class="text-sm font-medium py-2">
-              Product Cover Photo*
+              Product Cover Photo
+              <span class="text-red-400 font-bold text-sm">*</span>
             </label>
             <input
               type="file"
@@ -253,7 +264,7 @@
               >
                 <router-link
                   to="/admin/products"
-                  class="p-2 text-sm text-secondary-foreground hover:bg-secondary/80 font-semibold rounded-lg"
+                  class="p-2 text-sm text-secondary-foreground font-semibold rounded-lg"
                   >Cancel</router-link
                 >
               </button>
@@ -263,21 +274,56 @@
       </div>
     </div>
   </div>
+  <!--File Uploading-->
+  <div
+    v-if="isLoading && !isUploadSuccessful"
+    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+  >
+    <div class="p-8 bg-secondary rounded-xl shadow space-y-4">
+      <div class="flex flex-row">
+        <span class="text-xl font-bold text-secondary-foreground pt-4 pl-8"
+          >Uploading</span
+        >
+        <span><img src="/upload_fire.gif" class="h-16 w-auto" /></span>
+      </div>
+
+      <Progress
+        v-model="progress"
+        class="w-full border-2 border-background/20"
+      />
+    </div>
+  </div>
+  <!--File Uploading Sucessfully-->
+  <div
+    v-if="isUploadSuccessful"
+    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+  >
+    <div class="p-8 bg-secondary rounded-xl shadow space-y-4">
+      <div class="flex flex-col justify-center items-center">
+        <span class="text-xl font-bold text-secondary-foreground pt-4"
+          >Product Added Successfully</span
+        >
+        <span><img src="/upload_successful.gif" class="h-32 w-auto" /></span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import NavBar from "../AdminNavBar.vue";
 import AdminSidebar from "../AdminSidebar.vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watchEffect } from "vue";
 import { initFlowbite } from "flowbite";
 import { storage, db } from "@/firebase/init.ts";
 import {
-  uploadBytes,
   getDownloadURL,
   ref as storageRef,
+  uploadBytesResumable,
+  UploadTaskSnapshot,
 } from "firebase/storage";
 import { addDoc, collection } from "firebase/firestore";
 import { useRouter } from "vue-router";
+import { Progress } from "@/components/ui/progress";
 
 const router = useRouter();
 
@@ -310,10 +356,21 @@ const newProduct = ref<ProductData>({
 
 const coverPhotoInput = ref<HTMLInputElement | null>(null);
 const productPhotosInput = ref<HTMLInputElement | null>(null);
+const naChecked = ref(false);
+
+let isLoading = ref(false);
+let isUploadSuccessful = ref(false);
+
+const progress = ref(13);
+watchEffect((cleanupFn) => {
+  const timer = setTimeout(() => (progress.value = 66), 500);
+  cleanupFn(() => clearTimeout(timer));
+});
 
 const handleFormSubmit = async (): Promise<boolean> => {
   console.log("Form submitted");
   try {
+    isLoading.value = true;
     console.log("Cover photo files:", coverPhotoInput.value?.files); // Check the cover photo input
     console.log("Product photos files:", productPhotosInput.value?.files); // Check the product photos input
     if (coverPhotoInput.value?.files) {
@@ -333,26 +390,63 @@ const handleFormSubmit = async (): Promise<boolean> => {
       storage,
       `gs://csshoppee-76342.appspot.com/products/${newProduct.value.name}/${newProduct.value.coverPhoto.name}`
     );
-    const coverPhotoUploadResult = await uploadBytes(
+    const coverPhotoUploadTask = uploadBytesResumable(
       coverPhotoRef,
       newProduct.value.coverPhoto
     );
-    console.log("Cover photo upload result:", coverPhotoUploadResult);
-    const coverPhotoURL = await getDownloadURL(coverPhotoRef);
-    console.log("Cover photo URL:", coverPhotoURL);
+
+    let coverPhotoURL = "";
+    coverPhotoUploadTask.on(
+      "state_changed",
+      (snapshot: UploadTaskSnapshot) => {
+        const progressValue =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        progress.value = progressValue;
+        console.log("Upload is " + progressValue + "% done");
+      },
+      (error) => {
+        console.error("Error uploading files: ", error);
+      },
+      async () => {
+        coverPhotoURL = await getDownloadURL(coverPhotoRef);
+        console.log("Cover photo URL:", coverPhotoURL);
+      }
+    );
+
+    // Wait for the upload to complete
+    await coverPhotoUploadTask;
+
+    console.log("Cover photo URL after upload:", coverPhotoURL);
 
     // Upload other product photos
-    const photosUploadPromises = newProduct.value.photos.map(
-      async (photo: File) => {
+    const photosUploadPromises = newProduct.value.photos.map((photo: File) => {
+      return new Promise(async (resolve, reject) => {
         const photoRef = storageRef(
           storage,
           `gs://csshoppee-76342.appspot.com/products/${newProduct.value.name}/${photo.name}`
         );
-        const uploadResult = await uploadBytes(photoRef, photo);
-        console.log("Photo upload result:", uploadResult);
-        return await getDownloadURL(photoRef);
-      }
-    );
+        const photoUploadTask = uploadBytesResumable(photoRef, photo);
+
+        photoUploadTask.on(
+          "state_changed",
+          (snapshot: UploadTaskSnapshot) => {
+            const progressValue =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            progress.value = progressValue;
+            console.log("Upload is " + progressValue + "% done");
+          },
+          (error) => {
+            console.error("Error uploading files: ", error);
+            reject(error);
+          },
+          async () => {
+            const photoURL = await getDownloadURL(photoRef);
+            console.log("Photo URL:", photoURL);
+            resolve(photoURL);
+          }
+        );
+      });
+    });
 
     const photosURLs = await Promise.all(photosUploadPromises);
     console.log("Photo URLs:", photosURLs);
@@ -362,7 +456,7 @@ const handleFormSubmit = async (): Promise<boolean> => {
       name: newProduct.value.name,
       category: newProduct.value.category,
       price: newProduct.value.price,
-      sizes: newProduct.value.sizes,
+      sizes: naChecked.value ? ["N/A"] : newProduct.value.sizes,
       description: newProduct.value.description,
       coverPhoto: coverPhotoURL,
       photos: photosURLs,
@@ -382,10 +476,15 @@ const handleFormSubmit = async (): Promise<boolean> => {
       photos: [],
       isPublished: false,
     };
-    router.push("/admin/products");
-    alert("Product added successfully");
-    return true; // return true if the process was successful
+    isLoading.value = false;
+    isUploadSuccessful.value = true;
+    setTimeout(() => {
+      router.push("/admin/products");
+    }, 3000);
+    return true;
   } catch (error) {
+    isLoading.value = false;
+    isUploadSuccessful.value = false;
     console.error("Error uploading files: ", error);
     alert("Product addition failed");
     return false; // return false if there was an error

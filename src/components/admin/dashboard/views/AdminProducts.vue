@@ -2,7 +2,7 @@
   <NavBar />
   <AdminSidebar />
 
-  <div class="p-4 ml-2 sm:ml-64">
+  <div class="p-4 ml-2 sm:ml-64 pb-8">
     <div class="flex flex-row justify-start py-10">
       <div class="flex">
         <span class="material-symbols-outlined py-2 px-2 text-5xl">
@@ -11,7 +11,7 @@
       </div>
       <div class="flex flex-col">
         <h1 class="text-2xl">Welcome to the Products Page</h1>
-        <p class="text-sm py-1">
+        <p class="text-sm py-1 text-secondary-foreground/50">
           This is the admin products page. You can manage your products from
           here. You can add, edit, and delete products from here.
         </p>
@@ -210,7 +210,7 @@
                               <p class="">
                                 <span
                                   class="text-sm text-gray-600 dark:text-gray-400"
-                                  >T-Shirt</span
+                                  >{{ product.category }}</span
                                 >
                               </p>
                             </div>
@@ -352,7 +352,7 @@
                                               >
                                             </p>
                                             <p
-                                              class="whitespace-normal text-sm text-secondary-foreground text-justify"
+                                              class="whitespace-normal text-xs pt-2 pl-4 text-secondary-foreground text-justify"
                                             >
                                               {{ product.description }}
                                             </p>
@@ -390,7 +390,9 @@
                                                 </span>
                                               </span>
                                             </p>
-                                            <p class="py-4 text-sm">
+                                            <p
+                                              class="py-4 text-xs text-secondary-foreground/80"
+                                            >
                                               <span v-if="product.isPublished"
                                                 >This product is currently
                                                 published in the market.</span
@@ -400,15 +402,6 @@
                                                 hidden in the market.</span
                                               >
                                             </p>
-                                            <div class="flex flex-row pt-4">
-                                              <span v-if="product.isPublished">
-                                                Hide</span
-                                              >
-                                              <span v-else> Publish </span>
-                                              <div class="flex px-2">
-                                                <Switch class="" />
-                                              </div>
-                                            </div>
                                           </div>
                                         </div>
                                         <div
