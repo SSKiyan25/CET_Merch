@@ -11,7 +11,7 @@
       </div>
       <div class="flex flex-col">
         <h1 class="text-2xl">Welcome to the Admin Dashboard</h1>
-        <p class="text-sm py-1">
+        <p class="text-sm py-1 text-secondary-foreground/60">
           This is the admin dashboard. You can manage your products, users, and
           other settings from here.
         </p>

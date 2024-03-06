@@ -72,12 +72,12 @@
           </div>
           <ul class="py-1">
             <li>
-              <a
-                href="#"
+              <router-link
+                to="/admin"
                 class="block px-4 py-2 text-sm text-muted-foreground hover:bg-primary/20"
                 role="menuitem"
-                >Dashboard</a
-              >
+                >Dashboard
+              </router-link>
             </li>
             <li>
               <a

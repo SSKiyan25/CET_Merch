@@ -416,7 +416,7 @@
                                             <img
                                               v-for="photo in product.photos"
                                               :src="photo"
-                                              class="p-2 w-32 h-auto"
+                                              class="p-2 w-auto h-48"
                                             />
                                           </div>
                                         </div>
