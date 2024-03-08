@@ -236,22 +236,56 @@
               </div>
             </div>
           </div>
-          <div class="flex items-center justify-end w-full space-x-2 py-8">
-            <button
-              @click.prevent="cancel"
-              class="p-2 text-sm rounded-lg text-secondary-foreground bg-red-500"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              class="p-2 bg-primary text-sm text-primary-foreground hover:bg-primary/80 font-semibold rounded-lg"
-            >
-              + Update Product
-            </button>
+          <div class="flex flex-row justify-between pt-6">
+            <div class="flex flex-row items-start py-8">
+              <input
+                id="is-hidden"
+                type="checkbox"
+                v-model="product.isPublished"
+                class="w-8 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
+              />
+              <label
+                for="is-hidden"
+                class="ms-2 text-sm font-medium text-secondary-foreground pt-2"
+              >
+                Publish Product
+              </label>
+            </div>
+            <div class="flex items-center justify-end space-x-2 py-8">
+              <button
+                @click.prevent="cancel"
+                class="p-2 text-sm rounded-lg text-secondary-foreground bg-red-500"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="p-2 bg-primary text-sm text-primary-foreground hover:bg-primary/80 font-semibold rounded-lg"
+              >
+                + Update Product
+              </button>
+            </div>
           </div>
         </form>
       </div>
+    </div>
+  </div>
+  <div
+    v-if="isLoading"
+    class="fixed inset-0 flex items-center justify center z-50"
+  >
+    <div class="p-8 bg-secondary rounded-xl shadow space-y-4">
+      <div class="flex flex-row">
+        <span class="text-xl font-bold text-secondary-foreground pt-4 pl-8"
+          >Uploading</span
+        >
+        <span><img src="/upload_fire.gif" class="h-16 w-auto" /></span>
+      </div>
+
+      <Progress
+        v-model="progress"
+        class="w-full border-2 border-background/20"
+      />
     </div>
   </div>
 </template>
@@ -261,6 +295,8 @@ import NavBar from "../AdminNavBar.vue";
 import AdminSidebar from "../AdminSidebar.vue";
 import { setup as setupProductController } from "@/components/admin/dashboard/controllers/adminProducts.ts";
 import { useRouter } from "vue-router";
+import { Progress } from "@/components/ui/progress";
+import { ref, watchEffect } from "vue";
 
 const router = useRouter();
 const {
@@ -268,6 +304,13 @@ const {
   editProduct: editProductController,
   handleFileUpload,
 } = setupProductController();
+
+let isLoading = ref(false);
+const progress = ref(13);
+watchEffect((cleanupFn) => {
+  const timer = setTimeout(() => (progress.value = 66), 500);
+  cleanupFn(() => clearTimeout(timer));
+});
 
 const editProduct = async (id: string, product: any) => {
   try {

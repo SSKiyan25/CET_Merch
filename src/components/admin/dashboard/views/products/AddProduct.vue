@@ -312,7 +312,7 @@
 <script setup lang="ts">
 import NavBar from "../AdminNavBar.vue";
 import AdminSidebar from "../AdminSidebar.vue";
-import { onMounted, ref, watchEffect } from "vue";
+import { onMounted, ref, watchEffect, watch } from "vue";
 import { initFlowbite } from "flowbite";
 import { storage, db } from "@/firebase/init.ts";
 import {
@@ -341,6 +341,7 @@ interface ProductData {
   coverPhoto: File;
   photos: File[];
   isPublished: boolean;
+  status: string;
 }
 
 const newProduct = ref<ProductData>({
@@ -352,6 +353,7 @@ const newProduct = ref<ProductData>({
   coverPhoto: new File([], ""),
   photos: [],
   isPublished: false,
+  status: "",
 });
 
 const coverPhotoInput = ref<HTMLInputElement | null>(null);
@@ -366,6 +368,14 @@ watchEffect((cleanupFn) => {
   const timer = setTimeout(() => (progress.value = 66), 500);
   cleanupFn(() => clearTimeout(timer));
 });
+
+watch(
+  newProduct,
+  (newValue) => {
+    newValue.status = newValue.isPublished ? "Published" : "Hidden";
+  },
+  { deep: true }
+);
 
 const handleFormSubmit = async (): Promise<boolean> => {
   console.log("Form submitted");
@@ -461,6 +471,7 @@ const handleFormSubmit = async (): Promise<boolean> => {
       coverPhoto: coverPhotoURL,
       photos: photosURLs,
       isPublished: newProduct.value.isPublished,
+      status: newProduct.value.status,
     };
     const docRef = await addDoc(collection(db, "products"), productData);
     console.log("Document reference:", docRef);
@@ -475,6 +486,7 @@ const handleFormSubmit = async (): Promise<boolean> => {
       coverPhoto: new File([], ""),
       photos: [],
       isPublished: false,
+      status: "",
     };
     isLoading.value = false;
     isUploadSuccessful.value = true;

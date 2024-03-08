@@ -6,6 +6,7 @@ import AdminDashboard from "../components/admin/dashboard/views/AdminDashboard.v
 import AdminProducts from "../components/admin/dashboard/views/AdminProducts.vue";
 import AdminAddProduct from "../components/admin/dashboard/views/products/AddProduct.vue";
 import AdminEditProduct from "../components/admin/dashboard/views/products/EditProduct.vue";
+import AdminOrders from "../components/admin/orders/views/AdminOrders.vue";
 import { auth } from "../firebase/init.ts";
 
 function requireAdminAuth(next: any) {
@@ -59,6 +60,13 @@ const routes: RouteRecordRaw[] = [
     path: "/admin/products/editproduct/:id",
     name: "adminEditProduct",
     component: AdminEditProduct,
+    beforeEnter: requireAdminAuth,
+    meta: { requiresAdmin: true },
+  },
+  {
+    path: "/admin/orders",
+    name: "adminOrders",
+    component: AdminOrders,
     beforeEnter: requireAdminAuth,
     meta: { requiresAdmin: true },
   },

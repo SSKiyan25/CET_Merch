@@ -116,8 +116,18 @@
                 <table class="min-w-full divide-y divide-primary/50">
                   <thead class="bg-secondary-50">
                     <tr>
-                      <th scope="col" class="pl-4 py-2 text-start">
+                      <th scope="col" class="pl-4 py-2 text-start w-3/12">
                         <div class="flex gap-x-1 whitespace-nowrap">
+                          <span
+                            class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
+                          >
+                            Name
+                          </span>
+                        </div>
+                      </th>
+
+                      <th scope="col" class="pr-6 py-3 text-start w-2/12">
+                        <div class="flex items-center gap-x-2">
                           <span
                             class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                           >
@@ -126,16 +136,6 @@
                           <span class="text-xs text-gray-400">
                             (If posted)</span
                           >
-                        </div>
-                      </th>
-
-                      <th scope="col" class="pr-6 py-3 text-start">
-                        <div class="flex items-center gap-x-2">
-                          <span
-                            class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
-                          >
-                            Name
-                          </span>
                         </div>
                       </th>
 
@@ -185,20 +185,90 @@
                       :key="product.id"
                       class="hover:bg-primary/10"
                     >
-                      <td class="size-0.5 whitespace-nowrap">
+                      <td>
                         <div class="pl-4 py-3">
-                          <Switch class="" />
+                          <p class="w-full whitespace-normal">
+                            <span class="text-sm text-secondary-foreground/80">
+                              {{ product.name }}</span
+                            >
+                          </p>
                         </div>
                       </td>
-                      <td class="size-4/12">
-                        <div class="py-3">
-                          <div class="flex items-center gap-x-2">
-                            <div class="grow">
-                              <p class="w-full whitespace-normal">
-                                <span class="text-sm text-secondary-foreground">
-                                  {{ product.name }}</span
+                      <td>
+                        <div
+                          class="py-3 px-5 flex items-center justify-center gap-x-2"
+                        >
+                          <div class="grow">
+                            <button
+                              v-if="product.isPublished && !product.editStatus"
+                              :class="[
+                                'cursor-default rounded-lg p-1.5',
+                                product.isPublished
+                                  ? 'bg-emerald-600 text-white'
+                                  : 'bg-primary/40 text-secondary-foreground/80',
+                              ]"
+                              @click.prevent="product.editStatus = true"
+                            >
+                              <span class="text-xs font-medium">{{
+                                product.status
+                              }}</span>
+                            </button>
+                            <button
+                              v-else-if="
+                                !product.isPublished && !product.editStatus
+                              "
+                              :class="[
+                                'cursor-default rounded-lg p-1.5',
+                                product.isPublished
+                                  ? 'bg-emerald-600 text-white'
+                                  : 'bg-primary/40 text-secondary-foreground/80',
+                              ]"
+                              @click.prevent="product.editStatus = true"
+                            >
+                              <span class="text-xs"> {{ product.status }}</span>
+                            </button>
+                            <div v-if="product.editStatus">
+                              <div class="flex flex-row">
+                                <div class="w-3/4">
+                                  <Select v-model="product.selectedStatus">
+                                    <SelectTrigger>
+                                      <span
+                                        v-if="product.editStatus"
+                                        class="material-symbols-outlined"
+                                      >
+                                        edit
+                                      </span>
+                                      <SelectValue
+                                        :placeholder="product.status"
+                                      />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectGroup>
+                                        <SelectLabel>Edit Status</SelectLabel>
+                                        <SelectItem value="Publish"
+                                          >Publish</SelectItem
+                                        >
+                                        <SelectItem value="Hidden"
+                                          >Hidden</SelectItem
+                                        >
+                                      </SelectGroup>
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+
+                                <button
+                                  @click.prevent="updateProductStatus(product)"
                                 >
-                              </p>
+                                  <span
+                                    v-if="!product.isLoading"
+                                    class="material-symbols-outlined text-xs px-1"
+                                    >check</span
+                                  >
+                                  <span v-else>
+                                    <img src="/loading.gif" />
+                                  </span>
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -224,7 +294,7 @@
                             <div class="grow">
                               <span
                                 class="text-sm text-gray-600 dark:text-gray-400"
-                                >{{ product.price }}</span
+                                >P {{ product.price }}</span
                               >
                             </div>
                           </div>
@@ -308,7 +378,7 @@
                                               grid_on
                                             </span>
                                             <h3
-                                              class="font-bold text-xl text-primary/80"
+                                              class="font-bold text-xl text-primary/90"
                                             >
                                               {{ product.name }}
                                             </h3>
@@ -558,7 +628,7 @@ import NavBar from "../views/AdminNavBar.vue";
 import AdminSidebar from "../views/AdminSidebar.vue";
 import { MagnifyingGlassIcon } from "@radix-icons/vue";
 import { Input } from "@/components/ui/input";
-import { ref, defineExpose } from "vue";
+import { ref, defineExpose, watch } from "vue";
 import { Check, ChevronsUpDown, Plus } from "lucide-vue-next";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -586,7 +656,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { db } from "@/firebase/init.ts";
+import { doc, updateDoc } from "firebase/firestore";
 
 const frameworks = [
   { value: "T-Shirt", label: "T-Shirt" },
@@ -602,5 +682,49 @@ const value = ref<string>("");
 const { products, editProduct, deleteProduct } = setupProductController();
 const showProductModal = ref(products.value.map(() => false));
 
-defineExpose({ showProductModal });
+products.value.forEach((product) => {
+  product.editStatus = false;
+  product.selectedStatus = product.status;
+  product.isLoading = false;
+});
+
+const editStatus = (product: any) => {
+  product.editStatus = true;
+  product.selectedStatus = product.status;
+};
+
+const updateProductStatus = async (product: any) => {
+  product.isLoading = true; // Set isLoading to true when the update starts
+
+  if (product.selectedStatus) {
+    product.status = product.selectedStatus;
+    product.isPublished = product.status === "Published";
+  }
+
+  product.editStatus = false;
+
+  // Update the product status in Firestore
+  const productRef = doc(db, "products", product.id);
+  await updateDoc(productRef, {
+    status: product.status,
+    isPublished: product.isPublished,
+  });
+
+  product.isLoading = false; // Set isLoading to false when the update finishes
+};
+
+// Watch for changes in the products array and update the Firestore database
+watch(
+  products,
+  async (newProducts) => {
+    for (const product of newProducts) {
+      if (product.status !== product.selectedStatus) {
+        await updateProductStatus(product);
+      }
+    }
+  },
+  { deep: true }
+);
+
+defineExpose({ showProductModal, updateProductStatus, editStatus });
 </script>
