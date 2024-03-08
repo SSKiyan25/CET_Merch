@@ -16,7 +16,8 @@ import { RouterView } from "vue-router";
         $route.name === 'adminProducts' ||
         $route.name === 'adminAddProduct' ||
         $route.name === 'adminEditProduct' ||
-        $route.name === 'adminOrders',
+        $route.name === 'adminOrders' ||
+        $route.name === 'adminInbox',
     }"
   />
 </template>

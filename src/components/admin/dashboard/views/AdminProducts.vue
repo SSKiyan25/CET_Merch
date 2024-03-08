@@ -316,17 +316,17 @@
                           </p>
                         </div>
                       </td>
-                      <td class="size-1/12 text-end whitespace-nowrap px-5">
+                      <td class="size-1/12 text-start whitespace-nowrap px-2.5">
                         <div class="py-1">
                           <div
                             class="hs-dropdown relative inline-block [--placement:bottom-right]"
                           >
                             <div
-                              class="flex flex-row space-y-2 space-x-2 text-sm"
+                              class="flex flex-row space-y-2 space-x-1 text-sm"
                             >
                               <div class="rounded-sm cursor-pointer mt-2">
                                 <button
-                                  class="bg-emerald-600 text-white p-3 rounded-sm"
+                                  class="bg-emerald-600 text-white p-2 rounded-sm"
                                   title="Edit Product"
                                   @click.prevent="
                                     console.log(product.id);
@@ -334,7 +334,7 @@
                                   "
                                 >
                                   <span
-                                    class="material-symbols-outlined text-sm"
+                                    class="material-symbols-outlined text-xs"
                                   >
                                     edit
                                   </span>
@@ -351,11 +351,11 @@
                                         @click.prevent="
                                           showProductModal[index] = true
                                         "
-                                        class="bg-blue-600 text-white p-3 rounded-sm"
+                                        class="bg-blue-600 text-white p-2 rounded-sm"
                                         title="View Full Details"
                                       >
                                         <span
-                                          class="material-symbols-outlined text-sm"
+                                          class="material-symbols-outlined text-xs"
                                         >
                                           visibility
                                         </span>
@@ -500,11 +500,11 @@
                                 <AlertDialog>
                                   <AlertDialogTrigger class="w-full"
                                     ><button
-                                      class="bg-red-600 text-white p-3 rounded-sm"
+                                      class="bg-red-600 text-white p-2 rounded-sm"
                                       title="Delete Product"
                                     >
                                       <span
-                                        class="material-symbols-outlined text-sm"
+                                        class="material-symbols-outlined text-xs"
                                       >
                                         delete_forever
                                       </span>
@@ -714,17 +714,23 @@ const updateProductStatus = async (product: any) => {
 };
 
 // Watch for changes in the products array and update the Firestore database
-watch(
-  products,
-  async (newProducts) => {
-    for (const product of newProducts) {
-      if (product.status !== product.selectedStatus) {
-        await updateProductStatus(product);
-      }
-    }
-  },
-  { deep: true }
-);
+// let previousProducts = JSON.parse(JSON.stringify(products.value));
+
+// watch(
+//   products,
+//   async (newProducts) => {
+//     for (let i = 0; i < newProducts.length; i++) {
+//       const product = newProducts[i];
+//       const previousProduct = previousProducts[i];
+
+//       if (product.status !== previousProduct.status) {
+//         await updateProductStatus(product);
+//       }
+//     }
+//     previousProducts = JSON.parse(JSON.stringify(newProducts));
+//   },
+//   { deep: true }
+// );
 
 defineExpose({ showProductModal, updateProductStatus, editStatus });
 </script>

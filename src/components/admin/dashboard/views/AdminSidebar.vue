@@ -33,8 +33,8 @@
         </li>
 
         <li>
-          <a
-            href="#"
+          <router-link
+            to="/admin/inbox"
             class="flex items-center p-2 text-secondary-foreground rounded-lg hover:bg-primary/10 group"
             active-class="active-link"
           >
@@ -54,7 +54,7 @@
               class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-primary-foreground bg-primary rounded-full"
               >3</span
             >
-          </a>
+          </router-link>
         </li>
         <li>
           <router-link

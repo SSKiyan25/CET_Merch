@@ -1,4 +1,10 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import {
+  createRouter,
+  createWebHistory,
+  RouteRecordRaw,
+  NavigationGuardNext,
+  RouteLocationNormalized,
+} from "vue-router";
 import Dashboard from "../components/feature/dashboard/views/DashboardView.vue";
 import Login from "../components/feature/authentication/views/LoginView.vue";
 import Signup from "../components/feature/authentication/views/SignupView.vue";
@@ -7,9 +13,14 @@ import AdminProducts from "../components/admin/dashboard/views/AdminProducts.vue
 import AdminAddProduct from "../components/admin/dashboard/views/products/AddProduct.vue";
 import AdminEditProduct from "../components/admin/dashboard/views/products/EditProduct.vue";
 import AdminOrders from "../components/admin/orders/views/AdminOrders.vue";
+import AdminInbox from "../components/admin/inbox/views/InboxPage.vue";
 import { auth } from "../firebase/init.ts";
 
-function requireAdminAuth(next: any) {
+function requireAdminAuth(
+  _: RouteLocationNormalized,
+  __: RouteLocationNormalized,
+  next: NavigationGuardNext
+) {
   auth.onAuthStateChanged((user) => {
     if (user && user.email === "admin@gmail.com") {
       next();
@@ -67,6 +78,13 @@ const routes: RouteRecordRaw[] = [
     path: "/admin/orders",
     name: "adminOrders",
     component: AdminOrders,
+    beforeEnter: requireAdminAuth,
+    meta: { requiresAdmin: true },
+  },
+  {
+    path: "/admin/inbox",
+    name: "adminInbox",
+    component: AdminInbox,
     beforeEnter: requireAdminAuth,
     meta: { requiresAdmin: true },
   },

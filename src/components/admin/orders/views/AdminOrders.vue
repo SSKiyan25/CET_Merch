@@ -10,7 +10,7 @@
       </div>
       <div class="flex flex-col">
         <h1 class="text-2xl">User Orders</h1>
-        <p class="text-sm py-1">
+        <p class="text-sm py-1 text-secondary-foreground/50">
           View and manage user orders. You can filter by status, date range or
           search for a specific order.
         </p>
