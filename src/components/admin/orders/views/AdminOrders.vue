@@ -20,8 +20,45 @@
       <div class="flex flex-row justify-between border-b-2">
         <div class="flex flex-row">
           <h1 class="font-bold text-xl tracking-wide mt-1">Orders</h1>
+          <div class="flex flex-row pl-2">
+            <div :class="cn('grid gap-2', $attrs.class ?? '')">
+              <Popover>
+                <PopoverTrigger as-child>
+                  <Button
+                    id="date"
+                    :variant="'outline'"
+                    :class="
+                      cn(
+                        'w-[300px] justify-start text-left font-normal',
+                        !date && 'text-muted-foreground'
+                      )
+                    "
+                  >
+                    <CalendarIcon class="mr-2 h-4 w-4" />
+
+                    <span>
+                      {{
+                        date.start
+                          ? date.end
+                            ? `${format(date.start, "LLL dd, y")} - ${format(
+                                date.end,
+                                "LLL dd, y"
+                              )}`
+                            : format(date.start, "LLL dd, y")
+                          : "Pick a date"
+                      }}
+                    </span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent class="w-auto p-0" align="start">
+                  <Calendar v-model.range="date" :columns="2" />
+                </PopoverContent>
+              </Popover>
+            </div>
+            <span class="material-symbols-outlined pt-2 pl-1"> send </span>
+          </div>
         </div>
-        <div class="flex flex-row pb-2">
+        <div class="flex flex-row pb-2 space-x-2">
           <form>
             <div class="flex relative w-full max-w-sm items-center">
               <Input
@@ -35,61 +72,74 @@
               >
                 <MagnifyingGlassIcon class="size-6 text-muted-foreground" />
               </span>
-              <Popover v-model:open="open" class="max-w-sm">
-                <PopoverTrigger as-child>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    :aria-expanded="open"
-                    class="w-[200px] justify-between"
-                  >
-                    {{
-                      value
-                        ? frameworks.find(
-                            (framework) => framework.value === value
-                          )?.label
-                        : "Select Category"
-                    }}
-                    <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent class="w-[200px] p-0">
-                  <Command>
-                    <CommandInput class="h-9" placeholder="Search Category" />
-                    <CommandEmpty>No framework found.</CommandEmpty>
-                    <CommandList>
-                      <CommandGroup>
-                        <CommandItem
-                          v-for="framework in frameworks"
-                          :key="framework.value"
-                          :value="framework.value"
-                          @select="
-                            (ev) => {
-                              if (typeof ev.detail.value === 'string') {
-                                value = ev.detail.value;
+              <div class="text-xs">
+                <Popover v-model:open="open">
+                  <PopoverTrigger as-child>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      :aria-expanded="open"
+                      class="w-[130px] justify-between text-xs"
+                    >
+                      {{
+                        value
+                          ? frameworks.find(
+                              (framework) => framework.value === value
+                            )?.label
+                          : "Select Category"
+                      }}
+                      <ChevronsUpDown
+                        class="pl-1 h-4 w-4 shrink-0 opacity-50"
+                      />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent class="w-[120px] p-0">
+                    <Command>
+                      <CommandInput class="h-9" placeholder="Search Category" />
+                      <CommandEmpty>No framework found.</CommandEmpty>
+                      <CommandList>
+                        <CommandGroup>
+                          <CommandItem
+                            v-for="framework in frameworks"
+                            :key="framework.value"
+                            :value="framework.value"
+                            @select="
+                              (ev) => {
+                                if (typeof ev.detail.value === 'string') {
+                                  value = ev.detail.value;
+                                }
+                                open = false;
                               }
-                              open = false;
-                            }
-                          "
-                          class="cursor-pointer"
-                        >
-                          {{ framework.label }}
-                          <Check
-                            :class="
-                              cn(
-                                'ml-auto h-4 w-4',
-                                value === framework.value
-                                  ? 'opacity-100'
-                                  : 'opacity-0'
-                              )
                             "
-                          />
-                        </CommandItem>
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                            class="cursor-pointer"
+                          >
+                            {{ framework.label }}
+                            <Check
+                              :class="
+                                cn(
+                                  'ml-auto h-4 w-4',
+                                  value === framework.value
+                                    ? 'opacity-100'
+                                    : 'opacity-0'
+                                )
+                              "
+                            />
+                          </CommandItem>
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              <div class="px-1">
+                <button
+                  class="p-2 bg-background border-1 rounded-lg hover:bg-background/40"
+                  title="Export"
+                >
+                  <Download />
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -329,7 +379,7 @@ import { onMounted, ref } from "vue";
 import { initFlowbite } from "flowbite";
 import { MagnifyingGlassIcon } from "@radix-icons/vue";
 import { Input } from "@/components/ui/input";
-import { Check, ChevronsUpDown } from "lucide-vue-next";
+import { Check, ChevronsUpDown, Download } from "lucide-vue-next";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -345,9 +395,17 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { addDays, format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-vue-next";
 
 const open = ref(false);
 const value = ref<string>("");
+
+const date = ref({
+  start: new Date(2024, 0, 20),
+  end: addDays(new Date(2024, 0, 20), 20),
+});
 
 const frameworks = [
   { value: "Paid", label: "Paid" },

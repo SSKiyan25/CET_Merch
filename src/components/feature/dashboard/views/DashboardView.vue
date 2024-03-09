@@ -144,11 +144,6 @@
   <div class="flex flex-row py-12 px-8 md:px-24 justify-between">
     <div class="flex flex-row">
       <span class="font-bold text-4xl">Products</span>
-      <div class="flex-row py-3 px-2">
-        <button class="hover:text-primary">
-          <span class="material-symbols-outlined"> add_box </span>
-        </button>
-      </div>
     </div>
     <div class="py-2">
       <form class="min-w-xl mx-auto">

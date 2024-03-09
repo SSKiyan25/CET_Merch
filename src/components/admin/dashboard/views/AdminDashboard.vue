@@ -17,6 +17,68 @@
         </p>
       </div>
     </div>
+    <div class="flex flex-row flex-nowrap justify-start pb-4">
+      <div class="flex flex-col p-4 rounded-lg py-3">
+        <div class="flex flex-row">
+          <h1 class="font-semibold text-xl tracking-wide">Dashboard Reports</h1>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
+          <div
+            class="flex flex-col items-start bg-secondary rounded-sm space-x-4 w-80 h-32 p-4 shadow"
+          >
+            <div class="flex items-center space-x-4 pt-2">
+              <router-link to="admin/inbox" class="bg-blue-600 p-2 rounded-sm">
+                <span class="material-symbols-outlined p-2 text-4xl">
+                  mail
+                </span>
+              </router-link>
+              <div class="flex flex-col">
+                <span class="text-lg font-base">Inbox</span>
+                <span class="font-bold text-primary">1</span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="flex flex-col items-start bg-secondary rounded-sm space-x-4 w-80 h-32 p-4 shadow"
+          >
+            <div class="flex items-center space-x-4 pt-2">
+              <router-link to="admin/orders" class="bg-red-600 p-2 rounded-sm">
+                <span class="material-symbols-outlined p-2 text-4xl">
+                  pending_actions
+                </span>
+              </router-link>
+              <div class="flex flex-col">
+                <span class="text-lg font-base whitespace-nowrap"
+                  >Pending Orders</span
+                >
+                <span class="font-bold text-primary">1</span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="flex flex-col items-start bg-secondary rounded-sm space-x-4 w-80 h-32 p-4 shadow"
+          >
+            <div class="flex items-center space-x-4 pt-2">
+              <router-link
+                to="admin/products"
+                class="bg-green-600 p-2 rounded-sm"
+              >
+                <span class="material-symbols-outlined p-2 text-4xl">
+                  inventory
+                </span>
+              </router-link>
+              <div class="flex flex-col">
+                <span class="text-lg font-base whitespace-nowrap"
+                  >Total Products</span
+                >
+                <span class="font-bold text-primary">1</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="flex flex-col p-4 border-2 rounded-lg py-5">
       <div class="flex flex-row border-b-2">
         <h1 class="font-bold text-xl tracking-wide">Featured Images</h1>
@@ -159,6 +221,7 @@ import { Button } from "@/components/ui/button";
 import { setup as setupControllerFeatured } from "../controllers/adminUploadFeatured.ts";
 import { useRouter } from "vue-router";
 import AdminSidebar from "../views/AdminSidebar.vue";
+import { Mail } from "lucide-vue-next";
 
 const { onFileChange, uploadFeaturedImage, imageUrls, deleteFeaturedImage } =
   setupControllerFeatured();
