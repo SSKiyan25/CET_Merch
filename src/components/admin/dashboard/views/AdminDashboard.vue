@@ -221,7 +221,6 @@ import { Button } from "@/components/ui/button";
 import { setup as setupControllerFeatured } from "../controllers/adminUploadFeatured.ts";
 import { useRouter } from "vue-router";
 import AdminSidebar from "../views/AdminSidebar.vue";
-import { Mail } from "lucide-vue-next";
 
 const { onFileChange, uploadFeaturedImage, imageUrls, deleteFeaturedImage } =
   setupControllerFeatured();

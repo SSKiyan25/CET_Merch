@@ -6,30 +6,7 @@
     <!-- Grid -->
     <div class="md:grid md:grid-cols-2 md:items-center md:gap-12 xl:gap-32">
       <div class="items-center justify-center">
-        <Carousel
-          class="w-full min-w-lg"
-          :plugins="[plugin]"
-          @mouseenter="plugin.stop"
-          @mouseleave="[plugin.reset(), plugin.play(), console.log('Running')]"
-        >
-          <CarouselContent>
-            <CarouselItem v-for="(_, index) in 5" :key="index">
-              <div class="p-1">
-                <Card>
-                  <CardContent class="flex items-center justify-center p-2">
-                    <img
-                      :src="`/carousel/${index + 1}-carousel.jpg`"
-                      alt="Carousel image"
-                      class="max-w-full h-auto"
-                    />
-                  </CardContent>
-                </Card>
-              </div>
-            </CarouselItem>
-          </CarouselContent>
-          <CarouselPrevious class="ml-16 opacity-40 hover:opacity-100" />
-          <CarouselNext class="mr-16 opacity-40 hover:opacity-100" />
-        </Carousel>
+        <FeaturedCarousel />
       </div>
 
       <!-- End Col -->
@@ -141,14 +118,16 @@
     <!-- End Grid -->
   </div>
   <!-- End Features -->
-  <div class="flex flex-row py-12 px-8 md:px-24 justify-between">
-    <div class="flex flex-row">
+  <div class="flex flex-col md:flex-row py-12 px-4 md:px-12 justify-between">
+    <div class="flex flex-row mb-4 md:mb-0">
       <span class="font-bold text-4xl">Products</span>
     </div>
     <div class="py-2">
       <form class="min-w-xl mx-auto">
-        <div class="flex">
-          <div class="relative w-full max-w-sm items-center">
+        <div class="flex flex-col md:flex-row">
+          <div
+            class="relative w-full max-w-sm items-center mb-4 md:mb-0 md:mr-1"
+          >
             <Input
               id="search"
               type="text"
@@ -168,7 +147,7 @@
                 variant="outline"
                 role="combobox"
                 :aria-expanded="open"
-                class="w-[200px] justify-between"
+                class="w-full md:w-[200px] justify-between"
               >
                 {{
                   value
@@ -179,7 +158,7 @@
                 <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent class="w-[200px] p-0">
+            <PopoverContent class="w-full md:w-[200px]">
               <Command>
                 <CommandInput class="h-9" placeholder="Search Category" />
                 <CommandEmpty>No framework found.</CommandEmpty>
@@ -220,30 +199,23 @@
       </form>
     </div>
   </div>
-  <div class="flex flex-row px-36 mb-72">
+  <div class="flex flex-row px-24 pb-72">
     <!-- Card Blog -->
-    <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-4 lg:py-8 mx-auto">
+    <div class="max-w-[85rem] sm:px-1 lg:px-2 mx-auto">
       <!-- Grid -->
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Card -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <Products />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import FeaturedCarousel from "../components/Carousel.vue";
+import Products from "../components/Products.vue";
 import { Button } from "@/components/ui/button";
 import { onMounted, ref } from "vue";
 import { initFlowbite } from "flowbite";
-import Autoplay from "embla-carousel-autoplay";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
 import { MagnifyingGlassIcon } from "@radix-icons/vue";
 import { Input } from "@/components/ui/input";
 
@@ -262,6 +234,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+//import { storage } from "@/firebase/init.ts";
+//import { listAll, ref as storageRef, getDownloadURL } from "firebase/storage";
 
 const frameworks = [
   { value: "T-Shirt", label: "T-Shirt" },
@@ -273,12 +247,6 @@ const frameworks = [
 
 const open = ref(false);
 const value = ref<string>("");
-
-const plugin = Autoplay({
-  delay: 3500,
-  stopOnMouseEnter: false,
-  stopOnInteraction: false,
-});
 
 onMounted(() => {
   initFlowbite();

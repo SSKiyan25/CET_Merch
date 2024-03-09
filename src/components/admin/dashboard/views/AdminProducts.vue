@@ -628,7 +628,7 @@ import NavBar from "../views/AdminNavBar.vue";
 import AdminSidebar from "../views/AdminSidebar.vue";
 import { MagnifyingGlassIcon } from "@radix-icons/vue";
 import { Input } from "@/components/ui/input";
-import { ref, defineExpose, watch } from "vue";
+import { ref, defineExpose } from "vue";
 import { Check, ChevronsUpDown, Plus } from "lucide-vue-next";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
