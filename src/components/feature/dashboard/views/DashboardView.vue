@@ -4,8 +4,10 @@
     class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-12 lg:py-20 mx-auto border-b-2"
   >
     <!-- Grid -->
-    <div class="md:grid md:grid-cols-2 md:items-center md:gap-12 xl:gap-32">
-      <div class="items-center justify-center">
+    <div
+      class="md:grid md:grid-cols-2 md:items-center md:gap-12 xl:gap-32 pb-2"
+    >
+      <div>
         <FeaturedCarousel />
       </div>
 
@@ -118,11 +120,18 @@
     <!-- End Grid -->
   </div>
   <!-- End Features -->
-  <div class="flex flex-col md:flex-row py-12 px-4 md:px-12 justify-between">
-    <div class="flex flex-row mb-4 md:mb-0">
+  <div
+    class="flex flex-col md:flex-row pt-12 pb-8 px-4 md:px-12 justify-between"
+  >
+    <div class="flex flex-row space-x-1 md:mb-0">
+      <span
+        class="material-symbols-outlined text-5xl text-secondary-foreground"
+      >
+        store
+      </span>
       <span class="font-bold text-4xl">Products</span>
     </div>
-    <div class="py-2">
+    <div class="">
       <form class="min-w-xl mx-auto">
         <div class="flex flex-col md:flex-row">
           <div
@@ -199,13 +208,11 @@
       </form>
     </div>
   </div>
-  <div class="flex flex-row px-24 pb-72">
+  <div class="flex flex-row px-16 pb-72 justify-center">
     <!-- Card Blog -->
-    <div class="max-w-[85rem] sm:px-1 lg:px-2 mx-auto">
+    <div class="max-w-[75rem] justify-center items-center">
       <!-- Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <Products />
-      </div>
+      <Products />
     </div>
   </div>
 </template>

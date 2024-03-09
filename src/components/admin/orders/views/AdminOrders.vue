@@ -55,7 +55,7 @@
                 </PopoverContent>
               </Popover>
             </div>
-            <span class="material-symbols-outlined pt-2 pl-1"> send </span>
+            <Button variant="ghost"><ChevronDown /></Button>
           </div>
         </div>
         <div class="flex flex-row pb-2 space-x-2">
@@ -379,7 +379,7 @@ import { onMounted, ref } from "vue";
 import { initFlowbite } from "flowbite";
 import { MagnifyingGlassIcon } from "@radix-icons/vue";
 import { Input } from "@/components/ui/input";
-import { Check, ChevronsUpDown, Download } from "lucide-vue-next";
+import { Check, ChevronsUpDown, Download, ChevronDown } from "lucide-vue-next";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {

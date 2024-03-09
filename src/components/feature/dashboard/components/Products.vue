@@ -1,37 +1,49 @@
 <template>
-  <div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
     <div
-      v-for="(product, index) in products"
+      v-for="product in products"
       :key="product.id"
-      class="group flex flex-col h-full bg-background/80 border border-secondary-foreground/20 shadow-sm rounded-xl"
+      class="group flex flex-col bg-background border border-primary/50 shadow-sm rounded-b-xl"
     >
       <div
-        class="h-72 flex flex-col justify-center items-center bg-secondary rounded-t-lg"
+        class="h-full flex flex-col border-b-2 border-primary/60 justify-center items-center"
       >
         <img :src="product.coverPhoto" />
       </div>
       <div class="p-4 md:p-6">
-        <span class="block mb-1 text-xs font-semibold uppercase text-primary">
-          {{ product.category }}
-        </span>
+        <div class="flex flex-row">
+          <span
+            class="block pb-2 pt-1 text-xs font-semibold uppercase text-secondary-foreground/30"
+          >
+            {{ product.category }}
+          </span>
+          <span
+            class="block pb-2 pl-2 pt-1 text-xs font-semibold uppercase text-primary"
+          >
+            (P {{ product.price }})
+          </span>
+        </div>
+
         <h3 class="text-xl font-semibold text-secondary-foreground">
           {{ product.name }}
         </h3>
-        <p class="mt-3 text-secondary-foreground/30 text-xs">
+        <p
+          class="mt-3 text-secondary-foreground/30 text-xs whitespace-wrap text-justify truncate"
+        >
           {{ product.description }}
         </p>
       </div>
       <div
         class="mt-auto flex border-t border-secondary divide-x divide-secondary"
       >
-        <a
-          class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-es-xl bg-primary/80 text-primary-foreground shadow-sm hover:bg-primary disabled:opacity-50 disabled:pointer-events-none"
-          href="#"
+        <router-link
+          class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-es-xl bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 disabled:opacity-50 disabled:pointer-events-none"
+          to="/product/:id"
         >
           View Product
-        </a>
+        </router-link>
         <a
-          class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-primary/80 text-primary-foreground shadow-sm hover:bg-primary disabled:opacity-50 disabled:pointer-events-none"
+          class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 disabled:opacity-50 disabled:pointer-events-none"
           href="#"
         >
           Order Now

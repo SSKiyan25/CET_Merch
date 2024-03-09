@@ -14,6 +14,7 @@ import AdminAddProduct from "../components/admin/dashboard/views/products/AddPro
 import AdminEditProduct from "../components/admin/dashboard/views/products/EditProduct.vue";
 import AdminOrders from "../components/admin/orders/views/AdminOrders.vue";
 import AdminInbox from "../components/admin/inbox/views/InboxPage.vue";
+import Product from "../components/feature/product/views/ProductView.vue";
 import { auth } from "../firebase/init.ts";
 
 function requireAdminAuth(
@@ -87,6 +88,11 @@ const routes: RouteRecordRaw[] = [
     component: AdminInbox,
     beforeEnter: requireAdminAuth,
     meta: { requiresAdmin: true },
+  },
+  {
+    path: "/product/:id",
+    name: "product",
+    component: Product,
   },
 ];
 
