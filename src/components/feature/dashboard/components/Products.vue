@@ -29,7 +29,7 @@
             </span>
           </div>
           <!--Popover-->
-          <Popover v-model:open="open" class="max-w-sm">
+          <Popover v-model:open="open">
             <PopoverTrigger as-child>
               <Button
                 variant="outline"

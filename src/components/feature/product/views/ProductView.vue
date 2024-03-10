@@ -147,7 +147,12 @@
                 </p>
               </div>
               <div>
-                <Button> Add to Cart</Button>
+                <Sheet>
+                  <SheetTrigger as-child
+                    ><Button> Add to Cart</Button></SheetTrigger
+                  >
+                  <Cart />
+                </Sheet>
               </div>
             </div>
             <!-- End Title -->
@@ -213,6 +218,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
+import Cart from "@/components/feature/user/views/AddToCartView.vue";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 
 async function fetchProduct(id: any): Promise<DocumentData | undefined> {
   try {

@@ -1,6 +1,5 @@
 <template>
   <Carousel
-    class="w-full min-w-lg"
     :plugins="[plugin]"
     @mouseenter="plugin.stop"
     @mouseleave="[plugin.reset(), plugin.play(), console.log('Running')]"
