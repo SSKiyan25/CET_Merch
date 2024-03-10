@@ -1,7 +1,7 @@
 <template>
   <NavBar />
   <AdminSidebar />
-  <div class="p-4 ml-2 sm:ml-64 pb-16">
+  <div class="p-4 ml-2 pt-16 sm:ml-64 pb-16">
     <div class="flex flex-row justify-start py-10">
       <div class="flex">
         <span class="material-symbols-outlined p-2 text-5xl"> mail </span>
