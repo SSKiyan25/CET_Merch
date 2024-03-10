@@ -38,7 +38,7 @@
       >
         <router-link
           class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-es-xl bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 disabled:opacity-50 disabled:pointer-events-none"
-          to="/product/:id"
+          :to="`/product/${product.id}`"
         >
           View Product
         </router-link>

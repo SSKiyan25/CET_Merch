@@ -62,7 +62,7 @@ export const setup = () => {
     if (coverPhotoFile.value) {
       const storageReference = storageRef(
         storage,
-        `productImages/${coverPhotoFile.value.name}`
+        `products/${coverPhotoFile.value.name}`
       );
       const uploadTask = uploadBytesResumable(
         storageReference,
