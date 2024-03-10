@@ -1,6 +1,6 @@
 <template>
   <div class="relative h-[80.5rem]">
-    <div class="pt-8 px-8">
+    <div class="pt-20 md:pt-24 px-2 md:px-8">
       <div class="flex flex-row items-center">
         <router-link to="/" class="cursor-pointer text-primary/50">
           <div class="flex flex-row items-center pt-0.5 hover:text-primary">
@@ -28,32 +28,7 @@
         class="md:grid md:grid-cols-2 md:items-center md:gap-12 xl:gap-32 pb-2"
       >
         <div class="items-center justify-center -mt-8">
-          <Carousel
-            class="w-full"
-            :plugins="[plugin]"
-            @mouseenter="plugin.stop"
-            @mouseleave="
-              [plugin.reset(), plugin.play(), console.log('Running')]
-            "
-          >
-            <CarouselContent>
-              <CarouselItem v-for="(url, index) in allImages" :key="index">
-                <div class="p-1">
-                  <Card>
-                    <CardContent class="flex items-center justify-center p-2">
-                      <img
-                        :src="url"
-                        alt="Carousel image"
-                        class="max-w-full max-h-96"
-                      />
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
-            </CarouselContent>
-            <CarouselPrevious class="ml-16 opacity-40 hover:opacity-100" />
-            <CarouselNext class="mr-16 opacity-40 hover:opacity-100" />
-          </Carousel>
+          <img :src="product?.coverPhoto" class="max-w-full max-h-96" />
         </div>
         <div class="mt-5 sm:mt-10 sm:h-96 lg:h-auto lg:mt-0">
           <div class="space-y-6 sm:space-y-8">

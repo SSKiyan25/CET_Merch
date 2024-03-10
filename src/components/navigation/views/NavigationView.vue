@@ -1,5 +1,5 @@
 <template>
-  <nav class="min-w-screen bg-secondary border-accent md:px-10 border-b-2 z-50">
+  <nav class="w-full fixed bg-secondary border-accent md:px-10 border-b-2 z-40">
     <div class="flex items-center justify-between p-3">
       <div class="flex">
         <router-link
