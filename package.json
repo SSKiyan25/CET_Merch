@@ -24,7 +24,8 @@
     "tailwindcss-animate": "^1.0.7",
     "v-calendar": "^3.1.2",
     "vue": "^3.4.19",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "vue-scrollto": "^2.20.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.20",

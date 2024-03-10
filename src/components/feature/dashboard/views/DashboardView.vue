@@ -108,7 +108,9 @@
               </span>
             </li>
             <li class="flex space-x-3 py-4">
-              <Button variant="default"> Order Now </Button>
+              <Button variant="default" v-scroll-to="'#products'">
+                Order Now
+              </Button>
               <Button variant="ghost"> Contact Us </Button>
             </li>
           </ul>
@@ -120,140 +122,15 @@
     <!-- End Grid -->
   </div>
   <!-- End Features -->
-  <div
-    class="flex flex-col md:flex-row pt-12 pb-8 px-4 md:px-12 justify-between"
-  >
-    <div class="flex flex-row space-x-1 md:mb-0">
-      <span
-        class="material-symbols-outlined text-5xl text-secondary-foreground"
-      >
-        store
-      </span>
-      <span class="font-bold text-4xl">Products</span>
-    </div>
-    <div class="">
-      <form class="min-w-xl mx-auto">
-        <div class="flex flex-col md:flex-row">
-          <div
-            class="relative w-full max-w-sm items-center mb-4 md:mb-0 md:mr-1"
-          >
-            <Input
-              id="search"
-              type="text"
-              placeholder="Search..."
-              class="pl-10"
-            />
-            <span
-              class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
-            >
-              <MagnifyingGlassIcon class="size-6 text-muted-foreground" />
-            </span>
-          </div>
-          <!--Popover-->
-          <Popover v-model:open="open" class="max-w-sm">
-            <PopoverTrigger as-child>
-              <Button
-                variant="outline"
-                role="combobox"
-                :aria-expanded="open"
-                class="w-full md:w-[200px] justify-between"
-              >
-                {{
-                  value
-                    ? frameworks.find((framework) => framework.value === value)
-                        ?.label
-                    : "Select Category"
-                }}
-                <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent class="w-full md:w-[200px]">
-              <Command>
-                <CommandInput class="h-9" placeholder="Search Category" />
-                <CommandEmpty>No framework found.</CommandEmpty>
-                <CommandList>
-                  <CommandGroup>
-                    <CommandItem
-                      v-for="framework in frameworks"
-                      :key="framework.value"
-                      :value="framework.value"
-                      @select="
-                        (ev) => {
-                          if (typeof ev.detail.value === 'string') {
-                            value = ev.detail.value;
-                          }
-                          open = false;
-                        }
-                      "
-                      class="cursor-pointer"
-                    >
-                      {{ framework.label }}
-                      <Check
-                        :class="
-                          cn(
-                            'ml-auto h-4 w-4',
-                            value === framework.value
-                              ? 'opacity-100'
-                              : 'opacity-0'
-                          )
-                        "
-                      />
-                    </CommandItem>
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div class="flex flex-row px-16 pb-72 justify-center">
-    <!-- Card Blog -->
-    <div class="max-w-[75rem] justify-center items-center">
-      <!-- Grid -->
-      <Products />
-    </div>
-  </div>
+  <div id="products"><Products /></div>
 </template>
 
 <script setup lang="ts">
 import FeaturedCarousel from "../components/Carousel.vue";
 import Products from "../components/Products.vue";
 import { Button } from "@/components/ui/button";
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";
-import { MagnifyingGlassIcon } from "@radix-icons/vue";
-import { Input } from "@/components/ui/input";
-
-import { Check, ChevronsUpDown } from "lucide-vue-next";
-import { cn } from "@/lib/utils";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-//import { storage } from "@/firebase/init.ts";
-//import { listAll, ref as storageRef, getDownloadURL } from "firebase/storage";
-
-const frameworks = [
-  { value: "T-Shirt", label: "T-Shirt" },
-  { value: "Polo-Shirt", label: "Polo-Shirt" },
-  { value: "Lace", label: "Lace" },
-  { value: "Hoodie", label: "Hoodie" },
-  { value: "Stickers", label: "Stickers" },
-];
-
-const open = ref(false);
-const value = ref<string>("");
 
 onMounted(() => {
   initFlowbite();
