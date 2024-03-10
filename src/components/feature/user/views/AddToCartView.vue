@@ -1,67 +1,105 @@
 <template>
   <SheetContent>
-    <Tabs default-value="cart">
-      <SheetHeader class="border-b-2 pb-2">
-        <!-- <TabsList class="grid w-full grid-cols-2">
-          <TabsTrigger value="cart">Cart</TabsTrigger>
-          <TabsTrigger value="order">Order List</TabsTrigger>
-        </TabsList> -->
-        <SheetTitle>
-          <span class="material-symbols-outlined -pb-2">
-            add_shopping_cart
-          </span>
-          <span class="pl-2">Order</span></SheetTitle
-        >
+    <Tabs default-value="cart" v-model="selectedTab">
+      <SheetHeader>
+        <TabsList class="grid w-full h-12 grid-cols-2">
+          <TabsTrigger value="cart">
+            <span
+              class="material-symbols-outlined"
+              :class="{ 'text-primary/90': selectedTab === 'cart' }"
+            >
+              add_shopping_cart
+            </span>
+            <span
+              class="pl-1"
+              :class="{ 'text-primary/90': selectedTab === 'cart' }"
+              >Order</span
+            >
+          </TabsTrigger>
+          <TabsTrigger value="order">
+            <span
+              class="material-symbols-outlined"
+              :class="{ 'text-primary/90': selectedTab === 'order' }"
+            >
+              shopping_cart
+            </span>
+            <span
+              class="pl-2"
+              :class="{ 'text-primary/90': selectedTab === 'order' }"
+              >Order List</span
+            >
+          </TabsTrigger>
+        </TabsList>
       </SheetHeader>
-      <div class="flex flex-col flex-wrap py-6">
-        <div class="flex flex-col">
-          <Label>Product - "Category"</Label>
-          <span class="pt-4 pl-4 text-primary font-bold">Product Name</span>
-        </div>
+      <TabsContent value="cart">
         <div class="flex flex-col flex-wrap py-6">
-          <span class="text-sm"> Available Sizes</span>
-          <div class="flex flex-row flex-wrap py-4 pl-4 space-x-1">
-            <Button
-              :variant="selectedSize === 'L' ? 'default' : 'secondary'"
-              @click.prevent="selectedSize = 'L'"
-            >
-              L
-            </Button>
-            <Button
-              :variant="selectedSize === 'XL' ? 'default' : 'secondary'"
-              @click.prevent="selectedSize = 'XL'"
-            >
-              XL
-            </Button>
-            <Button
-              :variant="selectedSize === '2XL' ? 'default' : 'secondary'"
-              @click.prevent="selectedSize = '2XL'"
-            >
-              2XL
-            </Button>
+          <div class="flex flex-col">
+            <Label>Product - "Category"</Label>
+            <span class="pt-4 pl-4 text-primary font-bold">Product Name</span>
+          </div>
+          <div class="flex flex-col flex-wrap py-6">
+            <span class="text-sm"> Available Sizes</span>
+            <div class="flex flex-row flex-wrap py-4 pl-4 space-x-1">
+              <Button
+                :variant="selectedSize === 'L' ? 'default' : 'secondary'"
+                @click.prevent="selectedSize = 'L'"
+              >
+                L
+              </Button>
+              <Button
+                :variant="selectedSize === 'XL' ? 'default' : 'secondary'"
+                @click.prevent="selectedSize = 'XL'"
+              >
+                XL
+              </Button>
+              <Button
+                :variant="selectedSize === '2XL' ? 'default' : 'secondary'"
+                @click.prevent="selectedSize = '2XL'"
+              >
+                2XL
+              </Button>
+            </div>
+          </div>
+          <div class="flex flex-row">
+            <span class="pt-2.5 pr-2 text-xs md:text-sm">Quantity : </span>
+            <Input
+              type="number"
+              min="1"
+              max="10"
+              placeholder="0"
+              class="px-2 py-2 w-1/6 text-base text-center"
+            />
+            <span class="pt-2.5 px-2 text-xs md:text-sm">Initial Price :</span>
+            <span class="pt-2.5 text-sm text-primary">P50.00</span>
           </div>
         </div>
-        <div class="flex flex-row">
-          <span class="pt-2.5 pr-2 text-sm">Quantity : </span>
-          <Input
-            type="number"
-            min="1"
-            max="10"
-            placeholder="0"
-            class="px-2 py-2 w-1/4 text-base"
-          />
-          <span class="pt-2.5 px-2 text-sm">Initial Price :</span>
-          <span class="pt-2.5 text-sm text-primary">P50.00</span>
+        <SheetFooter
+          class="flex flex-col sm:flex-row justify-between items-center"
+        >
+          <SheetClose as-child class="w-full sm:w-auto">
+            <router-link to="/product/:id" class="w-full sm:w-auto">
+              <Button variant="ghost" class="w-full sm:w-auto"
+                >Preview Product</Button
+              >
+            </router-link>
+            <Button type="submit" class="w-full sm:w-auto mt-4 sm:mt-0 sm:ml-4">
+              Add To Cart
+            </Button>
+          </SheetClose>
+        </SheetFooter>
+      </TabsContent>
+      <TabsContent value="order">
+        <div class="flex flex-col flex-wrap py-6">
+          <div class="flex flex-col">
+            <Label> Total Order </Label>
+          </div>
         </div>
-      </div>
-      <SheetFooter>
-        <SheetClose as-child>
-          <router-link to="/product/:id"
-            ><Button variant="ghost">Preview Product</Button></router-link
-          >
-          <Button type="submit"> Add To Cart </Button>
-        </SheetClose>
-      </SheetFooter>
+        <SheetFooter>
+          <SheetClose as-child>
+            <Button type="submit"> Order </Button>
+          </SheetClose>
+        </SheetFooter>
+      </TabsContent>
     </Tabs>
   </SheetContent>
 </template>
@@ -81,4 +119,5 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const selectedSize = ref("L");
+const selectedTab = ref("cart");
 </script>
