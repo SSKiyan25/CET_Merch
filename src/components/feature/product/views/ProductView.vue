@@ -1,6 +1,6 @@
 <template>
   <div class="relative h-[80.5rem]">
-    <div class="pt-20 md:pt-24 px-2 md:px-8">
+    <div class="pt-20 pb-8 md:pt-24 px-2 md:px-8">
       <div class="flex flex-row items-center">
         <router-link to="/" class="cursor-pointer text-primary/50">
           <div class="flex flex-row items-center pt-0.5 hover:text-primary">
@@ -22,15 +22,61 @@
       </div>
     </div>
     <div
-      class="max-w-[85rem] h-[12rem] sm:h-[40rem] lg:h-[75rem] px-4 py-4 sm:px-6 lg:px-12 lg:py-12 mx-auto border-b-2 mt-8"
+      class="max-w-[85rem] h-[62rem] base:h-[64rem] md:h-[36rem] lg:h-[44rem] px-4 py-4 sm:px-6 lg:px-12 lg:py-4 mx-auto mt-8 border-b-2"
     >
-      <div
-        class="md:grid md:grid-cols-2 md:items-center md:gap-12 xl:gap-32 pb-2"
-      >
-        <div class="items-center justify-center -mt-8">
-          <img :src="product?.coverPhoto" class="max-w-full max-h-96" />
+      <div class="md:grid md:grid-cols-2 md:gap-12 xl:gap-18 pb-2">
+        <div
+          class="flex flex-col items-center bg-secondary/50 rounded-sm shadow-sm overflow-hidden pt-10 -mt-8 px-4"
+        >
+          <div class="items-center justify-center -mt-6 pb-3">
+            <img
+              :src="product?.coverPhoto"
+              class="w-full max-h-96 rounded-sm"
+            />
+          </div>
+          <div
+            class="flex flex-col sm:flex-row w-full justify-center items-center border-t-2"
+          >
+            <Carousel
+              class="relative w-full max-w-full"
+              :opts="{
+                align: 'start',
+              }"
+            >
+              <CarouselContent class="px-2 sm:px-8">
+                <CarouselItem
+                  v-for="(photo, index) in product?.photos"
+                  :key="index"
+                  class="w-full lg:basis-1/2"
+                >
+                  <div class="p-1">
+                    <Card
+                      class="bg-background/0 opacity-90 border-none shadow-none"
+                    >
+                      <CardContent
+                        class="flex aspect-square items-center justify-center"
+                      >
+                        <img
+                          :src="photo"
+                          alt="Product image"
+                          class="w-full h-auto rounded-sm"
+                        />
+                      </CardContent>
+                    </Card>
+                  </div>
+                </CarouselItem>
+              </CarouselContent>
+              <CarouselPrevious
+                class="ml-24 sm:ml-16 opacity-40 hover:opacity-100"
+              />
+              <CarouselNext
+                class="mr-24 sm:mr-16 opacity-40 hover:opacity-100"
+              />
+            </Carousel>
+          </div>
         </div>
-        <div class="mt-5 sm:mt-10 sm:h-96 lg:h-auto lg:mt-0">
+
+        <div class="sm:h-96 pt-4 lg:mt-0">
           <div class="space-y-6 sm:space-y-8">
             <!-- Title -->
             <div class="space-y-2 md:space-y-4">
@@ -42,10 +88,10 @@
                 </h2>
               </div>
               <div class="flex flex-row">
-                <snap class="text-2xl font-semibold text-primary">
-                  P {{ product?.price }}</snap
+                <span class="text-2xl font-semibold text-primary">
+                  P {{ product?.price }}</span
                 >
-                <snap class="text-xl pl-2">(</snap>
+                <span class="text-xl pl-2">(</span>
                 <div class="flex items-center">
                   <svg
                     class="w-4 h-4 text-yellow-300 ms-1"
@@ -103,7 +149,7 @@
                     />
                   </svg>
                 </div>
-                <snap class="text-xl">)</snap>
+                <span class="text-xl">)</span>
               </div>
 
               <div class="flex flex-wrap">
@@ -112,7 +158,7 @@
                 </p>
               </div>
               <div>
-                <snap>Available Sizes:</snap>
+                <span>Available Sizes:</span>
                 <p class="pl-8 py-4 text-secondary-foreground/70">
                   {{
                     product?.sizes[0] === "N/A"
@@ -134,56 +180,16 @@
           </div>
         </div>
       </div>
-      <div class="flex items-center justify-center mt-16">
-        <div
-          class="flex flex-col sm:flex-row w-full justify-center items-center"
-        >
-          <Carousel
-            class="relative w-full max-w-full"
-            :opts="{
-              align: 'start',
-            }"
-          >
-            <CarouselContent class="px-2 sm:px-12">
-              <CarouselItem
-                v-for="(photo, index) in product?.photos"
-                :key="index"
-                class="w-full sm:basis-1/2 lg:basis-1/3"
-              >
-                <div class="p-1">
-                  <Card
-                    class="bg-background/10 opacity-90 border-none shadow-none"
-                  >
-                    <CardContent
-                      class="flex aspect-square items-center justify-center"
-                    >
-                      <img
-                        :src="photo"
-                        alt="Product image"
-                        class="w-full h-auto object-cover"
-                      />
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
-            </CarouselContent>
-            <CarouselPrevious
-              class="ml-24 sm:ml-16 opacity-40 hover:opacity-100"
-            />
-            <CarouselNext class="mr-24 sm:mr-16 opacity-40 hover:opacity-100" />
-          </Carousel>
-        </div>
-      </div>
+      <div class="flex items-center justify-center h-[10rem]"></div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, watch, computed, provide } from "vue";
+import { ref, watch, provide } from "vue";
 import { useRoute } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { db } from "@/firebase/init.ts";
 import { getDoc, doc, DocumentData } from "firebase/firestore";
-import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,
   CarouselContent,
