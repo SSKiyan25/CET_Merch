@@ -34,34 +34,30 @@
       <TabsContent value="cart">
         <div class="flex flex-col flex-wrap py-6">
           <div class="flex flex-col">
-            <Label>Product - "Category"</Label>
-            <span class="pt-4 pl-4 text-primary font-bold">Product Name</span>
+            <Label>Product - {{ product.category }}</Label>
+            <span class="pt-4 pl-4 text-primary font-bold">
+              {{ product.name }}
+            </span>
           </div>
-          <div class="flex flex-col flex-wrap py-6">
+          <div
+            class="flex flex-col flex-wrap py-6"
+            v-if="product.sizes && product.sizes[0] !== 'N/A'"
+          >
             <span class="text-sm"> Available Sizes</span>
             <div class="flex flex-row flex-wrap py-4 pl-4 space-x-1">
               <Button
-                :variant="selectedSize === 'L' ? 'default' : 'secondary'"
-                @click.prevent="selectedSize = 'L'"
+                v-for="size in product.sizes"
+                :key="size"
+                :variant="selectedSize === size ? 'default' : 'secondary'"
+                @click.prevent="selectedSize = size"
+                class="mb-2"
               >
-                L
-              </Button>
-              <Button
-                :variant="selectedSize === 'XL' ? 'default' : 'secondary'"
-                @click.prevent="selectedSize = 'XL'"
-              >
-                XL
-              </Button>
-              <Button
-                :variant="selectedSize === '2XL' ? 'default' : 'secondary'"
-                @click.prevent="selectedSize = '2XL'"
-              >
-                2XL
+                {{ size }}
               </Button>
             </div>
           </div>
-          <div class="flex flex-row">
-            <span class="pt-2.5 pr-2 text-xs md:text-sm">Quantity : </span>
+          <div class="flex flex-row pt-4">
+            <span class="pt-2.5 pr-2 text-xs md:text-sm"> Quantity : </span>
             <Input
               type="number"
               min="1"
@@ -70,7 +66,9 @@
               class="px-2 py-2 w-1/6 text-base text-center"
             />
             <span class="pt-2.5 px-2 text-xs md:text-sm">Initial Price :</span>
-            <span class="pt-2.5 text-sm text-primary">P50.00</span>
+            <span class="pt-2.5 text-sm text-primary">
+              {{ product.price }}
+            </span>
           </div>
         </div>
         <SheetFooter
@@ -105,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, defineProps, computed, inject } from "vue";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -114,10 +112,31 @@ import {
   SheetContent,
   SheetFooter,
   SheetHeader,
-  SheetTitle,
 } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const selectedSize = ref("L");
+type ProductType = {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  sizes: string[];
+};
+
 const selectedTab = ref("cart");
+
+const props = defineProps({
+  productId: {
+    type: String,
+    required: true,
+  },
+});
+
+const injectedGetProductById = inject("getProductById") as (
+  id: string
+) => ProductType;
+const product = computed(() => injectedGetProductById(props.productId));
+const selectedSize = computed(() =>
+  product.value.sizes ? product.value.sizes[0] : ""
+);
 </script>

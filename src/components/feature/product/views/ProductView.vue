@@ -126,7 +126,7 @@
                   <SheetTrigger as-child
                     ><Button> Add to Cart</Button></SheetTrigger
                   >
-                  <Cart />
+                  <Cart :productId="product?.id" />
                 </Sheet>
               </div>
             </div>
@@ -177,9 +177,8 @@
     </div>
   </div>
 </template>
-
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, provide } from "vue";
 import { useRoute } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { db } from "@/firebase/init.ts";
@@ -217,7 +216,6 @@ async function fetchProduct(id: any): Promise<DocumentData | undefined> {
 const route = useRoute();
 const product = ref<DocumentData | null | undefined>(null);
 const cache = new Map();
-console.log(product);
 
 watch(
   () => route.params.id,
@@ -232,14 +230,12 @@ watch(
   { immediate: true }
 );
 
-const allImages = computed(() => [
-  product.value?.coverPhoto,
-  ...product.value?.photos,
-]);
-const plugin = Autoplay({
-  delay: 3500,
-  stopOnMouseEnter: false,
-  stopOnInteraction: false,
-});
-console.log(product);
+// Removed unused variables 'allImages' and 'plugin'
+
+const getProductById = (id: string) => {
+  // Replaced 'products' with 'product'
+  return product.value?.id === id ? product.value : undefined;
+};
+
+provide("getProductById", getProductById);
 </script>

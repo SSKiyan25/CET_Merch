@@ -40,16 +40,11 @@
         class="relative flex justify-between md:order-2 items-center w-[6rem]"
       >
         <div class="flex">
-          <Sheet>
-            <SheetTrigger as-child>
-              <button>
-                <span class="material-symbols-outlined text-2xl">
-                  shopping_cart
-                </span>
-              </button>
-            </SheetTrigger>
-            <Cart />
-          </Sheet>
+          <button>
+            <span class="material-symbols-outlined text-2xl">
+              shopping_cart
+            </span>
+          </button>
         </div>
         <div class="flex items-center ms-3">
           <div>
@@ -125,8 +120,6 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase/init.ts";
 import { useRouter } from "vue-router";
 import { signOut } from "firebase/auth";
-import Cart from "@/components/feature/user/views/AddToCartView.vue";
-import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 
 const router = useRouter();
 const user = ref<User | null>(null);

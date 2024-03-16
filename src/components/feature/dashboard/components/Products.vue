@@ -13,21 +13,6 @@
     <div class="">
       <form class="min-w-xl mx-auto">
         <div class="flex flex-col md:flex-row">
-          <div
-            class="relative w-full max-w-sm items-center mb-4 md:mb-0 md:mr-1"
-          >
-            <Input
-              id="search"
-              type="text"
-              placeholder="Search..."
-              class="pl-10"
-            />
-            <span
-              class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
-            >
-              <MagnifyingGlassIcon class="size-6 text-muted-foreground" />
-            </span>
-          </div>
           <!--Popover-->
           <Popover v-model:open="open">
             <PopoverTrigger as-child>
@@ -100,7 +85,9 @@
           <div
             class="h-full flex flex-col border-b-2 border-primary/60 justify-center items-center"
           >
-            <img :src="product.coverPhoto" />
+            <router-link :to="`/product/${product.id}`">
+              <img :src="product.coverPhoto" class="hover:opacity-70" />
+            </router-link>
           </div>
           <div class="p-4 md:p-6">
             <div class="flex flex-row">
@@ -140,12 +127,11 @@
               <SheetTrigger as-child>
                 <button
                   class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 disabled:opacity-50 disabled:pointer-events-none"
-                  href="#"
                 >
                   Order Now
                 </button>
               </SheetTrigger>
-              <Cart />
+              <Cart :productId="product.id" />
             </Sheet>
           </div>
         </div>
@@ -156,9 +142,9 @@
 </template>
 
 <script setup lang="ts">
-import { MagnifyingGlassIcon } from "@radix-icons/vue";
-import { Input } from "@/components/ui/input";
-import { ref } from "vue";
+// import { MagnifyingGlassIcon } from "@radix-icons/vue";
+// import { Input } from "@/components/ui/input";
+import { ref, provide } from "vue";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronsUpDown } from "lucide-vue-next";
 import { cn } from "@/lib/utils";
@@ -191,4 +177,10 @@ const open = ref(false);
 const value = ref<string>("");
 
 const { products } = setupProductController();
+
+const getProductById = (id: string) => {
+  return products.value.find((product) => product.id === id);
+};
+
+provide("getProductById", getProductById);
 </script>
