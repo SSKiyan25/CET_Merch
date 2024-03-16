@@ -1,5 +1,5 @@
 <template>
-  <div class="flex pt-10 pb-20 justify-center">
+  <div class="flex pt-24 pb-20 justify-center">
     <div
       class="p-7 sm:w-full md:w-1/2 lg:w-1/3 items-center justify-center bg-accent border border-primary/20 rounded-xl shadow-sm"
     >
