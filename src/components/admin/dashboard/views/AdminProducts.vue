@@ -508,13 +508,13 @@
                                       >
                                         delete_forever
                                       </span>
-                                    </button></AlertDialogTrigger
-                                  >
+                                    </button>
+                                  </AlertDialogTrigger>
                                   <AlertDialogContent>
                                     <AlertDialogHeader>
                                       <AlertDialogTitle
-                                        >Delete Product</AlertDialogTitle
-                                      >
+                                        >Delete Product
+                                      </AlertDialogTitle>
                                       <AlertDialogDescription>
                                         Are you sure you want to delete this
                                         product?
@@ -628,7 +628,7 @@ import NavBar from "../views/AdminNavBar.vue";
 import AdminSidebar from "../views/AdminSidebar.vue";
 import { MagnifyingGlassIcon } from "@radix-icons/vue";
 import { Input } from "@/components/ui/input";
-import { ref, defineExpose } from "vue";
+import { ref } from "vue";
 import { Check, ChevronsUpDown, Plus } from "lucide-vue-next";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";

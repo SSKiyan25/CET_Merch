@@ -142,8 +142,6 @@
 </template>
 
 <script setup lang="ts">
-// import { MagnifyingGlassIcon } from "@radix-icons/vue";
-// import { Input } from "@/components/ui/input";
 import { ref, provide } from "vue";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronsUpDown } from "lucide-vue-next";
