@@ -102,9 +102,14 @@
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent v-if="newAddToCartData.quantity > 0">
-                  <AlertDialogHeader class="border-b-2 pb-2">
-                    <AlertDialogTitle>Add To Cart</AlertDialogTitle>
-                    <AlertDialogDescription class="pb-4">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle class="border-b-2 pb-2"
+                      >Add To Cart
+                    </AlertDialogTitle>
+                    <AlertDialogDescription
+                      class="pb-4"
+                      id="alert-dialog-description"
+                    >
                       Are you sure you want to add this product to your cart?
                     </AlertDialogDescription>
                   </AlertDialogHeader>
@@ -116,8 +121,9 @@
                     </AlertDialogAction>
                     <AlertDialogAction>
                       <button
-                        type="submit"
+                        type="button"
                         class="bg-primary hover:bg-primary/80"
+                        @click.prevent="handleFormCartSubmit"
                       >
                         Yes
                       </button>
@@ -205,7 +211,9 @@ const handleAlertDialogTrigger = () => {
     return;
   }
 };
+
 const handleFormCartSubmit = async () => {
+  console.log("Form submitted");
   if (newAddToCartData.value.quantity === 0) {
     alert("Please enter a valid number of quantity");
     console.error("Quantity cannot be 0");
@@ -219,14 +227,19 @@ const handleFormCartSubmit = async () => {
       totalPrice: product.value.price * newAddToCartData.value.quantity,
       size: selectedSize.value,
     };
-    await handleAddToCartSubmit(newAddToCartData.value);
-    newAddToCartData.value = {
-      productId: "",
-      userId: "",
-      quantity: 0,
-      totalPrice: 0,
-      size: "",
-    };
+    const docId = await handleAddToCartSubmit(newAddToCartData.value);
+    if (docId) {
+      console.log(`Product added with document id: ${docId}`);
+      newAddToCartData.value = {
+        productId: "",
+        userId: "",
+        quantity: 0,
+        totalPrice: 0,
+        size: "",
+      };
+    } else {
+      console.error("Failed to add product to cart");
+    }
   } else {
     // Handle the case where no user is logged in
     router.push({ name: "login" });

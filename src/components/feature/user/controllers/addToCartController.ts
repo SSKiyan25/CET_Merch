@@ -36,7 +36,8 @@ export const setup = () => {
   const handleAddToCartSubmit = async (newAddToCart: cartData) => {
     const cartCollection = collection(db, "userCart");
 
-    await addDoc(cartCollection, newAddToCart);
+    const docRef = await addDoc(cartCollection, newAddToCart);
+    return docRef.id; // return the id of the newly added document
   };
 
   return { handleAddToCartSubmit, newAddToCartData };
