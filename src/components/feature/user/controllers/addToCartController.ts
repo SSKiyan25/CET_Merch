@@ -12,11 +12,6 @@ import {
 //import { useRoute } from "vue-router";
 
 export const setup = () => {
-  // const products = ref<any[]>([]);
-  // const product = ref<any>(null);
-  // const cart = ref<any[]>([]);
-  // const route = useRoute();
-
   interface cartData {
     productId: string;
     userId: string;

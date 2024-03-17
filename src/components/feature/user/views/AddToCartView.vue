@@ -92,45 +92,7 @@
                   >Preview Product
                 </Button>
               </router-link>
-              <AlertDialog>
-                <AlertDialogTrigger>
-                  <Button
-                    class="w-full sm:w-auto mt-4 sm:mt-0 sm:ml-4"
-                    @click.prevent="handleAlertDialogTrigger"
-                  >
-                    Add To Cart
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent v-if="newAddToCartData.quantity > 0">
-                  <AlertDialogHeader>
-                    <AlertDialogTitle class="border-b-2 pb-2"
-                      >Add To Cart
-                    </AlertDialogTitle>
-                    <AlertDialogDescription
-                      class="pb-4"
-                      id="alert-dialog-description"
-                    >
-                      Are you sure you want to add this product to your cart?
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogAction
-                      class="bg-ghost text-secondary-foreground hover:bg-secondary"
-                    >
-                      Cancel
-                    </AlertDialogAction>
-                    <AlertDialogAction>
-                      <button
-                        type="button"
-                        class="bg-primary hover:bg-primary/80"
-                        @click.prevent="handleFormCartSubmit"
-                      >
-                        Yes
-                      </button>
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+              <Button type="submit" variant="default"> Add To Cart </Button>
             </SheetClose>
           </SheetFooter>
         </TabsContent>
@@ -143,11 +105,21 @@
         </div>
         <SheetFooter>
           <SheetClose as-child>
-            <Button type="submit"> Order </Button>
+            <router-link to="">
+              <Button variant="ghost">View Order List</Button>
+            </router-link>
+            <Button type="submit">Submit Order </Button>
           </SheetClose>
         </SheetFooter>
       </TabsContent>
     </Tabs>
+    <div
+      class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-80"
+      v-if="isLoading || isUploadSuccessful"
+    >
+      <div v-if="isLoading"><LoadingComponent /></div>
+      <div v-if="isUploadSuccessful"><SucessfulComponent /></div>
+    </div>
   </SheetContent>
 </template>
 
@@ -163,19 +135,21 @@ import {
   SheetHeader,
 } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+// import {
+//   AlertDialog,
+//   AlertDialogAction,
+//   AlertDialogContent,
+//   AlertDialogDescription,
+//   AlertDialogFooter,
+//   AlertDialogHeader,
+//   AlertDialogTitle,
+//   AlertDialogTrigger,
+// } from "@/components/ui/alert-dialog";
 import { setup as setupAddToCartController } from "../controllers/addToCartController.ts";
 import { auth } from "@/firebase/init.ts";
 import { useRouter } from "vue-router";
+import LoadingComponent from "../components/LoadingComponent.vue";
+import SucessfulComponent from "../components/SucessfulComponent.vue";
 
 const router = useRouter();
 
@@ -203,16 +177,16 @@ const product = computed(() => injectedGetProductById(props.productId));
 
 const { handleAddToCartSubmit, newAddToCartData } = setupAddToCartController();
 
-const handleAlertDialogTrigger = () => {
-  // Check if the quantity is 0
+let isLoading = ref(false);
+let isUploadSuccessful = ref(false);
+
+const handleFormCartSubmit = async () => {
   if (newAddToCartData.value.quantity === 0) {
     alert("Please enter a valid number of quantity");
     console.error("Quantity cannot be 0");
     return;
   }
-};
-
-const handleFormCartSubmit = async () => {
+  isLoading.value = true;
   console.log("Form submitted");
   if (newAddToCartData.value.quantity === 0) {
     alert("Please enter a valid number of quantity");
@@ -229,6 +203,9 @@ const handleFormCartSubmit = async () => {
     };
     const docId = await handleAddToCartSubmit(newAddToCartData.value);
     if (docId) {
+      isLoading.value = false;
+      isUploadSuccessful.value = true;
+
       console.log(`Product added with document id: ${docId}`);
       newAddToCartData.value = {
         productId: "",
@@ -237,13 +214,19 @@ const handleFormCartSubmit = async () => {
         totalPrice: 0,
         size: "",
       };
+      setTimeout(() => {
+        isUploadSuccessful.value = false;
+        selectedTab.value = "order";
+      }, 2500);
     } else {
       console.error("Failed to add product to cart");
+      isLoading.value = false;
     }
   } else {
     // Handle the case where no user is logged in
     router.push({ name: "login" });
     console.error("No user is logged in");
+    isLoading.value = false;
   }
 };
 
