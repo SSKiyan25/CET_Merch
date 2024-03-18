@@ -236,8 +236,6 @@ watch(
   { immediate: true }
 );
 
-// Removed unused variables 'allImages' and 'plugin'
-
 const getProductById = (id: string) => {
   // Replaced 'products' with 'product'
   return product.value?.id === id ? product.value : undefined;
