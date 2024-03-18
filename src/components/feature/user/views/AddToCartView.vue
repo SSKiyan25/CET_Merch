@@ -102,6 +102,7 @@
           <div class="flex flex-col">
             <Label> Total Order </Label>
           </div>
+          <div></div>
         </div>
         <SheetFooter>
           <SheetClose as-child>
@@ -135,16 +136,6 @@ import {
   SheetHeader,
 } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-// import {
-//   AlertDialog,
-//   AlertDialogAction,
-//   AlertDialogContent,
-//   AlertDialogDescription,
-//   AlertDialogFooter,
-//   AlertDialogHeader,
-//   AlertDialogTitle,
-//   AlertDialogTrigger,
-// } from "@/components/ui/alert-dialog";
 import { setup as setupAddToCartController } from "../controllers/addToCartController.ts";
 import { auth } from "@/firebase/init.ts";
 import { useRouter } from "vue-router";
@@ -224,6 +215,7 @@ const handleFormCartSubmit = async () => {
     }
   } else {
     // Handle the case where no user is logged in
+    alert("Please login to add product to your cart");
     router.push({ name: "login" });
     console.error("No user is logged in");
     isLoading.value = false;
