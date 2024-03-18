@@ -59,11 +59,38 @@
                   {{ product.details?.price * product.quantity }}
                 </td>
                 <td class="p-2">
-                  <button
-                    class="material-symbols-outlined text-secondary-foreground bg-destructive p-2 rounded-sm"
-                  >
-                    delete
-                  </button>
+                  <AlertDialog>
+                    <AlertDialogTrigger
+                      ><button
+                        class="material-symbols-outlined text-secondary-foreground bg-destructive p-2 rounded-sm"
+                      >
+                        delete
+                      </button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Delete Product to Cart
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Are you sure you want to delete this product from your
+                          cart? This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogAction
+                          class="bg-destructive hover:bg-destructive/80 text-destructive-foreground"
+                        >
+                          Delete
+                        </AlertDialogAction>
+                        <AlertDialogAction
+                          class="bg-secondary hover:bg-secondary/80 text-secondary-foreground"
+                        >
+                          Cancel
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </td>
               </tr>
             </tbody>
