@@ -11,28 +11,28 @@ import {
   limit,
 } from "firebase/firestore";
 
+interface cartData {
+  productId: string;
+  userId: string;
+  quantity: number;
+  totalPrice: number;
+  size: string;
+}
+
+export interface orderData {
+  orderNumber: number;
+  userId: string;
+  userName: string;
+  userContactNumber: string;
+  products: cartData[]; //products in the cart
+  totalPrice: number;
+  paymentStatus: string;
+  paymentMethod: string;
+  orderStatus: string;
+  dateOrdered: string;
+}
+
 export const setup = () => {
-  interface cartData {
-    productId: string;
-    userId: string;
-    quantity: number;
-    totalPrice: number;
-    size: string;
-  }
-
-  interface orderData {
-    orderNumber: number;
-    userId: string;
-    userName: string;
-    userContactNumber: string;
-    products: cartData[]; //products in the cart
-    totalPrice: number;
-    paymentStatus: string;
-    paymentMethod: string;
-    orderStatus: string;
-    dateOrdered: string;
-  }
-
   const newAddToCartData = ref<cartData>({
     productId: "",
     userId: "",
@@ -62,13 +62,13 @@ export const setup = () => {
       if (!orderSnapshot.empty) {
         // If an order is on queue, add the product to it
         orderDoc = orderSnapshot.docs[0];
-        const orderData = orderDoc.data() as orderData;
-        if (orderData.products) {
-          orderData.products.push(newAddToCart);
+        const currentOrderData = orderDoc.data() as orderData; // Renamed variable here
+        if (currentOrderData.products) {
+          currentOrderData.products.push(newAddToCart);
         } else {
-          orderData.products = [newAddToCart];
+          currentOrderData.products = [newAddToCart];
         }
-        await updateDoc(orderDoc.ref, { ...orderData });
+        await updateDoc(orderDoc.ref, { ...currentOrderData });
       } else {
         // If no order is on queue, create a new one
         const orderCountSnapshot = await getDocs(orderCollection);
@@ -92,4 +92,27 @@ export const setup = () => {
   };
 
   return { handleAddToCartSubmit, newAddToCartData };
+};
+
+export const getOnQueueOrder = async () => {
+  const orderCollection = collection(db, "userOrder");
+
+  if (auth.currentUser) {
+    const orderQuery = query(
+      orderCollection,
+      where("userId", "==", auth.currentUser.uid),
+      where("orderStatus", "==", "OnQueue"),
+      orderBy("dateOrdered", "desc"),
+      limit(1)
+    );
+
+    const orderSnapshot = await getDocs(orderQuery);
+    if (!orderSnapshot.empty) {
+      const orderDoc = orderSnapshot.docs[0];
+      const currentOrderData = orderDoc.data() as orderData;
+      return currentOrderData;
+    }
+  }
+
+  return null;
 };

@@ -99,15 +99,42 @@
       </form>
       <TabsContent value="order">
         <div class="flex flex-col flex-wrap py-6">
-          <div class="flex flex-col">
-            <Label> Total Order </Label>
+          <div class="flex flex-row">
+            <Label> Total Order In The Cart</Label>
+            <Label class="ml-1 text-primary">(</Label>
+            <Label class="text-primary"> {{ totalProductsInCart }}</Label>
+            <Label class="text-primary">)</Label>
           </div>
-          <div></div>
+          <div v-if="unref(orderData)">
+            <div
+              v-for="(product, index) in unref(orderData)?.products"
+              :key="index"
+            >
+              <Accordion type="single" collapsible>
+                <AccordionItem value="item-1">
+                  <AccordionTrigger>
+                    <span class="text-primary">{{
+                      getProductById(product.productId).name
+                    }}</span>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div class="flex justify-between px-4">
+                      <Label>Quantity: {{ product.quantity }}</Label>
+                      <Label v-if="product.size !== 'N/A'"
+                        >Size: {{ product.size }}</Label
+                      >
+                      <Label>Total Price: {{ product.totalPrice }} </Label>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
+          </div>
         </div>
         <SheetFooter>
           <SheetClose as-child>
             <router-link to="">
-              <Button variant="ghost">View Order List</Button>
+              <Button variant="destructive">Edit Cart</Button>
             </router-link>
             <Button type="submit">Submit Order </Button>
           </SheetClose>
@@ -125,7 +152,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, computed, inject } from "vue";
+import { ref, defineProps, computed, inject, onMounted, unref } from "vue";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -136,13 +163,24 @@ import {
   SheetHeader,
 } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { setup as setupAddToCartController } from "../controllers/addToCartController.ts";
+import {
+  setup as setupAddToCartController,
+  getOnQueueOrder,
+  orderData as OrderDataType,
+} from "../controllers/addToCartController.ts";
 import { auth } from "@/firebase/init.ts";
 import { useRouter } from "vue-router";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import LoadingComponent from "../components/LoadingComponent.vue";
 import SucessfulComponent from "../components/SucessfulComponent.vue";
 
 const router = useRouter();
+const orderData = ref<OrderDataType | null>(null);
 
 type ProductType = {
   id: string;
@@ -151,7 +189,8 @@ type ProductType = {
   price: number;
   sizes: string[];
 };
-
+type GetProductByIdType = (id: string) => ProductType;
+const getProductById = inject("getProductById") as GetProductByIdType;
 const selectedTab = ref("cart");
 
 const props = defineProps({
@@ -159,6 +198,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+});
+
+onMounted(async () => {
+  orderData.value = await getOnQueueOrder();
 });
 
 const injectedGetProductById = inject("getProductById") as (
@@ -205,6 +248,8 @@ const handleFormCartSubmit = async () => {
         totalPrice: 0,
         size: "",
       };
+      //router.go(0);
+      orderData.value = await getOnQueueOrder();
       setTimeout(() => {
         isUploadSuccessful.value = false;
         selectedTab.value = "order";
@@ -227,4 +272,11 @@ const selectedSize = ref(product.value.sizes ? product.value.sizes[0] : "");
 const selectSize = (size: string) => {
   selectedSize.value = size;
 };
+
+const totalProductsInCart = computed(() => {
+  if (orderData.value) {
+    return orderData.value.products.length;
+  }
+  return 0;
+});
 </script>
