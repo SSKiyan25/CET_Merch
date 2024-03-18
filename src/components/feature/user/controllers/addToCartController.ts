@@ -24,7 +24,7 @@ export interface orderData {
   userId: string;
   userName: string;
   userContactNumber: string;
-  products: cartData[]; //products in the cart
+  products: cartData[];
   totalPrice: number;
   paymentStatus: string;
   paymentMethod: string;
@@ -62,7 +62,7 @@ export const setup = () => {
       if (!orderSnapshot.empty) {
         // If an order is on queue, add the product to it
         orderDoc = orderSnapshot.docs[0];
-        const currentOrderData = orderDoc.data() as orderData; // Renamed variable here
+        const currentOrderData = orderDoc.data() as orderData;
         if (currentOrderData.products) {
           currentOrderData.products.push(newAddToCart);
         } else {
@@ -75,22 +75,20 @@ export const setup = () => {
         const newOrder: orderData = {
           orderNumber: orderCountSnapshot.size + 1,
           userId: auth.currentUser.uid,
-          userName: "", // Update this accordingly
-          userContactNumber: "", // Update this accordingly
+          userName: "",
+          userContactNumber: "",
           products: [newAddToCart],
           totalPrice: newAddToCart.totalPrice,
-          paymentStatus: "", // Update this accordingly
-          paymentMethod: "", // Update this accordingly
+          paymentStatus: "",
+          paymentMethod: "",
           orderStatus: "OnQueue",
           dateOrdered: new Date().toISOString(),
         };
         await addDoc(orderCollection, newOrder);
       }
     }
-
     return docRef.id;
   };
-
   return { handleAddToCartSubmit, newAddToCartData };
 };
 
