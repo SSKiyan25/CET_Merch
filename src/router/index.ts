@@ -15,6 +15,7 @@ import AdminEditProduct from "../components/admin/dashboard/views/products/EditP
 import AdminOrders from "../components/admin/orders/views/AdminOrders.vue";
 import AdminInbox from "../components/admin/inbox/views/InboxPage.vue";
 import Product from "../components/feature/product/views/ProductView.vue";
+import ConfirmOrder from "../components/feature/user/views/ConfirmationOrderView.vue";
 import { auth } from "../firebase/init.ts";
 
 function requireAdminAuth(
@@ -93,6 +94,11 @@ const routes: RouteRecordRaw[] = [
     path: "/product/:id",
     name: "product",
     component: Product,
+  },
+  {
+    path: "/confirmorder/:id",
+    name: "confirmOrder",
+    component: ConfirmOrder,
   },
 ];
 

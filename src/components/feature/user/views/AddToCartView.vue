@@ -133,7 +133,7 @@
         </div>
         <SheetFooter>
           <SheetClose as-child>
-            <router-link to="">
+            <router-link :to="`confirmOrder/${unref(orderId)}`">
               <Button variant="destructive">Edit Cart</Button>
             </router-link>
             <Button type="submit">Submit Order </Button>
@@ -199,9 +199,14 @@ const props = defineProps({
     required: true,
   },
 });
+const orderId = ref<string | null>(null);
 
 onMounted(async () => {
-  orderData.value = await getOnQueueOrder();
+  const result = await getOnQueueOrder();
+  if (result) {
+    orderData.value = result.data;
+    orderId.value = result.id;
+  }
 });
 
 const injectedGetProductById = inject("getProductById") as (
@@ -249,7 +254,11 @@ const handleFormCartSubmit = async () => {
         size: "",
       };
       //router.go(0);
-      orderData.value = await getOnQueueOrder();
+      const result = await getOnQueueOrder();
+      if (result) {
+        orderData.value = result.data;
+        orderId.value = result.id;
+      }
       setTimeout(() => {
         isUploadSuccessful.value = false;
         selectedTab.value = "order";

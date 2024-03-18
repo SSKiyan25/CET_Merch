@@ -82,13 +82,13 @@ export const setup = () => {
           paymentStatus: "", // Update this accordingly
           paymentMethod: "", // Update this accordingly
           orderStatus: "OnQueue",
-          dateOrdered: new Date().toISOString(), // Update this accordingly
+          dateOrdered: new Date().toISOString(),
         };
         await addDoc(orderCollection, newOrder);
       }
     }
 
-    return docRef.id; // return the id of the newly added document
+    return docRef.id;
   };
 
   return { handleAddToCartSubmit, newAddToCartData };
@@ -110,9 +110,8 @@ export const getOnQueueOrder = async () => {
     if (!orderSnapshot.empty) {
       const orderDoc = orderSnapshot.docs[0];
       const currentOrderData = orderDoc.data() as orderData;
-      return currentOrderData;
+      return { id: orderDoc.id, data: currentOrderData };
     }
   }
-
   return null;
 };
