@@ -183,6 +183,9 @@
       <div class="flex items-center justify-center h-[10rem]"></div>
     </div>
   </div>
+  <div v-if="loading">
+    <Loading />
+  </div>
 </template>
 <script setup lang="ts">
 import { ref, watch, provide } from "vue";
@@ -200,6 +203,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import Cart from "@/components/feature/user/views/AddToCartView.vue";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import Loading from "@/components/feature/misc/LoadingComponent.vue";
 
 async function fetchProduct(id: any): Promise<DocumentData | undefined> {
   try {
@@ -222,16 +226,20 @@ async function fetchProduct(id: any): Promise<DocumentData | undefined> {
 const route = useRoute();
 const product = ref<DocumentData | null | undefined>(null);
 const cache = new Map();
+const loading = ref(true);
 
 watch(
   () => route.params.id,
   async (newId) => {
+    loading.value = true;
+
     if (cache.has(newId)) {
       product.value = cache.get(newId);
     } else {
       product.value = await fetchProduct(newId);
       cache.set(newId, product.value);
     }
+    setTimeout(() => (loading.value = false), 1000);
   },
   { immediate: true }
 );
@@ -243,3 +251,4 @@ const getProductById = (id: string) => {
 
 provide("getProductById", getProductById);
 </script>
+../../misc/LoadingComponent.vue
