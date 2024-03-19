@@ -16,6 +16,7 @@ import AdminOrders from "../components/admin/orders/views/AdminOrders.vue";
 import AdminInbox from "../components/admin/inbox/views/InboxPage.vue";
 import Product from "../components/feature/product/views/ProductView.vue";
 import ConfirmOrder from "../components/feature/user/views/ConfirmationOrderView.vue";
+import SubmitOrder from "../components/feature/user/views/SubmitOrderView.vue";
 import { auth } from "../firebase/init.ts";
 
 function requireAdminAuth(
@@ -28,6 +29,20 @@ function requireAdminAuth(
       next();
     } else {
       next({ name: "dashboard" });
+    }
+  });
+}
+
+function requireAuth(
+  _: RouteLocationNormalized,
+  __: RouteLocationNormalized,
+  next: NavigationGuardNext
+) {
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      next();
+    } else {
+      next({ name: "login" });
     }
   });
 }
@@ -99,6 +114,13 @@ const routes: RouteRecordRaw[] = [
     path: "/confirmorder/:id",
     name: "confirmOrder",
     component: ConfirmOrder,
+    beforeEnter: requireAuth,
+  },
+  {
+    path: "/submitorder/:id",
+    name: "submitOrder",
+    component: SubmitOrder,
+    beforeEnter: requireAuth,
   },
 ];
 

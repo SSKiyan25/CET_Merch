@@ -14,12 +14,14 @@
             <h1 class="block text-2xl font-bold text-primary/90">Your Cart</h1>
           </div>
           <div class="flex flex-row items-center justify-center">
-            <button
-              class="p-2 bg-emerald-800 rounded-sm hover:bg-emerald-700 text-base text-secondary-foreground font-semibold flex items-center"
-            >
-              Process Order
-              <span class="material-symbols-outlined ml-2"> start </span>
-            </button>
+            <router-link :to="`/submitorder/${route.params.id}`">
+              <button
+                class="p-2 bg-emerald-800 rounded-sm hover:bg-emerald-700 text-base text-secondary-foreground font-semibold flex items-center"
+              >
+                Process Order
+                <span class="material-symbols-outlined ml-2"> start </span>
+              </button>
+            </router-link>
           </div>
         </div>
       </div>
@@ -104,12 +106,14 @@
             <router-link to="/"
               ><button class="bg-destructive rounded-sm p-2">Back</button>
             </router-link>
-            <button
-              class="p-2 bg-emerald-800 rounded-sm hover:bg-emerald-700 text-base text-secondary-foreground font-semibold flex items-center"
-            >
-              Process Order
-              <span class="material-symbols-outlined ml-2"> start </span>
-            </button>
+            <router-link :to="`/submitorder/${route.params.id}`">
+              <button
+                class="p-2 bg-emerald-800 rounded-sm hover:bg-emerald-700 text-base text-secondary-foreground font-semibold flex items-center"
+              >
+                Process Order
+                <span class="material-symbols-outlined ml-2"> start </span>
+              </button>
+            </router-link>
           </div>
 
           <div class="flex flex-row justify-end p-2">
