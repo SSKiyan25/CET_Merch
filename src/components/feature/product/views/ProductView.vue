@@ -251,4 +251,3 @@ const getProductById = (id: string) => {
 
 provide("getProductById", getProductById);
 </script>
-../../misc/LoadingComponent.vue
