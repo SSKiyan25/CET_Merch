@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 
 interface cartData {
+  cartId?: string;
   productId: string;
   userId: string;
   quantity: number;
@@ -34,6 +35,7 @@ export interface orderData {
 
 export const setup = () => {
   const newAddToCartData = ref<cartData>({
+    cartId: "",
     productId: "",
     userId: "",
     quantity: 0,
@@ -46,6 +48,7 @@ export const setup = () => {
     const orderCollection = collection(db, "userOrder");
 
     const docRef = await addDoc(cartCollection, newAddToCart);
+    const cartId = docRef.id;
 
     if (auth.currentUser) {
       const orderQuery = query(
@@ -64,9 +67,9 @@ export const setup = () => {
         orderDoc = orderSnapshot.docs[0];
         const currentOrderData = orderDoc.data() as orderData;
         if (currentOrderData.products) {
-          currentOrderData.products.push(newAddToCart);
+          currentOrderData.products.push({ ...newAddToCart, cartId }); // Include the cartId
         } else {
-          currentOrderData.products = [newAddToCart];
+          currentOrderData.products = [{ ...newAddToCart, cartId }]; // Include the cartId
         }
         await updateDoc(orderDoc.ref, { ...currentOrderData });
       } else {
@@ -77,7 +80,7 @@ export const setup = () => {
           userId: auth.currentUser.uid,
           userName: "",
           userContactNumber: "",
-          products: [newAddToCart],
+          products: [{ ...newAddToCart, cartId }], // Include the cartId
           totalPrice: newAddToCart.totalPrice,
           paymentStatus: "",
           paymentMethod: "",
@@ -87,7 +90,7 @@ export const setup = () => {
         await addDoc(orderCollection, newOrder);
       }
     }
-    return docRef.id;
+    return cartId;
   };
   return { handleAddToCartSubmit, newAddToCartData };
 };

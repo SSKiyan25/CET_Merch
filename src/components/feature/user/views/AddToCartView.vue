@@ -227,11 +227,6 @@ const handleFormCartSubmit = async () => {
   }
   isLoading.value = true;
   console.log("Form submitted");
-  if (newAddToCartData.value.quantity === 0) {
-    alert("Please enter a valid number of quantity");
-    console.error("Quantity cannot be 0");
-    return;
-  }
   if (auth.currentUser) {
     newAddToCartData.value = {
       productId: product.value.id,
@@ -253,7 +248,6 @@ const handleFormCartSubmit = async () => {
         totalPrice: 0,
         size: "",
       };
-      //router.go(0);
       const result = await getOnQueueOrder();
       if (result) {
         orderData.value = result.data;
