@@ -355,6 +355,10 @@ const submitOrder = async (formData: any) => {
       orderStatus: "done",
       dateOrdered: new Date().toDateString(),
     });
+
+    if (order.value) {
+      order.value.orderRefNum = orderRefNum;
+    }
     loading.value = false;
     ifSuccess.value = true;
   } catch (error) {

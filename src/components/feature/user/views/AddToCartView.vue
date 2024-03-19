@@ -105,7 +105,7 @@
             <Label class="text-primary"> {{ totalProductsInCart }}</Label>
             <Label class="text-primary">)</Label>
           </div>
-          <div v-if="unref(orderData)">
+          <div v-if="!ifCartEmpty">
             <div
               v-for="(product, index) in unref(orderData)?.products"
               :key="index"
@@ -130,13 +130,24 @@
               </Accordion>
             </div>
           </div>
+          <div
+            v-if="ifCartEmpty"
+            class="flex flex-col items-center justify-center text-center pt-8"
+          >
+            <span class="material-symbols-outlined text-6xl">
+              production_quantity_limits
+            </span>
+            <span class="text-primary pt-3">Your cart is empty</span>
+          </div>
         </div>
-        <SheetFooter>
+        <SheetFooter v-if="!ifCartEmpty">
           <SheetClose as-child>
             <router-link :to="`confirmOrder/${unref(orderId)}`">
               <Button variant="destructive">Edit Cart</Button>
             </router-link>
-            <Button type="submit">Submit Order </Button>
+            <router-link :to="`confirmOrder/${unref(orderId)}`">
+              <Button type="submit">Submit Order </Button>
+            </router-link>
           </SheetClose>
         </SheetFooter>
       </TabsContent>
@@ -181,6 +192,7 @@ import SucessfulComponent from "../components/SucessfulComponent.vue";
 
 const router = useRouter();
 const orderData = ref<OrderDataType | null>(null);
+const ifCartEmpty = ref(true);
 
 type ProductType = {
   id: string;
@@ -206,6 +218,7 @@ onMounted(async () => {
   if (result) {
     orderData.value = result.data;
     orderId.value = result.id;
+    ifCartEmpty.value = result.data.products.length === 0;
   }
 });
 
@@ -252,6 +265,7 @@ const handleFormCartSubmit = async () => {
       if (result) {
         orderData.value = result.data;
         orderId.value = result.id;
+        ifCartEmpty.value = result.data.products.length === 0;
       }
       setTimeout(() => {
         isUploadSuccessful.value = false;
