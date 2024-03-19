@@ -80,6 +80,7 @@
                       <AlertDialogFooter>
                         <AlertDialogAction
                           class="bg-destructive hover:bg-destructive/80 text-destructive-foreground"
+                          @click.prevent="deleteProductToCart(product.cartId)"
                         >
                           Delete
                         </AlertDialogAction>
@@ -135,7 +136,13 @@
 import { ref, watch, provide, computed } from "vue";
 import LoadingComponent from "../components/LoadingComponent.vue";
 import { useRoute } from "vue-router";
-import { getDoc, doc, DocumentData } from "firebase/firestore";
+import {
+  getDoc,
+  doc,
+  DocumentData,
+  deleteDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "@/firebase/init.ts";
 import {
   AlertDialog,
@@ -163,7 +170,8 @@ async function fetchOrder(orderId: string) {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      return docSnap.data();
+      console.log("Fetching order for orderId:", orderId);
+      return { id: docSnap.id, ...docSnap.data() };
     } else {
       throw new Error("No such document");
     }
@@ -184,7 +192,7 @@ async function fetchProductDetails(productId: string) {
 
     if (docSnap.exists()) {
       console.log("Fetched order:", docSnap.data());
-      console.log("Product details:", docSnap.data()); // Add this line
+      console.log("Product details:", docSnap.data());
       return docSnap.data();
     } else {
       throw new Error("No such document");
@@ -205,19 +213,23 @@ watch(
         order.value = cache.get(newId);
       } else {
         const fetchedOrder = await fetchOrder(newId);
-        if (fetchedOrder?.products) {
-          const productsWithDetails = [];
-          for (let product of fetchedOrder.products) {
-            const productDetails = await fetchProductDetails(product.productId);
-            productsWithDetails.push({ ...product, details: productDetails });
+        if (fetchedOrder) {
+          const products = (fetchedOrder as any).products;
+          if (products) {
+            const productsWithDetails = [];
+            for (let product of products) {
+              const productDetails = await fetchProductDetails(
+                product.productId
+              );
+              productsWithDetails.push({ ...product, details: productDetails });
+            }
+            (fetchedOrder as any).products = productsWithDetails;
           }
-          fetchedOrder.products = productsWithDetails;
+          order.value = fetchedOrder;
+          cache.set(newId, order.value);
         }
-        order.value = { ...fetchedOrder };
-        cache.set(newId, order.value);
       }
     }
-    console.log("Order:", order.value);
     loading.value = false;
   },
   { immediate: true }
@@ -227,6 +239,7 @@ const getOrderById = (id: string) => {
   return order.value?.id === id ? order.value : undefined;
 };
 
+//Temporary Compute Total price
 const totalPrice = computed(() => {
   if (order.value && order.value.products) {
     return order.value.products.reduce(
@@ -246,4 +259,49 @@ const products = computed(() => {
 });
 
 provide("getOrderById", getOrderById);
+
+async function deleteProductToCart(cartId: string) {
+  loading.value = true;
+  try {
+    if (!order.value) {
+      console.error("Order is null or undefined");
+      return;
+    }
+    if (!cartId) {
+      console.error("Invalid cartId");
+      return;
+    }
+    console.log(cartId);
+    console.log(order.value.id);
+    const orderDocRef = doc(db, "userOrder", order.value.id);
+    const cartDocRef = doc(db, "userCart", cartId);
+
+    const productToRemove = order.value.products.find(
+      (product: any) => product.cartId === cartId
+    );
+
+    if (!productToRemove) {
+      console.error("Product not found in cart");
+      return;
+    }
+
+    const newProductsArray = order.value.products.filter(
+      (product: any) => product.cartId !== cartId
+    );
+
+    await updateDoc(orderDocRef, {
+      products: newProductsArray,
+    });
+
+    await deleteDoc(cartDocRef).catch((error) => {
+      console.error("Error deleting cart:", error);
+    });
+
+    // Update order.value by creating a new object instead of directly manipulating it
+    order.value = { ...order.value, products: newProductsArray };
+  } catch (error) {
+    console.error("Error deleting document:", error);
+  }
+  loading.value = false;
+}
 </script>
