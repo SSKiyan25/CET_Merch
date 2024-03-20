@@ -218,7 +218,7 @@
         </span>
         <div class="flex pt-4 space-x-2">
           <router-link
-            to="/"
+            to="/contactUs"
             class="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg hover:bg-background/70 hover:text-secondary-foreground/80"
             ><span class="text-secondary-foreground"> Contact Us </span>
           </router-link>

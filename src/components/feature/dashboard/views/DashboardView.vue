@@ -111,7 +111,9 @@
               <Button variant="default" v-scroll-to="'#products'">
                 Order Now
               </Button>
-              <Button variant="ghost"> Contact Us </Button>
+              <router-link to="/contactUs">
+                <Button variant="ghost"> Contact Us </Button>
+              </router-link>
             </li>
           </ul>
           <!-- End List -->

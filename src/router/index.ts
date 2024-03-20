@@ -17,6 +17,7 @@ import AdminInbox from "../components/admin/inbox/views/InboxPage.vue";
 import Product from "../components/feature/product/views/ProductView.vue";
 import ConfirmOrder from "../components/feature/user/views/ConfirmationOrderView.vue";
 import SubmitOrder from "../components/feature/user/views/SubmitOrderView.vue";
+import ContactUs from "../components/feature/contactUs/views/ContactUsView.vue";
 import { auth } from "../firebase/init.ts";
 
 function requireAdminAuth(
@@ -121,6 +122,11 @@ const routes: RouteRecordRaw[] = [
     name: "submitOrder",
     component: SubmitOrder,
     beforeEnter: requireAuth,
+  },
+  {
+    path: "/contactUs",
+    name: "contactUs",
+    component: ContactUs,
   },
 ];
 
