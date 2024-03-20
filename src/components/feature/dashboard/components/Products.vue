@@ -83,10 +83,13 @@
           class="group flex flex-col bg-background border border-primary/50 shadow-sm rounded-b-xl"
         >
           <div
-            class="h-full flex flex-col border-b-2 border-primary/60 justify-center items-center"
+            class="h-full flex flex-col border-b-2 border-primary/60 justify-center items-center max-h-[22rem]"
           >
             <router-link :to="`/product/${product.id}`">
-              <img :src="product.coverPhoto" class="hover:opacity-70" />
+              <img
+                :src="product.coverPhoto"
+                class="hover:opacity-70 max-h-[20rem]"
+              />
             </router-link>
           </div>
           <div class="p-4 md:p-6">
