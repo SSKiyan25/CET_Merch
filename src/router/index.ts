@@ -111,7 +111,7 @@ const routes: RouteRecordRaw[] = [
     component: Product,
   },
   {
-    path: "/confirmorder/:id",
+    path: "/confirmOrder/:id",
     name: "confirmOrder",
     component: ConfirmOrder,
     beforeEnter: requireAuth,

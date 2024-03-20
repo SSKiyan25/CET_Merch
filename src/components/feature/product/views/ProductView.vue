@@ -1,5 +1,5 @@
 <template>
-  <div class="relative h-[80.5rem]">
+  <div class="relative">
     <div class="pt-20 pb-8 md:pt-24 px-2 md:px-8">
       <div class="flex flex-row items-center">
         <router-link to="/" class="cursor-pointer text-primary/50">
@@ -170,9 +170,9 @@
               <div>
                 <Sheet>
                   <SheetTrigger as-child
-                    ><Button> Add to Cart</Button></SheetTrigger
-                  >
-                  <Cart :productId="product?.id" />
+                    ><Button> Add to Cart</Button>
+                  </SheetTrigger>
+                  <Cart :productId="currentId" />
                 </Sheet>
               </div>
             </div>
@@ -180,7 +180,6 @@
           </div>
         </div>
       </div>
-      <div class="flex items-center justify-center h-[10rem]"></div>
     </div>
   </div>
   <div v-if="loading">
@@ -204,16 +203,20 @@ import { Card, CardContent } from "@/components/ui/card";
 import Cart from "@/components/feature/user/views/AddToCartView.vue";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import Loading from "@/components/feature/misc/LoadingComponent.vue";
+import { setup as setupProductController } from "@/components/feature/dashboard/controllers/products_controller.ts";
 
 async function fetchProduct(id: any): Promise<DocumentData | undefined> {
+  console.log("fetchProduct called with id: ", id);
   try {
     if (!id) {
       throw new Error("Product ID is undefined");
     }
     const docRef = doc(db, "products", id);
     const docSnap = await getDoc(docRef);
+    console.log("docSnap: ", docSnap);
 
     if (docSnap.exists()) {
+      console.log("Product data: ", docSnap.data());
       return docSnap.data();
     } else {
       throw new Error("No such document!");
@@ -227,26 +230,39 @@ const route = useRoute();
 const product = ref<DocumentData | null | undefined>(null);
 const cache = new Map();
 const loading = ref(true);
+const currentId = route.params.id as string;
+
+const { products } = setupProductController();
+
+const getProductById = (id: string) => {
+  return products.value.find((product) => product.id === id);
+};
+
+provide("getProductById", getProductById);
 
 watch(
   () => route.params.id,
   async (newId) => {
     loading.value = true;
 
-    if (cache.has(newId)) {
-      product.value = cache.get(newId);
-    } else {
-      product.value = await fetchProduct(newId);
-      cache.set(newId, product.value);
+    try {
+      if (cache.has(newId)) {
+        product.value = cache.get(newId);
+      } else {
+        const fetchedProduct = await fetchProduct(newId);
+        product.value = fetchedProduct;
+        console.log("fetchedProduct: ", fetchedProduct);
+        cache.set(newId, fetchedProduct);
+      }
+    } catch (error) {
+      console.error("Error fetching product: ", error);
+    } finally {
+      console.log("loading: ", loading.value);
+      loading.value = false;
     }
-    setTimeout(() => (loading.value = false), 1000);
   },
   { immediate: true }
 );
 
-const getProductById = (id: string) => {
-  return product.value?.id === id ? product.value : undefined;
-};
-
-provide("getProductById", getProductById);
+console.log("product: ", product);
 </script>

@@ -105,7 +105,6 @@
                   type="text"
                   v-model="formData.phoneNumber"
                   class="py-3 px-4 block w-full bg-secondary border-primary/40 rounded-lg text-sm focus:border-primary/70 focus:ring-primary/60 disabled:opacity-50 disabled:pointer-events-none"
-                  required
                 />
               </div>
             </div>
@@ -217,7 +216,12 @@
         <span class="text-sm text-secondary-foreground/70 pt-2">
           (Show this to the CS3 treasurer for your payment.)
         </span>
-        <div class="flex pt-4">
+        <div class="flex pt-4 space-x-2">
+          <router-link
+            to="/"
+            class="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg hover:bg-background/70 hover:text-secondary-foreground/80"
+            ><span class="text-secondary-foreground"> Contact Us </span>
+          </router-link>
           <router-link
             to="/"
             class="bg-primary/80 text-primary/90 px-4 py-2 rounded-lg hover:bg-primary/90 hover:text-primary/80"

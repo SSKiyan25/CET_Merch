@@ -1,12 +1,10 @@
 import { onMounted, ref } from "vue";
 import { initFlowbite } from "flowbite";
-import { db, storage } from "@/firebase/init.ts";
-import { ref as storageRef, getDownloadURL, listAll } from "firebase/storage";
+import { db } from "@/firebase/init.ts";
 import { collection, getDocs, doc, getDoc } from "firebase/firestore";
-import { useRouter, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 
 export const setup = () => {
-  const router = useRouter();
   const route = useRoute();
   const products = ref<any[]>([]);
   const product = ref<any>(null);

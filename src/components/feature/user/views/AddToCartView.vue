@@ -2,34 +2,37 @@
   <SheetContent>
     <Tabs default-value="cart" v-model="selectedTab">
       <SheetHeader>
-        <TabsList class="grid w-full h-12 grid-cols-2">
-          <TabsTrigger value="cart">
-            <span
-              class="material-symbols-outlined"
-              :class="{ 'text-primary/90': selectedTab === 'cart' }"
-            >
-              add_shopping_cart
-            </span>
-            <span
-              class="pl-1"
-              :class="{ 'text-primary/90': selectedTab === 'cart' }"
-              >Order</span
-            >
-          </TabsTrigger>
-          <TabsTrigger value="order">
-            <span
-              class="material-symbols-outlined"
-              :class="{ 'text-primary/90': selectedTab === 'order' }"
-            >
-              shopping_cart
-            </span>
-            <span
-              class="pl-2"
-              :class="{ 'text-primary/90': selectedTab === 'order' }"
-              >Order List</span
-            >
-          </TabsTrigger>
-        </TabsList>
+        <SheetTitle>
+          <TabsList class="grid w-full h-12 grid-cols-2">
+            <TabsTrigger value="cart">
+              <span
+                class="material-symbols-outlined"
+                :class="{ 'text-primary/90': selectedTab === 'cart' }"
+              >
+                add_shopping_cart
+              </span>
+              <span
+                class="pl-1"
+                :class="{ 'text-primary/90': selectedTab === 'cart' }"
+                >Order</span
+              >
+            </TabsTrigger>
+            <TabsTrigger value="order">
+              <span
+                class="material-symbols-outlined"
+                :class="{ 'text-primary/90': selectedTab === 'order' }"
+              >
+                shopping_cart
+              </span>
+              <span
+                class="pl-2"
+                :class="{ 'text-primary/90': selectedTab === 'order' }"
+                >Order List</span
+              >
+            </TabsTrigger>
+          </TabsList>
+        </SheetTitle>
+        <SheetDescription></SheetDescription>
       </SheetHeader>
       <form @submit.prevent="handleFormCartSubmit">
         <TabsContent value="cart">
@@ -142,10 +145,14 @@
         </div>
         <SheetFooter v-if="!ifCartEmpty">
           <SheetClose as-child>
-            <router-link :to="`confirmOrder/${unref(orderId)}`">
+            <router-link
+              :to="{ name: 'confirmOrder', params: { id: unref(orderId) } }"
+            >
               <Button variant="destructive">Edit Cart</Button>
             </router-link>
-            <router-link :to="`confirmOrder/${unref(orderId)}`">
+            <router-link
+              :to="{ name: 'confirmOrder', params: { id: unref(orderId) } }"
+            >
               <Button type="submit">Submit Order </Button>
             </router-link>
           </SheetClose>
@@ -168,6 +175,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
+  SheetTitle,
+  SheetDescription,
   SheetClose,
   SheetContent,
   SheetFooter,
@@ -211,6 +220,7 @@ const props = defineProps({
     required: true,
   },
 });
+console.log("productId in Cart component: ", props.productId);
 const orderId = ref<string | null>(null);
 
 onMounted(async () => {
@@ -284,7 +294,19 @@ const handleFormCartSubmit = async () => {
   }
 };
 
-const selectedSize = ref(product.value.sizes ? product.value.sizes[0] : "");
+let _selectedSize = ref("");
+
+const selectedSize = computed({
+  get: () => {
+    if (product.value && product.value.sizes && _selectedSize.value === "") {
+      _selectedSize.value = product.value.sizes[0];
+    }
+    return _selectedSize.value;
+  },
+  set: (value) => {
+    _selectedSize.value = value;
+  },
+});
 
 const selectSize = (size: string) => {
   selectedSize.value = size;
