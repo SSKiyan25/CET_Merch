@@ -3,22 +3,25 @@ import { initFlowbite } from "flowbite";
 import { db } from "@/firebase/init.ts";
 import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 
+export interface Order {
+  id: string;
+  cart: any[];
+  dateOrdered: string;
+  orderNumber: number;
+  orderRefNum: string;
+  orderStatus: string;
+  paymentMethod: string;
+  paymentStatus: string;
+  totalPrice: number;
+  userContactNumber: string;
+  userEmailAddress: string;
+  userId: string;
+  userName: string;
+  studentId: string;
+  showDetails?: boolean;
+}
+
 export const setup = () => {
-  interface Order {
-    id: string;
-    cart: any[];
-    dateOrdered: string;
-    orderNumber: number;
-    orderRefNum: string;
-    orderStatus: string;
-    paymentMethod: string;
-    paymentStatus: string;
-    totalPrice: number;
-    userContactNumber: string;
-    userEmailAddress: string;
-    userId: string;
-    userName: string;
-  }
   const order = ref<Order | null>(null);
   const orders = ref<Order[]>([]);
 
@@ -46,6 +49,7 @@ export const setup = () => {
           return {
             ...orderData,
             id: doc.id,
+            showDetails: false,
           };
         })
       )

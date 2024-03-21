@@ -212,7 +212,7 @@
                     </tr>
                   </thead>
                   <tbody
-                    v-for="order in orders"
+                    v-for="(order, index) in orders"
                     :key="order.id"
                     class="divide-y divide-primary/50"
                   >
@@ -237,7 +237,7 @@
                         <div
                           v-for="product in order.cart"
                           :key="product"
-                          class="p-2 text-wrap whitespace-normal"
+                          class="px-2 text-wrap whitespace-normal"
                         >
                           <span class="text-xs text-secondary-foreground/80">{{
                             product.details.name
@@ -307,6 +307,7 @@
                               <button
                                 class="bg-blue-600 text-white p-2 rounded-sm"
                                 title="View Details"
+                                @click.prevent="toggleDetails(order)"
                               >
                                 <span class="material-symbols-outlined text-sm">
                                   visibility
@@ -324,6 +325,190 @@
                           </div>
                         </div>
                       </td>
+                      <div v-if="showFullDetails[index]">
+                        <div
+                          class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-80"
+                        >
+                          <div
+                            class="relative w-full max-w-xl max-h-full bg-secondary rounded-lg shadow overflow-y-auto p-4"
+                            style="max-height: 90vh"
+                          >
+                            <div
+                              v-for="(order, index) in orders"
+                              :key="index"
+                              class="flex flex-col bg-secondary rounded-lg"
+                            >
+                              <div
+                                class="border-b border-secondary-foreground/50 py-3"
+                              >
+                                <span class="font-bold text-primary text-xl"
+                                  >Order number:
+                                </span>
+                                <span
+                                  class="font-bold text-secondary-foreground text-xl underline"
+                                  >{{ order.orderRefNum }}</span
+                                >
+                              </div>
+                              <div
+                                class="flex flex-col p-4 space-y-2 border-b border-secondary-foreground/20"
+                              >
+                                <div>
+                                  <span class="font-semibold"
+                                    >Customer Details</span
+                                  >
+                                </div>
+                                <div
+                                  class="flex flex-col pl-8 space-y-2 text-sm opacity-80"
+                                >
+                                  <div class="flex flex-row justify-between">
+                                    <div class="flex flex-row">
+                                      <span class="font-bold">Name: </span>
+                                      <span class="pl-2">
+                                        {{ order.userName }}
+                                      </span>
+                                    </div>
+                                    <div
+                                      v-if="order.studentId"
+                                      class="flex flex-row"
+                                    >
+                                      <span class="font-bold pl-4"
+                                        >Student ID:</span
+                                      >
+                                      <span class="pl-2">{{
+                                        order.studentId
+                                      }}</span>
+                                    </div>
+                                  </div>
+                                  <div class="flex flex-row justify-between">
+                                    <div class="flex flex-row">
+                                      <span class="font-bold">Email: </span>
+                                      <span
+                                        class="pl-2 underline text-blue-200 cursor-pointer"
+                                        >{{ order.userEmailAddress }}</span
+                                      >
+                                    </div>
+                                    <div
+                                      v-if="order.userContactNumber"
+                                      class="flex flex-row"
+                                    >
+                                      <span class="font-bold pl-4"
+                                        >Contact Number:
+                                      </span>
+                                      <span class="pl-2"
+                                        >{{ order.userContactNumber }}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                class="flex flex-col p-4 space-y-2 border-b border-secondary-foreground/20"
+                              >
+                                <div>
+                                  <span class="font-semibold"
+                                    >Order Details</span
+                                  >
+                                </div>
+                                <div
+                                  v-for="(product, index) in order.cart"
+                                  :key="product"
+                                  class="flex flex-col pl-4 space-y-2 text-sm"
+                                >
+                                  <div class="flex flex-row opacity-80">
+                                    <span>Product/s ordered:</span>
+                                  </div>
+                                  <div class="pl-2 text-xs">
+                                    <span class="opacity-80">
+                                      {{ index + 1 }} |</span
+                                    >
+                                    <span class="pl-2 truncate opacity-80">
+                                      {{ product.details.name }} --</span
+                                    >
+                                    <span class="px-2 font-bold text-primary">
+                                      Size: {{ product.size }}
+                                    </span>
+                                    <span class="opacity-80">-- </span
+                                    ><span class="font-bold text-primary px-2">
+                                      {{ product.quantity }}</span
+                                    >
+                                    <span class="opacity-80">--</span>
+
+                                    <span class="pl-2 opacity-80"
+                                      >Amount: {{ product.totalPrice }}</span
+                                    >
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                class="flex flex-col p-4 space-y-2 border-b border-secondary-foreground/20"
+                              >
+                                <div>
+                                  <span class="font-semibold"
+                                    >Payment Details</span
+                                  >
+                                </div>
+                                <div
+                                  class="flex flex-col pl-4 space-y-2 text-xs"
+                                >
+                                  <div
+                                    class="flex row justify-between opacity-80"
+                                  >
+                                    <div class="flex flex-row">
+                                      <span>Payment Status:</span>
+                                      <span class="pl-2 font-bold"
+                                        >{{ order.paymentStatus }}
+                                      </span>
+                                    </div>
+                                    <div class="flex flex-row">
+                                      <span>Payment Method:</span>
+                                      <span class="pl-2"
+                                        >{{ order.paymentMethod }}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div
+                                    class="flex flex-row text-primary font-bold"
+                                  >
+                                    <span>Total Payment:</span>
+                                    <span class="pl-2">
+                                      {{ order.totalPrice }}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="flex flex-row justify-between p-4">
+                                <div
+                                  class="flex flex-row items-center justify-start"
+                                >
+                                  <input
+                                    type="checkbox"
+                                    id="checkbox"
+                                    class="w-6 h-6 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
+                                  />
+                                  <label for="checkbox" class="pl-2 text-sm"
+                                    >Mark Status as Paid
+                                  </label>
+                                </div>
+                                <div
+                                  class="flex flex-row justify-end space-x-2"
+                                >
+                                  <button
+                                    class="p-2 bg-primary font-semibold text-primary-foreground rounded-sm hover:bg-primary/90"
+                                  >
+                                    Contact Customer
+                                  </button>
+                                  <Button
+                                    variant="destructive"
+                                    @click.prevent="toggleDetails(order)"
+                                  >
+                                    Close
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </tr>
                   </tbody>
                 </table>
@@ -417,7 +602,10 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { addDays, format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-vue-next";
-import { setup as setupOrdersController } from "../controllers/adminOrdersController.ts";
+import {
+  Order,
+  setup as setupOrdersController,
+} from "../controllers/adminOrdersController.ts";
 const open = ref(false);
 const value = ref<string>("");
 const { orders } = setupOrdersController();
@@ -426,6 +614,14 @@ const date = ref({
   start: new Date(2024, 0, 20),
   end: addDays(new Date(2024, 0, 20), 20),
 });
+const showFullDetails = ref(orders.value.map(() => false));
+
+const toggleDetails = (order: Order) => {
+  const index = orders.value.indexOf(order);
+  if (index !== -1) {
+    showFullDetails.value[index] = !showFullDetails.value[index];
+  }
+};
 
 const frameworks = [
   { value: "Paid", label: "Paid" },
