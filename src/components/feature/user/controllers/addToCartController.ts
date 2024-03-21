@@ -12,9 +12,7 @@ import {
 } from "firebase/firestore";
 
 interface cartData {
-  cartId?: string;
   productId: string;
-  userId: string;
   quantity: number;
   totalPrice: number;
   size: string;
@@ -25,7 +23,7 @@ export interface orderData {
   userId: string;
   userName: string;
   userContactNumber: string;
-  products: cartData[];
+  cart: cartData[];
   totalPrice: number;
   paymentStatus: string;
   paymentMethod: string;
@@ -35,20 +33,14 @@ export interface orderData {
 
 export const setup = () => {
   const newAddToCartData = ref<cartData>({
-    cartId: "",
     productId: "",
-    userId: "",
     quantity: 0,
     totalPrice: 0,
     size: "",
   });
 
   const handleAddToCartSubmit = async (newAddToCart: cartData) => {
-    const cartCollection = collection(db, "userCart");
     const orderCollection = collection(db, "userOrder");
-
-    const docRef = await addDoc(cartCollection, newAddToCart);
-    const cartId = docRef.id;
 
     if (auth.currentUser) {
       const orderQuery = query(
@@ -66,10 +58,10 @@ export const setup = () => {
         // If an order is on queue, add the product to it
         orderDoc = orderSnapshot.docs[0];
         const currentOrderData = orderDoc.data() as orderData;
-        if (currentOrderData.products) {
-          currentOrderData.products.push({ ...newAddToCart, cartId }); // Include the cartId
+        if (currentOrderData.cart) {
+          currentOrderData.cart.push(newAddToCart);
         } else {
-          currentOrderData.products = [{ ...newAddToCart, cartId }]; // Include the cartId
+          currentOrderData.cart = [newAddToCart];
         }
         await updateDoc(orderDoc.ref, { ...currentOrderData });
       } else {
@@ -80,7 +72,7 @@ export const setup = () => {
           userId: auth.currentUser.uid,
           userName: "",
           userContactNumber: "",
-          products: [{ ...newAddToCart, cartId }], // Include the cartId
+          cart: [newAddToCart],
           totalPrice: newAddToCart.totalPrice,
           paymentStatus: "",
           paymentMethod: "",
@@ -90,7 +82,6 @@ export const setup = () => {
         await addDoc(orderCollection, newOrder);
       }
     }
-    return cartId;
   };
   return { handleAddToCartSubmit, newAddToCartData };
 };

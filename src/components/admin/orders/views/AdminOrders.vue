@@ -235,9 +235,9 @@
                       </td>
                       <td>
                         <div
-                          v-for="product in order.products"
+                          v-for="product in order.cart"
                           :key="product"
-                          class="p-3 text-wrap whitespace-normal"
+                          class="p-2 text-wrap whitespace-normal"
                         >
                           <span class="text-xs text-secondary-foreground/80">{{
                             product.details.name

@@ -40,7 +40,7 @@
             </thead>
             <tbody>
               <tr
-                v-for="(product, index) in products"
+                v-for="(product, index) in cart"
                 :key="index"
                 class="border-b border-primary/40 hover:bg-primary/10"
               >
@@ -82,7 +82,7 @@
                       <AlertDialogFooter>
                         <AlertDialogAction
                           class="bg-destructive hover:bg-destructive/80 text-destructive-foreground"
-                          @click.prevent="deleteProductToCart(product.cartId)"
+                          @click.prevent="deleteProductFromCart(index)"
                         >
                           Delete
                         </AlertDialogAction>
@@ -140,13 +140,7 @@
 import { ref, watch, provide, computed } from "vue";
 import LoadingComponent from "../components/LoadingComponent.vue";
 import { useRoute } from "vue-router";
-import {
-  getDoc,
-  doc,
-  DocumentData,
-  deleteDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { getDoc, doc, DocumentData, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase/init.ts";
 import {
   AlertDialog,
@@ -218,16 +212,14 @@ watch(
       } else {
         const fetchedOrder = await fetchOrder(newId);
         if (fetchedOrder) {
-          const products = (fetchedOrder as any).products;
-          if (products) {
-            const productsWithDetails = [];
-            for (let product of products) {
-              const productDetails = await fetchProductDetails(
-                product.productId
-              );
-              productsWithDetails.push({ ...product, details: productDetails });
+          const cart = (fetchedOrder as any).cart;
+          if (cart) {
+            const cartWithDetails = [];
+            for (let item of cart) {
+              const productDetails = await fetchProductDetails(item.productId);
+              cartWithDetails.push({ ...item, details: productDetails });
             }
-            (fetchedOrder as any).products = productsWithDetails;
+            (fetchedOrder as any).cart = cartWithDetails;
           }
           order.value = fetchedOrder;
           cache.set(newId, order.value);
@@ -245,12 +237,10 @@ const getOrderById = (id: string) => {
 
 //Temporary Compute Total price
 const totalPrice = computed(() => {
-  if (order.value && order.value.products) {
-    return order.value.products.reduce(
-      (
-        total: number,
-        product: { details: { price: number }; quantity: number }
-      ) => total + product.details.price * product.quantity,
+  if (order.value && order.value.cart) {
+    return order.value.cart.reduce(
+      (total: number, item: { details: { price: number }; quantity: number }) =>
+        total + item.details.price * item.quantity,
       0
     );
   } else {
@@ -258,51 +248,36 @@ const totalPrice = computed(() => {
   }
 });
 
-const products = computed(() => {
-  return order.value ? order.value.products : [];
+const cart = computed(() => {
+  return order.value ? order.value.cart : [];
 });
 
 provide("getOrderById", getOrderById);
 
-async function deleteProductToCart(cartId: string) {
+async function deleteProductFromCart(index: number) {
   loading.value = true;
   try {
     if (!order.value) {
       console.error("Order is null or undefined");
       return;
     }
-    if (!cartId) {
-      console.error("Invalid cartId");
+    if (index < 0 || index >= order.value.cart.length) {
+      console.error("Invalid index");
       return;
     }
-    console.log(cartId);
-    console.log(order.value.id);
+
     const orderDocRef = doc(db, "userOrder", order.value.id);
-    const cartDocRef = doc(db, "userCart", cartId);
 
-    const productToRemove = order.value.products.find(
-      (product: any) => product.cartId === cartId
-    );
-
-    if (!productToRemove) {
-      console.error("Product not found in cart");
-      return;
-    }
-
-    const newProductsArray = order.value.products.filter(
-      (product: any) => product.cartId !== cartId
+    const newCartArray = order.value.cart.filter(
+      (_: any, itemIndex: number) => itemIndex !== index
     );
 
     await updateDoc(orderDocRef, {
-      products: newProductsArray,
-    });
-
-    await deleteDoc(cartDocRef).catch((error) => {
-      console.error("Error deleting cart:", error);
+      cart: newCartArray,
     });
 
     // Update order.value by creating a new object instead of directly manipulating it
-    order.value = { ...order.value, products: newProductsArray };
+    order.value = { ...order.value, cart: newCartArray };
   } catch (error) {
     console.error("Error deleting document:", error);
   }

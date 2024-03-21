@@ -283,7 +283,7 @@ const fetchOrder = async (id: string) => {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const fetchedOrder = docSnap.data();
-      for (let product of fetchedOrder.products) {
+      for (let product of fetchedOrder.cart) {
         const productDetails = await fetchProductDetails(product.productId);
         product.details = productDetails;
         products.value.push(product);
@@ -298,8 +298,8 @@ const fetchOrder = async (id: string) => {
 };
 
 const totalPrice = computed(() => {
-  if (order.value && order.value.products) {
-    return order.value.products.reduce(
+  if (order.value && order.value.cart) {
+    return order.value.cart.reduce(
       (
         total: number,
         product: { details: { price: number }; quantity: number }

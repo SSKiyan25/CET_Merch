@@ -110,7 +110,7 @@
           </div>
           <div v-if="!ifCartEmpty">
             <div
-              v-for="(product, index) in unref(orderData)?.products"
+              v-for="(product, index) in unref(orderData)?.cart"
               :key="index"
             >
               <Accordion type="single" collapsible>
@@ -228,7 +228,7 @@ onMounted(async () => {
   if (result) {
     orderData.value = result.data;
     orderId.value = result.id;
-    ifCartEmpty.value = result.data.products.length === 0;
+    ifCartEmpty.value = result.data.cart.length === 0;
   }
 });
 
@@ -253,38 +253,33 @@ const handleFormCartSubmit = async () => {
   if (auth.currentUser) {
     newAddToCartData.value = {
       productId: product.value.id,
-      userId: auth.currentUser.uid,
       quantity: newAddToCartData.value.quantity,
-      totalPrice: product.value.price * newAddToCartData.value.quantity,
+      totalPrice: parseFloat(
+        (product.value.price * newAddToCartData.value.quantity).toFixed(2)
+      ),
       size: selectedSize.value,
     };
-    const docId = await handleAddToCartSubmit(newAddToCartData.value);
-    if (docId) {
-      isLoading.value = false;
-      isUploadSuccessful.value = true;
+    await handleAddToCartSubmit(newAddToCartData.value);
+    isLoading.value = false;
+    isUploadSuccessful.value = true;
 
-      console.log(`Product added with document id: ${docId}`);
-      newAddToCartData.value = {
-        productId: "",
-        userId: "",
-        quantity: 0,
-        totalPrice: 0,
-        size: "",
-      };
-      const result = await getOnQueueOrder();
-      if (result) {
-        orderData.value = result.data;
-        orderId.value = result.id;
-        ifCartEmpty.value = result.data.products.length === 0;
-      }
-      setTimeout(() => {
-        isUploadSuccessful.value = false;
-        selectedTab.value = "order";
-      }, 2500);
-    } else {
-      console.error("Failed to add product to cart");
-      isLoading.value = false;
+    console.log(`Product added to cart`);
+    newAddToCartData.value = {
+      productId: "",
+      quantity: 0,
+      totalPrice: 0,
+      size: "",
+    };
+    const result = await getOnQueueOrder();
+    if (result) {
+      orderData.value = result.data;
+      orderId.value = result.id;
+      ifCartEmpty.value = result.data.cart.length === 0;
     }
+    setTimeout(() => {
+      isUploadSuccessful.value = false;
+      selectedTab.value = "order";
+    }, 2000);
   } else {
     // Handle the case where no user is logged in
     alert("Please login to add product to your cart");
@@ -314,7 +309,7 @@ const selectSize = (size: string) => {
 
 const totalProductsInCart = computed(() => {
   if (orderData.value) {
-    return orderData.value.products.length;
+    return orderData.value.cart.length;
   }
   return 0;
 });
