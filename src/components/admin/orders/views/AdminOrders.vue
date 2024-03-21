@@ -211,52 +211,59 @@
                       </th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-primary/50">
+                  <tbody
+                    v-for="order in orders"
+                    :key="order.id"
+                    class="divide-y divide-primary/50"
+                  >
                     <tr class="hover:bg-primary/10">
                       <td>
                         <div class="pl-5 py-3">
                           <span
                             class="text-xs font-semibold text-primary/80 underline"
-                            >#-12345</span
-                          >
+                            >{{ order.orderRefNum }}
+                          </span>
                         </div>
                       </td>
                       <td>
                         <div class="p-3">
                           <span
-                            class="text-xs font-medium text-secondary-foreground"
-                            >5 Jul 2001</span
+                            class="text-xs font-medium text-secondary-foreground/80"
+                            >{{ order.dateOrdered }}</span
                           >
                         </div>
                       </td>
                       <td>
-                        <div class="p-3 text-wrap whitespace-normal">
-                          <span
-                            class="text-xs font-medium text-secondary-foreground"
-                            >New Lace</span
-                          >
+                        <div
+                          v-for="product in order.products"
+                          :key="product"
+                          class="p-3 text-wrap whitespace-normal"
+                        >
+                          <span class="text-xs text-secondary-foreground/80">{{
+                            product.details.name
+                          }}</span>
                         </div>
                       </td>
                       <td>
                         <div class="p-3">
                           <span class="text-xs text-secondary-foreground/60"
-                            >Sosmeña, Joshua A.</span
-                          >
+                            >{{ order.userName }}
+                          </span>
                         </div>
                       </td>
                       <td>
                         <div class="px-4">
                           <span class="text-xs text-secondary-foreground/60"
-                            >P65.00</span
-                          >
+                            >P{{ order.totalPrice }}
+                          </span>
                         </div>
                       </td>
                       <td>
                         <div class="p-8 py-3">
-                          <button class="rounded-lg bg-emerald-300 px-4">
+                          <button class="rounded-lg bg-emerald-300 py-1.5 px-4">
                             <span
                               class="text-xs font-medium text-secondary pb-1 cursor-none"
-                              >Paid</span
+                              >{{ order.paymentStatus }}</span
                             >
                           </button>
                           <button
@@ -274,8 +281,8 @@
                       <td>
                         <div class="p-12 py-3">
                           <span class="text-xs text-secondary-foreground"
-                            >G-Cash</span
-                          >
+                            >{{ order.paymentMethod }}
+                          </span>
                         </div>
                       </td>
                       <td>
@@ -375,8 +382,7 @@
 <script setup lang="ts">
 import NavBar from "@/components/admin/dashboard/views/AdminNavBar.vue";
 import AdminSidebar from "@/components/admin/dashboard/views/AdminSidebar.vue";
-import { onMounted, ref } from "vue";
-import { initFlowbite } from "flowbite";
+import { ref } from "vue";
 import { MagnifyingGlassIcon } from "@radix-icons/vue";
 import { Input } from "@/components/ui/input";
 import { Check, ChevronsUpDown, Download, ChevronDown } from "lucide-vue-next";
@@ -398,9 +404,10 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { addDays, format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-vue-next";
-
+import { setup as setupOrdersController } from "../controllers/adminOrdersController.ts";
 const open = ref(false);
 const value = ref<string>("");
+const { orders } = setupOrdersController();
 
 const date = ref({
   start: new Date(2024, 0, 20),
@@ -417,8 +424,4 @@ const frameworks = [
   { value: "Hoodie", label: "Hoodie" },
   { value: "Stickers", label: "Stickers" },
 ];
-
-onMounted(() => {
-  initFlowbite();
-});
 </script>

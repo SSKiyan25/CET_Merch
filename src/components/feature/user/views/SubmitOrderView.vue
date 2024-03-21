@@ -350,7 +350,7 @@ const submitOrder = async (formData: any) => {
     const orderRefNum = await generateOrderRefNum();
     await updateDoc(docRef, {
       orderRefNum,
-      userName: formData.lastName + " " + formData.firstName,
+      userName: formData.lastName + ", " + formData.firstName,
       userContactNumber: formData.phoneNumber,
       totalPrice: totalPrice.value,
       userEmailAddress: formData.emailAddress,
