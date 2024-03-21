@@ -78,7 +78,7 @@
       <!-- Grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         <div
-          v-for="product in products"
+          v-for="product in publishedProducts"
           :key="product.id"
           class="group flex flex-col bg-background border border-primary/50 shadow-sm rounded-b-xl"
         >
@@ -138,6 +138,7 @@
             </Sheet>
           </div>
         </div>
+
         <!-- End Card -->
       </div>
     </div>
@@ -145,7 +146,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, provide } from "vue";
+import { ref, provide, computed } from "vue";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronsUpDown } from "lucide-vue-next";
 import { cn } from "@/lib/utils";
@@ -182,6 +183,10 @@ const { products } = setupProductController();
 const getProductById = (id: string) => {
   return products.value.find((product) => product.id === id);
 };
+
+const publishedProducts = computed(() => {
+  return products.value.filter((product) => product.isPublished === true);
+});
 
 provide("getProductById", getProductById);
 </script>

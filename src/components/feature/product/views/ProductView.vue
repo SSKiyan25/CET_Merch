@@ -78,7 +78,6 @@
 
         <div class="sm:h-96 pt-4 lg:mt-0">
           <div class="space-y-6 sm:space-y-8">
-            <!-- Title -->
             <div class="space-y-2 md:space-y-4">
               <div class="border-b-2 pb-2">
                 <h2
@@ -176,7 +175,6 @@
                 </Sheet>
               </div>
             </div>
-            <!-- End Title -->
           </div>
         </div>
       </div>

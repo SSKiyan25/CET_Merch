@@ -230,7 +230,7 @@
                         </div>
                       </td>
                       <td>
-                        <div class="p-3">
+                        <div class="p-3 text-wrap whitespace-normal">
                           <span
                             class="text-xs font-medium text-secondary-foreground"
                             >New Lace</span
