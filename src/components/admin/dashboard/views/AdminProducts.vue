@@ -33,7 +33,7 @@
           ></router-link>
 
           <form>
-            <div class="flex relative w-full max-w-sm items-center">
+            <div class="flex relative w-full items-center">
               <Input
                 id="search"
                 type="text"
@@ -45,7 +45,7 @@
               >
                 <MagnifyingGlassIcon class="size-6 text-muted-foreground" />
               </span>
-              <Popover v-model:open="open" class="max-w-sm">
+              <Popover v-model:open="open">
                 <PopoverTrigger as-child>
                   <Button
                     variant="outline"
@@ -196,80 +196,19 @@
                       </td>
                       <td>
                         <div
-                          class="py-3 px-5 flex items-center justify-center gap-x-2"
+                          class="py-3 px-5 flex items-center justify-start gap-x-2"
                         >
-                          <div class="grow">
-                            <button
-                              v-if="product.isPublished && !product.editStatus"
-                              :class="[
-                                'cursor-default rounded-lg p-1.5',
-                                product.isPublished
-                                  ? 'bg-emerald-600 text-white'
-                                  : 'bg-primary/40 text-secondary-foreground/80',
-                              ]"
-                              @click.prevent="product.editStatus = true"
-                            >
-                              <span class="text-xs font-medium">{{
-                                product.status
-                              }}</span>
-                            </button>
-                            <button
-                              v-else-if="
-                                !product.isPublished && !product.editStatus
-                              "
-                              :class="[
-                                'cursor-default rounded-lg p-1.5',
-                                product.isPublished
-                                  ? 'bg-emerald-600 text-white'
-                                  : 'bg-primary/40 text-secondary-foreground/80',
-                              ]"
-                              @click.prevent="product.editStatus = true"
-                            >
-                              <span class="text-xs"> {{ product.status }}</span>
-                            </button>
-                            <div v-if="product.editStatus">
-                              <div class="flex flex-row">
-                                <div class="w-3/4">
-                                  <Select v-model="product.selectedStatus">
-                                    <SelectTrigger>
-                                      <span
-                                        v-if="product.editStatus"
-                                        class="material-symbols-outlined"
-                                      >
-                                        edit
-                                      </span>
-                                      <SelectValue
-                                        :placeholder="product.status"
-                                      />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      <SelectGroup>
-                                        <SelectLabel>Edit Status</SelectLabel>
-                                        <SelectItem value="Publish"
-                                          >Publish</SelectItem
-                                        >
-                                        <SelectItem value="Hidden"
-                                          >Hidden</SelectItem
-                                        >
-                                      </SelectGroup>
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-
-                                <button
-                                  @click.prevent="updateProductStatus(product)"
-                                >
-                                  <span
-                                    v-if="!product.isLoading"
-                                    class="material-symbols-outlined text-xs px-1"
-                                    >check</span
-                                  >
-                                  <span v-else>
-                                    <img src="/loading.gif" />
-                                  </span>
-                                </button>
-                              </div>
-                            </div>
+                          <div
+                            v-if="product.isPublished"
+                            class="bg-green-500 p-2 rounded-md text-center"
+                          >
+                            <span class="text-xs font-medium">Published </span>
+                          </div>
+                          <div
+                            v-else
+                            class="bg-amber-700 p-2 rounded-md ml-1.5"
+                          >
+                            <span class="text-xs font-medium">Hidden </span>
                           </div>
                         </div>
                       </td>
@@ -366,7 +305,8 @@
                                       class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
                                     >
                                       <div
-                                        class="relative p-4 w-full max-w-2xl max-h-full bg-secondary rounded-lg shadow"
+                                        class="relative p-4 w-full max-w-2xl max-h-full bg-secondary rounded-lg shadow overflow-y-auto"
+                                        style="max-height: 90vh"
                                       >
                                         <div
                                           class="modal-header flex items-center justify-between p-4 md:p-5 border-b rounded-t border-secondary-foreground/90"
@@ -498,8 +438,8 @@
 
                               <div class="rounded-sm cursor-pointer mr-2">
                                 <AlertDialog>
-                                  <AlertDialogTrigger class="w-full"
-                                    ><button
+                                  <AlertDialogTrigger>
+                                    <button
                                       class="bg-red-600 text-white p-2 rounded-sm"
                                       title="Delete Product"
                                     >
@@ -656,17 +596,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { db } from "@/firebase/init.ts";
-import { doc, updateDoc } from "firebase/firestore";
 
 const frameworks = [
   { value: "T-Shirt", label: "T-Shirt" },
@@ -688,49 +617,5 @@ products.value.forEach((product) => {
   product.isLoading = false;
 });
 
-const editStatus = (product: any) => {
-  product.editStatus = true;
-  product.selectedStatus = product.status;
-};
-
-const updateProductStatus = async (product: any) => {
-  product.isLoading = true; // Set isLoading to true when the update starts
-
-  if (product.selectedStatus) {
-    product.status = product.selectedStatus;
-    product.isPublished = product.status === "Published";
-  }
-
-  product.editStatus = false;
-
-  // Update the product status in Firestore
-  const productRef = doc(db, "products", product.id);
-  await updateDoc(productRef, {
-    status: product.status,
-    isPublished: product.isPublished,
-  });
-
-  product.isLoading = false; // Set isLoading to false when the update finishes
-};
-
-// Watch for changes in the products array and update the Firestore database
-// let previousProducts = JSON.parse(JSON.stringify(products.value));
-
-// watch(
-//   products,
-//   async (newProducts) => {
-//     for (let i = 0; i < newProducts.length; i++) {
-//       const product = newProducts[i];
-//       const previousProduct = previousProducts[i];
-
-//       if (product.status !== previousProduct.status) {
-//         await updateProductStatus(product);
-//       }
-//     }
-//     previousProducts = JSON.parse(JSON.stringify(newProducts));
-//   },
-//   { deep: true }
-// );
-
-defineExpose({ showProductModal, updateProductStatus, editStatus });
+defineExpose({ showProductModal });
 </script>
