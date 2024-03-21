@@ -259,13 +259,26 @@
                         </div>
                       </td>
                       <td>
-                        <div class="p-8 py-3">
-                          <button class="rounded-lg bg-emerald-300 py-1.5 px-4">
-                            <span
-                              class="text-xs font-medium text-secondary pb-1 cursor-none"
-                              >{{ order.paymentStatus }}</span
-                            >
-                          </button>
+                        <div class="p-8 py-3 flex flex-row">
+                          <div v-if="order.paymentStatus === 'pending'">
+                            <button class="rounded-lg bg-amber-700 py-1.5 px-4">
+                              <span
+                                class="text-xs font-medium text-secondary-foreground pb-1 cursor-none"
+                              >
+                                Pending
+                              </span>
+                            </button>
+                          </div>
+                          <div v-if="order.paymentStatus === 'paid'">
+                            <button class="rounded-lg bg-green-700 py-1.5 px-4">
+                              <span
+                                class="text-xs font-medium text-secondary-foreground pb-1 cursor-none"
+                              >
+                                Paid
+                              </span>
+                            </button>
+                          </div>
+
                           <button
                             class="text-secondary-foreground/60 hover:text-secondary-foreground"
                             title="Edit Status"

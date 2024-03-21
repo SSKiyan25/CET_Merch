@@ -238,10 +238,16 @@ const getOrderById = (id: string) => {
 //Temporary Compute Total price
 const totalPrice = computed(() => {
   if (order.value && order.value.cart) {
-    return order.value.cart.reduce(
-      (total: number, item: { details: { price: number }; quantity: number }) =>
-        total + item.details.price * item.quantity,
-      0
+    return parseFloat(
+      order.value.cart
+        .reduce(
+          (
+            total: number,
+            item: { details: { price: number }; quantity: number }
+          ) => total + item.details.price * item.quantity,
+          0
+        )
+        .toFixed(2)
     );
   } else {
     return 0;
