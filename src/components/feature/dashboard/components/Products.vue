@@ -163,7 +163,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import Cart from "@/components/feature/user/views/AddToCartView.vue";
+import Cart from "@/components/feature/user/userOrder/views/AddToCartView.vue";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { setup as setupProductController } from "../controllers/products_controller.ts";
 

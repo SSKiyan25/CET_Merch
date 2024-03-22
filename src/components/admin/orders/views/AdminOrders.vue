@@ -333,11 +333,7 @@
                             class="relative w-full max-w-xl max-h-full bg-secondary rounded-lg shadow overflow-y-auto p-4"
                             style="max-height: 90vh"
                           >
-                            <div
-                              v-for="(order, index) in orders"
-                              :key="index"
-                              class="flex flex-col bg-secondary rounded-lg"
-                            >
+                            <div class="flex flex-col bg-secondary rounded-lg">
                               <div
                                 class="border-b border-secondary-foreground/50 py-3"
                               >

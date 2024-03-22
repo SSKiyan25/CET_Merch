@@ -203,7 +203,7 @@
       <div
         class="flex flex-col items-center justify-center rounded-sm bg-secondary p-8"
       >
-        <span><img src="/upload_successful.gif" class="h-32 w-auto" /></span>
+        <span><img src="/cartSuccessful.gif" class="h-32 w-auto" /></span>
         <span class="text-lg text-secondary-foreground/90 text-wrap"
           >Your Order has been successfully processed!
         </span>
@@ -356,6 +356,7 @@ const submitOrder = async (formData: any) => {
       orderRefNum,
       userName: formData.lastName + ", " + formData.firstName,
       userContactNumber: formData.phoneNumber,
+      studentId: formData.studentId,
       totalPrice: totalPrice.value,
       userEmailAddress: formData.emailAddress,
       paymentMethod: formData.paymentMethod,
@@ -363,7 +364,6 @@ const submitOrder = async (formData: any) => {
       orderStatus: "done",
       dateOrdered: new Date().toDateString(),
     });
-
     if (order.value) {
       order.value.orderRefNum = orderRefNum;
     }

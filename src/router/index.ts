@@ -15,8 +15,8 @@ import AdminEditProduct from "../components/admin/dashboard/views/products/EditP
 import AdminOrders from "../components/admin/orders/views/AdminOrders.vue";
 import AdminInbox from "../components/admin/inbox/views/InboxPage.vue";
 import Product from "../components/feature/product/views/ProductView.vue";
-import ConfirmOrder from "../components/feature/user/views/ConfirmationOrderView.vue";
-import SubmitOrder from "../components/feature/user/views/SubmitOrderView.vue";
+import ConfirmOrder from "../components/feature/user/userOrder/views/ConfirmationOrderView.vue";
+import SubmitOrder from "../components/feature/user/userOrder/views/SubmitOrderView.vue";
 import ContactUs from "../components/feature/contactUs/views/ContactUsView.vue";
 import { auth } from "../firebase/init.ts";
 
