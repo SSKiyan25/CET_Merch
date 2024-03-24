@@ -293,7 +293,7 @@
 <script setup lang="ts">
 import NavBar from "../AdminNavBar.vue";
 import AdminSidebar from "../AdminSidebar.vue";
-import { setup as setupProductController } from "@/components/admin/dashboard/controllers/adminProducts.ts";
+import { setup as setupProductController } from "@/components/admin/dashboard/controllers/adminProductsController.ts";
 import { useRouter } from "vue-router";
 import { Progress } from "@/components/ui/progress";
 import { ref, watchEffect } from "vue";

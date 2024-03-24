@@ -463,7 +463,7 @@
                                     <AlertDialogFooter>
                                       <AlertDialogAction
                                         @click.prevent="
-                                          deleteProduct(
+                                          deleteProductController(
                                             product.id,
                                             product.name
                                           )
@@ -561,6 +561,9 @@
       <!-- End Table Section -->
     </div>
   </div>
+  <div v-if="isDeleting">
+    <LoadingComponent />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -585,7 +588,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { setup as setupProductController } from "../controllers/adminProducts.ts";
+import { setup as setupProductController } from "../controllers/adminProductsController.ts";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -596,6 +599,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import LoadingComponent from "@/components/feature/misc/LoadingComponent.vue";
 
 const frameworks = [
   { value: "T-Shirt", label: "T-Shirt" },
@@ -608,7 +612,8 @@ const frameworks = [
 const open = ref(false);
 const value = ref<string>("");
 
-const { products, editProduct, deleteProduct } = setupProductController();
+const { products, editProduct, deleteProductController, isDeleting } =
+  setupProductController();
 const showProductModal = ref(products.value.map(() => false));
 
 products.value.forEach((product) => {

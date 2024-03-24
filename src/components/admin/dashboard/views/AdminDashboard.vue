@@ -218,7 +218,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { setup as setupControllerFeatured } from "../controllers/adminUploadFeatured.ts";
+import { setup as setupControllerFeatured } from "../controllers/adminUploadFeaturedController.ts";
 import { useRouter } from "vue-router";
 import AdminSidebar from "../views/AdminSidebar.vue";
 
