@@ -499,7 +499,7 @@ const handleFormSubmit = async (): Promise<boolean> => {
     isUploadSuccessful.value = false;
     console.error("Error uploading files: ", error);
     alert("Product addition failed");
-    return false; // return false if there was an error
+    return false;
   }
 };
 </script>
