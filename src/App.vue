@@ -1,11 +1,44 @@
 <script setup lang="ts">
 import NavigationBar from "../src/components/navigation/views/NavigationView.vue";
+import UserSidebar from "../src/components/feature/user/userDashboard/views/UserSidebarView.vue";
 import Footer from "../src/components/footer/Footer.vue";
 import { RouterView } from "vue-router";
+import { ref, provide } from "vue";
+
+const isSidebarVisible = ref(window.innerWidth > 768);
+
+// Define the toggleSidebar function
+const toggleSidebar = () => {
+  console.log("toggleSidebar called");
+  isSidebarVisible.value = !isSidebarVisible.value;
+};
+
+// Provide isSidebarVisible and toggleSidebar
+provide("isSidebarVisible", isSidebarVisible);
+provide("toggleSidebar", toggleSidebar);
 </script>
 
 <template>
   <NavigationBar />
+  <UserSidebar
+    v-if="isSidebarVisible"
+    :class="{
+      'is-hidden':
+        $route.name === 'launchPage' ||
+        $route.name === 'login' ||
+        $route.name === 'signup' ||
+        $route.name === 'adminDashboard' ||
+        $route.name === 'adminProducts' ||
+        $route.name === 'adminAddProduct' ||
+        $route.name === 'adminEditProduct' ||
+        $route.name === 'adminOrders' ||
+        $route.name === 'adminInbox' ||
+        $route.name === 'product' ||
+        $route.name === 'confirmOrder' ||
+        $route.name === 'submitOrder' ||
+        $route.name === 'contactUs',
+    }"
+  />
   <main>
     <RouterView />
   </main>
@@ -17,7 +50,8 @@ import { RouterView } from "vue-router";
         $route.name === 'adminAddProduct' ||
         $route.name === 'adminEditProduct' ||
         $route.name === 'adminOrders' ||
-        $route.name === 'adminInbox',
+        $route.name === 'adminInbox' ||
+        $route.name === 'userDashboard',
     }"
   />
 </template>

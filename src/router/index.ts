@@ -5,7 +5,7 @@ import {
   NavigationGuardNext,
   RouteLocationNormalized,
 } from "vue-router";
-import Dashboard from "../components/feature/dashboard/views/DashboardView.vue";
+import LaunchPage from "../components/feature/dashboard/views/LaunchPageView.vue";
 import Login from "../components/feature/authentication/views/LoginView.vue";
 import Signup from "../components/feature/authentication/views/SignupView.vue";
 import AdminDashboard from "../components/admin/dashboard/views/AdminDashboard.vue";
@@ -18,7 +18,10 @@ import Product from "../components/feature/product/views/ProductView.vue";
 import ConfirmOrder from "../components/feature/user/userOrder/views/ConfirmationOrderView.vue";
 import SubmitOrder from "../components/feature/user/userOrder/views/SubmitOrderView.vue";
 import ContactUs from "../components/feature/contactUs/views/ContactUsView.vue";
-import { auth } from "../firebase/init.ts";
+import UserDashboard from "../components/feature/user/userDashboard/views/UserDashboardView.vue";
+import { auth, db } from "../firebase/init.ts";
+import { ref } from "vue";
+import { DocumentData, getDoc, doc } from "firebase/firestore";
 
 function requireAdminAuth(
   _: RouteLocationNormalized,
@@ -39,8 +42,19 @@ function requireAuth(
   __: RouteLocationNormalized,
   next: NavigationGuardNext
 ) {
-  auth.onAuthStateChanged((user) => {
+  const userData = ref<DocumentData | null>(null);
+
+  auth.onAuthStateChanged(async (user) => {
     if (user) {
+      // Fetch user-specific data from Firestore using user.uid
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        userData.value = docSnap.data(); // Store user data in the reactive property
+      } else {
+        console.log("No such document!");
+      }
       next();
     } else {
       next({ name: "login" });
@@ -51,8 +65,8 @@ function requireAuth(
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
-    name: "dashboard",
-    component: Dashboard,
+    name: "launchPage",
+    component: LaunchPage,
   },
   {
     path: "/login",
@@ -127,6 +141,12 @@ const routes: RouteRecordRaw[] = [
     path: "/contactUs",
     name: "contactUs",
     component: ContactUs,
+  },
+  {
+    path: "/dashboard",
+    name: "userDashboard",
+    component: UserDashboard,
+    beforeEnter: requireAuth,
   },
 ];
 

@@ -406,14 +406,16 @@
                                   >
                                 </div>
                                 <div
-                                  v-for="(product, index) in order.cart"
-                                  :key="product"
                                   class="flex flex-col pl-4 space-y-2 text-sm"
                                 >
                                   <div class="flex flex-row opacity-80">
                                     <span>Product/s ordered:</span>
                                   </div>
-                                  <div class="pl-2 text-xs">
+                                  <div
+                                    v-for="(product, index) in order.cart"
+                                    :key="product"
+                                    class="pl-2 text-xs"
+                                  >
                                     <span class="opacity-80">
                                       {{ index + 1 }} |</span
                                     >
