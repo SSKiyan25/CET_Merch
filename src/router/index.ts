@@ -19,6 +19,7 @@ import ConfirmOrder from "../components/feature/user/userOrder/views/Confirmatio
 import SubmitOrder from "../components/feature/user/userOrder/views/SubmitOrderView.vue";
 import ContactUs from "../components/feature/contactUs/views/ContactUsView.vue";
 import UserDashboard from "../components/feature/user/userDashboard/views/UserDashboardView.vue";
+import UserOrders from "../components/feature/user/userDashboard/views/UserOrdersView.vue";
 import { auth, db } from "../firebase/init.ts";
 import { ref } from "vue";
 import { DocumentData, getDoc, doc } from "firebase/firestore";
@@ -51,7 +52,7 @@ function requireAuth(
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        userData.value = docSnap.data(); // Store user data in the reactive property
+        userData.value = docSnap.data();
       } else {
         console.log("No such document!");
       }
@@ -146,6 +147,12 @@ const routes: RouteRecordRaw[] = [
     path: "/dashboard",
     name: "userDashboard",
     component: UserDashboard,
+    beforeEnter: requireAuth,
+  },
+  {
+    path: "/dashboard/orders",
+    name: "userOrders",
+    component: UserOrders,
     beforeEnter: requireAuth,
   },
 ];

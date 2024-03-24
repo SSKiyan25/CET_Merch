@@ -51,7 +51,8 @@ provide("toggleSidebar", toggleSidebar);
         $route.name === 'adminEditProduct' ||
         $route.name === 'adminOrders' ||
         $route.name === 'adminInbox' ||
-        $route.name === 'userDashboard',
+        $route.name === 'userDashboard' ||
+        $route.name === 'userOrders',
     }"
   />
 </template>

@@ -171,7 +171,7 @@
                         <span
                           class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
-                          Product
+                          Product/s
                         </span>
                       </th>
                       <th scope="col" class="pl-4 py-2 w-2/12 text-start">
