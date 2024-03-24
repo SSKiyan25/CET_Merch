@@ -67,8 +67,59 @@
           Recent Orders
         </h1>
       </div>
+      <div class="pt-8">
+        <div class="flex flex-col border pt-2 pb-4">
+          <div class="flex flex-row justify-between py-2 px-3">
+            <div>
+              <span class="text-sm font-semibold"
+                >Order Reference Number:
+              </span>
+              <span class="pl-2 text-primary font-semibold">#12345</span>
+            </div>
+            <div>
+              <span class="text-xs">Date Ordered: March 28, 2024</span>
+            </div>
+          </div>
+          <div class="px-2">
+            <div
+              class="flex flex-row items-center bg-secondary rounded-lg w-1/3 h-18"
+            >
+              <div class="p-4">
+                <img src="/1-Lanyard.png" class="w-40 h-auto rounded-sm" />
+              </div>
+              <div
+                class="flex flex-col text-xs space-y-2 whitespace-normal text-wrap"
+              >
+                <span>Product Name: New T-Shirt</span>
+                <span>Size: M</span>
+                <span>Quantity: 2</span>
+                <span>Total Amount: P150.00</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-row justify-between pt-4 px-4">
+            <div>
+              <span>Status: </span>
+              <Button variant="destructive" class="cursor-default">
+                <span>Not Paid</span>
+              </Button>
+            </div>
+            <div>
+              <span
+                >Total Payment:
+                <span class="text-primary font-semibold underline"
+                  >P150.00
+                </span>
+              </span>
+              <span class="pl-1">(Cash)</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+  <div class="pb-12"></div>
 </template>
 
 <script setup lang="ts">

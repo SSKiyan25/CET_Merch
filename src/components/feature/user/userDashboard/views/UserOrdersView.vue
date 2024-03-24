@@ -18,44 +18,9 @@
     <div class="flex flex-col p-4 border-2 rounded-lg py-5">
       <div class="flex flex-row justify-between border-b-2">
         <div class="flex flex-row">
-          <h1 class="font-bold text-xl tracking-wide mt-1">Orders</h1>
-          <div class="flex flex-row pl-2">
-            <div :class="cn('grid gap-2', $attrs.class ?? '')">
-              <Popover>
-                <PopoverTrigger as-child>
-                  <Button
-                    id="date"
-                    :variant="'outline'"
-                    :class="
-                      cn(
-                        'w-[300px] justify-start text-left font-normal',
-                        !date && 'text-muted-foreground'
-                      )
-                    "
-                  >
-                    <CalendarIcon class="mr-2 h-4 w-4" />
-
-                    <span>
-                      {{
-                        date.start
-                          ? date.end
-                            ? `${format(date.start, "LLL dd, y")} - ${format(
-                                date.end,
-                                "LLL dd, y"
-                              )}`
-                            : format(date.start, "LLL dd, y")
-                          : "Pick a date"
-                      }}
-                    </span>
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent class="w-auto p-0" align="start">
-                  <Calendar v-model.range="date" :columns="2" />
-                </PopoverContent>
-              </Popover>
-            </div>
-            <Button variant="outline"><ChevronDown /></Button>
-          </div>
+          <h1 class="font-bold text-xl text-primary tracking-wide mt-1">
+            Order History
+          </h1>
         </div>
         <div class="flex flex-row pb-2 space-x-2">
           <form>
@@ -130,70 +95,57 @@
                   </PopoverContent>
                 </Popover>
               </div>
-
-              <div class="px-1">
-                <button
-                  class="p-2 bg-background border-1 rounded-lg hover:bg-background/40"
-                  title="Export"
-                >
-                  <Download />
-                </button>
-              </div>
             </div>
           </form>
         </div>
       </div>
-      <!--Table Section-->
-      <div class="py-2 min-w-full">
-        <div class="flex flex-col">
-          <div class="overflow-x-auto">
-            <div class="min-w-full inline-block align-middle">
-              <div class="bg-secondary border-t-w shadow-sm overflow-hiden">
-                <table class="min-w-full divide-y divide-primary/50">
-                  <thead class="bg-secondary">
-                    <tr>
-                      <th scope="col" class="pl-4 w-2/12 py-2 text-start">
-                        <span
-                          class="text-sm font-semibold uppecase tracking-wide text-secondary-foregroun"
-                        >
-                          Order Ref #
-                        </span>
-                      </th>
-                      <th scope="col" class="px-4 py-2 text-start">
-                        <span
-                          class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
-                        >
-                          Date
-                        </span>
-                      </th>
-                      <th scope="col" class="px-3 py-2 w-3/12 text-start">
-                        <span
-                          class="text-xs font-semibold uppercase tracking-wide text-secondary-foregroun"
-                          >Product/s
-                        </span>
-                      </th>
-                      <th scope="col" class="pl-4 text-start">
-                        <span
-                          class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
-                          >Total
-                        </span>
-                      </th>
-                      <th scope="col" class="px-4 py-2 text-start">
-                        <span
-                          class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
-                          >Status
-                        </span>
-                      </th>
-                      <th scope="col" class="px-4 py-2 text-start">
-                        <span
-                          class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
-                          >Actions
-                        </span>
-                      </th>
-                    </tr>
-                  </thead>
-                </table>
+      <!--Order Section-->
+      <div class="pt-8">
+        <div class="flex flex-col border pt-2 pb-4">
+          <div class="flex flex-row justify-between py-2 px-3">
+            <div>
+              <span class="text-sm font-semibold"
+                >Order Reference Number:
+              </span>
+              <span class="pl-2 text-primary font-semibold">#12345</span>
+            </div>
+            <div>
+              <span class="text-xs">Date Ordered: March 28, 2024</span>
+            </div>
+          </div>
+          <div class="px-2">
+            <div
+              class="flex flex-row items-center bg-secondary rounded-lg w-1/3 h-18"
+            >
+              <div class="p-4">
+                <img src="/1-Lanyard.png" class="w-40 h-auto rounded-sm" />
               </div>
+              <div
+                class="flex flex-col text-xs space-y-2 whitespace-normal text-wrap"
+              >
+                <span>Product Name: New T-Shirt</span>
+                <span>Size: M</span>
+                <span>Quantity: 2</span>
+                <span>Total Amount: P150.00</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-row justify-between pt-4 px-4">
+            <div>
+              <span>Status: </span>
+              <Button variant="destructive" class="cursor-default">
+                <span>Not Paid</span>
+              </Button>
+            </div>
+            <div>
+              <span
+                >Total Payment:
+                <span class="text-primary font-semibold underline"
+                  >P150.00
+                </span>
+              </span>
+              <span class="pl-1">(Cash)</span>
             </div>
           </div>
         </div>
@@ -208,7 +160,7 @@ import { initFlowbite } from "flowbite";
 import UserSidebar from "../views/UserSidebarView.vue";
 import { MagnifyingGlassIcon } from "@radix-icons/vue";
 import { Input } from "@/components/ui/input";
-import { Check, ChevronsUpDown, Download, ChevronDown } from "lucide-vue-next";
+import { Check, ChevronsUpDown } from "lucide-vue-next";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -216,15 +168,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { addDays, format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-vue-next";
+
 const open = ref(false);
 const value = ref<string>("");
-const date = ref({
-  start: new Date(2024, 0, 20),
-  end: addDays(new Date(2024, 0, 20), 20),
-});
+
 onMounted(() => {
   initFlowbite();
 });
