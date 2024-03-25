@@ -44,7 +44,7 @@
                 Product Category
                 <span class="text-red-400 font-bold text-sm">*</span>
                 <span class="text-xs text-secondary-foreground/70"
-                  >(T-Shirt, Polo-Shirt, Hoodie, Stickers, etc..)</span
+                  >(T-Shirt, Polo-Shirt, Hoodie, Stickers, Other)</span
                 >
               </label>
               <input
