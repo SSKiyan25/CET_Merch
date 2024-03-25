@@ -252,17 +252,18 @@
               </label>
             </div>
             <div class="flex items-center justify-end space-x-2 py-8">
-              <button
+              <Button
+                variant="destructive"
                 @click.prevent="cancel"
-                class="p-2 text-sm rounded-lg text-secondary-foreground bg-red-500"
+                class="p-2 text-sm rounded-lg text-secondary-foreground"
               >
                 Cancel
-              </button>
+              </Button>
               <button
                 type="submit"
                 class="p-2 bg-primary text-sm text-primary-foreground hover:bg-primary/80 font-semibold rounded-lg"
               >
-                + Update Product
+                Update Product
               </button>
             </div>
           </div>
@@ -293,6 +294,7 @@
 <script setup lang="ts">
 import NavBar from "../AdminNavBar.vue";
 import AdminSidebar from "../AdminSidebar.vue";
+import { Button } from "@/components/ui/button";
 import { setup as setupProductController } from "@/components/admin/dashboard/controllers/adminProductsController.ts";
 import { useRouter } from "vue-router";
 import { Progress } from "@/components/ui/progress";
