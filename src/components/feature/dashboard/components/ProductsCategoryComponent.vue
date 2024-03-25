@@ -77,11 +77,14 @@
         <CarouselContent>
           <CarouselItem>
             <div
-              v-for="product in productsByCategory[category]"
-              :key="product.id"
+              v-if="productsByCategory[category].length"
               class="flex flex-row px-4 md:px-16 pt-4 pb-8 justify-center"
             >
-              <div class="max-w-[75rem] justify-center items-center">
+              <div
+                v-for="product in productsByCategory[category]"
+                :key="product.id"
+                class="max-w-[75rem] justify-center items-center"
+              >
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
                   <div
                     class="group flex flex-col bg-background border border-primary/50 shadow-sm rounded-b-xl"
@@ -144,10 +147,22 @@
                 </div>
               </div>
             </div>
+            <div
+              v-else
+              class="flex max-w-[75reh] h-24 justify-center items-center"
+            >
+              <p>There's no available product on this category :(</p>
+            </div>
           </CarouselItem>
         </CarouselContent>
-        <CarouselPrevious class="ml-6 md:ml-8 opacity-40 hover:opacity-100" />
-        <CarouselNext class="mr-6 md:mr-8 opacity-40 hover:opacity-100" />
+        <CarouselPrevious
+          v-if="productsByCategory[category].length"
+          class="ml-6 md:ml-8 opacity-40 hover:opacity-100"
+        />
+        <CarouselNext
+          v-if="productsByCategory[category].length"
+          class="mr-6 md:mr-8 opacity-40 hover:opacity-100"
+        />
       </Carousel>
     </div>
   </div>
