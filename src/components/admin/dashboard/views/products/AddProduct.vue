@@ -321,7 +321,7 @@ import {
   uploadBytesResumable,
   UploadTaskSnapshot,
 } from "firebase/storage";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, setDoc } from "firebase/firestore";
 import { useRouter } from "vue-router";
 import { Progress } from "@/components/ui/progress";
 
@@ -474,6 +474,7 @@ const handleFormSubmit = async (): Promise<boolean> => {
       status: newProduct.value.status,
     };
     const docRef = await addDoc(collection(db, "products"), productData);
+    await setDoc(docRef, { id: docRef.id }, { merge: true });
     console.log("Document reference:", docRef);
 
     // Reset form

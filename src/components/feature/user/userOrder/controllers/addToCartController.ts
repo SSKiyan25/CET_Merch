@@ -40,6 +40,7 @@ export const setup = () => {
   });
 
   const handleAddToCartSubmit = async (newAddToCart: cartData) => {
+    console.log("New Add To Cart Data: ", newAddToCart);
     const orderCollection = collection(db, "userOrder");
 
     if (auth.currentUser) {

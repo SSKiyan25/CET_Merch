@@ -117,7 +117,9 @@
                 <AccordionItem value="item-1">
                   <AccordionTrigger>
                     <span class="text-primary">{{
-                      getProductById(product.productId).name
+                      getProductById(product.productId)
+                        ? getProductById(product.productId).name
+                        : "Product not found"
                     }}</span>
                   </AccordionTrigger>
                   <AccordionContent>
@@ -220,6 +222,7 @@ const props = defineProps({
     required: true,
   },
 });
+
 console.log("productId in Cart component: ", props.productId);
 const orderId = ref<string | null>(null);
 
@@ -236,6 +239,7 @@ const injectedGetProductById = inject("getProductById") as (
   id: string
 ) => ProductType;
 const product = computed(() => injectedGetProductById(props.productId));
+console.log("Product data: ", product.value);
 
 const { handleAddToCartSubmit, newAddToCartData } = setupAddToCartController();
 
@@ -243,12 +247,12 @@ let isLoading = ref(false);
 let isUploadSuccessful = ref(false);
 
 const handleFormCartSubmit = async () => {
+  isLoading.value = true;
   if (newAddToCartData.value.quantity === 0) {
     alert("Please enter a valid number of quantity");
     console.error("Quantity cannot be 0");
     return;
   }
-  isLoading.value = true;
   console.log("Form submitted");
   if (auth.currentUser) {
     newAddToCartData.value = {
@@ -260,7 +264,7 @@ const handleFormCartSubmit = async () => {
       size: selectedSize.value,
     };
     await handleAddToCartSubmit(newAddToCartData.value);
-    isLoading.value = false;
+
     isUploadSuccessful.value = true;
 
     console.log(`Product added to cart`);
@@ -270,16 +274,20 @@ const handleFormCartSubmit = async () => {
       totalPrice: 0,
       size: "",
     };
+
+    // Fetch the updated order data
     const result = await getOnQueueOrder();
     if (result) {
       orderData.value = result.data;
       orderId.value = result.id;
       ifCartEmpty.value = result.data.cart.length === 0;
     }
+
+    isLoading.value = false;
     setTimeout(() => {
       isUploadSuccessful.value = false;
       selectedTab.value = "order";
-    }, 2000);
+    }, 3000);
   } else {
     // Handle the case where no user is logged in
     alert("Please login to add product to your cart");
