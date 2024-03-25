@@ -72,7 +72,7 @@
       </form>
     </div>
   </div>
-  <div class="flex flex-row px-16 pb-72 justify-center">
+  <div class="flex flex-row px-16 pb-12 justify-center">
     <!-- Card Blog -->
     <div class="max-w-[75rem] justify-center items-center">
       <!-- Grid -->
@@ -138,7 +138,6 @@
             </Sheet>
           </div>
         </div>
-
         <!-- End Card -->
       </div>
     </div>
@@ -165,7 +164,7 @@ import {
 } from "@/components/ui/popover";
 import Cart from "@/components/feature/user/userOrder/views/AddToCartView.vue";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
-import { setup as setupProductController } from "../controllers/products_controller.ts";
+import { setup as setupProductController } from "../controllers/productsController.ts";
 
 const frameworks = [
   { value: "T-Shirt", label: "T-Shirt" },

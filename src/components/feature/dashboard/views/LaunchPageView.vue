@@ -125,11 +125,13 @@
   </div>
   <!-- End Features -->
   <div id="products"><Products /></div>
+  <div><ProductsCategoryComponent /></div>
 </template>
 
 <script setup lang="ts">
 import FeaturedCarousel from "../components/Carousel.vue";
 import Products from "../components/Products.vue";
+import ProductsCategoryComponent from "../components/ProductsCategoryComponent.vue";
 import { Button } from "@/components/ui/button";
 import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";

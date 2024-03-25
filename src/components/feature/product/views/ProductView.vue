@@ -201,7 +201,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import Cart from "@/components/feature/user/userOrder/views/AddToCartView.vue";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import Loading from "@/components/feature/misc/LoadingComponent.vue";
-import { setup as setupProductController } from "@/components/feature/dashboard/controllers/products_controller.ts";
+import { setup as setupProductController } from "@/components/feature/dashboard/controllers/productsController.ts";
 
 async function fetchProduct(id: any): Promise<DocumentData | undefined> {
   console.log("fetchProduct called with id: ", id);
