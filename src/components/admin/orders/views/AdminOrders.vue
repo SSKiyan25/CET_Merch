@@ -282,6 +282,7 @@
                           <button
                             class="text-secondary-foreground/60 hover:text-secondary-foreground"
                             title="Edit Status"
+                            @click.prevent="toggleDetails(order)"
                           >
                             <span
                               class="material-symbols-outlined text-xs px-1"
@@ -420,8 +421,13 @@
                                       {{ index + 1 }} |</span
                                     >
                                     <span class="pl-2 truncate opacity-80">
-                                      {{ product.details.name }} --</span
-                                    >
+                                      {{
+                                        product.details.name
+                                          ? product.details.name
+                                          : "Product not found"
+                                      }}
+                                      --
+                                    </span>
                                     <span class="px-2 font-bold text-primary">
                                       Size: {{ product.size }}
                                     </span>
@@ -600,10 +606,8 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { addDays, format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-vue-next";
-import {
-  Order,
-  setup as setupOrdersController,
-} from "../controllers/adminOrdersController.ts";
+import { Order } from "../models/adminOrdersModel.ts";
+import { setup as setupOrdersController } from "../controllers/adminOrdersController.ts";
 const open = ref(false);
 const value = ref<string>("");
 const { orders } = setupOrdersController();
