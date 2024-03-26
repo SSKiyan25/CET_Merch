@@ -39,6 +39,7 @@
                 type="text"
                 placeholder="Search..."
                 class="pl-10"
+                v-model="searchInput"
               />
               <span
                 class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
@@ -54,9 +55,9 @@
                     class="w-[200px] justify-between"
                   >
                     {{
-                      value
+                      selectedCategory !== "All"
                         ? frameworks.find(
-                            (framework) => framework.value === value
+                            (framework) => framework.value === selectedCategory
                           )?.label
                         : "Select Category"
                     }}
@@ -76,7 +77,7 @@
                           @select="
                             (ev) => {
                               if (typeof ev.detail.value === 'string') {
-                                value = ev.detail.value;
+                                selectedCategory = ev.detail.value;
                               }
                               open = false;
                             }
@@ -88,7 +89,7 @@
                             :class="
                               cn(
                                 'ml-auto h-4 w-4',
-                                value === framework.value
+                                selectedCategory === framework.value
                                   ? 'opacity-100'
                                   : 'opacity-0'
                               )
@@ -133,7 +134,7 @@
                           >
                             Status
                           </span>
-                          <span class="text-xs text-gray-400">
+                          <span class="text-xs text-secondary-foreground/50">
                             (If posted)</span
                           >
                         </div>
@@ -181,7 +182,7 @@
 
                   <tbody class="divide-y divide-primary/50">
                     <tr
-                      v-for="(product, index) in products"
+                      v-for="(product, index) in filteredProducts"
                       :key="product.id"
                       class="hover:bg-primary/10"
                     >
@@ -218,7 +219,7 @@
                             <div class="grow">
                               <p class="">
                                 <span
-                                  class="text-sm text-gray-600 dark:text-gray-400"
+                                  class="text-sm text-secondary-foreground/50"
                                   >{{ product.category }}</span
                                 >
                               </p>
@@ -231,8 +232,7 @@
                         <div class="px-6 py-3">
                           <div class="flex items-center gap-x-2">
                             <div class="grow">
-                              <span
-                                class="text-sm text-gray-600 dark:text-gray-400"
+                              <span class="text-sm text-secondary-foreground/50"
                                 >P {{ product.price }}</span
                               >
                             </div>
@@ -245,12 +245,21 @@
                             <span
                               v-for="(size, index) in product.sizes"
                               :key="index"
-                              class="text-sm text-gray-600 dark:text-gray-400"
+                              class="text-xs text-secondary-foreground/50"
                             >
                               {{ size
                               }}<span v-if="index < product.sizes.length - 1">
                                 |
                               </span>
+                            </span>
+                            <span
+                              v-if="
+                                product.sizes[0] === '' &&
+                                product.sizes.length === 1
+                              "
+                              class="text-xs text-secondary-foreground/50"
+                            >
+                              N/A
                             </span>
                           </p>
                         </div>
@@ -399,6 +408,14 @@
                                                   >,
                                                 </span>
                                               </span>
+                                              <span
+                                                v-if="
+                                                  product.sizes[0] === '' &&
+                                                  product.sizes.length === 1
+                                                "
+                                              >
+                                                No Available Size
+                                              </span>
                                             </p>
                                             <p
                                               class="py-4 text-xs text-secondary-foreground/80"
@@ -446,7 +463,7 @@
                                       <span
                                         class="material-symbols-outlined text-xs"
                                       >
-                                        delete_forever
+                                        delete
                                       </span>
                                     </button>
                                   </AlertDialogTrigger>
@@ -457,16 +474,14 @@
                                       </AlertDialogTitle>
                                       <AlertDialogDescription>
                                         Are you sure you want to delete this
-                                        product?
+                                        product? This will be added to your
+                                        archive.
                                       </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                       <AlertDialogAction
                                         @click.prevent="
-                                          deleteProductController(
-                                            product.id,
-                                            product.name
-                                          )
+                                          deleteProductController(product.id)
                                         "
                                         class="bg-destructive text-destructive-foreground hover:bg-destructive/80"
                                       >
@@ -571,7 +586,7 @@ import NavBar from "../views/AdminNavBar.vue";
 import AdminSidebar from "../views/AdminSidebar.vue";
 import { MagnifyingGlassIcon } from "@radix-icons/vue";
 import { Input } from "@/components/ui/input";
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 import { Check, ChevronsUpDown, Plus } from "lucide-vue-next";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -602,24 +617,35 @@ import {
 import LoadingComponent from "@/components/feature/misc/LoadingComponent.vue";
 
 const frameworks = [
+  { value: "All", label: "All" },
   { value: "T-Shirt", label: "T-Shirt" },
   { value: "Polo-Shirt", label: "Polo-Shirt" },
-  { value: "Lace", label: "Lace" },
+  { value: "Lanyard", label: "Lanyard" },
   { value: "Hoodie", label: "Hoodie" },
   { value: "Stickers", label: "Stickers" },
+  { value: "Other", label: "Other" },
 ];
 
-const open = ref(false);
-const value = ref<string>("");
+let open = ref(false);
+let searchInput = ref("");
+let selectedCategory = ref("All");
 
 const { products, editProduct, deleteProductController, isDeleting } =
   setupProductController();
 const showProductModal = ref(products.value.map(() => false));
 
-products.value.forEach((product) => {
-  product.editStatus = false;
-  product.selectedStatus = product.status;
-  product.isLoading = false;
+let filteredProducts = ref<any[]>([]);
+
+watchEffect(() => {
+  filteredProducts.value = products.value.filter((product) => {
+    const isNameMatch = product.name
+      .toLowerCase()
+      .includes(searchInput.value.toLowerCase());
+    const isCategoryMatch =
+      selectedCategory.value === "All" ||
+      product.category === selectedCategory.value;
+    return isNameMatch && isCategoryMatch;
+  });
 });
 
 defineExpose({ showProductModal });

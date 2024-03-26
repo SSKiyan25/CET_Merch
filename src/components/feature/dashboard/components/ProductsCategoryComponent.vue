@@ -218,7 +218,9 @@ const getProductById = (id: string) => {
 };
 
 const publishedProducts = computed(() => {
-  return products.value.filter((product) => product.isPublished === true);
+  return products.value.filter(
+    (product) => product.isPublished === true && product.isArchived === false
+  );
 });
 
 provide("getProductById", getProductById);
@@ -226,7 +228,7 @@ provide("getProductById", getProductById);
 const categories = [
   "T-Shirt",
   "Polo-Shirt",
-  "Lace",
+  "Lanyard",
   "Hoodie",
   "Stickers",
   "Other",

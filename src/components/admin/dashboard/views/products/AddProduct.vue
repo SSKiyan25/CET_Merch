@@ -80,6 +80,7 @@
                 <option value="T-Shirt">T-Shirt</option>
                 <option value="Polo-Shirt">Polo-Shirt</option>
                 <option value="Hoodie">Hoodie</option>
+                <option value="Lanyard">Lanyard</option>
                 <option value="Stickers">Stickers</option>
                 <option value="Other">Other</option>
               </select>
@@ -322,6 +323,7 @@
               accept="image/*"
               type="file"
               ref="productPhotosInput"
+              required
               multiple
             />
           </div>

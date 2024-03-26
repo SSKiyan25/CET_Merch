@@ -5,23 +5,25 @@ import {
   doc,
   updateDoc,
   getDoc,
-  deleteDoc,
+  query,
+  where,
 } from "firebase/firestore";
 import {
   uploadBytesResumable,
   getDownloadURL,
   ref as storageRef,
-  deleteObject,
-  listAll,
 } from "firebase/storage";
 
 export const fetchProducts = async () => {
   const productCollection = collection(db, "products");
-  const productSnapshot = await getDocs(productCollection);
-  const products = productSnapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
+  const q = query(productCollection, where("isArchived", "==", false));
+  const productSnapshot = await getDocs(q);
+  const products = productSnapshot.docs
+    .map((doc) => {
+      const data = doc.data();
+      return data ? { id: doc.id, ...data } : null;
+    })
+    .filter(Boolean);
   return products;
 };
 
@@ -29,10 +31,8 @@ export const fetchProduct = async (id: string) => {
   const productRef = doc(db, "products", id);
   const singleProductSnapshot = await getDoc(productRef);
   if (singleProductSnapshot.exists()) {
-    return {
-      id: singleProductSnapshot.id,
-      ...singleProductSnapshot.data(),
-    };
+    const data = singleProductSnapshot.data();
+    return data ? { id: singleProductSnapshot.id, ...data } : null;
   }
   return null;
 };
@@ -90,29 +90,12 @@ export const updateProduct = async (
   return null;
 };
 
-export const deleteProduct = async (id: string, productName: string) => {
-  // Reference to the product folder in Storage
-  const storageReference = storageRef(storage, `products/${productName}`);
-
-  // List all files in the product folder
-  const { items } = await listAll(storageReference);
-
-  // Delete each file in the product folder
-  for (const item of items) {
-    try {
-      await deleteObject(item);
-    } catch (error) {
-      console.error("Error deleting file:", error);
-      throw error;
-    }
-  }
-
-  // Delete the product document in Firestore
+export const deleteProduct = async (id: string) => {
   const productRef = doc(db, "products", id);
   try {
-    await deleteDoc(productRef);
+    await updateDoc(productRef, { isArchived: true });
   } catch (error) {
-    console.error("Error deleting document:", error);
+    console.error("Error archiving document:", error);
     throw error;
   }
 };

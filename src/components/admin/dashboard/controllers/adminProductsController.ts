@@ -40,9 +40,9 @@ export const setup = () => {
   };
 
   const isDeleting = ref(false);
-  const deleteProductController = async (id: string, productName: string) => {
+  const deleteProductController = async (id: string) => {
     isDeleting.value = true;
-    await deleteProduct(id, productName);
+    await deleteProduct(id);
     // Remove the product from the products array
     products.value = products.value.filter((product) => product.id !== id);
     isDeleting.value = false;
