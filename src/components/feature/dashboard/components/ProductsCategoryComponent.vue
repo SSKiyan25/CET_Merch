@@ -110,7 +110,7 @@
                           <span
                             class="block pb-2 pl-2 pt-1 text-xs md:text-sm font-semibold uppercase text-primary"
                           >
-                            {{ product.price }}
+                            (P {{ product.price }} )
                           </span>
                         </div>
                         <h3
@@ -249,7 +249,7 @@ const productsByCategory = computed(() => {
 const frameworks = [
   { value: "T-Shirt", label: "T-Shirt" },
   { value: "Polo-Shirt", label: "Polo-Shirt" },
-  { value: "Lace", label: "Lace" },
+  { value: "Lanyard", label: "Lanyard" },
   { value: "Hoodie", label: "Hoodie" },
   { value: "Stickers", label: "Stickers" },
   { value: "", label: "All" },

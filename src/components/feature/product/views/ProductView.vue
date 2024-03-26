@@ -159,11 +159,12 @@
               <div>
                 <span>Available Sizes:</span>
                 <p class="pl-8 py-4 text-secondary-foreground/70">
-                  {{
-                    product?.sizes[0] === "N/A"
-                      ? "No Available Sizes"
-                      : product?.sizes.join(" | ")
-                  }}
+                  <span
+                    v-if="product?.sizes.every((size : string) => size === '')"
+                  >
+                    No Available Size
+                  </span>
+                  <span v-else>{{ product?.sizes.join(" | ") }}</span>
                 </p>
               </div>
               <div>
