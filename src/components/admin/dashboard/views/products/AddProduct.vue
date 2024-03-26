@@ -1,7 +1,7 @@
 <template>
   <NavBar />
   <AdminSidebar />
-  <div class="p-4 ml-2 sm:ml-64 pb-16">
+  <div class="p-4 ml-2 sm:ml-64 py-16">
     <div class="flex flex-row justify-start py-10">
       <div class="flex">
         <span class="material-symbols-outlined py-2 px-2 text-5xl">
@@ -9,7 +9,7 @@
         </span>
       </div>
       <div class="flex flex-col">
-        <h1 class="text-2xl">Add a Product</h1>
+        <h1 class="text-2xl text-primary">Add a Product</h1>
         <p class="text-sm py-1">
           Add a new product to the inventory. You can add a product by providing
           the product name, description, price, and any others.
@@ -18,25 +18,48 @@
     </div>
     <div class="flex flex-col p-4 border-2 rounded-lg py-5">
       <div class="flex flex-row border-b-2">
-        <h1 class="font-bold text-xl tracking-wide mb-2">
+        <h1 class="font-bold text-primary text-xl tracking-wide mb-2">
           Input All Required Fields
         </h1>
       </div>
       <div class="p-1">
         <form @submit.prevent="handleFormSubmit">
-          <div class="flex flex-col">
-            <label for="product-name" class="text-sm font-medium py-2">
-              Product Name
-              <span class="text-red-400 font-bold text-sm">*</span>
-            </label>
-            <input
-              type="text"
-              id="product-name"
-              v-model="newProduct.name"
-              class="p-2 border-2 text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
-              placeholder="Enter product name"
-              required
-            />
+          <div class="flex flex-row">
+            <div class="flex flex-col w-1/2 pr-2">
+              <label for="product-name" class="text-sm font-medium py-2">
+                Product Name
+                <span class="text-red-400 font-bold text-sm">*</span>
+              </label>
+              <input
+                type="text"
+                id="product-name"
+                v-model="newProduct.name"
+                class="p-2 border text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                placeholder="Enter product name"
+                required
+              />
+            </div>
+            <div class="flex flex-col w-1/2 pl-2">
+              <label for="product-faction" class="text-sm font-medium py-2">
+                Product Faction
+                <span class="text-red-400 font-bold text-sm">*</span>
+              </label>
+              <select
+                id="product-faction"
+                v-model="newProduct.faction"
+                class="p-2 border text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                required
+              >
+                <option disabled value="">Please select a faction</option>
+                <option value="CET">CET</option>
+                <option value="BSCS">BSCS</option>
+                <option value="BSCE">BSCE</option>
+                <option value="BSGE">BSGE</option>
+                <option value="BSME">BSME</option>
+                <option value="BSMet">BSMet</option>
+                <option value="BSABE">BSABE</option>
+              </select>
+            </div>
           </div>
           <div class="flex mt-4">
             <div class="flex flex-col w-1/2 pr-2">
@@ -47,14 +70,19 @@
                   >(T-Shirt, Polo-Shirt, Hoodie, Stickers, Other)</span
                 >
               </label>
-              <input
-                type="text"
+              <select
                 id="product-category"
                 v-model="newProduct.category"
-                class="p-2 border-2 text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
-                placeholder="Enter product category"
+                class="p-2 border text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
                 required
-              />
+              >
+                <option disabled value="">Please select a category</option>
+                <option value="T-Shirt">T-Shirt</option>
+                <option value="Polo-Shirt">Polo-Shirt</option>
+                <option value="Hoodie">Hoodie</option>
+                <option value="Stickers">Stickers</option>
+                <option value="Other">Other</option>
+              </select>
             </div>
             <div class="flex flex-col w-1/2 pl-2">
               <label for="product-price" class="text-sm font-medium py-2">
@@ -66,7 +94,7 @@
                 id="product-price"
                 v-model="newProduct.price"
                 step="0.01"
-                class="p-2 border-2 text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                class="p-2 border text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
                 placeholder="Enter product price"
                 required
               />
@@ -75,8 +103,11 @@
           <div class="flex flex-col mt-4">
             <label for="product-quantity" class="text-sm font-medium py-2">
               Sizes
+              <span class="opacity-50 text-xs"
+                >(One at a Time if adding other sizes)</span
+              >
             </label>
-            <div class="flex flex-row">
+            <div class="flex flex-row flex-wrap">
               <div class="flex items-center me-4">
                 <input
                   id="inline-checkbox-na"
@@ -98,11 +129,15 @@
                   value="XS"
                   v-model="newProduct.sizes"
                   v-bind:disabled="naChecked"
-                  class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
+                  :class="`w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 ${
+                    naChecked ? 'opacity-50' : ''
+                  }`"
                 />
                 <label
                   for="inline-checkbox-xs"
-                  class="ms-2 text-sm font-medium text-secondary-foreground"
+                  :class="`ms-2 text-sm font-medium text-secondary-foreground ${
+                    naChecked ? 'opacity-50' : ''
+                  }`"
                   >XS</label
                 >
               </div>
@@ -113,11 +148,15 @@
                   value="S"
                   v-model="newProduct.sizes"
                   v-bind:disabled="naChecked"
-                  class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
+                  :class="`w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 ${
+                    naChecked ? 'opacity-50' : ''
+                  }`"
                 />
                 <label
                   for="inline-checkbox-s"
-                  class="ms-2 text-sm font-medium text-secondary-foreground"
+                  :class="`ms-2 text-sm font-medium text-secondary-foreground ${
+                    naChecked ? 'opacity-50' : ''
+                  }`"
                   >S</label
                 >
               </div>
@@ -128,11 +167,15 @@
                   value="M"
                   v-model="newProduct.sizes"
                   v-bind:disabled="naChecked"
-                  class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
+                  :class="`w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 ${
+                    naChecked ? 'opacity-50' : ''
+                  }`"
                 />
                 <label
                   for="inline-checkbox-m"
-                  class="ms-2 text-sm font-medium text-secondary-foreground"
+                  :class="`ms-2 text-sm font-medium text-secondary-foreground ${
+                    naChecked ? 'opacity-50' : ''
+                  }`"
                   >M</label
                 >
               </div>
@@ -143,11 +186,15 @@
                   value="L"
                   v-model="newProduct.sizes"
                   v-bind:disabled="naChecked"
-                  class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
+                  :class="`w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 ${
+                    naChecked ? 'opacity-50' : ''
+                  }`"
                 />
                 <label
                   for="inline-checkbox-l"
-                  class="ms-2 text-sm font-medium text-secondary-foreground"
+                  :class="`ms-2 text-sm font-medium text-secondary-foreground ${
+                    naChecked ? 'opacity-50' : ''
+                  }`"
                   >L</label
                 >
               </div>
@@ -158,11 +205,15 @@
                   value="XL"
                   v-model="newProduct.sizes"
                   v-bind:disabled="naChecked"
-                  class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
+                  :class="`w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 ${
+                    naChecked ? 'opacity-50' : ''
+                  }`"
                 />
                 <label
                   for="inline-checkbox-xl"
-                  class="ms-2 text-sm font-medium text-secondary-foreground"
+                  :class="`ms-2 text-sm font-medium text-secondary-foreground ${
+                    naChecked ? 'opacity-50' : ''
+                  }`"
                   >XL</label
                 >
               </div>
@@ -173,11 +224,15 @@
                   value="2XL"
                   v-model="newProduct.sizes"
                   v-bind:disabled="naChecked"
-                  class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
+                  :class="`w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 ${
+                    naChecked ? 'opacity-50' : ''
+                  }`"
                 />
                 <label
                   for="inline-checkbox-2xl"
-                  class="ms-2 text-sm font-medium text-secondary-foreground"
+                  :class="`ms-2 text-sm font-medium text-secondary-foreground ${
+                    naChecked ? 'opacity-50' : ''
+                  }`"
                   >2XL</label
                 >
               </div>
@@ -188,13 +243,43 @@
                   value="3XL"
                   v-model="newProduct.sizes"
                   v-bind:disabled="naChecked"
-                  class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
+                  :class="`w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 ${
+                    naChecked ? 'opacity-50' : ''
+                  }`"
                 />
                 <label
                   for="inline-checkbox-3xl"
-                  class="ms-2 text-sm font-medium text-secondary-foreground"
+                  :class="`ms-2 text-sm font-medium text-secondary-foreground ${
+                    naChecked ? 'opacity-50' : ''
+                  }`"
                   >3XL</label
                 >
+              </div>
+              <div
+                :class="`flex flex-row space-x-1 items-center me-4 ${
+                  naChecked ? 'opacity-50' : ''
+                }`"
+              >
+                <label class="text-xs">Other: </label>
+                <div v-for="(size, index) in otherSizes" :key="index">
+                  <input
+                    type="text"
+                    v-model="size.value"
+                    v-bind:disabled="naChecked"
+                    class="w-12 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
+                    pattern="\S+"
+                    title="This field should not contain spaces."
+                  />
+                </div>
+                <Button
+                  title="Click to add more options"
+                  variant="default"
+                  class="w-2/5"
+                  @click.prevent="addSize"
+                  v-bind:disabled="naChecked"
+                >
+                  <span class="text-xs font-semibold">Add</span>
+                </Button>
               </div>
             </div>
           </div>
@@ -206,7 +291,7 @@
               id="product-description"
               rows="5"
               v-model="newProduct.description"
-              class="p-2 border-2 rounded-lg text-xs bg-secondary border-primary/40 text-secondary-foreground"
+              class="p-2 border rounded-lg text-xs bg-secondary border-primary/40 text-secondary-foreground"
               placeholder="Enter product description"
             ></textarea>
           </div>
@@ -226,7 +311,10 @@
           </div>
           <div class="flex flex-col mt-4">
             <label class="block py-2 text-sm font-medium" for="multiple_files"
-              >Upload Product Photos</label
+              >Upload Product Photos
+              <span class="opacity-50 text-xs"
+                >(Add Additional Photos like its Sizes or other Colors)</span
+              ></label
             >
             <input
               class="block w-full text-xs border-2 rounded-lg h-10"
@@ -324,6 +412,7 @@ import {
 import { addDoc, collection, setDoc } from "firebase/firestore";
 import { useRouter } from "vue-router";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "../../../../ui/button";
 
 const router = useRouter();
 
@@ -335,6 +424,7 @@ interface ProductData {
   id?: string;
   name: string;
   category: string;
+  faction: string;
   price: number;
   sizes: string[];
   description: string;
@@ -347,6 +437,7 @@ interface ProductData {
 const newProduct = ref<ProductData>({
   name: "",
   category: "",
+  faction: "",
   price: 0,
   sizes: [],
   description: "",
@@ -358,12 +449,12 @@ const newProduct = ref<ProductData>({
 
 const coverPhotoInput = ref<HTMLInputElement | null>(null);
 const productPhotosInput = ref<HTMLInputElement | null>(null);
-const naChecked = ref(false);
 
 let isLoading = ref(false);
 let isUploadSuccessful = ref(false);
 
 const progress = ref(13);
+
 watchEffect((cleanupFn) => {
   const timer = setTimeout(() => (progress.value = 66), 500);
   cleanupFn(() => clearTimeout(timer));
@@ -375,6 +466,23 @@ watch(
     newValue.status = newValue.isPublished ? "Published" : "Hidden";
   },
   { deep: true }
+);
+
+const naChecked = ref(false);
+const otherSizes = ref([{ value: "" }]);
+
+const addSize = () => {
+  otherSizes.value = [...otherSizes.value, { value: "" }];
+};
+
+watch(
+  () => naChecked.value,
+  (newNaChecked) => {
+    if (newNaChecked) {
+      newProduct.value.sizes = [];
+      otherSizes.value = [{ value: "" }];
+    }
+  }
 );
 
 const handleFormSubmit = async (): Promise<boolean> => {
@@ -465,8 +573,14 @@ const handleFormSubmit = async (): Promise<boolean> => {
     const productData = {
       name: newProduct.value.name,
       category: newProduct.value.category,
+      faction: newProduct.value.faction,
       price: newProduct.value.price,
-      sizes: naChecked.value ? ["N/A"] : newProduct.value.sizes,
+      sizes: [
+        ...new Set([
+          ...newProduct.value.sizes,
+          ...otherSizes.value.map((size) => size.value),
+        ]),
+      ],
       description: newProduct.value.description,
       coverPhoto: coverPhotoURL,
       photos: photosURLs,
@@ -481,6 +595,7 @@ const handleFormSubmit = async (): Promise<boolean> => {
     newProduct.value = {
       name: "",
       category: "",
+      faction: "",
       price: 0,
       sizes: [],
       description: "",
