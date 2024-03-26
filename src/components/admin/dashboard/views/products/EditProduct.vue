@@ -211,7 +211,7 @@
               id="multiple_files"
               accept="image/*"
               type="file"
-              ref="productPhotosInput"
+              ref="additionalPhotosInput"
               multiple
             />
             <div class="flex flex-row flex-wrap">
@@ -220,7 +220,7 @@
                 v-for="photo in product.photos"
                 :key="photo"
               >
-                <img :src="photo" class="p-2 pt-8 w-64 h-auto" />
+                <img :src="photo" class="p-2 pt-8 w-64 h-72 rounded-lg" />
                 <button
                   class="absolute bottom-2 right-2 p-1 hover:text-destructive text-destructive-foreground bg-destructive hover:bg-gray-200"
                   title="Delete Image"
@@ -229,6 +229,9 @@
                 </button>
               </div>
             </div>
+            <span class="text-base text-primary/80 italic pt-2"
+              >Not the Actual Photo Size so the Image might be stretched.
+            </span>
           </div>
           <div class="flex flex-row justify-between pt-6">
             <div class="flex flex-row items-start py-8">
@@ -292,11 +295,10 @@ import { ref, watch as watchSize, computed } from "vue";
 
 const naChecked = ref(false);
 const router = useRouter();
-const {
-  product,
-  editProduct: editProductController,
-  handleFileUpload,
-} = setupProductController();
+const { product, editProductController, handleFileUpload } =
+  setupProductController();
+
+const additionalPhotosInput = ref<HTMLInputElement | null>(null);
 
 let isLoading = ref(false);
 const otherSizes = ref([{ value: "" }]);
@@ -375,14 +377,15 @@ const editProduct = async (id: string) => {
     sizes = [...new Set(sizes)];
 
     if (naChecked.value && sizes.length === 0) {
-      sizes = [""];
+      sizes = ["N/A"];
     }
 
     const productData = {
       ...product.value,
       sizes: sizes,
     };
-    await editProductController(id, productData);
+    const additionalPhotosFiles = additionalPhotosInput.value?.files || null;
+    await editProductController(id, productData, additionalPhotosFiles);
     console.log("Product update was successful");
     router.push({ name: "adminProducts" });
   } catch (error) {

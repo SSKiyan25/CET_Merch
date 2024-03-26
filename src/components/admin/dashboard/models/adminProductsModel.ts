@@ -38,10 +38,43 @@ export const fetchProduct = async (id: string) => {
   return null;
 };
 
+async function uploadFileToFirebase(file: File, productName: string) {
+  const storageReference = storageRef(
+    storage,
+    `gs://csshoppee-76342.appspot.com/products/${productName}/${file.name}`
+  );
+  const uploadTask = uploadBytesResumable(storageReference, file);
+
+  const downloadURL = await new Promise<string>((resolve, reject) => {
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+      },
+      (error) => {
+        // Handle unsuccessful uploads
+        console.error(error);
+        reject(error);
+      },
+      async () => {
+        // Handle successful uploads on complete
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        console.log("File available at", downloadURL);
+        resolve(downloadURL);
+      }
+    );
+  });
+
+  return downloadURL;
+}
+
 export const updateProduct = async (
   id: string,
   productData: any,
-  coverPhotoFile: File | null
+  coverPhotoFile: File | null,
+  additionalPhotosFiles: FileList | null
 ) => {
   const productRef = doc(db, "products", id);
 
@@ -89,6 +122,22 @@ export const updateProduct = async (
         }
       );
     });
+  }
+
+  if (additionalPhotosFiles) {
+    // Create new File objects for the additional photos and upload them
+    for (let i = 0; i < additionalPhotosFiles.length; i++) {
+      const file = additionalPhotosFiles[i];
+      const newPhotoName = `${productData.name}_Photo[${i}]${file.name.slice(
+        file.name.lastIndexOf(".")
+      )}`;
+      const newPhotoFile = new File([file], newPhotoName, { type: file.type });
+      const downloadURL = await uploadFileToFirebase(
+        newPhotoFile,
+        productData.name
+      );
+      productData.photos.push(downloadURL);
+    }
   }
 
   await updateDoc(productRef, productData);

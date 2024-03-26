@@ -279,7 +279,11 @@
                                   title="Edit Product"
                                   @click.prevent="
                                     console.log(product.id);
-                                    editProduct(product.id, product);
+                                    editProductController(
+                                      product.id,
+                                      product,
+                                      null
+                                    );
                                   "
                                 >
                                   <span
@@ -631,7 +635,7 @@ let open = ref(false);
 let searchInput = ref("");
 let selectedCategory = ref("All");
 
-const { products, editProduct, deleteProductController, isDeleting } =
+const { products, editProductController, deleteProductController, isDeleting } =
   setupProductController();
 const showProductModal = ref(products.value.map(() => false));
 

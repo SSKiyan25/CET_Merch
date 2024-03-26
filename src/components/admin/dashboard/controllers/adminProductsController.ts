@@ -34,8 +34,17 @@ export const setup = () => {
     coverPhotoFile.value = file;
   };
 
-  const editProduct = async (id: string, productData: any) => {
-    product.value = await updateProduct(id, productData, coverPhotoFile.value);
+  const editProductController = async (
+    id: string,
+    productData: any,
+    additionalPhotosFiles: FileList | null
+  ) => {
+    product.value = await updateProduct(
+      id,
+      productData,
+      coverPhotoFile.value,
+      additionalPhotosFiles
+    );
     router.push({ name: "adminEditProduct", params: { id } });
   };
 
@@ -51,7 +60,7 @@ export const setup = () => {
   return {
     products,
     product,
-    editProduct,
+    editProductController,
     handleFileUpload,
     deleteProductController,
     isDeleting,
