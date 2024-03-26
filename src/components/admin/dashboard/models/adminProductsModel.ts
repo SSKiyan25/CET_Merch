@@ -21,7 +21,7 @@ import {
 
 export const fetchProducts = async (
   startAfterDoc: DocumentSnapshot | null = null,
-  limitCount = 1
+  limitCount = 5
 ) => {
   const productCollection = collection(db, "products");
   let q = query(

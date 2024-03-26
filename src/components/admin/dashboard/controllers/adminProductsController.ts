@@ -43,9 +43,9 @@ export const setup = () => {
   });
 
   const nextPage = async () => {
-    if ((currentPage.value + 1) * 1 < totalProducts.value) {
+    if ((currentPage.value + 1) * 5 < totalProducts.value) {
       loadingPage.value = true;
-      currentPage.value++;
+      currentPage.value = currentPage.value + 5;
       const startAfterDoc = lastDocs.value[currentPage.value - 1];
       const { products: newProducts, lastDoc } = await fetchProducts(
         startAfterDoc
@@ -59,7 +59,7 @@ export const setup = () => {
   const prevPage = async () => {
     if (currentPage.value > 0) {
       loadingPage.value = true;
-      currentPage.value--;
+      currentPage.value = currentPage.value - 5;
       const startAfterDoc =
         currentPage.value > 0 ? lastDocs.value[currentPage.value - 1] : null;
       const { products: newProducts } = await fetchProducts(startAfterDoc);
