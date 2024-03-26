@@ -21,19 +21,41 @@
       </div>
       <div class="p-1" v-if="product">
         <form @submit.prevent="editProduct(product.id)">
-          <div class="flex flex-col">
-            <label for="product-name" class="text-sm font-medium py-2">
-              Product Name*
-            </label>
-            <input
-              type="text"
-              id="product-name"
-              v-model="product.name"
-              class="p-2 border-2 text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
-              placeholder="{{ product.name }}"
-              required
-            />
+          <div class="flex flex-row">
+            <div class="flex flex-col w-1/2 pr-2">
+              <label for="product-name" class="text-sm font-medium py-2">
+                Product Name*
+              </label>
+              <input
+                type="text"
+                id="product-name"
+                v-model="product.name"
+                class="p-2 border-2 text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                placeholder="{{ product.name }}"
+                required
+              />
+            </div>
+            <div class="flex flex-col w-1/2 pl-2">
+              <label for="product-faction" class="text-sm font-medium py-2">
+                Product Faction
+              </label>
+              <select
+                id="product-faction"
+                v-model="product.faction"
+                class="p-2 border text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                required
+              >
+                <option
+                  v-for="faction in factions"
+                  :key="faction.value"
+                  :value="faction.value"
+                >
+                  {{ faction.label }}
+                </option>
+              </select>
+            </div>
           </div>
+
           <div class="flex mt-4">
             <div class="flex flex-col w-1/2 pr-2">
               <label for="product-category" class="text-sm font-medium py-2">
@@ -42,14 +64,20 @@
                   >(T-Shirt, Polo-Shirt, Hoodie, Stickers, etc..)</span
                 >
               </label>
-              <input
-                type="text"
-                id="product-category"
+              <select
+                id="product-faction"
                 v-model="product.category"
-                class="p-2 border-2 text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
-                placeholder="{{ product.category }}"
+                class="p-2 border text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
                 required
-              />
+              >
+                <option
+                  v-for="category in categories"
+                  :key="category.value"
+                  :value="category.value"
+                >
+                  {{ category.label }}
+                </option>
+              </select>
             </div>
             <div class="flex flex-col w-1/2 pl-2">
               <label for="product-price" class="text-sm font-medium py-2">
@@ -314,6 +342,25 @@ watchSize(
     }
   }
 );
+
+const factions = [
+  { value: "CET", label: "CET" },
+  { value: "BSCS", label: "BSCS" },
+  { value: "BSCE", label: "BSCE" },
+  { value: "BSGE", label: "BSGE" },
+  { value: "BSME", label: "BSME" },
+  { value: "BSMet", label: "BSMet" },
+  { value: "BSABE", label: "BSABE" },
+];
+
+const categories = [
+  { value: "T-Shirt", label: "T-Shirt" },
+  { value: "Polo-Shirt", label: "Polo-Shirt" },
+  { value: "Hoodie", label: "Hoodie" },
+  { value: "Lanyard", label: "Lanyard" },
+  { value: "Stickers", label: "Stickers" },
+  { value: "Other", label: "Other" },
+];
 
 const editProduct = async (id: string) => {
   try {

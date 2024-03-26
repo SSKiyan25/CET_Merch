@@ -254,8 +254,9 @@
                             </span>
                             <span
                               v-if="
-                                product.sizes[0] === '' &&
-                                product.sizes.length === 1
+                                (product.sizes[0] === '' &&
+                                  product.sizes.length === 1) ||
+                                product.sizes.length === 0
                               "
                               class="text-xs text-secondary-foreground/50"
                             >
