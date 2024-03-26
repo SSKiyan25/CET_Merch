@@ -431,6 +431,7 @@ interface ProductData {
   coverPhoto: File;
   photos: File[];
   isPublished: boolean;
+  isArchived: boolean;
   status: string;
 }
 
@@ -444,6 +445,7 @@ const newProduct = ref<ProductData>({
   coverPhoto: new File([], ""),
   photos: [],
   isPublished: false,
+  isArchived: false,
   status: "",
 });
 
@@ -585,6 +587,7 @@ const handleFormSubmit = async (): Promise<boolean> => {
       coverPhoto: coverPhotoURL,
       photos: photosURLs,
       isPublished: newProduct.value.isPublished,
+      isArchived: false,
       status: newProduct.value.status,
     };
     const docRef = await addDoc(collection(db, "products"), productData);
@@ -602,6 +605,7 @@ const handleFormSubmit = async (): Promise<boolean> => {
       coverPhoto: new File([], ""),
       photos: [],
       isPublished: false,
+      isArchived: false,
       status: "",
     };
     isLoading.value = false;
