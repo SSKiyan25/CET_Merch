@@ -491,18 +491,34 @@ watch(
 
 const handleFormSubmit = async (): Promise<boolean> => {
   console.log("Form submitted");
+
   try {
     isLoading.value = true;
     console.log("Cover photo files:", coverPhotoInput.value?.files); // Check the cover photo input
     console.log("Product photos files:", productPhotosInput.value?.files); // Check the product photos input
+
     if (coverPhotoInput.value?.files) {
-      newProduct.value.coverPhoto = coverPhotoInput.value.files[0];
+      const originalCoverPhoto = coverPhotoInput.value.files[0];
+      newProduct.value.coverPhoto = new File(
+        [originalCoverPhoto],
+        `${newProduct.value.name}_coverPhoto`,
+        { type: originalCoverPhoto.type }
+      );
     } else {
       newProduct.value.coverPhoto = new File([], "");
     }
 
     if (productPhotosInput.value?.files) {
-      newProduct.value.photos = Array.from(productPhotosInput.value.files);
+      newProduct.value.photos = Array.from(productPhotosInput.value.files).map(
+        (originalPhoto, index) =>
+          new File(
+            [originalPhoto],
+            `${newProduct.value.name}_Photo[${index}]${originalPhoto.name.slice(
+              originalPhoto.name.lastIndexOf(".")
+            )}`,
+            { type: originalPhoto.type }
+          )
+      );
     } else {
       newProduct.value.photos = [];
     }

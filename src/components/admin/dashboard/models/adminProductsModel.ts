@@ -12,6 +12,7 @@ import {
   uploadBytesResumable,
   getDownloadURL,
   ref as storageRef,
+  deleteObject,
 } from "firebase/storage";
 
 export const fetchProducts = async () => {
@@ -45,9 +46,16 @@ export const updateProduct = async (
   const productRef = doc(db, "products", id);
 
   if (coverPhotoFile) {
+    // Delete the existing cover photo from Firebase Storage
+    if (productData.coverPhoto) {
+      const coverPhotoRef = storageRef(storage, productData.coverPhoto);
+      await deleteObject(coverPhotoRef);
+    }
+
+    // Upload the new cover photo to Firebase Storage
     const storageReference = storageRef(
       storage,
-      `products/${coverPhotoFile.name}`
+      `products/${productData.name}`
     );
     const uploadTask = uploadBytesResumable(storageReference, coverPhotoFile);
 
