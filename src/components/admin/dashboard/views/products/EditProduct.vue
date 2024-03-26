@@ -273,20 +273,17 @@
   </div>
   <div
     v-if="isLoading"
-    class="fixed inset-0 flex items-center justify center z-50"
+    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-80"
   >
-    <div class="p-8 bg-secondary rounded-xl shadow space-y-4">
-      <div class="flex flex-row">
-        <span class="text-xl font-bold text-secondary-foreground pt-4 pl-8"
-          >Uploading</span
+    <div class="flex flex-col items-center justify-center h-full">
+      <div class="flex flex-col items-center justify-center">
+        <span
+          class="material-symbols-outlined text-6xl text-primary animate-spin"
         >
-        <span><img src="/upload_fire.gif" class="h-16 w-auto" /></span>
+          autorenew
+        </span>
+        <span class="text-lg text-secondary-foreground/60">Updating...</span>
       </div>
-
-      <Progress
-        v-model="progress"
-        class="w-full border-2 border-background/20"
-      />
     </div>
   </div>
 </template>
@@ -297,8 +294,7 @@ import AdminSidebar from "../AdminSidebar.vue";
 import { Button } from "@/components/ui/button";
 import { setup as setupProductController } from "@/components/admin/dashboard/controllers/adminProductsController.ts";
 import { useRouter } from "vue-router";
-import { Progress } from "@/components/ui/progress";
-import { ref, watchEffect } from "vue";
+import { ref } from "vue";
 
 const router = useRouter();
 const {
@@ -308,21 +304,19 @@ const {
 } = setupProductController();
 
 let isLoading = ref(false);
-const progress = ref(13);
-watchEffect((cleanupFn) => {
-  const timer = setTimeout(() => (progress.value = 66), 500);
-  cleanupFn(() => clearTimeout(timer));
-});
 
 const editProduct = async (id: string, product: any) => {
   try {
     // Create a copy of the product object
+    isLoading.value = true;
     const productData = { ...product };
     await editProductController(id, productData);
     console.log("Product update was successful");
     router.push({ name: "adminProducts" });
   } catch (error) {
     console.error("Failed to update product:", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
