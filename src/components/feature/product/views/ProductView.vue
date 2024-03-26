@@ -160,7 +160,7 @@
                 <span>Available Sizes:</span>
                 <p class="pl-8 py-4 text-secondary-foreground/70">
                   <span
-                    v-if="product?.sizes.every((size : string) => size === '')"
+                    v-if="product?.sizes.every((size : string) => size === '') || product?.size.length === 0"
                   >
                     No Available Size
                   </span>

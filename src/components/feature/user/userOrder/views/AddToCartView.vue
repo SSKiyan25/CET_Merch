@@ -45,7 +45,10 @@
             </div>
             <div
               class="flex flex-col flex-wrap py-6"
-              v-if="product.sizes && product.sizes[0] !== ''"
+              v-if="
+                (product.sizes && product.sizes[0] !== '') ||
+                product.sizes.length === 0
+              "
             >
               <span class="text-sm"> Available Sizes</span>
               <div class="flex flex-row flex-wrap py-4 pl-4 space-x-1">
