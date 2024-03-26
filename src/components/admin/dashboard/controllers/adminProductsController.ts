@@ -20,10 +20,11 @@ export const setup = () => {
   let currentPage = ref(0);
   let lastDocs = ref<DocumentSnapshot[]>([]);
   let totalProducts = ref(0);
+  const loadingPage = ref(false);
 
   onMounted(async () => {
     initFlowbite();
-
+    loadingPage.value = true;
     const {
       products: initialProducts,
       lastDoc,
@@ -38,9 +39,9 @@ export const setup = () => {
       const id = route.params.id as string;
       product.value = await fetchProduct(id);
     }
+    loadingPage.value = false;
   });
 
-  const loadingPage = ref(false);
   const nextPage = async () => {
     if ((currentPage.value + 1) * 1 < totalProducts.value) {
       loadingPage.value = true;
