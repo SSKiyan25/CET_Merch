@@ -1,7 +1,7 @@
 <template>
   <NavBar />
   <AdminSidebar />
-  <div class="p-4 ml-2 sm:ml-64">
+  <div class="p-4 ml-2 py-16 sm:ml-64">
     <div class="flex flex-row justify-start py-10">
       <div class="flex">
         <span class="material-symbols-outlined py-2 px-2 text-5xl">
@@ -20,7 +20,7 @@
         </h1>
       </div>
       <div class="p-1" v-if="product">
-        <form @submit.prevent="editProduct(product.id, product)">
+        <form @submit.prevent="editProduct(product.id)">
           <div class="flex flex-col">
             <label for="product-name" class="text-sm font-medium py-2">
               Product Name*
@@ -73,101 +73,67 @@
             <div class="flex flex-row">
               <div class="flex items-center me-4">
                 <input
-                  id="inline-checkbox-xs"
-                  type="checkbox"
-                  value="XS"
-                  v-model="product.sizes"
-                  class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
-                />
-                <label
-                  for="inline-checkbox-xs"
-                  class="ms-2 text-sm font-medium text-secondary-foreground"
-                  >XS</label
-                >
-              </div>
-              <div class="flex items-center me-4">
-                <input
                   id="inline-checkbox-s"
                   type="checkbox"
                   value="S"
-                  v-model="product.sizes"
+                  v-model="naChecked"
                   class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
                 />
                 <label
                   for="inline-checkbox-s"
                   class="ms-2 text-sm font-medium text-secondary-foreground"
-                  >S</label
+                  >N/A</label
                 >
               </div>
-              <div class="flex items-center me-4">
+              <div
+                v-for="(size, index) in allSizes"
+                :key="index"
+                class="flex items-center me-4"
+              >
                 <input
-                  id="inline-checkbox-m"
                   type="checkbox"
-                  value="M"
-                  v-model="product.sizes"
-                  class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
+                  :id="`size-${index}`"
+                  v-if="size.value !== ''"
+                  v-model="size.checked.value"
+                  :disabled="naChecked"
+                  checked
+                  :class="`w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 ${
+                    naChecked ? 'opacity-50' : ''
+                  }`"
                 />
                 <label
-                  for="inline-checkbox-m"
-                  class="ms-2 text-sm font-medium text-secondary-foreground"
-                  >M</label
-                >
+                  :for="`size-${index}`"
+                  :class="`ms-2 text-sm font-medium text-secondary-foreground ${
+                    naChecked ? 'opacity-50' : ''
+                  }`"
+                  >{{ size.value }}
+                </label>
               </div>
-              <div class="flex items-center me-4">
-                <input
-                  id="inline-checkbox-l"
-                  type="checkbox"
-                  value="L"
-                  v-model="product.sizes"
-                  class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
-                />
-                <label
-                  for="inline-checkbox-l"
-                  class="ms-2 text-sm font-medium text-secondary-foreground"
-                  >L</label
+              <div
+                :class="`flex flex-row space-x-1 items-center me-4 ${
+                  naChecked ? 'opacity-50' : ''
+                }`"
+              >
+                <label class="text-xs">Other: </label>
+                <div v-for="(size, index) in otherSizes" :key="index">
+                  <input
+                    type="text"
+                    v-model="size.value"
+                    v-bind:disabled="naChecked"
+                    class="w-12 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
+                    pattern="\S+"
+                    title="This field should not contain spaces."
+                  />
+                </div>
+                <Button
+                  title="Click to add more options"
+                  variant="default"
+                  class="w-2/5"
+                  @click.prevent="addSize"
+                  v-bind:disabled="naChecked"
                 >
-              </div>
-              <div class="flex items-center me-4">
-                <input
-                  id="inline-checkbox-xl"
-                  type="checkbox"
-                  value="XL"
-                  v-model="product.sizes"
-                  class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
-                />
-                <label
-                  for="inline-checkbox-xl"
-                  class="ms-2 text-sm font-medium text-secondary-foreground"
-                  >XL</label
-                >
-              </div>
-              <div class="flex items-center me-4">
-                <input
-                  id="inline-checkbox-2xl"
-                  type="checkbox"
-                  value="2XL"
-                  v-model="product.sizes"
-                  class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
-                />
-                <label
-                  for="inline-checkbox-2xl"
-                  class="ms-2 text-sm font-medium text-secondary-foreground"
-                  >2XL</label
-                >
-              </div>
-              <div class="flex items-center me-4">
-                <input
-                  id="inline-checkbox-3xl"
-                  type="checkbox"
-                  value="3XL"
-                  v-model="product.sizes"
-                  class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
-                />
-                <label
-                  for="inline-checkbox-3xl"
-                  class="ms-2 text-sm font-medium text-secondary-foreground"
-                  >3XL</label
-                >
+                  <span class="text-xs font-semibold">Add</span>
+                </Button>
               </div>
             </div>
           </div>
@@ -294,8 +260,9 @@ import AdminSidebar from "../AdminSidebar.vue";
 import { Button } from "@/components/ui/button";
 import { setup as setupProductController } from "@/components/admin/dashboard/controllers/adminProductsController.ts";
 import { useRouter } from "vue-router";
-import { ref } from "vue";
+import { ref, watch as watchSize, computed } from "vue";
 
+const naChecked = ref(false);
 const router = useRouter();
 const {
   product,
@@ -304,12 +271,70 @@ const {
 } = setupProductController();
 
 let isLoading = ref(false);
+const otherSizes = ref([{ value: "" }]);
 
-const editProduct = async (id: string, product: any) => {
+const addSize = () => {
+  otherSizes.value = [...otherSizes.value, { value: "" }];
+};
+
+const allSizes = computed(() => {
+  if (!product.value) {
+    return [];
+  }
+  const productSizes = product.value.sizes.map((size: string) => ({
+    value: size,
+    checked: ref(!naChecked.value),
+  }));
+  const otherSizesWithChecked = otherSizes.value.map((size) => ({
+    ...size,
+    checked: ref(!naChecked.value),
+  }));
+  return [...productSizes, ...otherSizesWithChecked];
+});
+
+watchSize(
+  () => naChecked.value,
+  (newNaChecked) => {
+    if (!allSizes.value) {
+      return;
+    }
+    if (newNaChecked) {
+      allSizes.value.forEach((size) => {
+        if (size && size.checked) {
+          size.checked.value = false;
+        }
+      });
+      otherSizes.value = [{ value: "" }];
+    } else {
+      allSizes.value.forEach((size) => {
+        if (size && size.checked) {
+          size.checked.value = true;
+        }
+      });
+    }
+  }
+);
+
+const editProduct = async (id: string) => {
   try {
-    // Create a copy of the product object
     isLoading.value = true;
-    const productData = { ...product };
+    let sizes = allSizes.value
+      .filter(
+        (size) => size.checked && size.checked.value && size.value.trim() !== ""
+      )
+      .map((size) => size.value);
+
+    // Remove duplicates
+    sizes = [...new Set(sizes)];
+
+    if (naChecked.value && sizes.length === 0) {
+      sizes = [""];
+    }
+
+    const productData = {
+      ...product.value,
+      sizes: sizes,
+    };
     await editProductController(id, productData);
     console.log("Product update was successful");
     router.push({ name: "adminProducts" });
@@ -323,5 +348,4 @@ const editProduct = async (id: string, product: any) => {
 const cancel = () => {
   router.push({ name: "adminProducts" });
 };
-console.log(product);
 </script>
