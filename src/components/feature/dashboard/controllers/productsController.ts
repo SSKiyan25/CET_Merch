@@ -7,15 +7,20 @@ export const setup = () => {
   const route = useRoute();
   const products = ref<any[]>([]);
   const product = ref<any>(null);
+  const isLoading = ref(true);
 
   onMounted(async () => {
     initFlowbite();
-    products.value = await fetchProducts();
-    // Check if route has id parameter
-    if (route.params.id) {
-      const id = route.params.id as string;
-      product.value = await fetchProductById(id);
+    try {
+      products.value = await fetchProducts();
+      // Check if route has id parameter
+      if (route.params.id) {
+        const id = route.params.id as string;
+        product.value = await fetchProductById(id);
+      }
+    } finally {
+      isLoading.value = false;
     }
   });
-  return { products, product };
+  return { products, product, isLoading };
 };

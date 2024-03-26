@@ -78,7 +78,24 @@
           <CarouselContent>
             <CarouselItem>
               <div
-                v-if="productsByCategory[category].length"
+                v-if="isLoading"
+                class="flex max-w-[75reh] h-full pt-8 justify-center items-center"
+              >
+                <div class="flex flex-col items-center justify-center h-full">
+                  <div class="flex flex-col items-center justify-center">
+                    <span
+                      class="material-symbols-outlined text-6xl text-primary animate-spin"
+                    >
+                      autorenew
+                    </span>
+                    <span class="text-lg text-secondary-foreground/60"
+                      >Loading...</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div
+                v-if="productsByCategory[category].length && !isLoading"
                 class="flex flex-row px-4 md:px-16 pt-4 pb-8 justify-center"
               >
                 <div
@@ -149,7 +166,7 @@
                 </div>
               </div>
               <div
-                v-else
+                v-if="!productsByCategory[category].length && !isLoading"
                 class="flex max-w-[75reh] h-24 justify-center items-center"
               >
                 <p>There's no available product on this category :(</p>
@@ -211,7 +228,7 @@ import Cart from "../../../feature/user/userOrder/views/AddToCartView.vue";
 const open = ref(false);
 const value = ref<string>("");
 
-const { products } = setupProductController();
+const { products, isLoading } = setupProductController();
 
 const getProductById = (id: string) => {
   return products.value.find((product) => product.id === id);
