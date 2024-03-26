@@ -58,8 +58,11 @@ export const setup = () => {
     isDeleting.value = false;
   };
 
+  const isDeletingPhoto = ref(false);
   const deletePhotoController = async (photoURL: string, productId: string) => {
+    isDeletingPhoto.value = true;
     await deletePhoto(photoURL, productId);
+    isDeletingPhoto.value = false;
   };
 
   return {
@@ -70,5 +73,6 @@ export const setup = () => {
     deleteProductController,
     deletePhotoController,
     isDeleting,
+    isDeletingPhoto,
   };
 };

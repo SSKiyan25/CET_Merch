@@ -220,14 +220,27 @@
                 v-for="(photo, index) in product.photos"
                 :key="photo"
               >
-                <img :src="photo" class="p-2 pt-8 w-64 h-72 rounded-lg" />
-                <button
-                  class="absolute bottom-2 right-2 p-1 hover:text-destructive text-destructive-foreground bg-destructive hover:bg-gray-200"
-                  title="Delete Image"
-                  @click.prevent="deletePhotoFromProduct(index)"
-                >
-                  <span class="material-symbols-outlined"> delete </span>
-                </button>
+                <div v-if="isDeletingPhoto" class="p-2 pt-8 w-64 h-72">
+                  <div class="flex flex-col items-center justify-center h-full">
+                    <div class="flex flex-col items-center justify-center">
+                      <span
+                        class="material-symbols-outlined text-6xl text-primary animate-spin"
+                      >
+                        autorenew
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div v-else>
+                  <img :src="photo" class="p-2 pt-8 w-64 h-72 rounded-lg" />
+                  <button
+                    class="absolute bottom-2 right-2 p-1 hover:text-destructive text-destructive-foreground bg-destructive hover:bg-gray-200"
+                    title="Delete Image"
+                    @click.prevent="deletePhotoFromProduct(index)"
+                  >
+                    <span class="material-symbols-outlined"> delete </span>
+                  </button>
+                </div>
               </div>
             </div>
             <span class="text-base text-primary/80 italic pt-2"
@@ -301,6 +314,7 @@ const {
   editProductController,
   handleFileUpload,
   deletePhotoController,
+  isDeletingPhoto,
 } = setupProductController();
 
 const additionalPhotosInput = ref<HTMLInputElement | null>(null);
