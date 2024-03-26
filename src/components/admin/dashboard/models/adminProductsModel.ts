@@ -162,3 +162,23 @@ export const deleteProduct = async (id: string) => {
     throw error;
   }
 };
+
+export const deletePhoto = async (photoURL: string, productId: string) => {
+  const photoRef = storageRef(storage, photoURL);
+  await deleteObject(photoRef);
+
+  // Get the product document
+  const productRef = doc(db, "products", productId);
+  const productSnapshot = await getDoc(productRef);
+  const productData = productSnapshot.data();
+
+  if (productData) {
+    // Filter out the deleted photo URL
+    const updatedPhotos = productData.photos.filter(
+      (url: string) => url !== photoURL
+    );
+
+    // Update the product document
+    await updateDoc(productRef, { photos: updatedPhotos });
+  }
+};

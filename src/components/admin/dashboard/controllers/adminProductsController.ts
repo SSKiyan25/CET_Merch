@@ -6,6 +6,7 @@ import {
   fetchProduct,
   updateProduct,
   deleteProduct,
+  deletePhoto,
 } from "../models/adminProductsModel.ts";
 
 export const setup = () => {
@@ -57,12 +58,17 @@ export const setup = () => {
     isDeleting.value = false;
   };
 
+  const deletePhotoController = async (photoURL: string, productId: string) => {
+    await deletePhoto(photoURL, productId);
+  };
+
   return {
     products,
     product,
     editProductController,
     handleFileUpload,
     deleteProductController,
+    deletePhotoController,
     isDeleting,
   };
 };

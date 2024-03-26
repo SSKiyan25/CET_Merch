@@ -217,13 +217,14 @@
             <div class="flex flex-row flex-wrap">
               <div
                 class="relative"
-                v-for="photo in product.photos"
+                v-for="(photo, index) in product.photos"
                 :key="photo"
               >
                 <img :src="photo" class="p-2 pt-8 w-64 h-72 rounded-lg" />
                 <button
                   class="absolute bottom-2 right-2 p-1 hover:text-destructive text-destructive-foreground bg-destructive hover:bg-gray-200"
                   title="Delete Image"
+                  @click.prevent="deletePhotoFromProduct(index)"
                 >
                   <span class="material-symbols-outlined"> delete </span>
                 </button>
@@ -295,8 +296,12 @@ import { ref, watch as watchSize, computed } from "vue";
 
 const naChecked = ref(false);
 const router = useRouter();
-const { product, editProductController, handleFileUpload } =
-  setupProductController();
+const {
+  product,
+  editProductController,
+  handleFileUpload,
+  deletePhotoController,
+} = setupProductController();
 
 const additionalPhotosInput = ref<HTMLInputElement | null>(null);
 
@@ -363,6 +368,16 @@ const categories = [
   { value: "Stickers", label: "Stickers" },
   { value: "Other", label: "Other" },
 ];
+
+const deletePhotoFromProduct = async (index: number) => {
+  try {
+    const photoURL = product.value.photos[index];
+    await deletePhotoController(photoURL, product.value.id);
+    product.value.photos.splice(index, 1);
+  } catch (error) {
+    console.error("Failed to delete photo:", error);
+  }
+};
 
 const editProduct = async (id: string) => {
   try {
