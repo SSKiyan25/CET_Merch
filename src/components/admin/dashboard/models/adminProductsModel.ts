@@ -52,18 +52,24 @@ export const updateProduct = async (
       await deleteObject(coverPhotoRef);
     }
 
+    // Create a new File object for the cover photo
+    const newCoverPhoto = new File(
+      [coverPhotoFile],
+      `${productData.name}_coverPhoto`,
+      { type: coverPhotoFile.type }
+    );
+
     // Upload the new cover photo to Firebase Storage
     const storageReference = storageRef(
       storage,
-      `products/${productData.name}`
+      `gs://csshoppee-76342.appspot.com/products/${productData.name}/${newCoverPhoto.name}`
     );
-    const uploadTask = uploadBytesResumable(storageReference, coverPhotoFile);
+    const uploadTask = uploadBytesResumable(storageReference, newCoverPhoto);
 
     await new Promise((resolve, reject) => {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          // You can use this to display upload progress
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           console.log("Upload is " + progress + "% done");
@@ -78,7 +84,7 @@ export const updateProduct = async (
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
           console.log("File available at", downloadURL);
           // Here you can update your product data with the URL of the uploaded image
-          productData.coverPhotoUrl = downloadURL;
+          productData.coverPhoto = downloadURL;
           resolve(downloadURL);
         }
       );
