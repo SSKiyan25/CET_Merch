@@ -7,6 +7,10 @@ import {
   getDoc,
   query,
   where,
+  startAfter,
+  limit,
+  orderBy,
+  DocumentSnapshot,
 } from "firebase/firestore";
 import {
   uploadBytesResumable,
@@ -15,9 +19,22 @@ import {
   deleteObject,
 } from "firebase/storage";
 
-export const fetchProducts = async () => {
+export const fetchProducts = async (
+  startAfterDoc: DocumentSnapshot | null = null,
+  limitCount = 1
+) => {
   const productCollection = collection(db, "products");
-  const q = query(productCollection, where("isArchived", "==", false));
+  let q = query(
+    productCollection,
+    where("isArchived", "==", false),
+    orderBy("name"),
+    limit(limitCount)
+  );
+
+  if (startAfterDoc) {
+    q = query(q, startAfter(startAfterDoc));
+  }
+
   const productSnapshot = await getDocs(q);
   const products = productSnapshot.docs
     .map((doc) => {
@@ -25,7 +42,15 @@ export const fetchProducts = async () => {
       return data ? { id: doc.id, ...data } : null;
     })
     .filter(Boolean);
-  return products;
+
+  const lastDoc = productSnapshot.docs[productSnapshot.docs.length - 1];
+
+  // Query to get total number of products
+  const totalQuery = query(productCollection, where("isArchived", "==", false));
+  const totalSnapshot = await getDocs(totalQuery);
+  const totalProducts = totalSnapshot.docs.length;
+
+  return { products, lastDoc, totalProducts };
 };
 
 export const fetchProduct = async (id: string) => {

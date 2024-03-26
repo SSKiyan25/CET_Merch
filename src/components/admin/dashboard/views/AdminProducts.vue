@@ -181,7 +181,76 @@
                   </thead>
 
                   <tbody class="divide-y divide-primary/50">
+                    <tr v-if="loadingPage">
+                      <td class="p-4">
+                        <div
+                          class="flex items-center justify-start pl-4 h-full w-full"
+                        >
+                          <span
+                            class="material-symbols-outlined text-2xl text-primary animate-spin"
+                          >
+                            autorenew
+                          </span>
+                        </div>
+                      </td>
+                      <td class="p-4">
+                        <div
+                          class="flex items-center justify-start pl-4 h-full w-full"
+                        >
+                          <span
+                            class="material-symbols-outlined text-2xl text-primary animate-spin"
+                          >
+                            autorenew
+                          </span>
+                        </div>
+                      </td>
+                      <td class="p-4">
+                        <div
+                          class="flex items-center justify-start pl-4 h-full w-full"
+                        >
+                          <span
+                            class="material-symbols-outlined text-2xl text-primary animate-spin"
+                          >
+                            autorenew
+                          </span>
+                        </div>
+                      </td>
+                      <td class="p-4">
+                        <div
+                          class="flex items-center justify-start pl-4 h-full w-full"
+                        >
+                          <span
+                            class="material-symbols-outlined text-2xl text-primary animate-spin"
+                          >
+                            autorenew
+                          </span>
+                        </div>
+                      </td>
+                      <td class="p-4">
+                        <div
+                          class="flex items-center justify-start pl-4 h-full w-full"
+                        >
+                          <span
+                            class="material-symbols-outlined text-2xl text-primary animate-spin"
+                          >
+                            autorenew
+                          </span>
+                        </div>
+                      </td>
+                      <td class="p-4">
+                        <div
+                          class="flex items-center justify-end pr-16 h-full w-full"
+                        >
+                          <span
+                            class="material-symbols-outlined text-2xl text-primary animate-spin"
+                          >
+                            autorenew
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
                     <tr
+                      v-else
                       v-for="(product, index) in filteredProducts"
                       :key="product.id"
                       class="hover:bg-primary/10"
@@ -519,7 +588,12 @@
                       Showing
                       <span
                         class="font-semibold text-gray-800 dark:text-gray-200"
-                        >1-N</span
+                        >{{ currentPage + 1 }}</span
+                      >
+                      -
+                      <span
+                        class="font-semibold text-gray-800 dark:text-gray-200"
+                        >{{ totalProducts }}</span
                       >
                       results
                     </p>
@@ -529,6 +603,7 @@
                     <div class="inline-flex gap-x-2">
                       <button
                         type="button"
+                        @click.prevent="prevPage"
                         class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-primary/20 bg-muted text-secondary-foreground shadow-sm hover:bg-primary/50 hover:border-muted disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
                       >
                         <svg
@@ -550,6 +625,7 @@
 
                       <button
                         type="button"
+                        @click.prevent="nextPage"
                         class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-primary/20 bg-muted text-secondary-foreground shadow-sm hover:bg-primary/50 hover:border-muted disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
                       >
                         Next
@@ -635,8 +711,17 @@ let open = ref(false);
 let searchInput = ref("");
 let selectedCategory = ref("All");
 
-const { products, editProductController, deleteProductController, isDeleting } =
-  setupProductController();
+const {
+  products,
+  totalProducts,
+  editProductController,
+  deleteProductController,
+  isDeleting,
+  nextPage,
+  prevPage,
+  currentPage,
+  loadingPage,
+} = setupProductController();
 const showProductModal = ref(products.value.map(() => false));
 
 let filteredProducts = ref<any[]>([]);

@@ -8,6 +8,7 @@ import {
   deleteProduct,
   deletePhoto,
 } from "../models/adminProductsModel.ts";
+import { DocumentSnapshot } from "firebase/firestore";
 
 export const setup = () => {
   const router = useRouter();
@@ -16,11 +17,21 @@ export const setup = () => {
   const product = ref<any>(null);
 
   let coverPhotoFile = ref<File | null>(null);
+  let currentPage = ref(0);
+  let lastDocs = ref<DocumentSnapshot[]>([]);
+  let totalProducts = ref(0);
 
   onMounted(async () => {
     initFlowbite();
 
-    products.value = await fetchProducts();
+    const {
+      products: initialProducts,
+      lastDoc,
+      totalProducts: initialTotalProducts,
+    } = await fetchProducts();
+    products.value = initialProducts;
+    lastDocs.value[currentPage.value] = lastDoc;
+    totalProducts.value = initialTotalProducts;
 
     // Check if route has id parameter
     if (route.params.id) {
@@ -28,6 +39,33 @@ export const setup = () => {
       product.value = await fetchProduct(id);
     }
   });
+
+  const loadingPage = ref(false);
+  const nextPage = async () => {
+    if ((currentPage.value + 1) * 1 < totalProducts.value) {
+      loadingPage.value = true;
+      currentPage.value++;
+      const startAfterDoc = lastDocs.value[currentPage.value - 1];
+      const { products: newProducts, lastDoc } = await fetchProducts(
+        startAfterDoc
+      );
+      products.value = newProducts;
+      lastDocs.value[currentPage.value] = lastDoc;
+      loadingPage.value = false;
+    }
+  };
+
+  const prevPage = async () => {
+    if (currentPage.value > 0) {
+      loadingPage.value = true;
+      currentPage.value--;
+      const startAfterDoc =
+        currentPage.value > 0 ? lastDocs.value[currentPage.value - 1] : null;
+      const { products: newProducts } = await fetchProducts(startAfterDoc);
+      products.value = newProducts;
+      loadingPage.value = false;
+    }
+  };
 
   const handleFileUpload = (event: Event) => {
     const target = event.target as HTMLInputElement;
@@ -74,5 +112,10 @@ export const setup = () => {
     deletePhotoController,
     isDeleting,
     isDeletingPhoto,
+    nextPage,
+    prevPage,
+    currentPage,
+    totalProducts,
+    loadingPage,
   };
 };
