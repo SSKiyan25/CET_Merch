@@ -25,13 +25,24 @@ export const fetchProducts = async (
   limitCount = 5
 ) => {
   const productCollection = collection(db, "products");
-  let q = query(
-    productCollection,
-    where("isArchived", "==", false),
-    where("faction", "==", faction),
-    orderBy("name"),
-    limit(limitCount)
-  );
+  let q;
+
+  if (faction === "all") {
+    q = query(
+      productCollection,
+      where("isArchived", "==", false),
+      orderBy("name"),
+      limit(limitCount)
+    );
+  } else {
+    q = query(
+      productCollection,
+      where("isArchived", "==", false),
+      where("faction", "==", faction),
+      orderBy("name"),
+      limit(limitCount)
+    );
+  }
 
   if (startAfterDoc) {
     q = query(q, startAfter(startAfterDoc));
