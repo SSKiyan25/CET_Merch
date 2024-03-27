@@ -22,14 +22,14 @@ export const handleLogin = (router: any) => {
         .then((docSnapshot) => {
           if (docSnapshot.exists()) {
             const userData = docSnapshot.data();
-            if (userData.isAdmin) {
+            if (userData.isAdmin || userData.role === "seller") {
               console.log("User is an admin");
               // Redirect to admin dashboard
               router.push({ name: "adminDashboard" });
             } else {
               console.log("User is not an admin");
               // Redirect to regular dashboard
-              router.push({ name: "dashboard" });
+              router.push({ name: "launchPage" });
             }
           } else {
             console.log("No such user!");

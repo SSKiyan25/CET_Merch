@@ -30,10 +30,10 @@ function requireAdminAuth(
   next: NavigationGuardNext
 ) {
   auth.onAuthStateChanged((user) => {
-    if (user && user.email === "admin@gmail.com") {
+    if (user) {
       next();
     } else {
-      next({ name: "dashboard" });
+      next({ name: "launchPage" });
     }
   });
 }
@@ -47,7 +47,6 @@ function requireAuth(
 
   auth.onAuthStateChanged(async (user) => {
     if (user) {
-      // Fetch user-specific data from Firestore using user.uid
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
 
