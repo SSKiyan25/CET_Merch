@@ -9,6 +9,7 @@ import {
   deletePhoto,
 } from "../models/adminProductsModel.ts";
 import { DocumentSnapshot } from "firebase/firestore";
+import { fetchUser } from "../models/userModel.ts";
 
 export const setup = () => {
   const router = useRouter();
@@ -25,11 +26,18 @@ export const setup = () => {
   onMounted(async () => {
     initFlowbite();
     loadingPage.value = true;
+    const user = await fetchUser();
+    if (!user) {
+      console.error("No current user");
+      return;
+    }
+    const faction = user.role === "admin" ? "all" : user.faction;
+
     const {
       products: initialProducts,
       lastDoc,
       totalProducts: initialTotalProducts,
-    } = await fetchProducts();
+    } = await fetchProducts(faction);
     products.value = initialProducts;
     lastDocs.value[currentPage.value] = lastDoc;
     totalProducts.value = initialTotalProducts;
@@ -43,11 +51,18 @@ export const setup = () => {
   });
 
   const nextPage = async () => {
+    const user = await fetchUser();
+    if (!user) {
+      console.error("No current user");
+      return;
+    }
+    const faction = user.role === "admin" ? "all" : user.faction;
     if ((currentPage.value + 1) * 5 < totalProducts.value) {
       loadingPage.value = true;
       currentPage.value = currentPage.value + 5;
       const startAfterDoc = lastDocs.value[currentPage.value - 1];
       const { products: newProducts, lastDoc } = await fetchProducts(
+        faction,
         startAfterDoc
       );
       products.value = newProducts;
@@ -57,12 +72,21 @@ export const setup = () => {
   };
 
   const prevPage = async () => {
+    const user = await fetchUser();
+    if (!user) {
+      console.error("No current user");
+      return;
+    }
+    const faction = user.role === "admin" ? "all" : user.faction;
     if (currentPage.value > 0) {
       loadingPage.value = true;
       currentPage.value = currentPage.value - 5;
       const startAfterDoc =
         currentPage.value > 0 ? lastDocs.value[currentPage.value - 1] : null;
-      const { products: newProducts } = await fetchProducts(startAfterDoc);
+      const { products: newProducts } = await fetchProducts(
+        faction,
+        startAfterDoc
+      );
       products.value = newProducts;
       loadingPage.value = false;
     }

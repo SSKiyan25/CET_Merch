@@ -20,6 +20,7 @@ import {
 } from "firebase/storage";
 
 export const fetchProducts = async (
+  faction: string,
   startAfterDoc: DocumentSnapshot | null = null,
   limitCount = 5
 ) => {
@@ -27,6 +28,7 @@ export const fetchProducts = async (
   let q = query(
     productCollection,
     where("isArchived", "==", false),
+    where("faction", "==", faction),
     orderBy("name"),
     limit(limitCount)
   );
