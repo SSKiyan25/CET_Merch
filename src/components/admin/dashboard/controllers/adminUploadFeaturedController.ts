@@ -5,10 +5,12 @@ import {
   fetchImages,
   deleteImage,
 } from "../models/adminFeaturedModel.ts";
+import { auth } from "@/firebase/init.ts";
 
 export const setup = () => {
   const image = ref<File | null>(null);
   const imageUrls = ref<string[]>([]);
+  const isAdmin = ref(false);
 
   const onFileChange = (e: Event) => {
     const files = (e.target as HTMLInputElement).files;
@@ -35,11 +37,14 @@ export const setup = () => {
   };
 
   const fetchAllImages = async () => {
-    try {
-      const urls = await fetchImages();
-      imageUrls.value = urls;
-    } catch (error) {
-      console.error("Error fetching images: ", error);
+    const user = auth.currentUser;
+    if (user && (await user.getIdTokenResult()).claims.role === "admin") {
+      try {
+        const urls = await fetchImages();
+        imageUrls.value = urls;
+      } catch (error) {
+        console.error("Error fetching images: ", error);
+      }
     }
   };
 
@@ -54,9 +59,16 @@ export const setup = () => {
     }
   };
 
-  onMounted(() => {
+  onMounted(async () => {
     initFlowbite();
-    fetchAllImages();
+    const user = auth.currentUser;
+    if (user) {
+      const tokenResult = await user.getIdTokenResult();
+      isAdmin.value = tokenResult.claims.role === "admin";
+      if (isAdmin.value) {
+        fetchAllImages();
+      }
+    }
   });
 
   return {
@@ -65,5 +77,6 @@ export const setup = () => {
     uploadFeaturedImage,
     imageUrls,
     deleteFeaturedImage,
+    isAdmin,
   };
 };

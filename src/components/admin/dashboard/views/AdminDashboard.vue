@@ -79,7 +79,7 @@
       </div>
     </div>
 
-    <div class="flex flex-col p-4 border-2 rounded-lg py-5">
+    <div v-if="isAdmin" class="flex flex-col p-4 border-2 rounded-lg py-5">
       <div class="flex flex-row border-b-2">
         <h1 class="font-bold text-xl tracking-wide">Featured Images</h1>
         <div class="p-1">
@@ -222,8 +222,13 @@ import { setup as setupControllerFeatured } from "../controllers/adminUploadFeat
 import { useRouter } from "vue-router";
 import AdminSidebar from "../views/AdminSidebar.vue";
 
-const { onFileChange, uploadFeaturedImage, imageUrls, deleteFeaturedImage } =
-  setupControllerFeatured();
+const {
+  onFileChange,
+  uploadFeaturedImage,
+  imageUrls,
+  deleteFeaturedImage,
+  isAdmin,
+} = setupControllerFeatured();
 
 const router = useRouter();
 
