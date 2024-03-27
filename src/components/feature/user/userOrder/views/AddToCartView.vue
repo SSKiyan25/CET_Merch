@@ -268,6 +268,7 @@ const handleFormCartSubmit = async () => {
     };
     await handleAddToCartSubmit(newAddToCartData.value);
 
+    isLoading.value = false;
     isUploadSuccessful.value = true;
 
     console.log(`Product added to cart`);
@@ -286,11 +287,10 @@ const handleFormCartSubmit = async () => {
       ifCartEmpty.value = result.data.cart.length === 0;
     }
 
-    isLoading.value = false;
     setTimeout(() => {
       isUploadSuccessful.value = false;
       selectedTab.value = "order";
-    }, 3000);
+    }, 2500);
   } else {
     // Handle the case where no user is logged in
     alert("Please login to add product to your cart");
