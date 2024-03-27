@@ -137,8 +137,6 @@
                 >
                   <option value="cash">Cash</option>
                   <option value="gcash">GCash</option>
-                  <option value="paypal">PayPal</option>
-                  <option value="bank">Bank Transfer</option>
                 </select>
               </div>
             </div>
