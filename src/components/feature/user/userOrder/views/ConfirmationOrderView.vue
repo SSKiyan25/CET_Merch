@@ -82,7 +82,7 @@
                       <AlertDialogFooter>
                         <AlertDialogAction
                           class="bg-destructive hover:bg-destructive/80 text-destructive-foreground"
-                          @click.prevent="deleteProductFromCart(index)"
+                          @click.prevent="deleteProductController(index)"
                         >
                           Delete
                         </AlertDialogAction>
@@ -137,11 +137,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, provide, computed } from "vue";
+import { provide, computed, onMounted } from "vue";
 import LoadingComponent from "../components/LoadingComponent.vue";
 import { useRoute } from "vue-router";
-import { getDoc, doc, DocumentData, updateDoc } from "firebase/firestore";
-import { db, auth } from "@/firebase/init.ts";
+import {
+  order,
+  loading,
+  deleteProductController,
+  fetchOrderAndUpdate,
+} from "../controllers/confirmOrderController";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -154,97 +158,12 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const route = useRoute();
-const order = ref<DocumentData | null | undefined>(null);
-const cache = new Map();
+const orderId = computed(() => route.params.id);
+onMounted(fetchOrderAndUpdate);
 
-async function fetchOrder() {
-  if (!auth.currentUser) {
-    console.error("User not authenticated");
-    return;
-  }
-
-  const userDoc = doc(db, "users", auth.currentUser.uid);
-  const userData = (await getDoc(userDoc)).data();
-
-  if (!userData) {
-    console.error("User data not found");
-    return;
-  }
-
-  if (
-    userData.orders &&
-    userData.orders.length > 0 &&
-    userData.orders[userData.orders.length - 1].status === "OnQueue"
-  ) {
-    const orderDoc = doc(
-      db,
-      "userOrder",
-      userData.orders[userData.orders.length - 1].userOrderID
-    );
-    const currentOrderData = (await getDoc(orderDoc)).data();
-    return { id: orderDoc.id, ...currentOrderData };
-  } else {
-    console.error("No order in queue");
-    return;
-  }
-}
-
-async function fetchProductDetails(productId: string) {
-  if (!productId) {
-    console.error("Invalid product ID");
-    return;
-  }
-
-  try {
-    const docRef = doc(db, "products", productId);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      console.log("Fetched order:", docSnap.data());
-      console.log("Product details:", docSnap.data());
-      return docSnap.data();
-    } else {
-      throw new Error("No such document");
-    }
-  } catch (error) {
-    console.error("Error getting document:", error);
-  }
-}
-
-const loading = ref(true);
-
-watch(
-  () => auth.currentUser?.uid,
-  async (newId) => {
-    loading.value = true;
-    if (typeof newId === "string") {
-      if (cache.has(newId)) {
-        order.value = cache.get(newId);
-      } else {
-        const fetchedOrder = await fetchOrder();
-        if (fetchedOrder) {
-          const cart = (fetchedOrder as any).cart;
-          if (cart) {
-            const cartWithDetails = [];
-            for (let item of cart) {
-              const productDetails = await fetchProductDetails(item.productId);
-              cartWithDetails.push({ ...item, details: productDetails });
-            }
-            (fetchedOrder as any).cart = cartWithDetails;
-          }
-          order.value = fetchedOrder;
-          cache.set(newId, order.value);
-        }
-      }
-    }
-    loading.value = false;
-  },
-  { immediate: true }
-);
-
-const getOrderById = (id: string) => {
-  return order.value?.id === id ? order.value : undefined;
-};
+const getOrderById = computed(() => {
+  return order.value?.id === orderId.value ? order.value : undefined;
+});
 
 //Temporary Compute Total price
 const totalPrice = computed(() => {
@@ -270,34 +189,4 @@ const cart = computed(() => {
 });
 
 provide("getOrderById", getOrderById);
-
-async function deleteProductFromCart(index: number) {
-  loading.value = true;
-  try {
-    if (!order.value) {
-      console.error("Order is null or undefined");
-      return;
-    }
-    if (index < 0 || index >= order.value.cart.length) {
-      console.error("Invalid index");
-      return;
-    }
-
-    const orderDocRef = doc(db, "userOrder", order.value.id);
-
-    const newCartArray = order.value.cart.filter(
-      (_: any, itemIndex: number) => itemIndex !== index
-    );
-
-    await updateDoc(orderDocRef, {
-      cart: newCartArray,
-    });
-
-    // Update order.value by creating a new object instead of directly manipulating it
-    order.value = { ...order.value, cart: newCartArray };
-  } catch (error) {
-    console.error("Error deleting document:", error);
-  }
-  loading.value = false;
-}
 </script>
