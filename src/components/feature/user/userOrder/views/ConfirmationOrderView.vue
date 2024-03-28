@@ -141,7 +141,7 @@ import { ref, watch, provide, computed } from "vue";
 import LoadingComponent from "../components/LoadingComponent.vue";
 import { useRoute } from "vue-router";
 import { getDoc, doc, DocumentData, updateDoc } from "firebase/firestore";
-import { db } from "@/firebase/init.ts";
+import { db, auth } from "@/firebase/init.ts";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -157,24 +157,35 @@ const route = useRoute();
 const order = ref<DocumentData | null | undefined>(null);
 const cache = new Map();
 
-async function fetchOrder(orderId: string) {
-  if (!orderId) {
-    console.error("Invalid order ID");
+async function fetchOrder() {
+  if (!auth.currentUser) {
+    console.error("User not authenticated");
     return;
   }
 
-  try {
-    const docRef = doc(db, "userOrder", orderId);
-    const docSnap = await getDoc(docRef);
+  const userDoc = doc(db, "users", auth.currentUser.uid);
+  const userData = (await getDoc(userDoc)).data();
 
-    if (docSnap.exists()) {
-      console.log("Fetching order for orderId:", orderId);
-      return { id: docSnap.id, ...docSnap.data() };
-    } else {
-      throw new Error("No such document");
-    }
-  } catch (error) {
-    console.error("Error getting document:", error);
+  if (!userData) {
+    console.error("User data not found");
+    return;
+  }
+
+  if (
+    userData.orders &&
+    userData.orders.length > 0 &&
+    userData.orders[userData.orders.length - 1].status === "OnQueue"
+  ) {
+    const orderDoc = doc(
+      db,
+      "userOrder",
+      userData.orders[userData.orders.length - 1].userOrderID
+    );
+    const currentOrderData = (await getDoc(orderDoc)).data();
+    return { id: orderDoc.id, ...currentOrderData };
+  } else {
+    console.error("No order in queue");
+    return;
   }
 }
 
@@ -203,14 +214,14 @@ async function fetchProductDetails(productId: string) {
 const loading = ref(true);
 
 watch(
-  () => route.params.id,
+  () => auth.currentUser?.uid,
   async (newId) => {
     loading.value = true;
     if (typeof newId === "string") {
       if (cache.has(newId)) {
         order.value = cache.get(newId);
       } else {
-        const fetchedOrder = await fetchOrder(newId);
+        const fetchedOrder = await fetchOrder();
         if (fetchedOrder) {
           const cart = (fetchedOrder as any).cart;
           if (cart) {
