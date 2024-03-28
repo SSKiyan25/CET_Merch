@@ -234,7 +234,7 @@
 <script setup lang="ts">
 import { ref, watch, computed } from "vue";
 import { useRoute } from "vue-router";
-import { db } from "@/firebase/init.ts";
+import { db, auth } from "@/firebase/init.ts";
 import {
   getDoc,
   doc,
@@ -275,20 +275,35 @@ const fetchProductDetails = async (productId: string) => {
   }
 };
 
-const fetchOrder = async (id: string) => {
+const fetchOrder = async () => {
   try {
-    const docRef = doc(db, "userOrder", id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const fetchedOrder = docSnap.data();
-      for (let product of fetchedOrder.cart) {
-        const productDetails = await fetchProductDetails(product.productId);
-        product.details = productDetails;
-        products.value.push(product);
+    const userId = auth.currentUser?.uid;
+    if (!userId) throw new Error("User not logged in");
+
+    const userRef = doc(db, "users", userId);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      const user = userSnap.data();
+      const latestOrder = user.orders
+        .reverse()
+        .find((order: any) => order.status === "OnQueue");
+      if (!latestOrder) throw new Error("No order in queue");
+
+      const docRef = doc(db, "userOrder", latestOrder.userOrderID);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const fetchedOrder = docSnap.data();
+        for (let product of fetchedOrder.cart) {
+          const productDetails = await fetchProductDetails(product.productId);
+          product.details = productDetails;
+          products.value.push(product);
+        }
+        return fetchedOrder;
+      } else {
+        console.log("No such document!");
       }
-      return fetchedOrder;
     } else {
-      console.log("No such document!");
+      console.log("No such user!");
     }
   } catch (error) {
     console.error("Error getting document:", error);
@@ -347,23 +362,41 @@ async function generateOrderRefNum() {
 const submitOrder = async (formData: any) => {
   try {
     loading.value = true;
-    const id = route.params.id as string;
-    const docRef = doc(db, "userOrder", id);
-    const orderRefNum = await generateOrderRefNum();
-    await updateDoc(docRef, {
-      orderRefNum,
-      userName: formData.lastName + ", " + formData.firstName,
-      userContactNumber: formData.phoneNumber,
-      studentId: formData.studentId,
-      totalPrice: totalPrice.value,
-      userEmailAddress: formData.emailAddress,
-      paymentMethod: formData.paymentMethod,
-      paymentStatus: "pending",
-      orderStatus: "done",
-      dateOrdered: new Date().toDateString(),
-    });
-    if (order.value) {
-      order.value.orderRefNum = orderRefNum;
+    const userId = auth.currentUser?.uid;
+    if (!userId) throw new Error("User not logged in");
+
+    const userRef = doc(db, "users", userId);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      const user = userSnap.data();
+      const latestOrder = user.orders
+        .reverse()
+        .find((order: any) => order.status === "OnQueue");
+      if (!latestOrder) throw new Error("No order in queue");
+
+      const docRef = doc(db, "userOrder", latestOrder.userOrderID);
+      const orderRefNum = await generateOrderRefNum();
+      await updateDoc(docRef, {
+        orderRefNum,
+        userName: formData.lastName + ", " + formData.firstName,
+        userContactNumber: formData.phoneNumber,
+        studentId: formData.studentId,
+        totalPrice: totalPrice.value,
+        userEmailAddress: formData.emailAddress,
+        paymentMethod: formData.paymentMethod,
+        paymentStatus: "pending",
+        orderStatus: "processing",
+        dateOrdered: new Date().toDateString(),
+      });
+      if (order.value) {
+        order.value.orderRefNum = orderRefNum;
+      }
+      // Update user's order status and payment status
+      latestOrder.status = "done";
+      latestOrder.paymentStatus = "paid";
+      await updateDoc(userRef, user);
+    } else {
+      console.log("No such user!");
     }
     loading.value = false;
     ifSuccess.value = true;
@@ -381,7 +414,7 @@ watch(
       if (cache.has(newId)) {
         order.value = cache.get(newId);
       } else {
-        const fetchedOrder = await fetchOrder(newId);
+        const fetchedOrder = await fetchOrder();
         if (fetchedOrder) {
           order.value = fetchedOrder;
           cache.set(newId, order.value);
