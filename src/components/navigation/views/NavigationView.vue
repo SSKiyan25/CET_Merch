@@ -93,11 +93,6 @@
           >
             <div class="px-4 py-3">
               <p class="text-sm dark:text-white">{{ username }}</p>
-              <p
-                class="text-sm font-medium text-gray-900 truncate dark:text-gray-300 truncate"
-              >
-                {{ userEmail }}
-              </p>
             </div>
             <ul class="py-1">
               <li>

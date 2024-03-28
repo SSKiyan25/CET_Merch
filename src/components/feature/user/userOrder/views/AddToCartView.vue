@@ -190,7 +190,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   setup as setupAddToCartController,
-  getOnQueueOrder,
+  getOnQueueOrderController,
   orderData as OrderDataType,
 } from "../controllers/addToCartController.ts";
 import { auth } from "@/firebase/init.ts";
@@ -230,7 +230,7 @@ console.log("productId in Cart component: ", props.productId);
 const orderId = ref<string | null>(null);
 
 onMounted(async () => {
-  const result = await getOnQueueOrder();
+  const result = await getOnQueueOrderController();
   if (result) {
     orderData.value = result.data;
     orderId.value = result.id;
@@ -280,7 +280,7 @@ const handleFormCartSubmit = async () => {
     };
 
     // Fetch the updated order data
-    const result = await getOnQueueOrder();
+    const result = await getOnQueueOrderController();
     if (result) {
       orderData.value = result.data;
       orderId.value = result.id;
