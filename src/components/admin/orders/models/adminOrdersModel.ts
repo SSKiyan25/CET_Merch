@@ -45,5 +45,5 @@ export const fetchOrders = async () => {
         };
       })
     )
-  ).filter((order: Order) => order.orderStatus === "done");
+  ).filter((order: Order) => order.orderStatus === "processing");
 };

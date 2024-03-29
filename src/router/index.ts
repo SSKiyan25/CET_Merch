@@ -23,6 +23,7 @@ import UserOrders from "../components/feature/user/userDashboard/views/UserOrder
 import { ref } from "vue";
 import { auth, db } from "../firebase/init.ts";
 import { DocumentData, getDoc, doc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 
 function requireAuth(
   _: RouteLocationNormalized,
@@ -31,11 +32,12 @@ function requireAuth(
 ) {
   const user = auth.currentUser;
   const userData = ref<DocumentData | null>(null);
-
+  console.log(user);
   if (user) {
     const docRef = doc(db, "users", user.uid);
     getDoc(docRef).then((docSnap) => {
       if (docSnap.exists()) {
+        console.log("Document data:");
         userData.value = docSnap.data();
       } else {
         console.log("No such document!");
@@ -43,6 +45,48 @@ function requireAuth(
       next();
     });
   } else {
+    console.log("Not authorized");
+    next({ name: "login" });
+  }
+}
+
+async function requireAdminAuth(
+  _: RouteLocationNormalized,
+  __: RouteLocationNormalized,
+  next: NavigationGuardNext
+) {
+  var userRole: string = "";
+
+  await new Promise((resolve, reject) => {
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+        console.log(user);
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data().role);
+          userRole = docSnap.data().role;
+          console.log("userRole-1:", userRole);
+          resolve(null);
+        }
+      } else {
+        console.log("User is not logged in");
+        reject("User is not logged in");
+      }
+    });
+  });
+
+  console.log("userRole-2:", userRole);
+  if (userRole) {
+    if (userRole === "admin" || userRole === "seller") {
+      console.log("Accessed");
+      next();
+    } else {
+      console.log("Not authorized-2");
+      next({ name: "launchPage" });
+    }
+  } else {
+    console.log("Not authorized-3");
     next({ name: "login" });
   }
 }
@@ -67,43 +111,37 @@ const routes: RouteRecordRaw[] = [
     path: "/admin",
     name: "adminDashboard",
     component: AdminDashboard,
-    beforeEnter: requireAuth,
-    meta: { requiresAdmin: true },
+    beforeEnter: requireAdminAuth,
   },
   {
     path: "/admin/products",
     name: "adminProducts",
     component: AdminProducts,
-    beforeEnter: requireAuth,
-    meta: { requiresAdmin: true },
+    beforeEnter: requireAdminAuth,
   },
   {
     path: "/admin/products/addproduct",
     name: "adminAddProduct",
     component: AdminAddProduct,
-    beforeEnter: requireAuth,
-    meta: { requiresAdmin: true },
+    beforeEnter: requireAdminAuth,
   },
   {
     path: "/admin/products/editproduct/:id",
     name: "adminEditProduct",
     component: AdminEditProduct,
-    beforeEnter: requireAuth,
-    meta: { requiresAdmin: true },
+    beforeEnter: requireAdminAuth,
   },
   {
     path: "/admin/orders",
     name: "adminOrders",
     component: AdminOrders,
-    beforeEnter: requireAuth,
-    meta: { requiresAdmin: true },
+    beforeEnter: requireAdminAuth,
   },
   {
     path: "/admin/inbox",
     name: "adminInbox",
     component: AdminInbox,
-    beforeEnter: requireAuth,
-    meta: { requiresAdmin: true },
+    beforeEnter: requireAdminAuth,
   },
   {
     path: "/product/:id",
