@@ -395,8 +395,8 @@ const submitOrder = async (formData: any) => {
         order.value.orderRefNum = orderRefNum;
       }
       // Update user's order status and payment status
-      latestOrder.status = "done";
-      latestOrder.paymentStatus = "paid";
+      latestOrder.status = "pending";
+      latestOrder.paymentStatus = "processing";
       await updateDoc(userRef, user);
     } else {
       console.log("No such user!");
