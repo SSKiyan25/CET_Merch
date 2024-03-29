@@ -5,7 +5,8 @@ import {
   fetchImages,
   deleteImage,
 } from "../models/adminFeaturedModel.ts";
-import { auth } from "@/firebase/init.ts";
+import { auth, db } from "@/firebase/init.ts";
+import { getDoc, doc } from "firebase/firestore";
 
 export const setup = () => {
   const image = ref<File | null>(null);
@@ -37,8 +38,7 @@ export const setup = () => {
   };
 
   const fetchAllImages = async () => {
-    const user = auth.currentUser;
-    if (user && (await user.getIdTokenResult()).claims.role === "admin") {
+    if (isAdmin.value) {
       try {
         const urls = await fetchImages();
         imageUrls.value = urls;
@@ -63,10 +63,13 @@ export const setup = () => {
     initFlowbite();
     const user = auth.currentUser;
     if (user) {
-      const tokenResult = await user.getIdTokenResult();
-      isAdmin.value = tokenResult.claims.role === "admin";
-      if (isAdmin.value) {
-        fetchAllImages();
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        isAdmin.value = docSnap.data().isAdmin;
+        if (isAdmin.value) {
+          fetchAllImages();
+        }
       }
     }
   });
