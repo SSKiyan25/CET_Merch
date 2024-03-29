@@ -39,7 +39,10 @@
                 required
               />
             </div>
-            <div class="flex flex-col w-1/2 pl-2">
+            <div
+              v-if="userData && userData.faction"
+              class="flex flex-col w-1/2 pl-2"
+            >
               <label for="product-faction" class="text-sm font-medium py-2">
                 Product Faction
                 <span class="text-red-400 font-bold text-sm">*</span>
@@ -85,20 +88,39 @@
                 <option value="Other">Other</option>
               </select>
             </div>
-            <div class="flex flex-col w-1/2 pl-2">
-              <label for="product-price" class="text-sm font-medium py-2">
-                Product Price
-                <span class="text-red-400 font-bold text-sm">*</span>
-              </label>
-              <input
-                type="number"
-                id="product-price"
-                v-model="newProduct.price"
-                step="0.01"
-                class="p-2 border text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
-                placeholder="Enter product price"
-                required
-              />
+            <div class="flex flex-row w-1/2">
+              <div class="flex flex-col w-1/2 pl-2">
+                <label for="product-price" class="text-sm font-medium py-2">
+                  Product Price
+                  <span class="text-red-400 font-bold text-sm">*</span>
+                </label>
+                <input
+                  type="number"
+                  id="product-original-price"
+                  v-model="newProduct.price[0].originalPrice"
+                  step="0.01"
+                  class="p-2 border text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                  placeholder="Enter product price"
+                  required
+                />
+              </div>
+              <div class="flex flex-col w-1/2 pl-2">
+                <label
+                  for="product-discounted-price"
+                  class="text-sm font-medium py-2"
+                >
+                  Discounted Price
+                  <span class="text-xs opacity-50">(Optional)</span>
+                </label>
+                <input
+                  type="number"
+                  id="product-discounted-price"
+                  v-model="newProduct.price[0].discountedPrice"
+                  step="0.01"
+                  class="p-2 border text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                  placeholder="Enter discounted price (optional)"
+                />
+              </div>
             </div>
           </div>
           <div class="flex flex-col mt-4">
@@ -404,14 +426,24 @@ import NavBar from "../AdminNavBar.vue";
 import AdminSidebar from "../AdminSidebar.vue";
 import { onMounted, ref, watchEffect, watch } from "vue";
 import { initFlowbite } from "flowbite";
-import { storage, db } from "@/firebase/init.ts";
+import { storage, db, auth } from "@/firebase/init.ts";
 import {
   getDownloadURL,
   ref as storageRef,
   uploadBytesResumable,
   UploadTaskSnapshot,
 } from "firebase/storage";
-import { addDoc, collection, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  setDoc,
+  doc,
+  updateDoc,
+  getDoc,
+  arrayUnion,
+  DocumentReference,
+  DocumentSnapshot,
+} from "firebase/firestore";
 import { useRouter } from "vue-router";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "../../../../ui/button";
@@ -422,12 +454,18 @@ onMounted(() => {
   initFlowbite();
 });
 
+type priceData = {
+  originalPrice: number;
+  discountedPrice: number;
+  dateCreated: string;
+};
+
 interface ProductData {
   id?: string;
   name: string;
   category: string;
   faction: string;
-  price: number;
+  price: priceData[];
   sizes: string[];
   description: string;
   coverPhoto: File;
@@ -435,13 +473,20 @@ interface ProductData {
   isPublished: boolean;
   isArchived: boolean;
   status: string;
+  totalSales: number;
 }
 
 const newProduct = ref<ProductData>({
   name: "",
   category: "",
   faction: "",
-  price: 0,
+  price: [
+    {
+      originalPrice: 0,
+      discountedPrice: 0,
+      dateCreated: "",
+    },
+  ],
   sizes: [],
   description: "",
   coverPhoto: new File([], ""),
@@ -449,6 +494,7 @@ const newProduct = ref<ProductData>({
   isPublished: false,
   isArchived: false,
   status: "",
+  totalSales: 0,
 });
 
 const coverPhotoInput = ref<HTMLInputElement | null>(null);
@@ -489,8 +535,27 @@ watch(
   }
 );
 
+let userData = ref<{ faction?: string; products?: string[] } | null>(null);
+
 const handleFormSubmit = async (): Promise<boolean> => {
   console.log("Form submitted");
+  let userRef: DocumentReference | null = null;
+  let userDoc: DocumentSnapshot | null = null;
+  let userData: { faction?: string; products?: any; role?: string } | null =
+    null;
+
+  const user = auth.currentUser;
+  if (user) {
+    userRef = doc(db, "users", user.uid);
+    if (userRef) {
+      userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        userData = userDoc.data() as { faction?: string; products?: string[] };
+      }
+    }
+  } else {
+    throw new Error("User not found");
+  }
 
   try {
     isLoading.value = true;
@@ -528,9 +593,18 @@ const handleFormSubmit = async (): Promise<boolean> => {
       storage,
       `gs://csshoppee-76342.appspot.com/products/${newProduct.value.name}/${newProduct.value.coverPhoto.name}`
     );
+
+    const metadata = {
+      customMetadata: {
+        role: userData?.role || "",
+        faction: userData?.faction || "",
+      },
+    };
+
     const coverPhotoUploadTask = uploadBytesResumable(
       coverPhotoRef,
-      newProduct.value.coverPhoto
+      newProduct.value.coverPhoto,
+      metadata
     );
 
     let coverPhotoURL = "";
@@ -563,7 +637,7 @@ const handleFormSubmit = async (): Promise<boolean> => {
           storage,
           `gs://csshoppee-76342.appspot.com/products/${newProduct.value.name}/${photo.name}`
         );
-        const photoUploadTask = uploadBytesResumable(photoRef, photo);
+        const photoUploadTask = uploadBytesResumable(photoRef, photo, metadata);
 
         photoUploadTask.on(
           "state_changed",
@@ -590,6 +664,12 @@ const handleFormSubmit = async (): Promise<boolean> => {
     console.log("Photo URLs:", photosURLs);
 
     // Add product data to Firestore
+    if (user && userData && userData.faction) {
+      if (user && userData.faction !== "all") {
+        newProduct.value.faction = userData.faction;
+      }
+    }
+    console.log(userData?.faction);
     const productData = {
       name: newProduct.value.name,
       category: newProduct.value.category,
@@ -607,17 +687,38 @@ const handleFormSubmit = async (): Promise<boolean> => {
       isPublished: newProduct.value.isPublished,
       isArchived: false,
       status: newProduct.value.status,
+      totalSales: 0,
     };
+
     const docRef = await addDoc(collection(db, "products"), productData);
     await setDoc(docRef, { id: docRef.id }, { merge: true });
     console.log("Document reference:", docRef);
+
+    // Add product id to the current user
+    if (user && userRef && userDoc && userDoc.exists() && userData) {
+      if (!userData.products) {
+        await updateDoc(userRef, {
+          products: [docRef.id],
+        });
+      } else {
+        await updateDoc(userRef, {
+          products: arrayUnion(docRef.id),
+        });
+      }
+    }
 
     // Reset form
     newProduct.value = {
       name: "",
       category: "",
       faction: "",
-      price: 0,
+      price: [
+        {
+          originalPrice: 0,
+          discountedPrice: 0,
+          dateCreated: "",
+        },
+      ],
       sizes: [],
       description: "",
       coverPhoto: new File([], ""),
@@ -625,6 +726,7 @@ const handleFormSubmit = async (): Promise<boolean> => {
       isPublished: false,
       isArchived: false,
       status: "",
+      totalSales: 0,
     };
     isLoading.value = false;
     isUploadSuccessful.value = true;

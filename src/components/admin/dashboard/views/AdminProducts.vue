@@ -299,15 +299,23 @@
 
                       <td class="size-px whitespace-nowrap">
                         <div class="px-6 py-3">
-                          <div class="flex items-center gap-x-2">
-                            <div class="grow">
-                              <span class="text-sm text-secondary-foreground/50"
-                                >P {{ product.price }}</span
-                              >
+                          <div class="flex flex-row items-center gap-x-2">
+                            <div
+                              v-for="(price, index) in product.price"
+                              :key="index"
+                              class="grow text-xs flex flex-col space-y-2"
+                            >
+                              <span class="text-secondary-foreground/50">
+                                Original Price: P {{ price.originalPrice }}
+                              </span>
+                              <span class="text-secondary-foreground/50">
+                                Discounted Price: P {{ price.discountedPrice }}
+                              </span>
                             </div>
                           </div>
                         </div>
                       </td>
+
                       <td class="size-2/12 whitespace-nowrap">
                         <div class="px-6 py-3">
                           <p class="w-full whitespace-normal">
