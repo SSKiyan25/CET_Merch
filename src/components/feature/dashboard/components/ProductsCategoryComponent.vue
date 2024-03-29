@@ -127,7 +127,12 @@
                           <span
                             class="block pb-2 pl-2 pt-1 text-xs md:text-sm font-semibold uppercase text-primary"
                           >
-                            (P {{ product.price }} )
+                            (P
+                            {{
+                              product.price[product.price.length - 1]
+                                .originalPrice
+                            }}
+                            )
                           </span>
                         </div>
                         <h3
