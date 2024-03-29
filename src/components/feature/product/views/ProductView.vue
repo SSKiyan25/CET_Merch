@@ -88,7 +88,10 @@
               </div>
               <div class="flex flex-row">
                 <span class="text-2xl font-semibold text-primary">
-                  P {{ product?.price }}</span
+                  P
+                  {{
+                    product?.price[product.price.length - 1].originalPrice
+                  }}</span
                 >
                 <span class="text-xl pl-2">(</span>
                 <div class="flex items-center">
