@@ -174,8 +174,8 @@ auth.onAuthStateChanged(async (currentUser) => {
 const handleSignout = () => {
   signOut(auth)
     .then(() => {
-      console.log("User signed out");
       router.push({ name: "login" });
+      console.log("User signed out");
     })
     .catch((error) => {
       console.log("Error signing out: ", error);

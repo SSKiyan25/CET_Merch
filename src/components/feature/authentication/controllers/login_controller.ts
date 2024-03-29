@@ -1,5 +1,4 @@
-import { ref, onMounted } from "vue";
-import { initFlowbite } from "flowbite";
+import { ref } from "vue";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../models/auth.ts";
 import { getDoc, doc } from "firebase/firestore";
@@ -8,10 +7,6 @@ export const email = ref("");
 export const password = ref("");
 
 export const handleLogin = (router: any) => {
-  onMounted(() => {
-    initFlowbite();
-  });
-
   signInWithEmailAndPassword(auth, email.value, password.value)
     .then((credential) => {
       const user = credential.user;
@@ -23,7 +18,7 @@ export const handleLogin = (router: any) => {
           if (docSnapshot.exists()) {
             const userData = docSnapshot.data();
             if (userData.isAdmin || userData.role === "seller") {
-              console.log("User is an admin");
+              console.log("User is an admin/seller");
               // Redirect to admin dashboard
               router.push({ name: "adminDashboard" });
             } else {

@@ -24,42 +24,27 @@ import { ref } from "vue";
 import { auth, db } from "../firebase/init.ts";
 import { DocumentData, getDoc, doc } from "firebase/firestore";
 
-function requireAdminAuth(
-  _: RouteLocationNormalized,
-  __: RouteLocationNormalized,
-  next: NavigationGuardNext
-) {
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      next();
-    } else {
-      next({ name: "launchPage" });
-    }
-  });
-}
-
 function requireAuth(
   _: RouteLocationNormalized,
   __: RouteLocationNormalized,
   next: NavigationGuardNext
 ) {
+  const user = auth.currentUser;
   const userData = ref<DocumentData | null>(null);
 
-  auth.onAuthStateChanged(async (user) => {
-    if (user) {
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
-
+  if (user) {
+    const docRef = doc(db, "users", user.uid);
+    getDoc(docRef).then((docSnap) => {
       if (docSnap.exists()) {
         userData.value = docSnap.data();
       } else {
         console.log("No such document!");
       }
       next();
-    } else {
-      next({ name: "login" });
-    }
-  });
+    });
+  } else {
+    next({ name: "login" });
+  }
 }
 
 const routes: RouteRecordRaw[] = [
@@ -82,42 +67,42 @@ const routes: RouteRecordRaw[] = [
     path: "/admin",
     name: "adminDashboard",
     component: AdminDashboard,
-    beforeEnter: requireAdminAuth,
+    beforeEnter: requireAuth,
     meta: { requiresAdmin: true },
   },
   {
     path: "/admin/products",
     name: "adminProducts",
     component: AdminProducts,
-    beforeEnter: requireAdminAuth,
+    beforeEnter: requireAuth,
     meta: { requiresAdmin: true },
   },
   {
     path: "/admin/products/addproduct",
     name: "adminAddProduct",
     component: AdminAddProduct,
-    beforeEnter: requireAdminAuth,
+    beforeEnter: requireAuth,
     meta: { requiresAdmin: true },
   },
   {
     path: "/admin/products/editproduct/:id",
     name: "adminEditProduct",
     component: AdminEditProduct,
-    beforeEnter: requireAdminAuth,
+    beforeEnter: requireAuth,
     meta: { requiresAdmin: true },
   },
   {
     path: "/admin/orders",
     name: "adminOrders",
     component: AdminOrders,
-    beforeEnter: requireAdminAuth,
+    beforeEnter: requireAuth,
     meta: { requiresAdmin: true },
   },
   {
     path: "/admin/inbox",
     name: "adminInbox",
     component: AdminInbox,
-    beforeEnter: requireAdminAuth,
+    beforeEnter: requireAuth,
     meta: { requiresAdmin: true },
   },
   {
