@@ -317,8 +317,11 @@ const totalPrice = computed(() => {
         .reduce(
           (
             total: number,
-            item: { details: { price: number }; quantity: number }
-          ) => total + item.details.price * item.quantity,
+            item: { details: { price: any[] }; quantity: number }
+          ) =>
+            total +
+            item.details.price[item.details.price.length - 1].originalPrice *
+              item.quantity,
           0
         )
         .toFixed(2)
