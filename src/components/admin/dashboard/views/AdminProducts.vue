@@ -300,16 +300,29 @@
                       <td class="size-px whitespace-nowrap">
                         <div class="px-6 py-3">
                           <div class="flex flex-row items-center gap-x-2">
-                            <div
-                              v-for="(price, index) in product.price"
-                              :key="index"
-                              class="grow text-xs flex flex-col space-y-2"
-                            >
+                            <div class="grow text-xs flex flex-col space-y-2">
                               <span class="text-secondary-foreground/50">
-                                Original Price: P {{ price.originalPrice }}
+                                Original Price: P
+                                {{
+                                  product.price[product.price.length - 1]
+                                    .originalPrice
+                                }}
                               </span>
                               <span class="text-secondary-foreground/50">
-                                Discounted Price: P {{ price.discountedPrice }}
+                                Discounted Price: P
+                                {{
+                                  product.price[product.price.length - 1]
+                                    .discountedPrice
+                                }}
+                              </span>
+                              <span class="text-secondary-foreground/50">
+                                Last Modified:
+                                {{
+                                  formatDate(
+                                    product.price[product.price.length - 1]
+                                      .dateCreated
+                                  )
+                                }}
                               </span>
                             </div>
                           </div>
@@ -746,5 +759,14 @@ watchEffect(() => {
   });
 });
 
-defineExpose({ showProductModal });
+const formatDate = (dateString: string) => {
+  const dateOptions = { year: "numeric", month: "long", day: "numeric" };
+  const timeOptions = { hour: "2-digit", minute: "2-digit" };
+  const date = new Date(dateString);
+  const formattedDate = (date.toLocaleDateString as any)([], dateOptions);
+  const formattedTime = (date.toLocaleTimeString as any)([], timeOptions);
+  return `${formattedDate} (${formattedTime})`;
+};
+
+defineExpose({ showProductModal, formatDate });
 </script>

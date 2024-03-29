@@ -419,6 +419,7 @@ const deletePhotoFromProduct = async (index: number) => {
     console.error("Failed to delete photo:", error);
   }
 };
+
 const latestPrice = computed(() => {
   if (product.value.price && product.value.price.length > 0) {
     return product.value.price[product.value.price.length - 1];
