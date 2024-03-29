@@ -306,6 +306,7 @@ import { Button } from "@/components/ui/button";
 import { setup as setupProductController } from "@/components/admin/dashboard/controllers/adminProductsController.ts";
 import { useRouter } from "vue-router";
 import { ref, watch as watchSize, computed } from "vue";
+import { auth } from "@/firebase/init.ts";
 
 const naChecked = ref(false);
 const router = useRouter();

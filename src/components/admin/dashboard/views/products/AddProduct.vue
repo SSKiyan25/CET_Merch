@@ -669,7 +669,11 @@ const handleFormSubmit = async (): Promise<boolean> => {
         newProduct.value.faction = userData.faction;
       }
     }
-    console.log(userData?.faction);
+
+    newProduct.value.price = newProduct.value.price.map((price) => ({
+      ...price,
+      dateCreated: new Date().toISOString(),
+    }));
     const productData = {
       name: newProduct.value.name,
       category: newProduct.value.category,
