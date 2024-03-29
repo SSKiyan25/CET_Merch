@@ -20,8 +20,8 @@ import SubmitOrder from "../components/feature/user/userOrder/views/SubmitOrderV
 import ContactUs from "../components/feature/contactUs/views/ContactUsView.vue";
 import UserDashboard from "../components/feature/user/userDashboard/views/UserDashboardView.vue";
 import UserOrders from "../components/feature/user/userDashboard/views/UserOrdersView.vue";
-import { auth, db } from "../firebase/init.ts";
 import { ref } from "vue";
+import { auth, db } from "../firebase/init.ts";
 import { DocumentData, getDoc, doc } from "firebase/firestore";
 
 function requireAdminAuth(
