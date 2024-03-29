@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="w-full fixed top-0 bg-secondary border-primary/20 md:px-5 border-b z-40"
+    class="w-full sticky top-0 bg-secondary border-primary/20 md:px-5 border-b z-40"
   >
     <div class="px-3 lg:px-5 lg:pl-3">
       <div class="flex items-center justify-between p-3">

@@ -474,6 +474,8 @@ interface ProductData {
   isArchived: boolean;
   status: string;
   totalSales: number;
+  dateCreated: string;
+  lastModified: string;
 }
 
 const newProduct = ref<ProductData>({
@@ -495,6 +497,8 @@ const newProduct = ref<ProductData>({
   isArchived: false,
   status: "",
   totalSales: 0,
+  dateCreated: "",
+  lastModified: "",
 });
 
 const coverPhotoInput = ref<HTMLInputElement | null>(null);
@@ -692,6 +696,8 @@ const handleFormSubmit = async (): Promise<boolean> => {
       isArchived: false,
       status: newProduct.value.status,
       totalSales: 0,
+      dateCreated: new Date().toISOString(),
+      lastModified: "",
     };
 
     const docRef = await addDoc(collection(db, "products"), productData);
@@ -731,6 +737,8 @@ const handleFormSubmit = async (): Promise<boolean> => {
       isArchived: false,
       status: "",
       totalSales: 0,
+      dateCreated: "",
+      lastModified: "",
     };
     isLoading.value = false;
     isUploadSuccessful.value = true;

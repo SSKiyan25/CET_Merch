@@ -8,8 +8,16 @@ import {
   deleteProduct,
   deletePhoto,
 } from "../models/adminProductsModel.ts";
-import { DocumentSnapshot } from "firebase/firestore";
+import {
+  DocumentReference,
+  DocumentSnapshot,
+  getDoc,
+  doc,
+} from "firebase/firestore";
+import { auth, db } from "@/firebase/init.ts";
 import { fetchUser } from "../models/userModel.ts";
+
+type UserData = { faction?: string; products?: any; role?: string } | null;
 
 export const setup = () => {
   const router = useRouter();
@@ -22,6 +30,10 @@ export const setup = () => {
   let lastDocs = ref<DocumentSnapshot[]>([]);
   let totalProducts = ref(0);
   const loadingPage = ref(false);
+
+  let userRef: DocumentReference | null = null;
+  let userDoc: DocumentSnapshot | null = null;
+  let userData = ref<UserData>(null);
 
   onMounted(async () => {
     initFlowbite();
@@ -47,6 +59,20 @@ export const setup = () => {
       const id = route.params.id as string;
       product.value = await fetchProduct(id);
     }
+
+    const userForEdit = auth.currentUser;
+    if (userForEdit) {
+      userRef = doc(db, "users", userForEdit.uid);
+      if (userRef) {
+        userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+          userData.value = userDoc.data();
+        }
+      }
+    } else {
+      console.error("User not logged in");
+    }
+
     loadingPage.value = false;
   });
 
@@ -142,5 +168,6 @@ export const setup = () => {
     currentPage,
     totalProducts,
     loadingPage,
+    userData,
   };
 };

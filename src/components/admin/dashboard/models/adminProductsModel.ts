@@ -11,6 +11,8 @@ import {
   limit,
   orderBy,
   DocumentSnapshot,
+  serverTimestamp,
+  arrayUnion,
 } from "firebase/firestore";
 import {
   uploadBytesResumable,
@@ -178,6 +180,41 @@ export const updateProduct = async (
     }
   }
 
+  // Update the product price
+  console.log(productData);
+  const productSnapshot = await getDoc(productRef);
+  const product = productSnapshot.data();
+  console.log(product);
+  if (product && product.price && product.price.length > 0) {
+    const latestPrice = product.price[product.price.length - 1];
+
+    // Check if prices have changed and are not undefined
+    if (
+      productData.originalPrice !== undefined &&
+      productData.discountedPrice !== undefined &&
+      (productData.originalPrice !== latestPrice.originalPrice ||
+        productData.discountedPrice !== latestPrice.discountedPrice)
+    ) {
+      // Create new price object
+      const newPrice = {
+        originalPrice: productData.originalPrice,
+        discountedPrice: productData.discountedPrice,
+        dateCreated: new Date().toISOString(),
+      };
+
+      // Add new price to productData.price array
+      if (!productData.price) {
+        productData.price = [newPrice];
+      } else {
+        productData.price.push(newPrice);
+      }
+    }
+  }
+
+  // Update the product dateModified
+  productData.lastModified = new Date().toISOString();
+
+  console.log(productData);
   await updateDoc(productRef, productData);
 
   // Fetch the updated product data

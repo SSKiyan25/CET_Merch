@@ -35,7 +35,10 @@
                 required
               />
             </div>
-            <div class="flex flex-col w-1/2 pl-2">
+            <div
+              v-if="userData && userData.faction === 'all'"
+              class="flex flex-col w-1/2 pl-2"
+            >
               <label for="product-faction" class="text-sm font-medium py-2">
                 Product Faction
               </label>
@@ -79,19 +82,42 @@
                 </option>
               </select>
             </div>
-            <div class="flex flex-col w-1/2 pl-2">
-              <label for="product-price" class="text-sm font-medium py-2">
-                Product Price*
-              </label>
-              <input
-                type="number"
-                id="product-price"
-                v-model="product.price"
-                step="0.01"
-                class="p-2 border-2 text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
-                placeholder="{{ product.price }}"
-                required
-              />
+            <div class="flex flex-row w-1/2">
+              <div class="flex flex-col w-1/2 pl-2">
+                <label
+                  for="product-original-price"
+                  class="text-sm font-medium py-2"
+                >
+                  Product Price*
+                </label>
+                <input
+                  type="number"
+                  id="product-original-price"
+                  v-model="latestPrice.originalPrice"
+                  step="0.01"
+                  class="p-2 border-2 text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                  placeholder="{{ latestPrice.originalPrice }}"
+                  required
+                />
+              </div>
+              <div class="flex flex-col w-1/2 pr-2">
+                <label
+                  for="product-discounted-price"
+                  class="text-sm font-medium py-2"
+                >
+                  Discounted Price
+                  <span class="text-xs opacity-50">(Optional)</span>
+                </label>
+                <input
+                  type="number"
+                  id="product-discounted-price"
+                  v-model="latestPrice.discountedPrice"
+                  step="0.01"
+                  class="p-2 border-2 text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                  placeholder="{{ latestPrice.discountedPrice }}"
+                  required
+                />
+              </div>
             </div>
           </div>
           <div class="flex flex-col mt-4">
@@ -306,7 +332,6 @@ import { Button } from "@/components/ui/button";
 import { setup as setupProductController } from "@/components/admin/dashboard/controllers/adminProductsController.ts";
 import { useRouter } from "vue-router";
 import { ref, watch as watchSize, computed } from "vue";
-import { auth } from "@/firebase/init.ts";
 
 const naChecked = ref(false);
 const router = useRouter();
@@ -316,6 +341,7 @@ const {
   handleFileUpload,
   deletePhotoController,
   isDeletingPhoto,
+  userData,
 } = setupProductController();
 
 const additionalPhotosInput = ref<HTMLInputElement | null>(null);
@@ -393,6 +419,12 @@ const deletePhotoFromProduct = async (index: number) => {
     console.error("Failed to delete photo:", error);
   }
 };
+const latestPrice = computed(() => {
+  if (product.value.price && product.value.price.length > 0) {
+    return product.value.price[product.value.price.length - 1];
+  }
+  return { originalPrice: "", discountedPrice: "" };
+});
 
 const editProduct = async (id: string) => {
   try {
@@ -413,6 +445,8 @@ const editProduct = async (id: string) => {
     const productData = {
       ...product.value,
       sizes: sizes,
+      originalPrice: latestPrice.value.originalPrice,
+      discountedPrice: latestPrice.value.discountedPrice,
     };
     const additionalPhotosFiles = additionalPhotosInput.value?.files || null;
     await editProductController(id, productData, additionalPhotosFiles);
