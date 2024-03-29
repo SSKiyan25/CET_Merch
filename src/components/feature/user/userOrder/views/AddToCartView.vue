@@ -77,7 +77,7 @@
                 >Initial Price :</span
               >
               <span class="pt-2.5 text-sm text-primary">
-                {{ product.price }}
+                {{ product.price[product.price.length - 1].originalPrice }}
               </span>
               <span
                 class="material-symbols-outlined text-sm pt-2.5 pl-1 opacity-80"
@@ -208,11 +208,17 @@ const router = useRouter();
 const orderData = ref<OrderDataType | null>(null);
 const ifCartEmpty = ref(true);
 
+type PriceType = {
+  dateCreated: string;
+  discountedPrice: number;
+  originalPrice: number;
+};
+
 type ProductType = {
   id: string;
   name: string;
   category: string;
-  price: number;
+  price: PriceType[];
   sizes: string[];
 };
 type GetProductByIdType = (id: string) => ProductType;
@@ -262,7 +268,10 @@ const handleFormCartSubmit = async () => {
       productId: product.value.id,
       quantity: newAddToCartData.value.quantity,
       totalPrice: parseFloat(
-        (product.value.price * newAddToCartData.value.quantity).toFixed(2)
+        (
+          product.value.price[product.value.price.length - 1].originalPrice *
+          newAddToCartData.value.quantity
+        ).toFixed(2)
       ),
       size: selectedSize.value,
     };

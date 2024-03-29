@@ -56,9 +56,17 @@
                 </td>
                 <td class="p-2 pl-4">{{ product.size }}</td>
                 <td class="p-2 pl-10">{{ product.quantity }}</td>
-                <td class="p-2 pl-4">{{ product.details.price }}</td>
+                <td class="p-2 pl-4">
+                  {{
+                    product.details.price[product.details.price.length - 1]
+                      .originalPrice
+                  }}
+                </td>
                 <td class="p-2 pl-8">
-                  {{ product.details?.price * product.quantity }}
+                  {{
+                    product.details?.price[product.details.price.length - 1]
+                      .originalPrice * product.quantity
+                  }}
                 </td>
                 <td class="p-2">
                   <AlertDialog>
@@ -173,8 +181,11 @@ const totalPrice = computed(() => {
         .reduce(
           (
             total: number,
-            item: { details: { price: number }; quantity: number }
-          ) => total + item.details.price * item.quantity,
+            item: { details: { price: any[] }; quantity: number }
+          ) =>
+            total +
+            item.details.price[item.details.price.length - 1].originalPrice *
+              item.quantity,
           0
         )
         .toFixed(2)
