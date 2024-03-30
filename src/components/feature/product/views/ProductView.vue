@@ -1,6 +1,6 @@
 <template>
   <div class="relative">
-    <div class="pt-20 pb-8 md:pt-8 px-2 md:px-8">
+    <div class="pt-4 pb-8 md:pt-8 px-2 md:px-8">
       <div class="flex flex-row items-center">
         <router-link to="/" class="cursor-pointer text-primary/50">
           <div class="flex flex-row items-center pt-0.5 hover:text-primary">
@@ -22,21 +22,23 @@
       </div>
     </div>
     <div
-      class="max-w-[85rem] h-[62rem] base:h-[64rem] md:h-[36rem] lg:h-[44rem] px-4 py-4 sm:px-6 lg:px-12 lg:py-4 mx-auto mt-8 border-b-2"
+      class="max-w-[85rem] h-[62rem] base:h-[64rem] md:h-[36rem] lg:h-[44rem] px-4 py-4 sm:px-6 lg:px-12 lg:py-4 mx-auto mt-8"
     >
       <div class="md:grid md:grid-cols-2 md:gap-12 xl:gap-18 pb-2">
         <div
           class="flex flex-col items-center bg-secondary/50 rounded-sm shadow-sm overflow-hidden pt-10 -mt-8 px-4"
         >
+          <!--Featured Photo-->
           <div class="items-center justify-center -mt-6 pb-3">
             <img
-              :src="product?.coverPhoto"
-              class="w-full max-h-96 rounded-sm"
+              :src="featuredPhoto || product?.coverPhoto"
+              class="w-full max-h-96 rounded-sm object-cover"
             />
           </div>
           <div
             class="flex flex-col sm:flex-row w-full justify-center items-center border-t-2"
           >
+            <!--Photos-->
             <Carousel
               class="relative w-full max-w-full"
               :opts="{
@@ -45,9 +47,10 @@
             >
               <CarouselContent class="px-2 sm:px-8">
                 <CarouselItem
-                  v-for="(photo, index) in product?.photos"
+                  v-for="(photo, index) in allPhotos"
                   :key="index"
                   class="w-full lg:basis-1/2"
+                  @click.prevent="updateFeaturedPhoto(photo)"
                 >
                   <div class="p-1">
                     <Card
@@ -59,7 +62,7 @@
                         <img
                           :src="photo"
                           alt="Product image"
-                          class="w-full h-auto rounded-sm"
+                          class="w-full h-[12rem] rounded-sm object-cover"
                         />
                       </CardContent>
                     </Card>
@@ -170,7 +173,7 @@
                   <span v-else>{{ product?.sizes.join(" | ") }}</span>
                 </p>
               </div>
-              <div>
+              <div class="flex justify-center md:justify-start">
                 <Sheet>
                   <SheetTrigger as-child
                     ><Button> Add to Cart</Button>
@@ -187,14 +190,13 @@
   <div v-if="loading">
     <Loading />
   </div>
+  <div class="pb-16"></div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, provide } from "vue";
+import { provide, ref, watch, Ref } from "vue";
 import { useRoute } from "vue-router";
 import { Button } from "@/components/ui/button";
-import { db } from "@/firebase/init.ts";
-import { getDoc, doc, DocumentData } from "firebase/firestore";
 import {
   Carousel,
   CarouselContent,
@@ -207,33 +209,14 @@ import Cart from "@/components/feature/user/userOrder/views/AddToCartView.vue";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import Loading from "@/components/feature/misc/LoadingComponent.vue";
 import { setup as setupProductController } from "@/components/feature/dashboard/controllers/productsController.ts";
-
-async function fetchProduct(id: any): Promise<DocumentData | undefined> {
-  console.log("fetchProduct called with id: ", id);
-  try {
-    if (!id) {
-      throw new Error("Product ID is undefined");
-    }
-    const docRef = doc(db, "products", id);
-    const docSnap = await getDoc(docRef);
-    console.log("docSnap: ", docSnap);
-
-    if (docSnap.exists()) {
-      console.log("Product data: ", docSnap.data());
-      return docSnap.data();
-    } else {
-      throw new Error("No such document!");
-    }
-  } catch (error) {
-    console.error("Fetch error: ", error);
-  }
-}
+import { setupProductController as setupProduct } from "../controllers/productController.ts";
+import { DocumentData } from "firebase/firestore";
 
 const route = useRoute();
-const product = ref<DocumentData | null | undefined>(null);
-const cache = new Map();
-const loading = ref(true);
+const { product, loading } = setupProduct(route);
 const currentId = route.params.id as string;
+
+console.log("product: ", product);
 
 const { products } = setupProductController();
 
@@ -243,29 +226,26 @@ const getProductById = (id: string) => {
 
 provide("getProductById", getProductById);
 
-watch(
-  () => route.params.id,
-  async (newId) => {
-    loading.value = true;
+// Define the type for allPhotos and featuredPhoto
+const allPhotos: Ref<string[]> = ref([]);
+const featuredPhoto: Ref<string | null> = ref(null);
 
-    try {
-      if (cache.has(newId)) {
-        product.value = cache.get(newId);
-      } else {
-        const fetchedProduct = await fetchProduct(newId);
-        product.value = fetchedProduct;
-        console.log("fetchedProduct: ", fetchedProduct);
-        cache.set(newId, fetchedProduct);
-      }
-    } catch (error) {
-      console.error("Error fetching product: ", error);
-    } finally {
-      console.log("loading: ", loading.value);
-      loading.value = false;
+watch(
+  () => product.value,
+  (newValue: DocumentData | null | undefined) => {
+    if (newValue && "coverPhoto" in newValue && "photos" in newValue) {
+      allPhotos.value = [newValue.coverPhoto, ...newValue.photos];
     }
   },
   { immediate: true }
 );
+
+// Update the initial value of featuredPhoto
+featuredPhoto.value = allPhotos.value[0] || null;
+
+const updateFeaturedPhoto = (newPhoto: string) => {
+  featuredPhoto.value = newPhoto;
+};
 
 console.log("product: ", product);
 </script>
