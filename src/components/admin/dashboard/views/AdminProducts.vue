@@ -2,7 +2,7 @@
   <NavBar />
   <AdminSidebar />
 
-  <div class="p-4 ml-2 pt-16 sm:ml-64 pb-8">
+  <div class="p-4 ml-2 sm:ml-64 pb-8">
     <div class="flex flex-row justify-start py-10">
       <div class="flex">
         <span class="material-symbols-outlined py-2 px-2 text-5xl">

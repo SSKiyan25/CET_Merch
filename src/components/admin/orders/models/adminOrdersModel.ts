@@ -1,5 +1,12 @@
-import { db } from "@/firebase/init.ts";
-import { collection, getDocs, doc, getDoc } from "firebase/firestore";
+import { db, auth } from "@/firebase/init.ts";
+import {
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  query,
+  where,
+} from "firebase/firestore";
 
 export interface Order {
   id: string;
@@ -26,24 +33,51 @@ export const getProductDetails = async (productId: string) => {
 };
 
 export const fetchOrders = async () => {
+  if (!auth.currentUser) {
+    throw new Error("User not authenticated");
+  }
+
+  // Fetch the current user's data
+  const userDoc = doc(db, "users", auth.currentUser.uid);
+  const userData = (await getDoc(userDoc)).data();
+
+  if (!userData) {
+    throw new Error("User data not found");
+  }
+
   const ordersCollection = collection(db, "userOrder");
-  const ordersSnapshot = await getDocs(ordersCollection);
-  return (
-    await Promise.all(
-      ordersSnapshot.docs.map(async (doc) => {
-        const orderData = doc.data() as Order;
-        orderData.cart = await Promise.all(
-          orderData.cart.map(async (product: any) => {
-            product.details = await getProductDetails(product.productId);
-            return product;
-          })
-        );
-        return {
-          ...orderData,
-          id: doc.id,
-          showDetails: false,
-        };
-      })
-    )
-  ).filter((order: Order) => order.orderStatus === "processing");
+  let querySnapshot;
+
+  if (userData.isAdmin) {
+    // If the user is an admin, fetch all orders with status "processing"
+    querySnapshot = await getDocs(
+      query(ordersCollection, where("orderStatus", "==", "processing"))
+    );
+  } else {
+    // If the user is not an admin, fetch only orders with status "processing" and matching faction
+    querySnapshot = await getDocs(
+      query(
+        ordersCollection,
+        where("faction", "==", userData.faction),
+        where("orderStatus", "==", "processing")
+      )
+    );
+  }
+
+  return await Promise.all(
+    querySnapshot.docs.map(async (doc) => {
+      const orderData = doc.data() as Order;
+      orderData.cart = await Promise.all(
+        orderData.cart.map(async (product: any) => {
+          product.details = await getProductDetails(product.productId);
+          return product;
+        })
+      );
+      return {
+        ...orderData,
+        id: doc.id,
+        showDetails: false,
+      };
+    })
+  );
 };

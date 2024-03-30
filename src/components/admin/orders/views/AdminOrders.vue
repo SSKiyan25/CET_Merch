@@ -1,7 +1,7 @@
 <template>
   <NavBar />
   <AdminSidebar />
-  <div class="p-4 ml-2 pt-16 sm:ml-64 pb-16">
+  <div class="p-4 ml-2 sm:ml-64 pb-16">
     <div class="flex flex-row justify-start py-10">
       <div class="flex">
         <span class="material-symbols-outlined p-2 text-5xl">
@@ -50,12 +50,11 @@
                     </span>
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent class="w-auto p-0" align="start">
+                <PopoverContent class="w-auto p-0">
                   <Calendar v-model.range="date" :columns="2" />
                 </PopoverContent>
               </Popover>
             </div>
-            <Button variant="outline"><ChevronDown /></Button>
           </div>
         </div>
         <div class="flex flex-row pb-2 space-x-2">
@@ -66,6 +65,7 @@
                 type="text"
                 placeholder="Search..."
                 class="pl-10"
+                v-model="searchTerm"
               />
               <span
                 class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
@@ -167,42 +167,42 @@
                           Date
                         </span>
                       </th>
-                      <th scope="col" class="px-3 py-2 w-2/12 text-start">
+                      <th scope="col" class="px-3 py-2 w-3/12 text-start">
                         <span
                           class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
                           Product/s
                         </span>
                       </th>
-                      <th scope="col" class="pl-4 py-2 w-2/12 text-start">
+                      <th scope="col" class="py-2 w-2/12 text-start">
                         <span
                           class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
                           Customer
                         </span>
                       </th>
-                      <th scope="col" class="pl-4 py-2 text-start">
+                      <th scope="col" class="pr-4 py-2 text-start">
                         <span
                           class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
                           Total
                         </span>
                       </th>
-                      <th scope="col" class="pl-4 py-2 text-start">
+                      <th scope="col" class="py-2 text-start">
                         <span
                           class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
                           Payment Status
                         </span>
                       </th>
-                      <th scope="col" class="pl-4 py-2 text-start">
+                      <th scope="col" class="py-2 text-start">
                         <span
                           class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
                           Payment Method
                         </span>
                       </th>
-                      <th scope="col" class="pl-5 py-2 text-start">
+                      <th scope="col" class="py-2 text-start">
                         <span
                           class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
@@ -212,7 +212,7 @@
                     </tr>
                   </thead>
                   <tbody
-                    v-for="(order, index) in orders"
+                    v-for="(order, index) in paginatedOrders"
                     :key="order.id"
                     class="divide-y divide-primary/50"
                   >
@@ -239,27 +239,33 @@
                           :key="product"
                           class="px-2 text-wrap whitespace-normal"
                         >
-                          <span class="text-xs text-secondary-foreground/80">{{
-                            product.details.name
-                          }}</span>
+                          <span
+                            class="text-xs text-secondary-foreground/80 truncate"
+                          >
+                            |
+                            {{ product.quantity }}
+                            |
+                            {{ product.details.name }} -
+                            {{ product.size }}</span
+                          >
                         </div>
                       </td>
                       <td>
-                        <div class="p-3">
+                        <div class="">
                           <span class="text-xs text-secondary-foreground/60"
                             >{{ order.userName }}
                           </span>
                         </div>
                       </td>
                       <td>
-                        <div class="px-4">
+                        <div class="">
                           <span class="text-xs text-secondary-foreground/60"
                             >P{{ order.totalPrice }}
                           </span>
                         </div>
                       </td>
                       <td>
-                        <div class="p-8 py-3 flex flex-row">
+                        <div class="pl-2.5 py-3 flex flex-row">
                           <div v-if="order.paymentStatus === 'pending'">
                             <button class="rounded-lg bg-amber-700 py-1.5 px-4">
                               <span
@@ -293,7 +299,7 @@
                         </div>
                       </td>
                       <td>
-                        <div class="p-12 py-3">
+                        <div class="p-10 py-3">
                           <span class="text-xs text-secondary-foreground"
                             >{{ order.paymentMethod }}
                           </span>
@@ -301,7 +307,7 @@
                       </td>
                       <td>
                         <div
-                          class="hs-dropdown relative inline-block [--placement:bottom-right] py-1 pl-3.5"
+                          class="hs-dropdown relative inline-block [--placement:bottom-right] py-1"
                         >
                           <div class="flex flex-row text-sm justify-end">
                             <div class="rounded-sm cursor-pointer space-x-1">
@@ -316,10 +322,10 @@
                               </button>
                               <button
                                 class="bg-red-600 text-white p-2 rounded-sm"
-                                title="Archive Order"
+                                title="Decline Order"
                               >
                                 <span class="material-symbols-outlined text-sm">
-                                  delete
+                                  block
                                 </span>
                               </button>
                             </div>
@@ -520,10 +526,22 @@
                 <div
                   class="px-6 py-4 grod gap-3 md:flex md:justify-between md:items-center border-t border-primary/20"
                 >
-                  <div>
-                    <p class="text-sm text-gray-400">
-                      <span class="font-semibold text-gray-200"> 1-N </span>
+                  <div class="flex flex-row items-center">
+                    <p class="text-sm text-secondary-foreground">
+                      <span class="font-semibold text-gray-200"
+                        >Showing {{ (currentPage - 1) * itemsPerPage + 1 }}-{{
+                          Math.min(
+                            currentPage * itemsPerPage,
+                            filteredOrders.length
+                          )
+                        }}
+                      </span>
                       results
+                    </p>
+                    <p
+                      class="pl-1 text-sm text-secondary-foreground opacity-50"
+                    >
+                      out of {{ orders.length }} total orders
                     </p>
                   </div>
                   <div>
@@ -531,6 +549,7 @@
                       <button
                         type="button"
                         class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-primary/20 bg-muted text-secondary-foreground shadow-sm hover:bg-primary/50 hover:border-muted disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
+                        @click.prevent="prevPage"
                       >
                         <svg
                           class="flex-shrink-0 size-4"
@@ -552,6 +571,7 @@
                       <button
                         type="button"
                         class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-primary/20 bg-muted text-secondary-foreground shadow-sm hover:bg-primary/50 hover:border-muted disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
+                        @click.prevent="nextPage"
                       >
                         Next
                         <svg
@@ -584,10 +604,10 @@
 <script setup lang="ts">
 import NavBar from "@/components/admin/dashboard/views/AdminNavBar.vue";
 import AdminSidebar from "@/components/admin/dashboard/views/AdminSidebar.vue";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { MagnifyingGlassIcon } from "@radix-icons/vue";
 import { Input } from "@/components/ui/input";
-import { Check, ChevronsUpDown, Download, ChevronDown } from "lucide-vue-next";
+import { Check, ChevronsUpDown, Download } from "lucide-vue-next";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -604,17 +624,20 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { addDays, format } from "date-fns";
+import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-vue-next";
 import { Order } from "../models/adminOrdersModel.ts";
 import { setup as setupOrdersController } from "../controllers/adminOrdersController.ts";
+
 const open = ref(false);
-const value = ref<string>("");
+const searchTerm = ref("");
+const value = ref<string>("all");
+
 const { orders } = setupOrdersController();
 
 const date = ref({
-  start: new Date(2024, 0, 20),
-  end: addDays(new Date(2024, 0, 20), 20),
+  start: new Date(2024, 0, 1),
+  end: new Date(),
 });
 const showFullDetails = ref(orders.value.map(() => false));
 
@@ -626,13 +649,60 @@ const toggleDetails = (order: Order) => {
 };
 
 const frameworks = [
-  { value: "Paid", label: "Paid" },
-  { value: "Pending", label: "Pending" },
-  { value: "Declined", label: "Declined" },
-  { value: "T-Shirt", label: "T-Shirt" },
-  { value: "Polo-Shirt", label: "Polo-Shirt" },
-  { value: "Lace", label: "Lace" },
-  { value: "Hoodie", label: "Hoodie" },
-  { value: "Stickers", label: "Stickers" },
+  { value: "all", label: "Show All" },
+  { value: "paid", label: "Paid" },
+  { value: "pending", label: "Pending" },
+  { value: "declined", label: "Declined" },
+  { value: "cancelled", label: "Cancelled" },
 ];
+
+const filteredOrders = computed(() => {
+  return orders.value.filter((order) => {
+    const orderDate = new Date(order.dateOrdered);
+
+    const matchesSearchTerm = [
+      order.orderRefNum,
+      order.userName,
+      ...order.cart.map((product) => product.productName),
+    ]
+      .filter((field) => field) // Remove undefined fields
+      .some((field) =>
+        field.toLowerCase().includes(searchTerm.value.toLowerCase())
+      );
+
+    const matchesSelectedCategory =
+      value.value !== "all" ? order.paymentStatus === value.value : true;
+
+    const isWithinDateRange =
+      (!date.value.start || orderDate >= date.value.start) &&
+      (!date.value.end || orderDate <= date.value.end);
+
+    return matchesSearchTerm && matchesSelectedCategory && isWithinDateRange;
+  });
+});
+
+const currentPage = ref(1);
+const itemsPerPage = ref(10);
+
+const paginatedOrders = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
+  return filteredOrders.value.slice(start, end);
+});
+
+const totalPages = computed(() => {
+  return Math.ceil(filteredOrders.value.length / itemsPerPage.value);
+});
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
+};
 </script>
