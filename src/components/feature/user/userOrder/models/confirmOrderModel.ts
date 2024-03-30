@@ -1,5 +1,5 @@
 import { getDoc, doc, updateDoc } from "firebase/firestore";
-import { db, auth } from "@/firebase/init.ts";
+import { db } from "@/firebase/init.ts";
 
 export async function fetchOrder(orderId: string) {
   console.log("Model: ", orderId);
