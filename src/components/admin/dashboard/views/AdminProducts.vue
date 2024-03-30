@@ -547,7 +547,6 @@
                                   </div>
                                 </div>
                               </div>
-
                               <div class="rounded-sm cursor-pointer mr-2">
                                 <AlertDialog>
                                   <AlertDialogTrigger>

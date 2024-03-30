@@ -35,9 +35,20 @@ export const setup = () => {
     orders.value = await fetchOrders();
   };
 
+  const declineOrder = async (order: Order) => {
+    // Set the paymentStatus to "decline"
+    await updateOrder(order.id, {
+      paymentStatus: "decline",
+    });
+
+    // Refresh the orders
+    orders.value = await fetchOrders();
+  };
+
   return {
     orders,
     order,
     markAsPaid,
+    declineOrder,
   };
 };

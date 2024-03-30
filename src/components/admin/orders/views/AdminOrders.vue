@@ -277,6 +277,17 @@
                               </span>
                             </button>
                           </div>
+                          <div v-if="order.paymentStatus === 'declined'">
+                            <button
+                              class="rounded-lg bg-amber-700 py-1.5 px-4 cursor-auto"
+                            >
+                              <span
+                                class="text-xs font-medium text-secondary-foreground pb-1"
+                              >
+                                Declined
+                              </span>
+                            </button>
+                          </div>
                           <div
                             v-if="order.paymentStatus === 'paid'"
                             class="pl-2"
@@ -327,14 +338,44 @@
                                   visibility
                                 </span>
                               </button>
-                              <button
-                                class="bg-red-600 text-white p-2 rounded-sm"
-                                title="Decline Order"
-                              >
-                                <span class="material-symbols-outlined text-sm">
-                                  block
-                                </span>
-                              </button>
+                              <AlertDialog>
+                                <AlertDialogTrigger>
+                                  <button
+                                    class="bg-red-600 text-white p-2 rounded-sm"
+                                    title="Decline Order"
+                                  >
+                                    <span
+                                      class="material-symbols-outlined text-sm"
+                                    >
+                                      block
+                                    </span>
+                                  </button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>
+                                      Decline Order
+                                    </AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      Are you sure you want to decline this
+                                      order?
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogAction
+                                      @click.prevent="declineOrder(order)"
+                                      class="bg-red-600 hover:bg-red-700 text-white"
+                                    >
+                                      Decline
+                                    </AlertDialogAction>
+                                    <AlertDialogAction
+                                      class="bg-secondary hover:bg-secondary/80 text-secondary-foreground"
+                                    >
+                                      Cancel
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
                             </div>
                           </div>
                         </div>
@@ -632,6 +673,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-vue-next";
@@ -642,7 +693,7 @@ const open = ref(false);
 const searchTerm = ref("");
 const value = ref<string>("all");
 
-const { orders, markAsPaid } = setupOrdersController();
+const { orders, markAsPaid, declineOrder } = setupOrdersController();
 
 const date = ref({
   start: new Date(2024, 0, 1),
