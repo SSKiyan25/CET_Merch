@@ -113,7 +113,7 @@
                         <router-link :to="`/product/${product.id}`">
                           <img
                             :src="product.coverPhoto"
-                            class="transform transition-all duration-500 hover:scale-105 max-h-[20rem] md:max-h-[22rem]"
+                            class="transform transition-all duration-500 hover:scale-105 max-h-[20rem] md:max-h-[22rem] object-cover"
                           />
                         </router-link>
                       </div>
@@ -160,7 +160,7 @@
                             <button
                               class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm md:text-base font-medium rounded-ee-xl bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 disabled:opacity-50 disabled:pointer-events-none"
                             >
-                              Order Now
+                              Add To Cart
                             </button>
                           </SheetTrigger>
                           <Cart :productId="product.id" />

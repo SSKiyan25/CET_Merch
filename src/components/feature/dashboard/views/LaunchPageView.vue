@@ -1,20 +1,16 @@
 <template>
   <!-- Features -->
-  <div
-    class="max-w-[85rem] px-4 py-24 sm:px-6 lg:px-24 lg:py-24 mx-auto border-b-2"
-  >
+  <div class="max-w-screen h-auto pb-4 mx-auto border-b-2">
     <!-- Grid -->
-    <div
-      class="md:grid md:grid-cols-2 md:items-center md:gap-12 xl:gap-32 pb-2"
-    >
-      <div>
-        <FeaturedCarousel />
-      </div>
 
-      <!-- End Col -->
+    <div>
+      <FeaturedCarousel />
+    </div>
+
+    <!-- End Col -->
+    <!--
       <div class="mt-5 sm:mt-10 lg:mt-0">
         <div class="space-y-6 sm:space-y-8">
-          <!-- Title -->
           <div class="space-y-2 md:space-y-4">
             <h2
               class="font-bold text-3xl lg:text-4xl text-gray-800 dark:text-gray-200"
@@ -29,9 +25,6 @@
               our commitment to excellence.
             </p>
           </div>
-          <!-- End Title -->
-
-          <!-- List -->
           <ul role="list" class="space-y-2 sm:space-y-4">
             <li class="flex space-x-3">
               <span
@@ -116,15 +109,12 @@
               </router-link>
             </li>
           </ul>
-          <!-- End List -->
         </div>
       </div>
-      <!-- End Col -->
-    </div>
-    <!-- End Grid -->
+      -->
   </div>
   <!-- End Features -->
-
+  <div id="products"><PopularProductsComponent /></div>
   <div><ProductsCategoryComponent /></div>
 </template>
 
@@ -132,7 +122,8 @@
 import FeaturedCarousel from "../components/Carousel.vue";
 //import Products from "../components/Products.vue";
 import ProductsCategoryComponent from "../components/ProductsCategoryComponent.vue";
-import { Button } from "@/components/ui/button";
+import PopularProductsComponent from "../components/PopularProductsComponent.vue";
+//import { Button } from "@/components/ui/button";
 import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";
 
