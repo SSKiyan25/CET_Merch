@@ -82,7 +82,6 @@ export const addToCart = async (newAddToCart: cartData) => {
     return;
   }
 
-  // If we reach this point, it means we need to create a new order
   const orderCountSnapshot = await getDocs(orderCollection);
   const newOrder: orderData = {
     orderNumber: orderCountSnapshot.size + 1,
@@ -115,7 +114,6 @@ export const getOnQueueOrders = async (): Promise<
 
   const onQueueOrders: { id: string; data: orderData }[] = [];
 
-  // Query the userOrder collection for "OnQueue" orders of the current user
   const querySnapshot = await getDocs(
     query(
       collection(db, "userOrder"),
