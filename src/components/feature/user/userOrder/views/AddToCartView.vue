@@ -1,6 +1,6 @@
 <template>
   <SheetContent>
-    <Tabs default-value="cart" v-model="selectedTab">
+    <Tabs default-value="cart" v-model="selectedTab" class="overflow-auto">
       <SheetHeader>
         <SheetTitle>
           <TabsList class="grid w-full h-12 grid-cols-2">
@@ -106,8 +106,9 @@
       <TabsContent value="order">
         <div v-for="(order, index) in orderData" :key="index">
           <div class="flex flex-col flex-wrap py-6">
-            <div class="flex flex-row">
-              <Label> Cart Number: </Label>
+            <div class="flex flex-row items-center">
+              <span class="material-symbols-outlined"> shopping_cart </span>
+              <Label class="pl-1"> Cart Number: </Label>
               <Label class="ml-2 text-primary"> {{ index + 1 }}</Label>
             </div>
             <div v-if="order.cart.length > 0">
