@@ -388,6 +388,23 @@ const submitOrder = async (formData: any) => {
       if (order.value) {
         order.value.orderRefNum = orderRefNum;
       }
+
+      // Get the orders array
+      const orders = userSnap.data().orders;
+      // Find the index of the order to update
+      const orderIndex = orders.findIndex(
+        (order: any) => order.userOrderID === orderId
+      );
+      if (orderIndex !== -1) {
+        // Update the order
+        orders[orderIndex] = {
+          paymentStatus: "pending",
+          status: "processing",
+          userOrderID: orderId,
+        };
+        // Update the orders array in Firestore
+        await updateDoc(userRef, { orders });
+      }
     } else {
       console.log("No such user!");
     }

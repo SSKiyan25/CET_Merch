@@ -150,8 +150,8 @@
               </div>
             </div>
           </div>
-          <SheetFooter v-if="!ifCartEmpty && totalOrdersOnQueue > 0">
-            <SheetClose as-child>
+          <SheetFooter>
+            <SheetClose as-child v-if="!ifCartEmpty">
               <router-link
                 :to="{
                   name: 'confirmOrder',
@@ -328,6 +328,9 @@ const handleFormCartSubmit = async () => {
         (result) => result.data.cart.length === 0
       );
     }
+
+    // Fetch the updated total orders on queue
+    await fetchTotalOrdersOnQueue();
 
     setTimeout(() => {
       isUploadSuccessful.value = false;

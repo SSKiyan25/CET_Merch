@@ -1,4 +1,4 @@
-import { getDoc, doc, updateDoc } from "firebase/firestore";
+import { getDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "@/firebase/init.ts";
 
 export async function fetchOrder(orderId: string) {
@@ -46,6 +46,12 @@ export async function deleteProductFromCart(orderId: string, index: number) {
 
   if (index < 0 || index >= orderData.cart.length) {
     throw new Error("Invalid index");
+  }
+
+  // If there's only one item in the cart, delete the entire document
+  if (orderData.cart.length === 1) {
+    await deleteDoc(orderDocRef);
+    return [];
   }
 
   const newCartArray = orderData.cart.filter(
