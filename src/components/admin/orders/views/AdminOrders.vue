@@ -277,7 +277,10 @@
                               </span>
                             </button>
                           </div>
-                          <div v-if="order.paymentStatus === 'paid'">
+                          <div
+                            v-if="order.paymentStatus === 'paid'"
+                            class="pl-2"
+                          >
                             <button
                               class="rounded-lg bg-green-700 py-1.5 px-4 cursor-auto"
                             >
@@ -498,6 +501,8 @@
                                     type="checkbox"
                                     id="checkbox"
                                     class="w-6 h-6 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
+                                    :checked="order.paymentStatus === 'paid'"
+                                    @change="markAsPaid(order)"
                                   />
                                   <label for="checkbox" class="pl-2 text-sm"
                                     >Mark Status as Paid
@@ -637,7 +642,7 @@ const open = ref(false);
 const searchTerm = ref("");
 const value = ref<string>("all");
 
-const { orders } = setupOrdersController();
+const { orders, markAsPaid } = setupOrdersController();
 
 const date = ref({
   start: new Date(2024, 0, 1),

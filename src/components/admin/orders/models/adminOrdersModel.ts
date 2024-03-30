@@ -6,6 +6,7 @@ import {
   getDoc,
   query,
   where,
+  updateDoc,
 } from "firebase/firestore";
 
 export interface Order {
@@ -24,6 +25,7 @@ export interface Order {
   userName: string;
   studentId: string;
   showDetails?: boolean;
+  purchaseDate?: string;
 }
 
 export const getProductDetails = async (productId: string) => {
@@ -49,17 +51,20 @@ export const fetchOrders = async () => {
   let querySnapshot;
 
   if (userData.isAdmin) {
-    // If the user is an admin, fetch all orders with status "processing"
+    // If the user is an admin, fetch all orders with status "processing" or "done"
     querySnapshot = await getDocs(
-      query(ordersCollection, where("orderStatus", "==", "processing"))
+      query(
+        ordersCollection,
+        where("orderStatus", "in", ["processing", "done"])
+      )
     );
   } else {
-    // If the user is not an admin, fetch only orders with status "processing" and matching faction
+    // If the user is not an admin, fetch only orders with status "processing" or "done" and matching faction
     querySnapshot = await getDocs(
       query(
         ordersCollection,
         where("faction", "==", userData.faction),
-        where("orderStatus", "==", "processing")
+        where("orderStatus", "in", ["processing", "done"])
       )
     );
   }
@@ -80,4 +85,12 @@ export const fetchOrders = async () => {
       };
     })
   );
+};
+
+export const updateOrder = async (
+  orderId: string,
+  updateData: Partial<Order>
+) => {
+  const orderDoc = doc(db, "userOrder", orderId);
+  await updateDoc(orderDoc, updateData);
 };
