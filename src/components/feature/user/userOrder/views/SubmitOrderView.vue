@@ -232,7 +232,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { db, auth } from "@/firebase/init.ts";
 import {
@@ -415,6 +415,22 @@ const submitOrder = async (formData: any) => {
     loading.value = false;
   }
 };
+
+onMounted(async () => {
+  const userId = auth.currentUser?.uid;
+  if (userId) {
+    const userRef = doc(db, "users", userId);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      const userData = userSnap.data();
+      formData.value.firstName = userData.name.split(", ")[1] || "";
+      formData.value.lastName = userData.name.split(", ")[0] || "";
+      formData.value.emailAddress = userData.emailAddress || "";
+      //formData.value.phoneNumber =
+      formData.value.studentId = userData.studentId || "";
+    }
+  }
+});
 
 watch(
   () => route.params.id,

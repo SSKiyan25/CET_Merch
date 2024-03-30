@@ -10,7 +10,7 @@ export const password = ref("");
 export const department = ref("");
 export const studentId = ref("");
 export const username = ref("");
-
+export const phoneNumber = ref("");
 export const loading = ref(false);
 
 export const confirmPassword = ref("");

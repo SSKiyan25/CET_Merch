@@ -9,7 +9,11 @@
         <div class="p-1">
           <Card>
             <CardContent class="flex items-center justify-center p-2">
-              <img :src="url" alt="Carousel image" class="max-w-full h-auto" />
+              <img
+                :src="url"
+                alt="Carousel image"
+                class="max-w-full h-[26rem] object-cover"
+              />
             </CardContent>
           </Card>
         </div>

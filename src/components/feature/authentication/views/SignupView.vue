@@ -26,6 +26,7 @@
             >
             <input
               type="text"
+              id="first_name"
               class="bg-secondary border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
               placeholder="Juan"
               v-model="firstName"
@@ -40,6 +41,7 @@
             >
             <input
               type="text"
+              id="last_name"
               class="bg-secondary border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
               placeholder="Dela Cruz"
               v-model="lastName"
@@ -77,9 +79,10 @@
             </label>
             <input
               type="text"
+              id="studentId"
               class="bg-secondary border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
               v-model="studentId"
-              placeholder="(+63)"
+              placeholder="(XX-X-XXXXX)"
             />
           </div>
           <div>
@@ -90,9 +93,24 @@
             >
             <input
               type="text"
+              id="username"
               class="bg-secondary border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
               v-model="username"
               placeholder="Panday"
+            />
+          </div>
+          <div>
+            <label
+              for="phoneNumber"
+              class="block mb-2 text-sm font-medium text-secondary-foreground"
+              >Phone Number</label
+            >
+            <input
+              type="text"
+              id="phoneNumber"
+              class="bg-secondary border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
+              v-model="phoneNumber"
+              placeholder="+63"
             />
           </div>
         </div>
@@ -197,6 +215,7 @@ import {
   handleSignup,
   confirmPassword,
   errorPassword,
+  phoneNumber,
   loading,
 } from "../models/SignUpModel.ts";
 import LoadingComponent from "../../misc/LoadingComponent.vue";
