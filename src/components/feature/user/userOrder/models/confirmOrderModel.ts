@@ -1,39 +1,24 @@
 import { getDoc, doc, updateDoc } from "firebase/firestore";
 import { db, auth } from "@/firebase/init.ts";
 
-export async function fetchOrder(orderId?: string) {
-  if (orderId) {
-    const orderDoc = doc(db, "userOrder", orderId);
-    const orderData = (await getDoc(orderDoc)).data();
-    return { id: orderDoc.id, ...orderData };
-  } else {
-    if (!auth.currentUser) {
-      throw new Error("User not authenticated");
-    }
-
-    const userDoc = doc(db, "users", auth.currentUser.uid);
-    const userData = (await getDoc(userDoc)).data();
-
-    if (!userData) {
-      throw new Error("User data not found");
-    }
-
-    if (
-      userData.orders &&
-      userData.orders.length > 0 &&
-      userData.orders[userData.orders.length - 1].status === "OnQueue"
-    ) {
-      const orderDoc = doc(
-        db,
-        "userOrder",
-        userData.orders[userData.orders.length - 1].userOrderID
-      );
-      const currentOrderData = (await getDoc(orderDoc)).data();
-      return { id: orderDoc.id, ...currentOrderData };
-    } else {
-      throw new Error("No order in queue");
-    }
+export async function fetchOrder(orderId: string) {
+  console.log("Model: ", orderId);
+  if (!orderId) {
+    throw new Error("Order ID is required");
   }
+
+  const orderDoc = doc(db, "userOrder", orderId);
+  const orderData = (await getDoc(orderDoc)).data();
+
+  if (!orderData) {
+    throw new Error("Order not found");
+  }
+  console.log("Model: ", orderData);
+  if (orderData.orderStatus !== "OnQueue") {
+    throw new Error("Order is not OnQueue");
+  }
+
+  return { id: orderDoc.id, ...orderData };
 }
 
 export async function fetchProductDetails(productId: string) {

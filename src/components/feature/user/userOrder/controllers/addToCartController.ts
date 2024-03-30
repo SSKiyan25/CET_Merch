@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { addToCart, getOnQueueOrder } from "../models/addToCartModel.ts";
+import { addToCart, getOnQueueOrders } from "../models/addToCartModel.ts";
 
 interface cartData {
   productId: string;
@@ -19,6 +19,8 @@ export interface orderData {
   paymentMethod: string;
   orderStatus: string;
   dateOrdered: string;
+  faction: string;
+  id: string;
 }
 
 export const setup = () => {
@@ -36,7 +38,7 @@ export const setup = () => {
   return { handleAddToCartSubmit, newAddToCartData };
 };
 
-export const getOnQueueOrderController = async () => {
-  const order = await getOnQueueOrder();
+export const getOnQueueOrdersController = async () => {
+  const order = await getOnQueueOrders();
   return order;
 };

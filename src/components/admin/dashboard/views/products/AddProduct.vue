@@ -40,7 +40,7 @@
               />
             </div>
             <div
-              v-if="userData && userData.faction"
+              v-if="userData && userData.isAdmin"
               class="flex flex-col w-1/2 pl-2"
             >
               <label for="product-faction" class="text-sm font-medium py-2">
@@ -449,9 +449,30 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "../../../../ui/button";
 
 const router = useRouter();
+let userData = ref<{
+  faction?: string;
+  products?: string[];
+  isAdmin?: boolean;
+} | null>(null);
 
-onMounted(() => {
+onMounted(async () => {
   initFlowbite();
+  const user = auth.currentUser;
+  if (user) {
+    const userRef = doc(db, "users", user.uid);
+    if (userRef) {
+      const userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        userData.value = userDoc.data() as {
+          faction?: string;
+          products?: string[];
+          isAdmin?: boolean;
+        };
+      }
+    }
+  } else {
+    throw new Error("User not found");
+  }
 });
 
 type priceData = {
@@ -539,14 +560,17 @@ watch(
   }
 );
 
-let userData = ref<{ faction?: string; products?: string[] } | null>(null);
-
+console.log(userData);
 const handleFormSubmit = async (): Promise<boolean> => {
   console.log("Form submitted");
   let userRef: DocumentReference | null = null;
   let userDoc: DocumentSnapshot | null = null;
-  let userData: { faction?: string; products?: any; role?: string } | null =
-    null;
+  let userData: {
+    faction?: string;
+    products?: any;
+    role?: string;
+    isAdmin?: boolean;
+  } | null = null;
 
   const user = auth.currentUser;
   if (user) {

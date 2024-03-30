@@ -145,7 +145,7 @@
 </template>
 
 <script setup lang="ts">
-import { provide, computed, onMounted } from "vue";
+import { provide, computed, watch } from "vue";
 import LoadingComponent from "../components/LoadingComponent.vue";
 import { useRoute } from "vue-router";
 import {
@@ -167,7 +167,16 @@ import {
 
 const route = useRoute();
 const orderId = computed(() => route.params.id);
-onMounted(fetchOrderAndUpdate);
+watch(
+  orderId,
+  (newOrderId, oldOrderId) => {
+    console.log(orderId);
+    if (typeof newOrderId === "string" && newOrderId !== oldOrderId) {
+      fetchOrderAndUpdate(newOrderId);
+    }
+  },
+  { immediate: true }
+);
 
 const getOrderById = computed(() => {
   return order.value?.id === orderId.value ? order.value : undefined;

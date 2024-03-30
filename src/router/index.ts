@@ -23,7 +23,6 @@ import UserOrders from "../components/feature/user/userDashboard/views/UserOrder
 import { ref } from "vue";
 import { auth, db } from "../firebase/init.ts";
 import { DocumentData, getDoc, doc } from "firebase/firestore";
-import { onAuthStateChanged } from "firebase/auth";
 
 function requireAuth(
   _: RouteLocationNormalized,
@@ -64,9 +63,7 @@ async function requireAdminAuth(
         const docSnap = await getDoc(docRef);
         console.log(user);
         if (docSnap.exists()) {
-          console.log("Document data:", docSnap.data().role);
           userRole = docSnap.data().role;
-          console.log("userRole-1:", userRole);
           resolve(null);
         }
       } else {
@@ -79,7 +76,6 @@ async function requireAdminAuth(
   console.log("userRole-2:", userRole);
   if (userRole) {
     if (userRole === "admin" || userRole === "seller") {
-      console.log("Accessed");
       next();
     } else {
       console.log("Not authorized-2");

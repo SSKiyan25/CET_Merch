@@ -104,64 +104,84 @@
         </TabsContent>
       </form>
       <TabsContent value="order">
-        <div class="flex flex-col flex-wrap py-6">
-          <div class="flex flex-row">
-            <Label> Total Order In The Cart</Label>
-            <Label class="ml-1 text-primary">(</Label>
-            <Label class="text-primary"> {{ totalProductsInCart }}</Label>
-            <Label class="text-primary">)</Label>
-          </div>
-          <div v-if="!ifCartEmpty">
+        <div v-for="(order, index) in orderData" :key="index">
+          <div class="flex flex-col flex-wrap py-6">
+            <div class="flex flex-row">
+              <Label> Cart Number: </Label>
+              <Label class="ml-1 text-primary">(</Label>
+              <Label class="text-primary"> {{ order.cart.length }}</Label>
+              <Label class="text-primary">)</Label>
+            </div>
+            <div v-if="order.cart.length > 0">
+              <div
+                v-for="(product, productIndex) in order.cart"
+                :key="productIndex"
+              >
+                <Accordion type="single" collapsible>
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger>
+                      <div class="flex justify-between">
+                        <span class="text-primary text-xs pr-1"
+                          >{{
+                            getProductById(product.productId)
+                              ? getProductById(product.productId).name
+                              : "Product not found"
+                          }}
+                          -
+                        </span>
+                        <span class="text-primary text-xs">
+                          {{
+                            getProductById(product.productId)
+                              ? getProductById(product.productId).faction
+                              : "Product not found"
+                          }}
+                        </span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div class="flex justify-between px-4">
+                        <Label>Quantity: {{ product.quantity }}</Label>
+                        <Label v-if="product.size !== 'N/A'"
+                          >Size: {{ product.size }}</Label
+                        >
+                        <Label>Total Price: {{ product.totalPrice }} </Label>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </div>
+            </div>
             <div
-              v-for="(product, index) in unref(orderData)?.cart"
-              :key="index"
+              v-if="totalProductsInCart == 0"
+              class="flex flex-col items-center justify-center text-center pt-8"
             >
-              <Accordion type="single" collapsible>
-                <AccordionItem value="item-1">
-                  <AccordionTrigger>
-                    <span class="text-primary">{{
-                      getProductById(product.productId)
-                        ? getProductById(product.productId).name
-                        : "Product not found"
-                    }}</span>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <div class="flex justify-between px-4">
-                      <Label>Quantity: {{ product.quantity }}</Label>
-                      <Label v-if="product.size !== 'N/A'"
-                        >Size: {{ product.size }}</Label
-                      >
-                      <Label>Total Price: {{ product.totalPrice }} </Label>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+              <span class="material-symbols-outlined text-6xl">
+                production_quantity_limits
+              </span>
+              <span class="text-primary pt-3">This cart is empty</span>
             </div>
           </div>
-          <div
-            v-if="ifCartEmpty"
-            class="flex flex-col items-center justify-center text-center pt-8"
-          >
-            <span class="material-symbols-outlined text-6xl">
-              production_quantity_limits
-            </span>
-            <span class="text-primary pt-3">Your cart is empty</span>
-          </div>
+          <SheetFooter v-if="!ifCartEmpty && totalProductsInCart > 0">
+            <SheetClose as-child>
+              <router-link
+                :to="{
+                  name: 'confirmOrder',
+                  params: { id: order.id },
+                }"
+              >
+                <Button variant="destructive">Edit Cart</Button>
+              </router-link>
+              <router-link
+                :to="{
+                  name: 'confirmOrder',
+                  params: { id: order.id },
+                }"
+              >
+                <Button type="submit">Submit Order </Button>
+              </router-link>
+            </SheetClose>
+          </SheetFooter>
         </div>
-        <SheetFooter v-if="!ifCartEmpty">
-          <SheetClose as-child>
-            <router-link
-              :to="{ name: 'confirmOrder', params: { id: unref(orderId) } }"
-            >
-              <Button variant="destructive">Edit Cart</Button>
-            </router-link>
-            <router-link
-              :to="{ name: 'confirmOrder', params: { id: unref(orderId) } }"
-            >
-              <Button type="submit">Submit Order </Button>
-            </router-link>
-          </SheetClose>
-        </SheetFooter>
       </TabsContent>
     </Tabs>
     <div
@@ -175,7 +195,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, computed, inject, onMounted, unref } from "vue";
+import { ref, defineProps, computed, inject, onMounted } from "vue";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -190,7 +210,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   setup as setupAddToCartController,
-  getOnQueueOrderController,
+  getOnQueueOrdersController,
   orderData as OrderDataType,
 } from "../controllers/addToCartController.ts";
 import { auth } from "@/firebase/init.ts";
@@ -205,7 +225,7 @@ import LoadingComponent from "../components/LoadingComponent.vue";
 import SucessfulComponent from "../components/SucessfulComponent.vue";
 
 const router = useRouter();
-const orderData = ref<OrderDataType | null>(null);
+const orderData = ref<OrderDataType[] | null>(null);
 const ifCartEmpty = ref(true);
 
 type PriceType = {
@@ -220,6 +240,7 @@ type ProductType = {
   category: string;
   price: PriceType[];
   sizes: string[];
+  faction: string;
 };
 type GetProductByIdType = (id: string) => ProductType;
 const getProductById = inject("getProductById") as GetProductByIdType;
@@ -233,14 +254,20 @@ const props = defineProps({
 });
 
 console.log("productId in Cart component: ", props.productId);
-const orderId = ref<string | null>(null);
 
 onMounted(async () => {
-  const result = await getOnQueueOrderController();
-  if (result) {
-    orderData.value = result.data;
-    orderId.value = result.id;
-    ifCartEmpty.value = result.data.cart.length === 0;
+  const results = await getOnQueueOrdersController();
+  if (results.length > 0) {
+    const onQueueOrders = results.filter(
+      (result) => result.data.orderStatus === "OnQueue"
+    );
+    orderData.value = onQueueOrders.map((result) => ({
+      ...result.data,
+      id: result.id,
+    }));
+    ifCartEmpty.value = onQueueOrders.every(
+      (result) => result.data.cart.length === 0
+    );
   }
 });
 
@@ -289,11 +316,18 @@ const handleFormCartSubmit = async () => {
     };
 
     // Fetch the updated order data
-    const result = await getOnQueueOrderController();
-    if (result) {
-      orderData.value = result.data;
-      orderId.value = result.id;
-      ifCartEmpty.value = result.data.cart.length === 0;
+    const results = await getOnQueueOrdersController();
+    if (results.length > 0) {
+      const onQueueOrders = results.filter(
+        (result) => result.data.orderStatus === "OnQueue"
+      );
+      orderData.value = onQueueOrders.map((result) => ({
+        ...result.data,
+        id: result.id,
+      }));
+      ifCartEmpty.value = onQueueOrders.every(
+        (result) => result.data.cart.length === 0
+      );
     }
 
     setTimeout(() => {
@@ -329,7 +363,10 @@ const selectSize = (size: string) => {
 
 const totalProductsInCart = computed(() => {
   if (orderData.value) {
-    return orderData.value.cart.length;
+    return orderData.value.reduce(
+      (total, order) => total + order.cart.length,
+      0
+    );
   }
   return 0;
 });

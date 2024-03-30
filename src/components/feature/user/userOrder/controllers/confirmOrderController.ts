@@ -19,13 +19,13 @@ auth.onAuthStateChanged((user) => {
   }
 });
 
-// Create a separate function for fetching the order
-export async function fetchOrderAndUpdate() {
+export async function fetchOrderAndUpdate(orderId: string) {
+  console.log("Controller: ", orderId);
   loading.value = true;
   const newId = userId.value;
   if (typeof newId === "string") {
     try {
-      const fetchedOrder = await fetchOrderFromModel();
+      const fetchedOrder = await fetchOrderFromModel(orderId);
       if (fetchedOrder) {
         const cart = (fetchedOrder as any).cart;
         if (cart) {
@@ -35,7 +35,6 @@ export async function fetchOrderAndUpdate() {
             return { ...item, details: productDetails };
           });
           const cartWithDetails = await Promise.all(cartWithDetailsPromises);
-
           (fetchedOrder as any).cart = cartWithDetails;
         }
         order.value = fetchedOrder;
@@ -46,9 +45,6 @@ export async function fetchOrderAndUpdate() {
   }
   loading.value = false;
 }
-
-// Watch for changes in userId.value and call fetchOrderAndUpdate when it changes
-watch(userId, fetchOrderAndUpdate, { immediate: true });
 
 async function deleteProductController(index: number) {
   loading.value = true;

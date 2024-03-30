@@ -5,6 +5,8 @@ import {
   updateDoc,
   doc,
   getDoc,
+  query,
+  where,
 } from "firebase/firestore";
 import { db, auth } from "@/firebase/init.ts";
 
@@ -19,6 +21,7 @@ type orderData = {
   paymentMethod: string;
   orderStatus: string;
   dateOrdered: string;
+  faction: string;
 };
 
 type cartData = {
@@ -40,6 +43,14 @@ export const addToCart = async (newAddToCart: cartData) => {
     throw new Error("User data not found");
   }
 
+  // Fetch the product data
+  const productDoc = doc(db, "products", newAddToCart.productId);
+  const productData = (await getDoc(productDoc)).data();
+
+  if (!productData) {
+    throw new Error("Product data not found");
+  }
+
   // If the user doesn't have an orders field, add it
   if (!userData.orders) {
     userData.orders = [];
@@ -50,67 +61,72 @@ export const addToCart = async (newAddToCart: cartData) => {
   let orderDoc;
   let currentOrderData;
 
-  if (
-    userData.orders.length > 0 &&
-    userData.orders[userData.orders.length - 1].status === "OnQueue"
-  ) {
-    orderDoc = doc(
-      db,
-      "userOrder",
-      userData.orders[userData.orders.length - 1].userOrderID
-    );
-    currentOrderData = (await getDoc(orderDoc)).data() as orderData;
+  // Check if the user has an order in queue
+  const querySnapshot = await getDocs(
+    query(
+      orderCollection,
+      where("orderStatus", "==", "OnQueue"),
+      where("userId", "==", auth.currentUser.uid),
+      where("faction", "==", productData.faction)
+    )
+  );
+
+  if (!querySnapshot.empty) {
+    const docSnapshot = querySnapshot.docs[0];
+    orderDoc = doc(db, "userOrder", docSnapshot.id);
+    currentOrderData = docSnapshot.data() as orderData;
+
+    // Add the product to the cart
     currentOrderData.cart.push(newAddToCart);
     await updateDoc(orderDoc, { ...currentOrderData });
-  } else {
-    const orderCountSnapshot = await getDocs(orderCollection);
-    const newOrder: orderData = {
-      orderNumber: orderCountSnapshot.size + 1,
-      userId: auth.currentUser.uid,
-      userName: "",
-      userContactNumber: "",
-      cart: [newAddToCart],
-      totalPrice: newAddToCart.totalPrice,
-      paymentStatus: "",
-      paymentMethod: "",
-      orderStatus: "OnQueue",
-      dateOrdered: new Date().toISOString(),
-    };
-    const newOrderDoc = await addDoc(orderCollection, newOrder);
-    userData.orders.push({
-      userOrderID: newOrderDoc.id,
-      status: "OnQueue",
-      paymentStatus: "pending",
-    });
-    await updateDoc(userDoc, { ...userData });
+    return;
   }
+
+  // If we reach this point, it means we need to create a new order
+  const orderCountSnapshot = await getDocs(orderCollection);
+  const newOrder: orderData = {
+    orderNumber: orderCountSnapshot.size + 1,
+    userId: auth.currentUser.uid,
+    userName: "",
+    userContactNumber: "",
+    cart: [newAddToCart],
+    totalPrice: newAddToCart.totalPrice,
+    paymentStatus: "",
+    paymentMethod: "",
+    orderStatus: "OnQueue",
+    faction: productData.faction,
+    dateOrdered: new Date().toISOString(),
+  };
+  const newOrderDoc = await addDoc(orderCollection, newOrder);
+  userData.orders.push({
+    userOrderID: newOrderDoc.id,
+    status: "OnQueue",
+    paymentStatus: "pending",
+  });
+  await updateDoc(userDoc, { ...userData });
 };
 
-export const getOnQueueOrder = async () => {
+export const getOnQueueOrders = async (): Promise<
+  { id: string; data: orderData }[]
+> => {
   if (!auth.currentUser) {
     throw new Error("User not authenticated");
   }
 
-  const userDoc = doc(db, "users", auth.currentUser.uid);
-  const userData = (await getDoc(userDoc)).data();
+  const onQueueOrders: { id: string; data: orderData }[] = [];
 
-  if (!userData) {
-    throw new Error("User data not found");
-  }
+  // Query the userOrder collection for "OnQueue" orders of the current user
+  const querySnapshot = await getDocs(
+    query(
+      collection(db, "userOrder"),
+      where("orderStatus", "==", "OnQueue"),
+      where("userId", "==", auth.currentUser.uid)
+    )
+  );
 
-  if (
-    userData.orders &&
-    userData.orders.length > 0 &&
-    userData.orders[userData.orders.length - 1].status === "OnQueue"
-  ) {
-    const orderDoc = doc(
-      db,
-      "userOrder",
-      userData.orders[userData.orders.length - 1].userOrderID
-    );
-    const currentOrderData = (await getDoc(orderDoc)).data() as orderData;
-    return { id: orderDoc.id, data: currentOrderData };
-  } else {
-    return 0;
-  }
+  querySnapshot.forEach((doc) => {
+    onQueueOrders.push({ id: doc.id, data: doc.data() as orderData });
+  });
+
+  return onQueueOrders;
 };
