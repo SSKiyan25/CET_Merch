@@ -1,6 +1,6 @@
 <template>
   <div class="relative">
-    <div class="pt-20 pb-8 md:pt-24 px-2 md:px-8">
+    <div class="pt-20 pb-8 md:pt-8 px-2 md:px-8">
       <div class="flex flex-row items-center">
         <router-link to="/" class="cursor-pointer text-primary/50">
           <div class="flex flex-row items-center pt-0.5 hover:text-primary">
@@ -163,7 +163,7 @@
                 <span>Available Sizes:</span>
                 <p class="pl-8 py-4 text-secondary-foreground/70">
                   <span
-                    v-if="product?.sizes.every((size : string) => size === '') || product?.size.length === 0"
+                    v-if="product?.sizes.every((size : string) => size === '') || product?.sizes.length === 0"
                   >
                     No Available Size
                   </span>
@@ -188,6 +188,7 @@
     <Loading />
   </div>
 </template>
+
 <script setup lang="ts">
 import { ref, watch, provide } from "vue";
 import { useRoute } from "vue-router";

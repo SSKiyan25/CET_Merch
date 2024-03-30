@@ -1,6 +1,10 @@
 <template>
   <SheetContent>
-    <Tabs default-value="cart" v-model="selectedTab" class="overflow-auto">
+    <Tabs
+      default-value="cart"
+      v-model="selectedTab"
+      class="h-screen overflow-auto"
+    >
       <SheetHeader>
         <SheetTitle>
           <TabsList class="grid w-full h-12 grid-cols-2">
