@@ -267,18 +267,22 @@
                       <td>
                         <div class="pl-2.5 py-3 flex flex-row">
                           <div v-if="order.paymentStatus === 'pending'">
-                            <button class="rounded-lg bg-amber-700 py-1.5 px-4">
+                            <button
+                              class="rounded-lg bg-amber-700 py-1.5 px-4 cursor-auto"
+                            >
                               <span
-                                class="text-xs font-medium text-secondary-foreground pb-1 cursor-none"
+                                class="text-xs font-medium text-secondary-foreground pb-1"
                               >
                                 Pending
                               </span>
                             </button>
                           </div>
                           <div v-if="order.paymentStatus === 'paid'">
-                            <button class="rounded-lg bg-green-700 py-1.5 px-4">
+                            <button
+                              class="rounded-lg bg-green-700 py-1.5 px-4 cursor-auto"
+                            >
                               <span
-                                class="text-xs font-medium text-secondary-foreground pb-1 cursor-none"
+                                class="text-xs font-medium text-secondary-foreground pb-1"
                               >
                                 Paid
                               </span>

@@ -242,6 +242,8 @@ import {
   updateDoc,
   collection,
   getDocs,
+  query,
+  where,
 } from "firebase/firestore";
 import LoadingComponent from "../components/LoadingComponent.vue";
 const route = useRoute();
@@ -316,10 +318,21 @@ const totalPrice = computed(() => {
   }
 });
 
-const getNumberOfOrders = async () => {
-  const querySnapshot = await getDocs(collection(db, "userOrder"));
+const getNumberOfOrders = async (faction: string) => {
+  const q = query(collection(db, "userOrder"), where("faction", "==", faction));
+  const querySnapshot = await getDocs(q);
   return querySnapshot.size;
 };
+
+function getFactionPrefix(faction: string) {
+  if (faction === "CET") {
+    return "CT";
+  } else if (faction.startsWith("BS")) {
+    return faction.slice(2);
+  } else {
+    return "AL";
+  }
+}
 
 async function generateOrderRefNum() {
   const now = new Date();
@@ -341,33 +354,24 @@ async function generateOrderRefNum() {
   const month = months[now.getMonth()];
   const day = now.getDate();
 
-  const numberOfOrders = await getNumberOfOrders();
+  const numberOfOrders = await getNumberOfOrders(order.value?.faction);
+  const factionPrefix = getFactionPrefix(order.value?.faction);
 
   // Combine all parts and return as a string
-  return `${month}${day}${year}${numberOfOrders + 1}`;
+  return `${factionPrefix}-${month}${day}${year}-${numberOfOrders + 1}`;
 }
 
 const submitOrder = async (formData: any) => {
   try {
     loading.value = true;
     const userId = auth.currentUser?.uid;
-    const orderId = route.params.id;
+    const orderId = String(route.params.id);
     if (!userId) throw new Error("User not logged in");
 
     const userRef = doc(db, "users", userId);
     const userSnap = await getDoc(userRef);
     if (userSnap.exists()) {
-      const user = userSnap.data();
-      let latestOrder;
-      for (let i = user.orders.length - 1; i >= 0; i--) {
-        if (user.orders[i].userOrderID === orderId) {
-          latestOrder = user.orders[i];
-          break;
-        }
-      }
-      if (!latestOrder) throw new Error("No order in queue");
-
-      const docRef = doc(db, "userOrder", latestOrder.userOrderID);
+      const docRef = doc(db, "userOrder", orderId);
       const orderRefNum = await generateOrderRefNum();
       await updateDoc(docRef, {
         orderRefNum,
@@ -384,10 +388,6 @@ const submitOrder = async (formData: any) => {
       if (order.value) {
         order.value.orderRefNum = orderRefNum;
       }
-      // Update user's order status and payment status
-      latestOrder.status = "processing";
-      latestOrder.paymentStatus = "pending";
-      await updateDoc(userRef, user);
     } else {
       console.log("No such user!");
     }

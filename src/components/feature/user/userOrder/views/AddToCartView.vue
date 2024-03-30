@@ -108,9 +108,7 @@
           <div class="flex flex-col flex-wrap py-6">
             <div class="flex flex-row">
               <Label> Cart Number: </Label>
-              <Label class="ml-1 text-primary">(</Label>
-              <Label class="text-primary"> {{ order.cart.length }}</Label>
-              <Label class="text-primary">)</Label>
+              <Label class="ml-2 text-primary"> {{ index + 1 }}</Label>
             </div>
             <div v-if="order.cart.length > 0">
               <div
@@ -151,17 +149,8 @@
                 </Accordion>
               </div>
             </div>
-            <div
-              v-if="totalProductsInCart == 0"
-              class="flex flex-col items-center justify-center text-center pt-8"
-            >
-              <span class="material-symbols-outlined text-6xl">
-                production_quantity_limits
-              </span>
-              <span class="text-primary pt-3">This cart is empty</span>
-            </div>
           </div>
-          <SheetFooter v-if="!ifCartEmpty && totalProductsInCart > 0">
+          <SheetFooter v-if="!ifCartEmpty && totalOrdersOnQueue > 0">
             <SheetClose as-child>
               <router-link
                 :to="{
@@ -182,6 +171,14 @@
             </SheetClose>
           </SheetFooter>
         </div>
+        <SheetFooter v-if="totalOrdersOnQueue === 0">
+          <div class="flex w-full items-center justify-center text-center pt-8">
+            <span class="material-symbols-outlined text-6xl">
+              production_quantity_limits
+            </span>
+            <span class="text-primary pt-3">This cart is empty</span>
+          </div>
+        </SheetFooter>
       </TabsContent>
     </Tabs>
     <div
@@ -223,6 +220,8 @@ import {
 } from "@/components/ui/accordion";
 import LoadingComponent from "../components/LoadingComponent.vue";
 import SucessfulComponent from "../components/SucessfulComponent.vue";
+import { db } from "@/firebase/init.ts";
+import { query, where, getDocs, collection } from "firebase/firestore";
 
 const router = useRouter();
 const orderData = ref<OrderDataType[] | null>(null);
@@ -333,7 +332,7 @@ const handleFormCartSubmit = async () => {
     setTimeout(() => {
       isUploadSuccessful.value = false;
       selectedTab.value = "order";
-    }, 2500);
+    }, 1500);
   } else {
     // Handle the case where no user is logged in
     alert("Please login to add product to your cart");
@@ -361,13 +360,19 @@ const selectSize = (size: string) => {
   selectedSize.value = size;
 };
 
-const totalProductsInCart = computed(() => {
-  if (orderData.value) {
-    return orderData.value.reduce(
-      (total, order) => total + order.cart.length,
-      0
+const totalOrdersOnQueue = ref(0);
+console.log("Total Orders on Queue: ", totalOrdersOnQueue.value);
+async function fetchTotalOrdersOnQueue() {
+  const userId = auth.currentUser?.uid;
+  if (userId) {
+    const q = query(
+      collection(db, "userOrder"),
+      where("userId", "==", userId),
+      where("orderStatus", "==", "OnQueue")
     );
+    const querySnapshot = await getDocs(q);
+    totalOrdersOnQueue.value = querySnapshot.size;
   }
-  return 0;
-});
+}
+onMounted(fetchTotalOrdersOnQueue);
 </script>
