@@ -6,7 +6,7 @@
       <div class="flex flex-row items-center text-primary space-x-1 md:mb:0">
         <span><Shirt /></span>
         <span
-          class="font-semibold text-secondary-foreground tracking-wide text-3xl uppercase"
+          class="font-semibold text-secondary-foreground tracking-wide text-xl uppercase"
           >{{ category }}</span
         >
       </div>
@@ -105,18 +105,21 @@
                 >
                   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
                     <div
-                      class="group flex flex-col bg-background border border-primary/50 shadow-sm rounded-b-xl"
+                      class="group flex flex-col bg-background/40 border border-primary/50 shadow-sm rounded-b-xl"
                     >
-                      <div
-                        class="h-full flex flex-col border-b-2 border-primary/60 justify-center items-center max-h-[22rem]"
-                      >
-                        <router-link :to="`/product/${product.id}`">
-                          <img
-                            :src="product.coverPhoto"
-                            class="transform transition-all duration-500 hover:scale-105 max-h-[20rem] md:max-h-[22rem] object-cover"
-                          />
-                        </router-link>
+                      <div class="overflow-hidden">
+                        <div
+                          class="h-full flex flex-col border-b-2 border-primary/60 justify-center items-center max-h-[22rem]"
+                        >
+                          <router-link :to="`/product/${product.id}`">
+                            <img
+                              :src="product.coverPhoto"
+                              class="transform transition-all duration-500 hover:scale-105 max-h-[20rem] md:max-h-[22rem] object-cover"
+                            />
+                          </router-link>
+                        </div>
                       </div>
+
                       <div class="p-4 md:p-6">
                         <div class="flex flex-row">
                           <span
