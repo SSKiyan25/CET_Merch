@@ -38,7 +38,7 @@
         <li>
           <router-link
             to="/admin/inbox"
-            class="flex items-center p-2 text-secondary-foreground rounded-lg hover:bg-primary/10 group"
+            class="flex items-center p-2 text-secondary-foreground rounded-lg hover:bg-primary/10 hover:text-primary group"
             active-class="active-link"
           >
             <svg
@@ -62,15 +62,17 @@
         <li>
           <router-link
             to="/admin/products"
-            class="flex items-center p-2 text-secondary-foreground rounded-lg hover:bg-primary/10 group"
+            class="flex items-center p-2 text-secondary-foreground rounded-lg hover:bg-primary/10 hover:text-primary group"
             active-class="active-link"
             :class="{
-              'text-primary-foreground bg-primary/80':
-                $route.path === '/admin/products',
+              'text-white bg-primary/80': $route.path === '/admin/products',
             }"
           >
             <svg
               class="flex-shrink-0 w-5 h-5 text-secondary-foreground transition duration-75 group-hover:text-primary"
+              :class="{
+                'text-white': $route.path === '/admin/products',
+              }"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
@@ -86,14 +88,16 @@
         <li>
           <router-link
             to="/admin/orders"
-            class="flex items-center p-2 text-secondary-foreground rounded-lg hover:bg-primary/10 group"
+            class="flex items-center p-2 text-secondary-foreground rounded-lg hover:bg-primary/10 hover:text-primary group"
             :class="{
-              'text-primary-foreground bg-primary/80':
-                $route.path === '/admin/orders',
+              'text-white bg-primary/80': $route.path === '/admin/orders',
             }"
           >
             <svg
               class="flex-shrink-0 w-5 h-5 text-secondary-foreground transition duration-75 group-hover:text-primary"
+              :class="{
+                'text-white': $route.path === '/admin/orders',
+              }"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"

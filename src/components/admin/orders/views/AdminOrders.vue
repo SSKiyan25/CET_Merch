@@ -72,7 +72,7 @@
               >
                 <MagnifyingGlassIcon class="size-6 text-muted-foreground" />
               </span>
-              <div class="text-xs">
+              <div class="ps-1 text-xs">
                 <Popover v-model:open="open">
                   <PopoverTrigger as-child>
                     <Button

@@ -33,7 +33,7 @@
           ></router-link>
 
           <form>
-            <div class="flex relative w-full items-center">
+            <div class="flex relative w-full items-center space-x-1">
               <Input
                 id="search"
                 type="text"
@@ -624,7 +624,7 @@
                       <button
                         type="button"
                         @click.prevent="prevPage"
-                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-primary/20 bg-muted text-secondary-foreground shadow-sm hover:bg-primary/50 hover:border-muted disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
+                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-accent/20 bg-accent text-secondary-foreground shadow-sm hover:bg-accent/50 hover:border-accent disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
                       >
                         <svg
                           class="flex-shrink-0 size-4"
@@ -646,7 +646,7 @@
                       <button
                         type="button"
                         @click.prevent="nextPage"
-                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-primary/20 bg-muted text-secondary-foreground shadow-sm hover:bg-primary/50 hover:border-muted disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
+                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-accent/20 bg-accent text-secondary-foreground shadow-sm hover:bg-accent/50 hover:border-accent/50 disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
                       >
                         Next
                         <svg
