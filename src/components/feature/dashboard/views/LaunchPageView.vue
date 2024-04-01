@@ -11,10 +11,8 @@
 
 <script setup lang="ts">
 import FeaturedCarousel from "../components/Carousel.vue";
-//import Products from "../components/Products.vue";
 import ProductsCategoryComponent from "../components/ProductsCategoryComponent.vue";
 import PopularProductsComponent from "../components/PopularProductsComponent.vue";
-//import { Button } from "@/components/ui/button";
 import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";
 

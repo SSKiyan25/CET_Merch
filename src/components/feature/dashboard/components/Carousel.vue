@@ -29,7 +29,7 @@
   </div>
 
   <div
-    class="absolute top-0 left-0 flex flex-col items-center justify-end w-full h-full p-2 pb-24 pl-8 md:pb-28 md:pl-16 md:items-start"
+    class="absolute top-0 left-0 flex flex-col items-center justify-end w-full h-full p-2 pb-24 pl-8 md:pb-28 md:pl-20 md:items-start"
   >
     <div class="bg-primary p-4 rounded">
       <h1
@@ -39,12 +39,11 @@
         CET MERCHANDISE
       </h1>
     </div>
-    <h2 class="pt-2 pb-6 text-primary font-semibold text-2xl md:text-5xl">
-      COLLECTION
-    </h2>
+    <h2 class="pt-2 pb-6 text-primary font-semibold text-2xl md:text-5xl"></h2>
 
     <button
       class="bg-none border-4 p-4 border-primary text-primary text-base md:text-xl font-bold rounded-sm"
+      v-scroll-to="'#products'"
     >
       Shop Now
     </button>
