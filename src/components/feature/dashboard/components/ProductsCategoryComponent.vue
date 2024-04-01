@@ -82,7 +82,7 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-col pt-4 bg-secondary">
+    <div class="flex flex-col pt-4 bg-accent/50">
       <div class="flex flex-row px-4 md:px-16">
         <Carousel class="w-full max-w-5/6" :opts="{ align: 'start' }">
           <CarouselContent>
