@@ -114,7 +114,7 @@
                           <router-link :to="`/product/${product.id}`">
                             <img
                               :src="product.coverPhoto"
-                              class="transform transition-all duration-500 hover:scale-105 max-h-[20rem] md:max-h-[22rem] object-cover"
+                              class="transform transition-all duration-500 hover:scale-110 max-h-[20rem] md:max-h-[22rem] object-cover"
                             />
                           </router-link>
                         </div>
