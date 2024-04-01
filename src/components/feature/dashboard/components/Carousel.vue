@@ -1,51 +1,54 @@
 <template>
-  <Carousel
-    :plugins="[plugin]"
-    @mouseenter="plugin.stop"
-    @mouseleave="[plugin.reset(), plugin.play(), console.log('Running')]"
-  >
-    <CarouselContent>
-      <CarouselItem v-for="(url, index) in imageUrls" :key="index">
-        <div class="p-1">
-          <Card>
-            <CardContent class="flex items-center justify-center p-2 relative">
-              <img
-                :src="url"
-                alt="Carousel image"
-                class="object-cover opacity-20"
-                style="width: 1920px; height: 620px"
-              />
-              <div
-                class="absolute top-0 left-0 flex flex-col items-center justify-end w-full h-full p-2 pb-12 pl-8 md:pb-16 md:pl-16 md:items-start"
+  <div class="flex relative">
+    <Carousel
+      :plugins="[plugin]"
+      @mouseenter="plugin.stop"
+      @mouseleave="[plugin.reset(), plugin.play(), console.log('Running')]"
+    >
+      <CarouselContent>
+        <CarouselItem v-for="(url, index) in imageUrls" :key="index">
+          <div class="p-1">
+            <Card>
+              <CardContent
+                class="flex items-center justify-center p-2 relative"
               >
-                <div class="bg-primary p-4 rounded">
-                  <h1
-                    class="text-secondary-foreground font-semibold text-2xl md:text-5xl"
-                    style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
-                  >
-                    CET MERCHANDISE
-                  </h1>
-                </div>
-                <h2
-                  class="pt-2 pb-6 text-primary font-semibold text-2xl md:text-5xl"
-                >
-                  COLLECTION
-                </h2>
+                <img
+                  :src="url"
+                  alt="Carousel image"
+                  class="object-cover opacity-20"
+                  style="width: 1920px; height: 620px"
+                />
+              </CardContent>
+            </Card>
+          </div>
+        </CarouselItem>
+      </CarouselContent>
+      <CarouselPrevious class="ml-16 opacity-40 hover:opacity-100" />
+      <CarouselNext class="mr-16 opacity-40 hover:opacity-100" />
+    </Carousel>
+  </div>
 
-                <button
-                  class="bg-none border-4 p-4 border-primary text-primary text-base md:text-xl font-bold rounded-sm"
-                >
-                  Shop Now
-                </button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </CarouselItem>
-    </CarouselContent>
-    <CarouselPrevious class="ml-16 opacity-40 hover:opacity-100" />
-    <CarouselNext class="mr-16 opacity-40 hover:opacity-100" />
-  </Carousel>
+  <div
+    class="absolute top-0 left-0 flex flex-col items-center justify-end w-full h-full p-2 pb-24 pl-8 md:pb-28 md:pl-16 md:items-start"
+  >
+    <div class="bg-primary p-4 rounded">
+      <h1
+        class="text-secondary-foreground font-semibold text-2xl md:text-5xl"
+        style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
+      >
+        CET MERCHANDISE
+      </h1>
+    </div>
+    <h2 class="pt-2 pb-6 text-primary font-semibold text-2xl md:text-5xl">
+      COLLECTION
+    </h2>
+
+    <button
+      class="bg-none border-4 p-4 border-primary text-primary text-base md:text-xl font-bold rounded-sm"
+    >
+      Shop Now
+    </button>
+  </div>
   <LoadingComponent v-if="loading" />
 </template>
 
