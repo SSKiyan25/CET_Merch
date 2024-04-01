@@ -1,7 +1,7 @@
 <template>
   <div v-for="category in categories" :key="category" class="mx-auto w-11/12">
     <div
-      class="flex flex-col md:flex-row pt-12 pb-2 justify-between border-b-2 border-primary/40 mx-auto"
+      class="flex flex-col md:flex-row pt-12 pb-2 justify-between border-b-4 border-primary mx-auto"
     >
       <div class="flex flex-row items-center text-primary md:mb:0">
         <span
@@ -74,7 +74,7 @@
         </div>
         <div class="px-1">
           <button
-            class="p-2 bg-background border-1 rounded-sm hover:bg-background/40"
+            class="p-2 bg-background border rounded-sm hover:bg-background/40"
             title="Filter"
           >
             <Filter />
@@ -82,7 +82,7 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-col pt-4 bg-secondary/40">
+    <div class="flex flex-col pt-4 bg-secondary">
       <div class="flex flex-row px-4 md:px-16">
         <Carousel class="w-full max-w-5/6" :opts="{ align: 'start' }">
           <CarouselContent>

@@ -1,8 +1,6 @@
 <template>
-  <nav
-    class="w-full sticky top-0 bg-secondary border-primary/20 px-0 md:px-5 border-b z-40"
-  >
-    <div class="px-0 pl-0 pr-3 lg:px-5 lg:pl-3">
+  <nav class="w-full sticky top-0 bg-secondary border-primary/20 border-b z-40">
+    <div class="px-0 pl-0">
       <div class="flex items-center justify-between p-3">
         <div class="flex items-center justify-start rtl:justify-end">
           <button
@@ -26,34 +24,43 @@
             </svg>
           </button>
           <div
-            class="flex flex-row items-center justify-center bg-primary h-full w-[10rem] md:w-[13rem] text-center absolute text-background space-x-1"
+            class="flex flex-row items-center justify-center h-full max-w-1/2 text-center absolute text-background"
           >
-            <router-link to="/"
-              ><span
-                class="text-lg md:text-2xl font-extrabold whitespace-nowrap"
-                >CET STORE
+            <router-link to="/">
+              <img src="/logo-2.png" class="w-auto h-14" />
+            </router-link>
+            <router-link to="/">
+              <span
+                class="text-2xl md:text-2xl lg:text-2xl uppercase text-primary font-bold truncate"
+              >
+                <span v-if="state.isMobile">CET</span>
+                <span v-else>College of Engineering and Technology</span>
               </span>
             </router-link>
           </div>
         </div>
-        <div class="flex flex-row justify-end items-center w-full md:order-2">
-          <div class="relative w-full hidden md:block max-w-sm items-center">
+        <div
+          class="flex flex-row justify-end items-center w-full md:order-2 pr-2"
+        >
+          <div class="relative w-1/3 md:w-full max-w-sm items-center">
             <Input
               id="search"
               type="text"
               placeholder="Search..."
-              class="pl-10 opacity-50"
+              class="pl-8 dark:opacity-50"
             />
             <span
               class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
             >
-              <Search class="size-6 text-muted-foreground" />
+              <Search
+                class="size-4 md:size-6 text-foreground text-xs md:text-sm"
+              />
             </span>
 
             <span
               class="absolute end-0 inset-y-0 flex items-center justify-center px-2 opacity-60"
             >
-              <button><SlidersHorizontal /></button>
+              <button><SlidersHorizontal class="size-4 md:size-6" /></button>
             </span>
           </div>
           <!--Sign In/Up Icons-->
@@ -77,7 +84,7 @@
             </div>
           </div>
           <!--User Dropdown-->
-          <div v-else class="flex justify-between items-center w-[6rem]">
+          <div v-else class="flex justify-between items-center w-[6rem] pr-2">
             <div class="flex flex-row items-center ms-6">
               <button
                 type="button"
@@ -93,26 +100,30 @@
             </div>
             <div></div>
             <div class="flex pt-1 items-center">
-              <button>
-                <span class="material-symbols-outlined text-2xl">
-                  shopping_cart
-                </span>
-              </button>
+              <Sheet>
+                <SheetTrigger as-child>
+                  <button>
+                    <span class="material-symbols-outlined text-2xl">
+                      shopping_cart
+                    </span>
+                  </button>
+                </SheetTrigger>
+              </Sheet>
             </div>
 
             <div
               :class="{ hidden: !dropdownUserVisible }"
-              class="absolute z-50 mt-56 -ml-12 text-base list-none divide-y divide-primary/10 rounded shadow bg-secondary border-accent"
+              class="absolute z-50 mt-56 -ml-12 text-base list-none divide-y divide-secondary/50 rounded shadow bg-secondary-foreground border-accent max-w-48"
               id="dropdown-user"
             >
               <div class="px-4 py-3">
-                <p class="text-sm dark:text-white">{{ username }}</p>
+                <p class="text-sm text-secondary">{{ username }}</p>
               </div>
               <ul class="py-1">
                 <li>
                   <router-link
                     to="/dashboard"
-                    class="block px-4 py-2 text-sm text-muted-foreground hover:bg-primary/20"
+                    class="block px-4 py-2 text-sm text-secondary/70 hover:bg-primary/20"
                     role="menuitem"
                     >Dashboard
                   </router-link>
@@ -145,7 +156,15 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watchEffect, inject, Ref } from "vue";
+import {
+  onMounted,
+  ref,
+  watchEffect,
+  inject,
+  Ref,
+  onUnmounted,
+  reactive,
+} from "vue";
 import { initFlowbite } from "flowbite";
 import { auth } from "@/firebase/init.ts";
 import type { User } from "firebase/auth";
@@ -157,6 +176,8 @@ import { User as UserIcon } from "lucide-vue-next";
 import { Search } from "lucide-vue-next";
 import { Input } from "@/components/ui/input";
 import { SlidersHorizontal } from "lucide-vue-next";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+//import Cart from "@/components/feature/user/userOrder/views/AddToCartView.vue";
 
 const router = useRouter();
 const user = ref<User | null>(null);
@@ -216,6 +237,23 @@ watchEffect(() => {
       isSidebarVisible.value = window.innerWidth > 768;
     }
   });
+});
+
+const state = reactive({
+  isMobile: false,
+});
+
+const checkScreenSize = () => {
+  state.isMobile = window.innerWidth <= 768;
+};
+
+onMounted(() => {
+  checkScreenSize();
+  window.addEventListener("resize", checkScreenSize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", checkScreenSize);
 });
 
 defineExpose({

@@ -8,17 +8,28 @@
       <CarouselContent>
         <CarouselItem v-for="(url, index) in imageUrls" :key="index">
           <div class="p-1">
-            <Card class="bg-background/0">
+            <Card v-if="!loading" class="bg-background/0">
               <CardContent
-                class="flex items-center justify-center p-2 relative"
+                class="flex bg-inherit items-center justify-center p-2 relative"
               >
                 <img
                   :src="url"
                   alt="Carousel image"
-                  class="object-cover opacity-60"
+                  class="object-cover md:object-fit brightness-50 backdrop-contrast-50 backdrop-hue-rotate-90"
                   style="width: 1920px; height: 620px"
                 />
               </CardContent>
+            </Card>
+            <Card v-else>
+              <div class="flex flex-col items-center justify-center">
+                <span
+                  class="material-symbols-outlined text-6xl text-primary animate-spin"
+                  style="width: 1920px; height: 620px"
+                  x
+                >
+                  autorenew
+                </span>
+              </div>
             </Card>
           </div>
         </CarouselItem>
@@ -31,25 +42,25 @@
   <div
     class="absolute bottom-48 md:bottom-0 left-0 flex flex-col items-center justify-end w-full h-full p-2 pl-8 md:pb-28 md:pl-20 md:items-start"
   >
-    <div class="bg-red-800 p-4 rounded-lg">
+    <div class="p-4 rounded-lg">
       <h1
-        class="text-secondary-foreground font-semibold text-2xl md:text-5xl"
+        class="text-secondary font-semibold text-2xl md:text-5xl"
         style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
       >
         CET MERCHANDISE
       </h1>
     </div>
-    <div class="pt-4"></div>
-    <div class="overflow-hidden border-4 border-red-800 rounded-lg">
-      <button
-        class="bg-secondary-foreground p-4 transform transition-all duration-500 hover:scale-110 text-red-800 text-base md:text-xl font-bold"
-        v-scroll-to="'#products'"
-      >
-        Shop Now
-      </button>
+    <div class="pt-2 ps-4">
+      <div class="overflow-hidden border-4 border-primary rounded-lg">
+        <button
+          class="bg-primary p-4 transform transition-all duration-500 hover:scale-110 text-primary-foreground text-base md:text-xl font-bold"
+          v-scroll-to="'#products'"
+        >
+          Shop Now
+        </button>
+      </div>
     </div>
   </div>
-  <LoadingComponent v-if="loading" />
 </template>
 
 <script setup lang="ts">
@@ -66,7 +77,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
-import LoadingComponent from "../../misc/LoadingComponent.vue";
+//import LoadingComponent from "../../misc/LoadingComponent.vue";
 
 const imageUrls = ref<string[]>([]);
 const loading = ref(false);
