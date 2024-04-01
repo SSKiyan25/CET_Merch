@@ -47,12 +47,9 @@
                 data-dropdown-toggle="dropdown-user"
               >
                 <span class="sr-only">Open user menu</span>
-                <img
-                  class="w-8 h-8 rounded-full saturate-0"
-                  src="/avatar.png"
-                  alt="user photo"
-                  style="filter: brightness(0) invert(1)"
-                />
+                <div class="">
+                  <UserIcon />
+                </div>
               </button>
             </div>
           </div>
@@ -112,6 +109,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase/init.ts";
 import { useRouter } from "vue-router";
 import { signOut } from "firebase/auth";
+import { User as UserIcon } from "lucide-vue-next";
 
 const router = useRouter();
 

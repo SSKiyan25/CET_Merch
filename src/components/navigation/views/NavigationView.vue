@@ -35,40 +35,49 @@
             </span>
           </router-link>
         </div>
-        <!--Sign In/Up Icons-->
-        <div
-          v-if="!user"
-          class="flex md:order-2 md:space-x-0 rtl:space-x-reverse"
-        >
-          <div class="flex-auto justify-end md:space-x-1">
-            <router-link
-              to="/login"
-              class="font-medium rounded-lg md:text-sm text-xs px-4 py-2 md:px-5 md:py-2.5"
+        <div class="flex flex-row justify-end items-center w-full md:order-2">
+          <div class="relative w-full hidden md:block max-w-sm items-center">
+            <Input
+              id="search"
+              type="text"
+              placeholder="Search..."
+              class="pl-10 opacity-50"
+            />
+            <span
+              class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
             >
-              Login
-            </router-link>
-            <router-link
-              to="/signup"
-              class="bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5"
+              <Search class="size-6 text-muted-foreground" />
+            </span>
+
+            <span
+              class="absolute end-0 inset-y-0 flex items-center justify-center px-2 opacity-60"
             >
-              Sign up
-            </router-link>
+              <button><SlidersHorizontal /></button>
+            </span>
           </div>
-        </div>
-        <!--User Dropdown-->
-        <div
-          v-else
-          class="relative flex justify-between md:order-2 items-center w-[6rem]"
-        >
-          <div class="flex">
-            <button>
-              <span class="material-symbols-outlined text-2xl">
-                shopping_cart
-              </span>
-            </button>
+          <!--Sign In/Up Icons-->
+          <div
+            v-if="!user"
+            class="flex md:order-2 md:space-x-0 rtl:space-x-reverse"
+          >
+            <div class="flex-auto justify-end md:space-x-1">
+              <router-link
+                to="/login"
+                class="font-medium rounded-lg md:text-sm text-xs px-4 py-2 md:px-5 md:py-2.5"
+              >
+                Login
+              </router-link>
+              <router-link
+                to="/signup"
+                class="bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5"
+              >
+                Sign up
+              </router-link>
+            </div>
           </div>
-          <div class="flex items-center ms-3">
-            <div>
+          <!--User Dropdown-->
+          <div v-else class="flex justify-between items-center w-[6rem]">
+            <div class="flex flex-row items-center ms-6">
               <button
                 type="button"
                 @click.prevent="toggleUserDropdown"
@@ -76,53 +85,59 @@
                 :aria-expanded="dropdownUserVisible"
               >
                 <span class="sr-only">Open user menu</span>
-                <img
-                  class="w-8 h-8 rounded-full saturate-0"
-                  src="/avatar.png"
-                  alt="user photo"
-                  style="filter: brightness(0) invert(1)"
-                />
+                <div class="">
+                  <UserIcon />
+                </div>
               </button>
             </div>
-          </div>
-
-          <div
-            :class="{ hidden: !dropdownUserVisible }"
-            class="absolute z-50 mt-56 -ml-12 text-base list-none divide-y divide-primary/10 rounded shadow bg-secondary border-accent"
-            id="dropdown-user"
-          >
-            <div class="px-4 py-3">
-              <p class="text-sm dark:text-white">{{ username }}</p>
+            <div></div>
+            <div class="flex pt-1 items-center">
+              <button>
+                <span class="material-symbols-outlined text-2xl">
+                  shopping_cart
+                </span>
+              </button>
             </div>
-            <ul class="py-1">
-              <li>
-                <router-link
-                  to="/dashboard"
-                  class="block px-4 py-2 text-sm text-muted-foreground hover:bg-primary/20"
-                  role="menuitem"
-                  >Dashboard
-                </router-link>
-              </li>
-              <li>
-                <a
-                  class="block px-4 py-2 text-sm text-muted-foreground hover:bg-primary/20 pointer-events-auto cursor-pointer"
-                  role="menuitem"
-                >
-                  Settings
-                </a>
-              </li>
-              <li>
-                <a
-                  @click.prevent="handleSignout"
-                  class="block px-4 py-2 text-sm text-muted-foreground hover:bg-primary/20 pointer-events-auto cursor-pointer"
-                  role="menuitem"
-                >
-                  Sign out
-                </a>
-              </li>
-            </ul>
+
+            <div
+              :class="{ hidden: !dropdownUserVisible }"
+              class="absolute z-50 mt-56 -ml-12 text-base list-none divide-y divide-primary/10 rounded shadow bg-secondary border-accent"
+              id="dropdown-user"
+            >
+              <div class="px-4 py-3">
+                <p class="text-sm dark:text-white">{{ username }}</p>
+              </div>
+              <ul class="py-1">
+                <li>
+                  <router-link
+                    to="/dashboard"
+                    class="block px-4 py-2 text-sm text-muted-foreground hover:bg-primary/20"
+                    role="menuitem"
+                    >Dashboard
+                  </router-link>
+                </li>
+                <li>
+                  <a
+                    class="block px-4 py-2 text-sm text-muted-foreground hover:bg-primary/20 pointer-events-auto cursor-pointer"
+                    role="menuitem"
+                  >
+                    Settings
+                  </a>
+                </li>
+                <li>
+                  <a
+                    @click.prevent="handleSignout"
+                    class="block px-4 py-2 text-sm text-muted-foreground hover:bg-primary/20 pointer-events-auto cursor-pointer"
+                    role="menuitem"
+                  >
+                    Sign out
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
+        <!--Search-->
       </div>
     </div>
   </nav>
@@ -137,6 +152,10 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase/init.ts";
 import { useRouter } from "vue-router";
 import { signOut } from "firebase/auth";
+import { User as UserIcon } from "lucide-vue-next";
+import { Search } from "lucide-vue-next";
+import { Input } from "@/components/ui/input";
+import { SlidersHorizontal } from "lucide-vue-next";
 
 const router = useRouter();
 const user = ref<User | null>(null);
