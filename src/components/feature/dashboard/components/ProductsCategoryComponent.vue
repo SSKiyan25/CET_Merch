@@ -1,75 +1,85 @@
 <template>
   <div v-for="category in categories" :key="category" class="mx-auto w-11/12">
     <div
-      class="flex flex-col md:flex-row pt-12 pb-2 px-2 justify-between border-b-2 border-primary/40 mx-auto"
+      class="flex flex-col md:flex-row pt-12 pb-2 justify-between border-b-2 border-primary/40 mx-auto"
     >
-      <div class="flex flex-row items-center text-primary space-x-1 md:mb:0">
-        <span><Shirt /></span>
+      <div class="flex flex-row items-center text-primary md:mb:0">
         <span
-          class="font-semibold text-secondary-foreground tracking-wide text-xl uppercase"
-          >{{ category }}</span
+          class="font-semibold text-secondary-foreground tracking-wide text-2xl uppercase"
         >
+          Collection
+        </span>
       </div>
-      <div class="flex flex-col">
-        <form>
-          <div class="min-w-xl mx-auto">
-            <Popover v-model:open="open">
-              <PopoverTrigger as-child>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  :aria-expanded="open"
-                  class="w-full md:w-[200px] justify-between"
-                >
-                  {{
-                    value
-                      ? frameworks.find(
-                          (framework) => framework.value === value
-                        )?.label
-                      : "Select Department"
-                  }}
-                  <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent class="w-full md:w-[200px]">
-                <Command>
-                  <CommandInput class="h-9" placeholder="Search Category" />
-                  <CommandEmpty>No framework found.</CommandEmpty>
-                  <CommandList>
-                    <CommandGroup>
-                      <CommandItem
-                        v-for="framework in frameworks"
-                        :key="framework.value"
-                        :value="framework.value"
-                        @select="
-                          (ev) => {
-                            if (typeof ev.detail.value === 'string') {
-                              value = ev.detail.value;
+      <div class="flex flex-row items-center">
+        <div class="flex flex-col">
+          <form>
+            <div class="min-w-xl mx-auto">
+              <Popover v-model:open="open">
+                <PopoverTrigger as-child>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    :aria-expanded="open"
+                    class="w-full md:w-[200px] justify-between"
+                  >
+                    {{
+                      value
+                        ? frameworks.find(
+                            (framework) => framework.value === value
+                          )?.label
+                        : "Select Department"
+                    }}
+                    <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent class="w-full md:w-[200px]">
+                  <Command>
+                    <CommandInput class="h-9" placeholder="Search Category" />
+                    <CommandEmpty>No framework found.</CommandEmpty>
+                    <CommandList>
+                      <CommandGroup>
+                        <CommandItem
+                          v-for="framework in frameworks"
+                          :key="framework.value"
+                          :value="framework.value"
+                          @select="
+                            (ev) => {
+                              if (typeof ev.detail.value === 'string') {
+                                value = ev.detail.value;
+                              }
+                              open = false;
                             }
-                            open = false;
-                          }
-                        "
-                        class="cursor-pointer"
-                      >
-                        {{ framework.label }}
-                        <Check
-                          :class="
-                            cn(
-                              'ml-auto h-4 w-4',
-                              value === framework.value
-                                ? 'opacity-100'
-                                : 'opacity-0'
-                            )
                           "
-                        />
-                      </CommandItem>
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
-          </div>
-        </form>
+                          class="cursor-pointer"
+                        >
+                          {{ framework.label }}
+                          <Check
+                            :class="
+                              cn(
+                                'ml-auto h-4 w-4',
+                                value === framework.value
+                                  ? 'opacity-100'
+                                  : 'opacity-0'
+                              )
+                            "
+                          />
+                        </CommandItem>
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div>
+          </form>
+        </div>
+        <div class="px-1">
+          <button
+            class="p-2 bg-background border-1 rounded-sm hover:bg-background/40"
+            title="Filter"
+          >
+            <Filter />
+          </button>
+        </div>
       </div>
     </div>
     <div class="flex flex-col pt-4 bg-secondary/40">
@@ -217,7 +227,6 @@ import {
   CarouselPrevious,
 } from "../../../ui/carousel";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
-import { Shirt } from "lucide-vue-next";
 import { Button } from "../../../ui/button";
 import { Check, ChevronsUpDown } from "lucide-vue-next";
 import { cn } from "../../../../lib/utils";
@@ -232,6 +241,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "../../../ui/popover";
 import { setup as setupProductController } from "../controllers/productsController.ts";
 import Cart from "../../../feature/user/userOrder/views/AddToCartView.vue";
+import { Filter } from "lucide-vue-next";
 
 const open = ref(false);
 const value = ref<string>("");

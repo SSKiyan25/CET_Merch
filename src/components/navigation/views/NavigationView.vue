@@ -1,8 +1,8 @@
 <template>
   <nav
-    class="w-full sticky top-0 bg-secondary border-primary/20 md:px-5 border-b z-40"
+    class="w-full sticky top-0 bg-secondary border-primary/20 px-0 md:px-5 border-b z-40"
   >
-    <div class="px-3 lg:px-5 lg:pl-3">
+    <div class="px-0 pl-0 pr-3 lg:px-5 lg:pl-3">
       <div class="flex items-center justify-between p-3">
         <div class="flex items-center justify-start rtl:justify-end">
           <button
@@ -25,15 +25,16 @@
               ></path>
             </svg>
           </button>
-          <router-link
-            to="/"
-            class="flex items-center md:space-x-3 space-x-1 rtl:space-x-reverse"
+          <div
+            class="flex flex-row items-center justify-center bg-primary h-full w-[10rem] md:w-[13rem] text-center absolute text-background space-x-1"
           >
-            <img src="/logo-3.png" class="h-8" alt="Logo" />
-            <span class="self-center text-xl font-semibold whitespace-nowrap"
-              >CET Merchandise
-            </span>
-          </router-link>
+            <router-link to="/"
+              ><span
+                class="text-lg md:text-2xl font-extrabold whitespace-nowrap"
+                >CET STORE
+              </span>
+            </router-link>
+          </div>
         </div>
         <div class="flex flex-row justify-end items-center w-full md:order-2">
           <div class="relative w-full hidden md:block max-w-sm items-center">

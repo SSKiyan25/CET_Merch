@@ -111,7 +111,11 @@
         <div v-for="(order, index) in orderData" :key="index">
           <div class="flex flex-col flex-wrap py-6">
             <div class="flex flex-row items-center">
-              <span class="material-symbols-outlined"> shopping_cart </span>
+              <span class="material-symbols-outlined">
+                <span class="material-symbols-outlined">
+                  add_shopping_cart
+                </span>
+              </span>
               <Label class="pl-1"> Cart Number: </Label>
               <Label class="ml-2 text-primary"> {{ index + 1 }}</Label>
             </div>

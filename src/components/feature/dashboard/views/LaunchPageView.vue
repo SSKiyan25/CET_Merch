@@ -5,14 +5,14 @@
     </div>
   </div>
   <!-- End Features -->
-  <div id="products"><PopularProductsComponent /></div>
+  <div id="products"><HeaderProductsComponent /></div>
   <div><ProductsCategoryComponent /></div>
 </template>
 
 <script setup lang="ts">
 import FeaturedCarousel from "../components/Carousel.vue";
 import ProductsCategoryComponent from "../components/ProductsCategoryComponent.vue";
-import PopularProductsComponent from "../components/PopularProductsComponent.vue";
+import HeaderProductsComponent from "../components/HeaderProductsComponent.vue";
 import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";
 
