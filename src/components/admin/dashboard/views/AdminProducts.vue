@@ -17,7 +17,7 @@
         </p>
       </div>
     </div>
-    <div class="flex flex-col p-4 border-2 rounded-lg py-5">
+    <div class="flex flex-col p-4 border-2 rounded-lg py-5 bg-slate-200">
       <div class="flex flex-row justify-between border-b-2">
         <div class="flex flex-row">
           <h1 class="font-bold text-xl tracking-wide mt-1">Products</h1>
@@ -44,7 +44,7 @@
               <span
                 class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
               >
-                <MagnifyingGlassIcon class="size-6 text-muted-foreground" />
+                <MagnifyingGlassIcon class="size-6 text-foreground" />
               </span>
               <Popover v-model:open="open">
                 <PopoverTrigger as-child>
@@ -112,7 +112,7 @@
         <div class="flex flex-col">
           <div class="overflow-x-auto">
             <div class="min-w-full inline-block align-middle">
-              <div class="bg-secondary border-t-2 shadow-sm overflow-hidden">
+              <div class="bg-slate-100 border-t-2 shadow-sm overflow-hidden">
                 <!-- Table -->
                 <table class="min-w-full divide-y divide-primary/50">
                   <thead class="bg-secondary-50">
@@ -258,7 +258,7 @@
                       <td>
                         <div class="pl-4 py-3">
                           <p class="w-full whitespace-normal">
-                            <span class="text-sm text-secondary-foreground/80">
+                            <span class="text-sm text-secondary-foreground">
                               {{ product.name }}</span
                             >
                           </p>
@@ -288,7 +288,7 @@
                             <div class="grow">
                               <p class="">
                                 <span
-                                  class="text-sm text-secondary-foreground/50"
+                                  class="text-sm text-secondary-foreground/80"
                                   >{{ product.category }}</span
                                 >
                               </p>
@@ -301,21 +301,21 @@
                         <div class="px-6 py-3">
                           <div class="flex flex-row items-center gap-x-2">
                             <div class="grow text-xs flex flex-col space-y-2">
-                              <span class="text-secondary-foreground/50">
+                              <span class="text-secondary-foreground/80">
                                 Original Price: P
                                 {{
                                   product.price[product.price.length - 1]
                                     .originalPrice
                                 }}
                               </span>
-                              <span class="text-secondary-foreground/50">
+                              <span class="text-secondary-foreground/80">
                                 Discounted Price: P
                                 {{
                                   product.price[product.price.length - 1]
                                     .discountedPrice
                                 }}
                               </span>
-                              <span class="text-secondary-foreground/50">
+                              <span class="text-secondary-foreground/80">
                                 Last Modified:
                                 {{
                                   formatDate(
@@ -335,7 +335,7 @@
                             <span
                               v-for="(size, index) in product.sizes"
                               :key="index"
-                              class="text-xs text-secondary-foreground/50"
+                              class="text-xs text-secondary-foreground/80"
                             >
                               {{ size
                               }}<span v-if="index < product.sizes.length - 1">
@@ -348,7 +348,7 @@
                                   product.sizes.length === 1) ||
                                 product.sizes.length === 0
                               "
-                              class="text-xs text-secondary-foreground/50"
+                              class="text-xs text-secondary-foreground/80"
                             >
                               N/A
                             </span>
@@ -470,18 +470,48 @@
                                             >
                                               {{ product.description }}
                                             </p>
-                                            <p class="pt-4">
-                                              <span
-                                                class="font-bold text-base text-primary/90"
-                                                >Price:
-                                              </span>
-                                              P
-                                              <span
-                                                class="text-sm text-secondary-foreground underline"
-                                              >
-                                                {{ product.price }}</span
-                                              >
-                                            </p>
+                                            <span
+                                              class="font-bold text-base text-primary/90 pt-4"
+                                              >Price:</span
+                                            >
+                                            <div
+                                              v-for="(
+                                                price, index
+                                              ) in product.price"
+                                              :key="index"
+                                              class="pt-4 flex flex-col items-start"
+                                            >
+                                              <p>
+                                                <span
+                                                  class="text-secondary-foreground/80"
+                                                >
+                                                  Original Price: P{{
+                                                    price.originalPrice
+                                                  }}
+                                                </span>
+                                              </p>
+                                              <p>
+                                                <span
+                                                  class="text-secondary-foreground/80"
+                                                >
+                                                  Discounted Price: P{{
+                                                    price.discountedPrice
+                                                  }}
+                                                </span>
+                                              </p>
+                                              <p>
+                                                <span
+                                                  class="text-secondary-foreground/80"
+                                                >
+                                                  Last Modified:
+                                                  {{
+                                                    formatDate(
+                                                      price.dateCreated
+                                                    )
+                                                  }}
+                                                </span>
+                                              </p>
+                                            </div>
                                             <p class="pt-4">
                                               <span
                                                 class="font-normal text-base text-primary/90"
