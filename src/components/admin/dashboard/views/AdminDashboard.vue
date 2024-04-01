@@ -198,8 +198,8 @@
               <th>Product Name</th>
               <th>Category</th>
               <th>Views</th>
+              <th>Total Orders</th>
               <th>Sales</th>
-              <th>Actions</th>
             </tr>
           </thead>
         </table>

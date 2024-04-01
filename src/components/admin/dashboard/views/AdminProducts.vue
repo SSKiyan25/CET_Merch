@@ -337,9 +337,9 @@
                               :key="index"
                               class="text-xs text-secondary-foreground/80"
                             >
-                              {{ size
+                              {{ size.value
                               }}<span v-if="index < product.sizes.length - 1">
-                                |
+                                - {{ size.stocks }} |
                               </span>
                             </span>
                             <span

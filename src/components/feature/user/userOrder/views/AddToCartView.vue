@@ -72,7 +72,7 @@
               <Input
                 type="number"
                 min="1"
-                max="10"
+                max="1000"
                 placeholder="0"
                 class="px-2 py-2 w-1/6 text-base text-center"
                 v-model="newAddToCartData.quantity"

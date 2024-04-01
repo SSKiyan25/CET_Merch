@@ -1,7 +1,7 @@
 <template>
   <NavBar />
   <AdminSidebar />
-  <div class="p-4 ml-2 sm:ml-64 py-16">
+  <div class="p-4 ml-2 sm:ml-64 pb-16 bg-slate-100">
     <div class="flex flex-row justify-start py-10">
       <div class="flex">
         <span class="material-symbols-outlined py-2 px-2 text-5xl">
@@ -145,164 +145,44 @@
                   >N/A</label
                 >
               </div>
-              <div class="flex items-center me-4">
-                <input
-                  id="inline-checkbox-xs"
-                  type="checkbox"
-                  value="XS"
-                  v-model="newProduct.sizes"
-                  v-bind:disabled="naChecked"
-                  :class="`w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 ${
-                    naChecked ? 'opacity-50' : ''
-                  }`"
-                />
-                <label
-                  for="inline-checkbox-xs"
-                  :class="`ms-2 text-sm font-medium text-secondary-foreground ${
-                    naChecked ? 'opacity-50' : ''
-                  }`"
-                  >XS</label
-                >
-              </div>
-              <div class="flex items-center me-4">
-                <input
-                  id="inline-checkbox-s"
-                  type="checkbox"
-                  value="S"
-                  v-model="newProduct.sizes"
-                  v-bind:disabled="naChecked"
-                  :class="`w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 ${
-                    naChecked ? 'opacity-50' : ''
-                  }`"
-                />
-                <label
-                  for="inline-checkbox-s"
-                  :class="`ms-2 text-sm font-medium text-secondary-foreground ${
-                    naChecked ? 'opacity-50' : ''
-                  }`"
-                  >S</label
-                >
-              </div>
-              <div class="flex items-center me-4">
-                <input
-                  id="inline-checkbox-m"
-                  type="checkbox"
-                  value="M"
-                  v-model="newProduct.sizes"
-                  v-bind:disabled="naChecked"
-                  :class="`w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 ${
-                    naChecked ? 'opacity-50' : ''
-                  }`"
-                />
-                <label
-                  for="inline-checkbox-m"
-                  :class="`ms-2 text-sm font-medium text-secondary-foreground ${
-                    naChecked ? 'opacity-50' : ''
-                  }`"
-                  >M</label
-                >
-              </div>
-              <div class="flex items-center me-4">
-                <input
-                  id="inline-checkbox-l"
-                  type="checkbox"
-                  value="L"
-                  v-model="newProduct.sizes"
-                  v-bind:disabled="naChecked"
-                  :class="`w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 ${
-                    naChecked ? 'opacity-50' : ''
-                  }`"
-                />
-                <label
-                  for="inline-checkbox-l"
-                  :class="`ms-2 text-sm font-medium text-secondary-foreground ${
-                    naChecked ? 'opacity-50' : ''
-                  }`"
-                  >L</label
-                >
-              </div>
-              <div class="flex items-center me-4">
-                <input
-                  id="inline-checkbox-xl"
-                  type="checkbox"
-                  value="XL"
-                  v-model="newProduct.sizes"
-                  v-bind:disabled="naChecked"
-                  :class="`w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 ${
-                    naChecked ? 'opacity-50' : ''
-                  }`"
-                />
-                <label
-                  for="inline-checkbox-xl"
-                  :class="`ms-2 text-sm font-medium text-secondary-foreground ${
-                    naChecked ? 'opacity-50' : ''
-                  }`"
-                  >XL</label
-                >
-              </div>
-              <div class="flex items-center me-4">
-                <input
-                  id="inline-checkbox-2xl"
-                  type="checkbox"
-                  value="2XL"
-                  v-model="newProduct.sizes"
-                  v-bind:disabled="naChecked"
-                  :class="`w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 ${
-                    naChecked ? 'opacity-50' : ''
-                  }`"
-                />
-                <label
-                  for="inline-checkbox-2xl"
-                  :class="`ms-2 text-sm font-medium text-secondary-foreground ${
-                    naChecked ? 'opacity-50' : ''
-                  }`"
-                  >2XL</label
-                >
-              </div>
-              <div class="flex items-center me-4">
-                <input
-                  id="inline-checkbox-3xl"
-                  type="checkbox"
-                  value="3XL"
-                  v-model="newProduct.sizes"
-                  v-bind:disabled="naChecked"
-                  :class="`w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 ${
-                    naChecked ? 'opacity-50' : ''
-                  }`"
-                />
-                <label
-                  for="inline-checkbox-3xl"
-                  :class="`ms-2 text-sm font-medium text-secondary-foreground ${
-                    naChecked ? 'opacity-50' : ''
-                  }`"
-                  >3XL</label
-                >
-              </div>
+
               <div
-                :class="`flex flex-row space-x-1 items-center me-4 ${
-                  naChecked ? 'opacity-50' : ''
-                }`"
+                v-for="(size, index) in otherSizes"
+                :key="index"
+                class="flex flex-row space-x-1 items-center"
               >
-                <label class="text-xs">Other: </label>
-                <div v-for="(size, index) in otherSizes" :key="index">
+                <div
+                  :class="`flex flex-row space-x-1 border p-2 rounded-sm borrder-primary items-center me-4 mb-2 ${
+                    naChecked ? 'opacity-50' : ''
+                  }`"
+                >
+                  <label class="text-sm">{{ index + 1 }}-</label>
+                  <label class="text-xs">Size: </label>
                   <input
                     type="text"
                     v-model="size.value"
                     v-bind:disabled="naChecked"
-                    class="w-12 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
+                    class="w-14 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
                     pattern="\S+"
                     title="This field should not contain spaces."
                   />
+                  <label class="text-xs">Stocks: </label>
+                  <input
+                    type="number"
+                    min="1"
+                    v-model="size.stocks"
+                    class="w-16 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
+                  />
+                  <button
+                    title="Click to add more options"
+                    variant="default"
+                    class="py-2 px-4 bg-emerald-600 rounded-sm"
+                    @click.prevent="addSize"
+                    v-bind:disabled="naChecked"
+                  >
+                    <span class="text-xs font-semibold">Add</span>
+                  </button>
                 </div>
-                <Button
-                  title="Click to add more options"
-                  variant="default"
-                  class="w-2/5"
-                  @click.prevent="addSize"
-                  v-bind:disabled="naChecked"
-                >
-                  <span class="text-xs font-semibold">Add</span>
-                </Button>
               </div>
             </div>
           </div>
@@ -317,6 +197,46 @@
               class="p-2 border rounded-lg text-xs bg-secondary border-primary/40 text-secondary-foreground"
               placeholder="Enter product description"
             ></textarea>
+          </div>
+          <div class="flex flex-col w-full items-start justify-start mt-4">
+            <label
+              for="product-type"
+              class="flex items-center text-sm font-medium py-2"
+            >
+              Product Types
+              <span class="material-symbols-outlined text-sm opacity-80 ml-1">
+                help
+              </span>
+            </label>
+            <div class="flex flex-row items-center flex-wrap">
+              <div
+                v-for="(type, index) in productTypes"
+                :key="index"
+                class="flex flex-row items-center space-x-1 border rounded-sm p-2 md:ml-4 mt-2"
+              >
+                <span class="text-sm font-medium">{{ index + 1 }}: </span>
+                <input
+                  v-model="type.value"
+                  type="text"
+                  class="w-54 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
+                />
+                <button
+                  @click.prevent="addProductType"
+                  title="Click to add more product type"
+                  class="py-2 px-4 bg-emerald-600 rounded-sm"
+                >
+                  <span class="text-xs font-semibold">Add</span>
+                </button>
+                <Button
+                  @click.prevent="removeProductType(index)"
+                  title="Click to remove this option"
+                  variant="default"
+                  class="w-2/5"
+                >
+                  <span class="text-xs font-semibold">Remove</span>
+                </Button>
+              </div>
+            </div>
           </div>
           <div class="flex flex-col mt-4">
             <label for="product-image" class="text-sm font-medium py-2">
@@ -340,7 +260,7 @@
               ></label
             >
             <input
-              class="block w-full text-xs border-2 rounded-lg h-10"
+              class="block w-full text-xs border-2 rounded-lg h-9"
               id="multiple_files"
               accept="image/*"
               type="file"
@@ -481,13 +401,18 @@ type priceData = {
   dateCreated: string;
 };
 
+type sizeData = {
+  value: string;
+  stocks: number;
+};
+
 interface ProductData {
   id?: string;
   name: string;
   category: string;
   faction: string;
   price: priceData[];
-  sizes: string[];
+  sizes: sizeData[];
   description: string;
   coverPhoto: File;
   photos: File[];
@@ -497,6 +422,7 @@ interface ProductData {
   totalSales: number;
   dateCreated: string;
   lastModified: string;
+  type: string[];
 }
 
 const newProduct = ref<ProductData>({
@@ -510,7 +436,12 @@ const newProduct = ref<ProductData>({
       dateCreated: "",
     },
   ],
-  sizes: [],
+  sizes: [
+    {
+      value: "",
+      stocks: 0,
+    },
+  ],
   description: "",
   coverPhoto: new File([], ""),
   photos: [],
@@ -520,6 +451,7 @@ const newProduct = ref<ProductData>({
   totalSales: 0,
   dateCreated: "",
   lastModified: "",
+  type: [],
 });
 
 const coverPhotoInput = ref<HTMLInputElement | null>(null);
@@ -544,18 +476,28 @@ watch(
 );
 
 const naChecked = ref(false);
-const otherSizes = ref([{ value: "" }]);
+const otherSizes = ref<sizeData[]>([{ value: "", stocks: 0 }]);
+const productTypes = ref([{ value: "" }]);
 
 const addSize = () => {
-  otherSizes.value = [...otherSizes.value, { value: "" }];
+  otherSizes.value = [...otherSizes.value, { value: "", stocks: 0 }];
+};
+
+const addProductType = () => {
+  productTypes.value.push({ value: "" });
+};
+
+const removeProductType = (index: number) => {
+  if (productTypes.value.length === 1)
+    return alert("At least one product type is required");
+  productTypes.value.splice(index, 1);
 };
 
 watch(
   () => naChecked.value,
   (newNaChecked) => {
     if (newNaChecked) {
-      newProduct.value.sizes = [];
-      otherSizes.value = [{ value: "" }];
+      otherSizes.value = [{ value: "", stocks: 0 }];
     }
   }
 );
@@ -587,8 +529,9 @@ const handleFormSubmit = async (): Promise<boolean> => {
 
   try {
     isLoading.value = true;
-    console.log("Cover photo files:", coverPhotoInput.value?.files); // Check the cover photo input
-    console.log("Product photos files:", productPhotosInput.value?.files); // Check the product photos input
+    //Checking if there was a file uploaded
+    console.log("Cover photo files:", coverPhotoInput.value?.files);
+    console.log("Product photos files:", productPhotosInput.value?.files);
 
     if (coverPhotoInput.value?.files) {
       const originalCoverPhoto = coverPhotoInput.value.files[0];
@@ -707,21 +650,18 @@ const handleFormSubmit = async (): Promise<boolean> => {
       category: newProduct.value.category,
       faction: newProduct.value.faction,
       price: newProduct.value.price,
-      sizes: [
-        ...new Set([
-          ...newProduct.value.sizes,
-          ...otherSizes.value.map((size) => size.value),
-        ]),
-      ],
+      sizes: otherSizes.value,
       description: newProduct.value.description,
       coverPhoto: coverPhotoURL,
       photos: photosURLs,
+
       isPublished: newProduct.value.isPublished,
       isArchived: false,
       status: newProduct.value.status,
       totalSales: 0,
       dateCreated: new Date().toISOString(),
       lastModified: "",
+      type: productTypes.value.map((pt) => pt.value),
     };
 
     const docRef = await addDoc(collection(db, "products"), productData);
@@ -753,7 +693,12 @@ const handleFormSubmit = async (): Promise<boolean> => {
           dateCreated: "",
         },
       ],
-      sizes: [],
+      sizes: [
+        {
+          value: "",
+          stocks: 0,
+        },
+      ],
       description: "",
       coverPhoto: new File([], ""),
       photos: [],
@@ -763,6 +708,7 @@ const handleFormSubmit = async (): Promise<boolean> => {
       totalSales: 0,
       dateCreated: "",
       lastModified: "",
+      type: [],
     };
     isLoading.value = false;
     isUploadSuccessful.value = true;
