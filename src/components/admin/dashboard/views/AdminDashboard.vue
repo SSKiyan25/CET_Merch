@@ -2,7 +2,7 @@
   <NavBar />
   <AdminSidebar />
 
-  <div class="p-4 ml-2 pt-16 sm:ml-64">
+  <div class="p-4 ml-2 sm:ml-64">
     <div class="flex flex-row justify-start py-10">
       <div class="flex">
         <span class="material-symbols-outlined py-2 px-2 text-5xl">
@@ -24,11 +24,13 @@
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
           <div
-            class="flex flex-col items-start bg-secondary rounded-sm space-x-4 w-80 h-32 p-4 shadow"
+            class="flex flex-col items-start bg-accent/50 rounded-sm space-x-4 w-80 h-32 p-4 shadow"
           >
             <div class="flex items-center space-x-4 pt-2">
               <router-link to="admin/inbox" class="bg-blue-600 p-2 rounded-sm">
-                <span class="material-symbols-outlined p-2 text-4xl">
+                <span
+                  class="material-symbols-outlined p-2 text-4xl text-secondary"
+                >
                   mail
                 </span>
               </router-link>
@@ -39,11 +41,13 @@
             </div>
           </div>
           <div
-            class="flex flex-col items-start bg-secondary rounded-sm space-x-4 w-80 h-32 p-4 shadow"
+            class="flex flex-col items-start bg-accent/50 rounded-sm space-x-4 w-80 h-32 p-4 shadow"
           >
             <div class="flex items-center space-x-4 pt-2">
               <router-link to="admin/orders" class="bg-red-600 p-2 rounded-sm">
-                <span class="material-symbols-outlined p-2 text-4xl">
+                <span
+                  class="material-symbols-outlined text-secondary p-2 text-4xl"
+                >
                   pending_actions
                 </span>
               </router-link>
@@ -56,14 +60,16 @@
             </div>
           </div>
           <div
-            class="flex flex-col items-start bg-secondary rounded-sm space-x-4 w-80 h-32 p-4 shadow"
+            class="flex flex-col items-start bg-accent/50 rounded-sm space-x-4 w-80 h-32 p-4 shadow"
           >
             <div class="flex items-center space-x-4 pt-2">
               <router-link
                 to="admin/products"
                 class="bg-green-600 p-2 rounded-sm"
               >
-                <span class="material-symbols-outlined p-2 text-4xl">
+                <span
+                  class="material-symbols-outlined p-2 text-4xl text-secondary"
+                >
                   inventory
                 </span>
               </router-link>
@@ -180,19 +186,23 @@
       </div>
     </div>
   </div>
-  <div class="p-4 ml-2 sm:ml-64">
-    <div class="flex flex-col p-4 border-2 rounded-lg py-14">
-      <div class="flex flex-row">
+  <div class="p-4 ml-2 sm:ml-64 pb-8">
+    <div class="flex flex-col p-4 border-2 rounded-lg">
+      <div class="flex flex-row border-b-2 border-primary pb-2">
         <h1 class="font-bold text-xl tracking-wide">Products Statistics</h1>
       </div>
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 p-5">
-        <div class="">
-          <img
-            class="h-auto max-w-full rounded-lg"
-            src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg"
-            alt=""
-          />
-        </div>
+      <div class="p-5">
+        <table class="min-w-full divide-y divide-primary/50">
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Category</th>
+              <th>Views</th>
+              <th>Sales</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+        </table>
       </div>
     </div>
   </div>

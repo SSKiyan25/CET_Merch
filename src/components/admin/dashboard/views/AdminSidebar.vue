@@ -1,21 +1,24 @@
 <template>
   <aside
     id="logo-sidebar"
-    class="fixed top-0 left-0 z-30 w-64 h-full pt-20 transition-transform -translate-x-full bg-secondary border-accent border-r sm:translate-x-0"
+    class="fixed top-0 left-0 z-40 w-64 h-full pt-20 transition-transform -translate-x-full bg-secondary border-primary border-r sm:translate-x-0"
     aria-label="Sidebar"
   >
-    <div class="h-full px-3 pb-4 overflow-y-auto bg-secondary border-accent">
+    <div class="h-full px-3 pb-4 overflow-y-auto border-primary">
       <ul class="space-y-2 font-medium">
         <li>
           <router-link
             to="/admin"
-            class="flex items-center p-2 text-secondary-foreground rounded-lg hover:bg-primary/10 group"
+            class="flex items-center p-2 text-secondary-foreground rounded-lg hover:bg-primary/10 hover:text-primary group"
             :class="{
-              'text-primary-foreground bg-primary/80': $route.path === '/admin',
+              'text-white bg-primary/80': $route.path === '/admin',
             }"
           >
             <svg
               class="w-5 h-5 text-secondary-foreground transition duration-75 group-hover:text-primary"
+              :class="{
+                'text-white': $route.path === '/admin',
+              }"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
@@ -103,9 +106,32 @@
             <span class="flex-1 ms-3 whitespace-nowrap">Orders</span>
           </router-link>
         </li>
+        <li>
+          <hr class="my-4 border-t border-secondary-foreground opacity-20" />
+        </li>
+        <li>
+          <a
+            class="flex p-2 items-center text-secondary-foreground hover:bg-primary/10 rounded-lg group cursor-pointer"
+          >
+            <span
+              class="material-symbols-outlined flex-shrink-0 w-5 h-5 transition duration-75 group-hover:text-primary"
+              aria-hiden="true"
+            >
+              logout
+            </span>
+            <span class="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
+          </a>
+        </li>
       </ul>
     </div>
   </aside>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted } from "vue";
+import { initFlowbite } from "flowbite";
+
+onMounted(() => {
+  initFlowbite();
+});
+</script>

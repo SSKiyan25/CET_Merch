@@ -19,7 +19,17 @@ provide("toggleSidebar", toggleSidebar);
 </script>
 
 <template>
-  <NavigationBar />
+  <NavigationBar
+    :class="{
+      'is-hidden':
+        $route.name === 'adminDashboard' ||
+        $route.name === 'adminProducts' ||
+        $route.name === 'adminAddProduct' ||
+        $route.name === 'adminEditProduct' ||
+        $route.name === 'adminOrders' ||
+        $route.name === 'adminInbox',
+    }"
+  />
   <UserSidebar
     v-if="isSidebarVisible"
     :class="{
