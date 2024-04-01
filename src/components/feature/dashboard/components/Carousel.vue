@@ -40,13 +40,14 @@
       </h1>
     </div>
     <h2 class="pt-2 pb-6 text-primary font-semibold text-2xl md:text-5xl"></h2>
-
-    <button
-      class="bg-none border-4 p-4 border-primary text-primary text-base md:text-xl font-bold rounded-sm"
-      v-scroll-to="'#products'"
-    >
-      Shop Now
-    </button>
+    <div class="overflow-hidden border-4 border-primary rounded-sm">
+      <button
+        class="bg-secondary-foreground p-4 transform transition-all duration-500 hover:scale-110 text-primary text-base md:text-xl font-bold"
+        v-scroll-to="'#products'"
+      >
+        Shop Now
+      </button>
+    </div>
   </div>
   <LoadingComponent v-if="loading" />
 </template>
