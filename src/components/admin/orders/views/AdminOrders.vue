@@ -149,7 +149,7 @@
         <div class="flex flex-col">
           <div class="overflow-x-auto">
             <div class="min-w-full inline-block align-middle">
-              <div class="bg-slate-100 border-t-2 shadow-sm overflow-hidden">
+              <div class="bg-slate-100 shadow-sm overflow-hidden">
                 <table class="min-w-full divide-y divide-primary/50">
                   <thead class="bg-slate-300">
                     <tr>
@@ -211,12 +211,103 @@
                       </th>
                     </tr>
                   </thead>
-                  <tbody
-                    v-for="(order, index) in paginatedOrders"
-                    :key="order.id"
-                    class="divide-y divide-primary/50"
-                  >
-                    <tr class="hover:bg-primary/10">
+                  <tbody class="divide-y divide-primary/50">
+                    <tr v-if="loadingPage">
+                      <td class="p-4">
+                        <div
+                          class="flex items-center justify-start pl-4 h-full w-full"
+                        >
+                          <span
+                            class="material-symbols-outlined text-2xl text-primary animate-spin"
+                          >
+                            autorenew
+                          </span>
+                        </div>
+                      </td>
+                      <td class="p-4">
+                        <div
+                          class="flex items-center justify-start pl-4 h-full w-full"
+                        >
+                          <span
+                            class="material-symbols-outlined text-2xl text-primary animate-spin"
+                          >
+                            autorenew
+                          </span>
+                        </div>
+                      </td>
+                      <td class="p-4">
+                        <div
+                          class="flex items-center justify-start pl-4 h-full w-full"
+                        >
+                          <span
+                            class="material-symbols-outlined text-2xl text-primary animate-spin"
+                          >
+                            autorenew
+                          </span>
+                        </div>
+                      </td>
+                      <td class="p-4">
+                        <div
+                          class="flex items-center justify-start pl-4 h-full w-full"
+                        >
+                          <span
+                            class="material-symbols-outlined text-2xl text-primary animate-spin"
+                          >
+                            autorenew
+                          </span>
+                        </div>
+                      </td>
+                      <td class="p-4">
+                        <div
+                          class="flex items-center justify-start pl-4 h-full w-full"
+                        >
+                          <span
+                            class="material-symbols-outlined text-2xl text-primary animate-spin"
+                          >
+                            autorenew
+                          </span>
+                        </div>
+                      </td>
+                      <td class="p-4">
+                        <div
+                          class="flex items-center justify-end pr-16 h-full w-full"
+                        >
+                          <span
+                            class="material-symbols-outlined text-2xl text-primary animate-spin"
+                          >
+                            autorenew
+                          </span>
+                        </div>
+                      </td>
+                      <td class="p-4">
+                        <div
+                          class="flex items-center justify-end pr-16 h-full w-full"
+                        >
+                          <span
+                            class="material-symbols-outlined text-2xl text-primary animate-spin"
+                          >
+                            autorenew
+                          </span>
+                        </div>
+                      </td>
+                      <td class="p-4">
+                        <div
+                          class="flex items-center justify-end pr-16 h-full w-full"
+                        >
+                          <span
+                            class="material-symbols-outlined text-2xl text-primary animate-spin"
+                          >
+                            autorenew
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr
+                      v-else
+                      v-for="(order, index) in paginatedOrders"
+                      :key="order.id"
+                      class="hover:bg-primary/10"
+                    >
                       <td>
                         <div class="pl-5 py-3">
                           <span
@@ -449,9 +540,15 @@
                               <div
                                 class="flex flex-col p-4 space-y-2 border-b border-secondary-foreground/20"
                               >
-                                <div>
+                                <div
+                                  class="flex flex-row justify-between items-center"
+                                >
                                   <span class="font-semibold"
                                     >Order Details</span
+                                  >
+                                  <span
+                                    class="text-xs font-bold capitalize text-primary underline"
+                                    >Status: {{ order.orderStatus }}</span
                                   >
                                 </div>
                                 <div
@@ -492,14 +589,17 @@
                                 </div>
                                 <div
                                   class="flex flex-row items-center space-x-1 pt-4"
+                                  v-if="order.orderStatus !== 'done'"
                                 >
                                   <input
                                     type="checkbox"
                                     id="checkbox"
                                     class="w-4 h-4 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2"
+                                    :checked="order.orderStatus === 'ready'"
+                                    @change="readyOrder(order)"
                                   />
-                                  <snap class="text-sm"
-                                    >Mark order as ready to get</snap
+                                  <span class="text-sm"
+                                    >Mark order as ready to get</span
                                   >
                                 </div>
                               </div>
@@ -559,12 +659,12 @@
                                   class="flex flex-row justify-end space-x-2"
                                 >
                                   <button
-                                    class="p-2 bg-primary font-semibold text-primary-foreground rounded-sm hover:bg-primary/90"
+                                    class="p-2 bg-emerald-600 font-semibold text-white rounded-sm hover:bg-primary/90"
                                   >
                                     Contact Customer
                                   </button>
                                   <Button
-                                    variant="destructive"
+                                    variant="default"
                                     @click.prevent="toggleDetails(order)"
                                   >
                                     Close
@@ -699,7 +799,8 @@ const open = ref(false);
 const searchTerm = ref("");
 const value = ref<string>("all");
 
-const { orders, markAsPaid, declineOrder } = setupOrdersController();
+const { orders, markAsPaid, declineOrder, readyOrder, loadingPage } =
+  setupOrdersController();
 
 const date = ref({
   start: new Date(2024, 0, 1),

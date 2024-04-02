@@ -28,10 +28,46 @@ export interface Order {
   purchaseDate?: string;
 }
 
+type priceData = {
+  originalPrice: number;
+  discountedPrice: number;
+  dateCreated: string;
+};
+
+type sizeData = {
+  value: string;
+  stocks: number;
+};
+
+export interface ProductData {
+  id?: string;
+  name: string;
+  category: string;
+  faction: string;
+  price: priceData[];
+  sizes: sizeData[];
+  description: string;
+  coverPhoto: File;
+  photos: File[];
+  isPublished: boolean;
+  isArchived: boolean;
+  status: string;
+  views: number;
+  totalOrders: number;
+  dateCreated: string;
+  lastModified: string;
+}
+
 export const getProductDetails = async (productId: string) => {
   const productDoc = doc(db, "products", productId);
   const productSnapshot = await getDoc(productDoc);
   return productSnapshot.exists() ? productSnapshot.data() : {};
+};
+
+export const fetchUser = async (userId: string) => {
+  const userDoc = doc(db, "users", userId);
+  const userSnapshot = await getDoc(userDoc);
+  return userSnapshot.exists() ? userSnapshot.data() : {};
 };
 
 export const fetchOrders = async () => {
@@ -55,7 +91,7 @@ export const fetchOrders = async () => {
     querySnapshot = await getDocs(
       query(
         ordersCollection,
-        where("orderStatus", "in", ["processing", "done"])
+        where("orderStatus", "in", ["processing", "done", "ready"])
       )
     );
   } else {
@@ -64,7 +100,7 @@ export const fetchOrders = async () => {
       query(
         ordersCollection,
         where("faction", "==", userData.faction),
-        where("orderStatus", "in", ["processing", "done"])
+        where("orderStatus", "in", ["processing", "done", "ready"])
       )
     );
   }
@@ -93,4 +129,12 @@ export const updateOrder = async (
 ) => {
   const orderDoc = doc(db, "userOrder", orderId);
   await updateDoc(orderDoc, updateData);
+};
+
+export const updateProduct = async (
+  productId: string,
+  updateProductData: Partial<ProductData>
+) => {
+  const productDoc = doc(db, "products", productId);
+  await updateDoc(productDoc, updateProductData);
 };

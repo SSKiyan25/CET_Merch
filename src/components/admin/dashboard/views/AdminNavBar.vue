@@ -35,64 +35,6 @@
             >
           </router-link>
         </div>
-        <div class="flex items-center">
-          <div class="flex items-center ms-3">
-            <div>
-              <button
-                type="button"
-                class="flex text-sm bg-secondary border-accent rounded-full focus:ring-4 focus:ring-accent"
-                aria-expanded="false"
-                data-dropdown-toggle="dropdown-user"
-              >
-                <span class="sr-only">Open user menu</span>
-                <div class="">
-                  <UserIcon />
-                </div>
-              </button>
-            </div>
-          </div>
-        </div>
-        <!--User Dropdown-->
-        <div
-          class="z-50 hidden my-4 text-base list-none divide-y divide-primary/10 rounded shadow bg-secondary border-accent"
-          id="dropdown-user"
-        >
-          <div class="px-4 py-3">
-            <p class="text-sm dark:text-white">{{ username }}</p>
-            <p
-              class="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
-            >
-              {{ userEmail }}
-            </p>
-          </div>
-          <ul class="py-1">
-            <li>
-              <router-link
-                to="/admin"
-                class="block px-4 py-2 text-sm text-muted-foreground hover:bg-primary/20"
-                role="menuitem"
-                >Dashboard
-              </router-link>
-            </li>
-            <li>
-              <a
-                class="block px-4 py-2 text-sm text-muted-foreground hover:bg-primary/20 pointer-events-auto cursor-pointer"
-                role="menuitem"
-              >
-                Settings
-              </a>
-            </li>
-            <li>
-              <a
-                @click.prevent="handleSignout"
-                class="block px-4 py-2 text-sm text-muted-foreground hover:bg-primary/20 pointer-events-auto cursor-pointer"
-                role="menuitem"
-              >
-                Sign out
-              </a>
-            </li>
-          </ul>
-        </div>
       </div>
     </div>
   </nav>
@@ -105,11 +47,6 @@ import { auth } from "@/firebase/init.ts";
 import type { User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase/init.ts";
-import { useRouter } from "vue-router";
-import { signOut } from "firebase/auth";
-import { User as UserIcon } from "lucide-vue-next";
-
-const router = useRouter();
 
 onMounted(() => {
   initFlowbite();
@@ -140,15 +77,4 @@ auth.onAuthStateChanged(async (currentUser) => {
     username.value = "";
   }
 });
-
-const handleSignout = () => {
-  signOut(auth)
-    .then(() => {
-      router.push({ name: "login" });
-      console.log("User signed out");
-    })
-    .catch((error) => {
-      console.log("Error signing out: ", error);
-    });
-};
 </script>

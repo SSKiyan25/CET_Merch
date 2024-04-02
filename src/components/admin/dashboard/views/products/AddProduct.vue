@@ -303,6 +303,9 @@
       </div>
     </div>
   </div>
+  <div v-if="isOpening">
+    <LoadingComponent />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -329,8 +332,10 @@ import {
 import { useRouter } from "vue-router";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "../../../../ui/button";
+import LoadingComponent from "@/components/feature/misc/LoadingComponent.vue";
 
 const router = useRouter();
+const isOpening = ref(false);
 let userData = ref<{
   faction?: string;
   products?: string[];
@@ -338,6 +343,7 @@ let userData = ref<{
 } | null>(null);
 
 onMounted(async () => {
+  isOpening.value = true;
   initFlowbite();
   const user = auth.currentUser;
   if (user) {
@@ -355,6 +361,7 @@ onMounted(async () => {
   } else {
     throw new Error("User not found");
   }
+  isOpening.value = false;
 });
 
 type priceData = {

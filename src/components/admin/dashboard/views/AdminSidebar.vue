@@ -114,8 +114,9 @@
           <hr class="my-4 border-t border-secondary-foreground opacity-20" />
         </li>
         <li>
-          <a
+          <button
             class="flex p-2 items-center text-secondary-foreground hover:bg-primary/10 rounded-lg group cursor-pointer"
+            @click.prevent="handleSignout"
           >
             <span
               class="material-symbols-outlined flex-shrink-0 w-5 h-5 transition duration-75 group-hover:text-primary"
@@ -124,7 +125,7 @@
               logout
             </span>
             <span class="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
-          </a>
+          </button>
         </li>
       </ul>
     </div>
@@ -134,8 +135,24 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";
+import { useRouter } from "vue-router";
+import { signOut } from "firebase/auth";
+import { auth } from "@/firebase/init.ts";
+
+const router = useRouter();
 
 onMounted(() => {
   initFlowbite();
 });
+
+const handleSignout = () => {
+  signOut(auth)
+    .then(() => {
+      router.push({ name: "login" });
+      console.log("User signed out");
+    })
+    .catch((error) => {
+      console.log("Error signing out: ", error);
+    });
+};
 </script>

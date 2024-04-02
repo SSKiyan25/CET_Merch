@@ -116,7 +116,7 @@
                 <!-- Table -->
                 <table class="min-w-full divide-y divide-primary/50">
                   <thead class="bg-secondary-50">
-                    <tr>
+                    <tr class="bg-slate-300">
                       <th scope="col" class="pl-4 py-2 text-start w-3/12">
                         <div class="flex gap-x-1 whitespace-nowrap">
                           <span
