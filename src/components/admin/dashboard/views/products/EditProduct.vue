@@ -1,7 +1,7 @@
 <template>
   <NavBar />
   <AdminSidebar />
-  <div class="p-4 ml-2 py-16 sm:ml-64">
+  <div class="p-4 ml-2 pb-16 sm:ml-64">
     <div class="flex flex-row justify-start py-10">
       <div class="flex">
         <span class="material-symbols-outlined py-2 px-2 text-5xl">
@@ -139,55 +139,56 @@
                   >N/A</label
                 >
               </div>
-              <div
-                v-for="(size, index) in allSizes"
-                :key="index"
-                class="flex items-center me-4"
-              >
-                <input
-                  type="checkbox"
-                  :id="`size-${index}`"
-                  v-if="size.value !== ''"
-                  v-model="size.checked.value"
-                  :disabled="naChecked"
-                  checked
-                  :class="`w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 ${
-                    naChecked ? 'opacity-50' : ''
-                  }`"
-                />
-                <label
-                  :for="`size-${index}`"
-                  :class="`ms-2 text-sm font-medium text-secondary-foreground ${
-                    naChecked ? 'opacity-50' : ''
-                  }`"
-                  >{{ size.value }}
-                </label>
-              </div>
-              <div
-                :class="`flex flex-row space-x-1 items-center me-4 ${
-                  naChecked ? 'opacity-50' : ''
-                }`"
-              >
-                <label class="text-xs">Other: </label>
-                <div v-for="(size, index) in otherSizes" :key="index">
-                  <input
-                    type="text"
-                    v-model="size.value"
-                    v-bind:disabled="naChecked"
-                    class="w-12 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
-                    pattern="\S+"
-                    title="This field should not contain spaces."
-                  />
-                </div>
-                <Button
-                  title="Click to add more options"
-                  variant="default"
-                  class="w-2/5"
-                  @click.prevent="addSize"
-                  v-bind:disabled="naChecked"
+              <div class="flex flex-wrap">
+                <div
+                  v-for="(size, index) in allSizes"
+                  :key="index"
+                  class="flex flex-row flex-wrap items-center me-4"
                 >
-                  <span class="text-xs font-semibold">Add</span>
-                </Button>
+                  <div class="flex flex-row flex-wrap items-center space-x-1">
+                    <div
+                      :class="`flex flex-row space-x-1 border p-2 rounded-sm borrder-primary items-center me-4 mb-2 ${
+                        naChecked ? 'opacity-50' : ''
+                      }`"
+                    >
+                      <label class="text-sm">{{ index + 1 }}-</label>
+                      <label class="text-xs">Size: </label>
+                      <input
+                        type="text"
+                        v-model="size.value"
+                        v-bind:disabled="naChecked"
+                        class="w-16 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
+                        pattern="\S+"
+                        title="This field should not contain spaces."
+                      />
+                      <label class="text-xs">Stocks:</label>
+
+                      <input
+                        type="number"
+                        v-model="size.stocks"
+                        v-bind:disabled="naChecked"
+                        min="0"
+                        class="w-16 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
+                      />
+                      <button
+                        title="Click to add more options"
+                        class="py-2 px-4 bg-red-600 rounded-sm"
+                        @click.prevent="removeSize(index)"
+                        v-bind:disabled="naChecked"
+                      >
+                        <span class="text-xs font-semibold">Remove</span>
+                      </button>
+                      <button
+                        title="Click to add more options"
+                        class="py-2 px-4 bg-emerald-600 rounded-sm"
+                        @click.prevent="addSize"
+                        v-bind:disabled="naChecked"
+                      >
+                        <span class="text-xs font-semibold">Add</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -203,6 +204,7 @@
               placeholder="{{ product.description }}"
             ></textarea>
           </div>
+
           <div class="flex flex-row justify-between">
             <div class="flex flex-col w-1/2 mt-4">
               <label for="product-image" class="text-sm font-medium py-2">
@@ -331,7 +333,7 @@ import AdminSidebar from "../AdminSidebar.vue";
 import { Button } from "@/components/ui/button";
 import { setup as setupProductController } from "@/components/admin/dashboard/controllers/adminProductsController.ts";
 import { useRouter } from "vue-router";
-import { ref, watch as watchSize, computed } from "vue";
+import { ref, computed, watch } from "vue";
 
 const naChecked = ref(false);
 const router = useRouter();
@@ -347,49 +349,33 @@ const {
 const additionalPhotosInput = ref<HTMLInputElement | null>(null);
 
 let isLoading = ref(false);
-const otherSizes = ref([{ value: "" }]);
+const allSizes = ref([{ value: "", stocks: 0 }]);
 
 const addSize = () => {
-  otherSizes.value = [...otherSizes.value, { value: "" }];
+  allSizes.value = [...allSizes.value, { value: "", stocks: 0 }];
 };
 
-const allSizes = computed(() => {
-  if (!product.value) {
-    return [];
+let originalSizes = ref<any[]>([]);
+
+watch(product, (newValue) => {
+  if (newValue && newValue.sizes) {
+    allSizes.value = newValue.sizes;
+    originalSizes.value = [...newValue.sizes];
   }
-  const productSizes = product.value.sizes.map((size: string) => ({
-    value: size,
-    checked: ref(!naChecked.value),
-  }));
-  const otherSizesWithChecked = otherSizes.value.map((size) => ({
-    ...size,
-    checked: ref(!naChecked.value),
-  }));
-  return [...productSizes, ...otherSizesWithChecked];
 });
 
-watchSize(
-  () => naChecked.value,
-  (newNaChecked) => {
-    if (!allSizes.value) {
-      return;
-    }
-    if (newNaChecked) {
-      allSizes.value.forEach((size) => {
-        if (size && size.checked) {
-          size.checked.value = false;
-        }
-      });
-      otherSizes.value = [{ value: "" }];
-    } else {
-      allSizes.value.forEach((size) => {
-        if (size && size.checked) {
-          size.checked.value = true;
-        }
-      });
-    }
+watch(naChecked, (newValue) => {
+  if (newValue) {
+    allSizes.value = [{ value: "", stocks: 0 }];
+  } else {
+    allSizes.value = [...originalSizes.value];
   }
-);
+});
+const removeSize = (index: number) => {
+  if (allSizes.value.length > 1) {
+    allSizes.value.splice(index, 1);
+  }
+};
 
 const factions = [
   { value: "CET", label: "CET" },
@@ -431,17 +417,13 @@ const editProduct = async (id: string) => {
   try {
     isLoading.value = true;
     let sizes = allSizes.value
-      .filter(
-        (size) => size.checked && size.checked.value && size.value.trim() !== ""
-      )
-      .map((size) => size.value);
+      .filter((size) => size.value.trim() !== "")
+      .map((size) => ({ value: size.value, stocks: size.stocks }));
 
     // Remove duplicates
-    sizes = [...new Set(sizes)];
-
-    if (naChecked.value && sizes.length === 0) {
-      sizes = ["N/A"];
-    }
+    sizes = Array.from(new Set(sizes.map((size) => JSON.stringify(size)))).map(
+      (size) => JSON.parse(size)
+    );
 
     const productData = {
       ...product.value,

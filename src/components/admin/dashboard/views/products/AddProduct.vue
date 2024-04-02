@@ -130,58 +130,61 @@
                 >(One at a Time if adding other sizes)</span
               >
             </label>
-            <div class="flex flex-row flex-wrap">
-              <div class="flex items-center me-4">
-                <input
-                  id="inline-checkbox-na"
-                  type="checkbox"
-                  value="none"
-                  v-model="naChecked"
-                  class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
-                />
-                <label
-                  for="inline-checkbox-xs"
-                  class="ms-2 text-sm font-medium text-secondary-foreground"
-                  >N/A</label
-                >
-              </div>
-
-              <div
-                v-for="(size, index) in otherSizes"
-                :key="index"
-                class="flex flex-row space-x-1 items-center"
-              >
-                <div
-                  :class="`flex flex-row space-x-1 border p-2 rounded-sm borrder-primary items-center me-4 mb-2 ${
-                    naChecked ? 'opacity-50' : ''
-                  }`"
-                >
-                  <label class="text-sm">{{ index + 1 }}-</label>
-                  <label class="text-xs">Size: </label>
+            <div class="flex flex-row items-center">
+              <div class="flex flex-col me-4">
+                <div class="flex items-center">
                   <input
-                    type="text"
-                    v-model="size.value"
-                    v-bind:disabled="naChecked"
-                    class="w-14 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
-                    pattern="\S+"
-                    title="This field should not contain spaces."
+                    id="inline-checkbox-na"
+                    type="checkbox"
+                    value="none"
+                    v-model="naChecked"
+                    class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
                   />
-                  <label class="text-xs">Stocks: </label>
-                  <input
-                    type="number"
-                    min="1"
-                    v-model="size.stocks"
-                    class="w-16 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
-                  />
-                  <button
-                    title="Click to add more options"
-                    variant="default"
-                    class="py-2 px-4 bg-emerald-600 rounded-sm"
-                    @click.prevent="addSize"
-                    v-bind:disabled="naChecked"
+                  <label
+                    for="inline-checkbox-xs"
+                    class="ms-2 text-sm font-medium text-secondary-foreground"
+                    >N/A</label
                   >
-                    <span class="text-xs font-semibold">Add</span>
-                  </button>
+                </div>
+              </div>
+              <div class="flex flex-row flex-wrap">
+                <div
+                  v-for="(size, index) in otherSizes"
+                  :key="index"
+                  class="flex flex-row space-x-1 items-center"
+                >
+                  <div
+                    :class="`flex flex-row space-x-1 border p-2 rounded-sm borrder-primary items-center me-4 mb-2 ${
+                      naChecked ? 'opacity-50' : ''
+                    }`"
+                  >
+                    <label class="text-sm">{{ index + 1 }}-</label>
+                    <label class="text-xs">Size: </label>
+                    <input
+                      type="text"
+                      v-model="size.value"
+                      v-bind:disabled="naChecked"
+                      class="w-14 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
+                      pattern="\S+"
+                      title="This field should not contain spaces."
+                    />
+                    <label class="text-xs">Stocks: </label>
+                    <input
+                      type="number"
+                      min="0"
+                      v-model="size.stocks"
+                      class="w-16 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
+                    />
+                    <button
+                      title="Click to add more options"
+                      variant="default"
+                      class="py-2 px-4 bg-emerald-600 rounded-sm"
+                      @click.prevent="addSize"
+                      v-bind:disabled="naChecked"
+                    >
+                      <span class="text-xs font-semibold">Add</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -198,46 +201,7 @@
               placeholder="Enter product description"
             ></textarea>
           </div>
-          <div class="flex flex-col w-full items-start justify-start mt-4">
-            <label
-              for="product-type"
-              class="flex items-center text-sm font-medium py-2"
-            >
-              Product Types
-              <span class="material-symbols-outlined text-sm opacity-80 ml-1">
-                help
-              </span>
-            </label>
-            <div class="flex flex-row items-center flex-wrap">
-              <div
-                v-for="(type, index) in productTypes"
-                :key="index"
-                class="flex flex-row items-center space-x-1 border rounded-sm p-2 md:ml-4 mt-2"
-              >
-                <span class="text-sm font-medium">{{ index + 1 }}: </span>
-                <input
-                  v-model="type.value"
-                  type="text"
-                  class="w-54 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
-                />
-                <button
-                  @click.prevent="addProductType"
-                  title="Click to add more product type"
-                  class="py-2 px-4 bg-emerald-600 rounded-sm"
-                >
-                  <span class="text-xs font-semibold">Add</span>
-                </button>
-                <Button
-                  @click.prevent="removeProductType(index)"
-                  title="Click to remove this option"
-                  variant="default"
-                  class="w-2/5"
-                >
-                  <span class="text-xs font-semibold">Remove</span>
-                </Button>
-              </div>
-            </div>
-          </div>
+
           <div class="flex flex-col mt-4">
             <label for="product-image" class="text-sm font-medium py-2">
               Product Cover Photo
@@ -358,9 +322,7 @@ import {
   collection,
   setDoc,
   doc,
-  updateDoc,
   getDoc,
-  arrayUnion,
   DocumentReference,
   DocumentSnapshot,
 } from "firebase/firestore";
@@ -419,10 +381,10 @@ interface ProductData {
   isPublished: boolean;
   isArchived: boolean;
   status: string;
-  totalSales: number;
+  views: number;
+  totalOrders: number;
   dateCreated: string;
   lastModified: string;
-  type: string[];
 }
 
 const newProduct = ref<ProductData>({
@@ -448,10 +410,10 @@ const newProduct = ref<ProductData>({
   isPublished: false,
   isArchived: false,
   status: "",
-  totalSales: 0,
+  views: 0,
+  totalOrders: 0,
   dateCreated: "",
   lastModified: "",
-  type: [],
 });
 
 const coverPhotoInput = ref<HTMLInputElement | null>(null);
@@ -477,20 +439,24 @@ watch(
 
 const naChecked = ref(false);
 const otherSizes = ref<sizeData[]>([{ value: "", stocks: 0 }]);
-const productTypes = ref([{ value: "" }]);
+
+let newSizeValue = ref("");
 
 const addSize = () => {
-  otherSizes.value = [...otherSizes.value, { value: "", stocks: 0 }];
-};
+  newSizeValue.value = newSizeValue.value.trim();
 
-const addProductType = () => {
-  productTypes.value.push({ value: "" });
-};
+  const sizeExists = otherSizes.value.some(
+    (size) => size.value === newSizeValue.value
+  );
 
-const removeProductType = (index: number) => {
-  if (productTypes.value.length === 1)
-    return alert("At least one product type is required");
-  productTypes.value.splice(index, 1);
+  if (sizeExists) {
+    alert("Size already existed");
+  } else {
+    console.log("Adding new size");
+    const newSize = { value: newSizeValue.value, stocks: 0 };
+    otherSizes.value = [...otherSizes.value, newSize];
+  }
+  newSizeValue.value = "";
 };
 
 watch(
@@ -509,7 +475,6 @@ const handleFormSubmit = async (): Promise<boolean> => {
   let userDoc: DocumentSnapshot | null = null;
   let userData: {
     faction?: string;
-    products?: any;
     role?: string;
     isAdmin?: boolean;
   } | null = null;
@@ -650,36 +615,22 @@ const handleFormSubmit = async (): Promise<boolean> => {
       category: newProduct.value.category,
       faction: newProduct.value.faction,
       price: newProduct.value.price,
-      sizes: otherSizes.value,
+      sizes: otherSizes.value.filter((size) => size.value.trim() !== ""),
       description: newProduct.value.description,
       coverPhoto: coverPhotoURL,
       photos: photosURLs,
-
       isPublished: newProduct.value.isPublished,
       isArchived: false,
       status: newProduct.value.status,
-      totalSales: 0,
+      views: 0,
+      totalOrders: 0,
       dateCreated: new Date().toISOString(),
       lastModified: "",
-      type: productTypes.value.map((pt) => pt.value),
     };
 
     const docRef = await addDoc(collection(db, "products"), productData);
     await setDoc(docRef, { id: docRef.id }, { merge: true });
     console.log("Document reference:", docRef);
-
-    // Add product id to the current user
-    if (user && userRef && userDoc && userDoc.exists() && userData) {
-      if (!userData.products) {
-        await updateDoc(userRef, {
-          products: [docRef.id],
-        });
-      } else {
-        await updateDoc(userRef, {
-          products: arrayUnion(docRef.id),
-        });
-      }
-    }
 
     // Reset form
     newProduct.value = {
@@ -705,10 +656,10 @@ const handleFormSubmit = async (): Promise<boolean> => {
       isPublished: false,
       isArchived: false,
       status: "",
-      totalSales: 0,
+      views: 0,
+      totalOrders: 0,
       dateCreated: "",
       lastModified: "",
-      type: [],
     };
     isLoading.value = false;
     isUploadSuccessful.value = true;
