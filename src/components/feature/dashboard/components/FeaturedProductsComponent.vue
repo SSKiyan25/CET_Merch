@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="flex flex-col pt-4 bg-gray-100 shadow-md">
-      <div class="flex flex-row px-4 md:px-16">
+      <div class="flex flex-row px-4 md:px-12">
         <Carousel class="w-full max-w-5/6" :opts="{ align: 'start' }">
           <CarouselContent>
             <CarouselItem

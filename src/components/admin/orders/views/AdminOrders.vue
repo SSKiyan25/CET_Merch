@@ -379,10 +379,10 @@
                           class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-80"
                         >
                           <div
-                            class="relative w-full max-w-xl max-h-full bg-secondary rounded-lg shadow overflow-y-auto p-4"
+                            class="relative w-full max-w-xl max-h-full bg-background rounded-lg shadow overflow-y-auto p-4"
                             style="max-height: 90vh"
                           >
-                            <div class="flex flex-col bg-secondary rounded-lg">
+                            <div class="flex flex-col bg-background rounded-lg">
                               <div
                                 class="border-b border-secondary-foreground/50 py-3"
                               >
@@ -428,7 +428,7 @@
                                     <div class="flex flex-row">
                                       <span class="font-bold">Email: </span>
                                       <span
-                                        class="pl-2 underline text-blue-200 cursor-pointer"
+                                        class="pl-2 underline text-blue-700 cursor-pointer"
                                         >{{ order.userEmailAddress }}</span
                                       >
                                     </div>
@@ -480,7 +480,7 @@
                                       Size: {{ product.size }}
                                     </span>
                                     <span class="opacity-80">-- </span
-                                    ><span class="font-bold text-primary px-2">
+                                    ><span class="font-bold text-primary px-1">
                                       {{ product.quantity }}</span
                                     >
                                     <span class="opacity-80">--</span>
@@ -489,6 +489,18 @@
                                       >Amount: {{ product.totalPrice }}</span
                                     >
                                   </div>
+                                </div>
+                                <div
+                                  class="flex flex-row items-center space-x-1 pt-4"
+                                >
+                                  <input
+                                    type="checkbox"
+                                    id="checkbox"
+                                    class="w-4 h-4 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2"
+                                  />
+                                  <snap class="text-sm"
+                                    >Mark order as ready to get</snap
+                                  >
                                 </div>
                               </div>
                               <div
@@ -535,7 +547,7 @@
                                   <input
                                     type="checkbox"
                                     id="checkbox"
-                                    class="w-6 h-6 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
+                                    class="w-6 h-6 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2"
                                     :checked="order.paymentStatus === 'paid'"
                                     @change="markAsPaid(order)"
                                   />

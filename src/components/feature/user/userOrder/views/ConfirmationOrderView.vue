@@ -16,7 +16,7 @@
           <div class="flex flex-row items-center justify-center">
             <router-link :to="`/submitorder/${route.params.id}`">
               <button
-                class="p-2 bg-emerald-800 rounded-sm hover:bg-emerald-700 text-base text-secondary-foreground font-semibold flex items-center"
+                class="p-2 bg-emerald-800 rounded-sm hover:bg-emerald-700 text-base text-background font-semibold flex items-center"
               >
                 Process Order
                 <span class="material-symbols-outlined ml-2"> start </span>
@@ -83,8 +83,10 @@
                           Delete Product to Cart
                         </AlertDialogTitle>
                         <AlertDialogDescription>
-                          Are you sure you want to delete this product from your
-                          cart? This action cannot be undone.
+                          <p class="text-black">
+                            Are you sure you want to delete this product from
+                            your cart? This action cannot be undone.
+                          </p>
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
@@ -116,7 +118,7 @@
             </router-link>
             <router-link :to="`/submitorder/${route.params.id}`">
               <button
-                class="p-2 bg-emerald-800 rounded-sm hover:bg-emerald-700 text-base text-secondary-foreground font-semibold flex items-center"
+                class="p-2 bg-emerald-800 rounded-sm hover:bg-emerald-700 text-base text-background font-semibold flex items-center"
               >
                 Process Order
                 <span class="material-symbols-outlined ml-2"> start </span>

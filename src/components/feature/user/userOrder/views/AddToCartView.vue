@@ -1,5 +1,5 @@
 <template>
-  <SheetContent>
+  <SheetContent class="bg-gray-100">
     <Tabs
       default-value="cart"
       v-model="selectedTab"

@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-20 md:pt-12 px-2 md:px-8">
+  <div class="pt-4 md:pt-6 px-2 md:px-8">
     <div class="flex flex-row items-center">
       <router-link to="/" class="cursor-pointer text-primary/50">
         <div class="flex flex-row items-center pt-0.5 hover:text-primary">
@@ -60,7 +60,7 @@
                 <input
                   type="text"
                   v-model="formData.firstName"
-                  class="py-3 px-4 block w-full bg-secondary border-primary/40 rounded-lg text-sm focus:border-primary/70 focus:ring-primary/60 disabled:opacity-50 disabled:pointer-events-none"
+                  class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/70 focus:ring-primary/60 disabled:opacity-50 disabled:pointer-events-none"
                   required
                 />
               </div>
@@ -73,7 +73,7 @@
                 <input
                   type="text"
                   v-model="formData.lastName"
-                  class="py-3 px-4 block w-full bg-secondary border-primary/40 rounded-lg text-sm focus:border-primary/70 focus:ring-primary/60 disabled:opacity-50 disabled:pointer-events-none"
+                  class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/70 focus:ring-primary/60 disabled:opacity-50 disabled:pointer-events-none"
                   required
                 />
               </div>
@@ -90,7 +90,7 @@
                 <input
                   type="email"
                   v-model="formData.emailAddress"
-                  class="py-3 px-4 block w-full bg-secondary border-primary/40 rounded-lg text-sm focus:border-primary/70 focus:ring-primary/60 disabled:opacity-50 disabled:pointer-events-none"
+                  class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/70 focus:ring-primary/60 disabled:opacity-50 disabled:pointer-events-none"
                   required
                 />
               </div>
@@ -104,7 +104,7 @@
                 <input
                   type="text"
                   v-model="formData.phoneNumber"
-                  class="py-3 px-4 block w-full bg-secondary border-primary/40 rounded-lg text-sm focus:border-primary/70 focus:ring-primary/60 disabled:opacity-50 disabled:pointer-events-none"
+                  class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/70 focus:ring-primary/60 disabled:opacity-50 disabled:pointer-events-none"
                 />
               </div>
             </div>
@@ -121,7 +121,7 @@
                   type="text"
                   placeholder="Optional"
                   v-model="formData.studentId"
-                  class="py-3 px-4 block w-full bg-secondary border-primary/40 rounded-lg text-sm focus:border-primary/70 focus:ring-primary/60 disabled:opacity-50 disabled:pointer-events-none"
+                  class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/70 focus:ring-primary/60 disabled:opacity-50 disabled:pointer-events-none"
                 />
               </div>
 
@@ -132,7 +132,7 @@
                 >
                 <select
                   v-model="formData.paymentMethod"
-                  class="py-3 px-4 block w-full bg-secondary border-primary/40 rounded-lg text-sm focus:border-primary/70 focus:ring-primary/60 disabled:opacity-50 disabled:pointer-events-none"
+                  class="py-3 px-4 block w-full bg-backgroudn border-primary/40 rounded-lg text-sm focus:border-primary/70 focus:ring-primary/60 disabled:opacity-50 disabled:pointer-events-none"
                   required
                 >
                   <option value="cash">Cash</option>
@@ -199,7 +199,7 @@
   >
     <div class="flex flex-col items-center justify-center h-full">
       <div
-        class="flex flex-col items-center justify-center rounded-sm bg-secondary p-8"
+        class="flex flex-col items-center justify-center rounded-sm bg-background p-8"
       >
         <span><img src="/cartSuccessful.gif" class="h-32 w-auto" /></span>
         <span class="text-lg text-secondary-foreground/90 text-wrap"
@@ -209,7 +209,7 @@
           >This is your order's reference number:
         </span>
         <span class="text-4xl text-primary underline">
-          {{ order?.orderRefNum }}
+          {{ orderRefNumDisplay }}
         </span>
         <span class="text-sm text-secondary-foreground/70 pt-2">
           (Show this to the CS3 treasurer for your payment.)
@@ -362,6 +362,8 @@ async function generateOrderRefNum() {
   return `${factionPrefix}-${month}${day}${year}-${numberOfOrders + 1}`;
 }
 
+let orderRefNumDisplay = ref("");
+
 const submitOrder = async (formData: any) => {
   try {
     loading.value = true;
@@ -387,9 +389,9 @@ const submitOrder = async (formData: any) => {
         orderStatus: "processing",
         dateOrdered: new Date().toDateString(),
       });
-      setTimeout(() => {
-        loading.value = false;
-      }, 2500);
+      orderRefNumDisplay.value = orderRefNumValue;
+      loading.value = false;
+      2500;
       ifSuccess.value = true;
     } else {
       console.log("No such user!");

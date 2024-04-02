@@ -8,7 +8,21 @@
       <CarouselContent>
         <CarouselItem v-for="(url, index) in imageUrls" :key="index">
           <div class="p-1">
-            <Card v-if="!loading" class="bg-background/0">
+            <Card v-if="loading">
+              <CardContent
+                ><div
+                  class="flex flex-col h-full w-full items-center justify-center"
+                  style="width: 1920px; height: 620px"
+                >
+                  <span
+                    class="material-symbols-outlined text-9xl text-primary animate-spin"
+                  >
+                    autorenew
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+            <Card v-else class="bg-background/0">
               <CardContent
                 class="flex bg-inherit items-center justify-center p-2 relative"
               >
@@ -20,17 +34,6 @@
                 />
               </CardContent>
             </Card>
-            <Card v-else>
-              <div class="flex flex-col items-center justify-center">
-                <span
-                  class="material-symbols-outlined text-6xl text-primary animate-spin"
-                  style="width: 1920px; height: 620px"
-                  x
-                >
-                  autorenew
-                </span>
-              </div>
-            </Card>
           </div>
         </CarouselItem>
       </CarouselContent>
@@ -40,6 +43,7 @@
   </div>
 
   <div
+    v-if="!loading"
     class="absolute bottom-48 md:bottom-0 left-0 flex flex-col items-center justify-end w-full h-full pb-20 p-2 md:pb-28 md:pl-20 lg:pb-36 md:items-start"
   >
     <div class="p-4 rounded-lg">
@@ -91,16 +95,20 @@ import { Card, CardContent } from "@/components/ui/card";
 const imageUrls = ref<string[]>([]);
 const loading = ref(false);
 const fetchImages = async () => {
-  loading.value = true;
   const storageReference = storageRef(
     storage,
     "gs://csshoppee-76342.appspot.com/featured"
   );
+  loading.value = true;
   const res = await listAll(storageReference);
   const urls = await Promise.all(res.items.map((item) => getDownloadURL(item)));
   imageUrls.value = urls;
   console.log(imageUrls.value);
-  loading.value = false;
+
+  // Add a delay before setting loading back to false
+  setTimeout(() => {
+    loading.value = false;
+  }, 1000); // Delay of 1 second
 };
 
 const plugin = Autoplay({

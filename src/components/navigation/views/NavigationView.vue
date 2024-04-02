@@ -69,7 +69,7 @@
               id="search"
               type="text"
               placeholder="Search..."
-              class="pl-8 dark:opacity-50"
+              class="pl-8 md:pl-12 dark:opacity-50"
             />
             <span
               class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
