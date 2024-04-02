@@ -34,7 +34,7 @@
                 <span
                   class="text-2xl md:text-2xl lg:text-2xl uppercase text-primary font-bold truncate"
                 >
-                  <span>CET</span>
+                  <span>CET STORE</span>
                 </span>
               </router-link>
             </div>
@@ -53,7 +53,7 @@
                 <span class="text-black pl-2">Products</span>
               </router-link>
               <router-link
-                to="/"
+                to="/contactUs"
                 class="border-l border-black border-opacity-60"
               >
                 <span class="text-black pl-2">Contact Us</span>

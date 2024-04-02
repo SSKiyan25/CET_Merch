@@ -1,7 +1,6 @@
 <template>
   <!-- Contact Us -->
-  <div class="pt-12"></div>
-  <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+  <div class="max-w-[85rem] px-4 py-4 sm:px-6 lg:px-8 lg:py-10 mx-auto">
     <div class="max-w-xl mx-auto">
       <div class="text-center">
         <h1 class="text-3xl font-bold text-primary sm:text-4xl">Contact us</h1>
@@ -11,7 +10,7 @@
       </div>
     </div>
 
-    <div class="mt-12 max-w-xl mx-auto">
+    <div class="mt-8 max-w-xl mx-auto">
       <!-- Card -->
       <div
         class="flex flex-col border rounded-xl p-4 sm:p-6 lg:p-8 hover:border-primary/20"
@@ -32,7 +31,7 @@
                 >
                 <input
                   type="text"
-                  class="py-3 px-4 block w-full bg-secondary border-primary/40 rounded-lg text-sm focus:border-primary/60 focus:ring-primary/80 disabled:opacity-50 disabled:pointer-events-none"
+                  class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/60 focus:ring-primary/80 disabled:opacity-50 disabled:pointer-events-none"
                 />
               </div>
 
@@ -44,7 +43,7 @@
                 >
                 <input
                   type="text"
-                  class="py-3 px-4 block w-full bg-secondary border-primary/40 rounded-lg text-sm focus:border-primary/60 focus:ring-primary/80 disabled:opacity-50 disabled:pointer-events-none"
+                  class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/60 focus:ring-primary/80 disabled:opacity-50 disabled:pointer-events-none"
                 />
               </div>
             </div>
@@ -60,7 +59,7 @@
                 >
                 <input
                   type="email"
-                  class="py-3 px-4 block w-full bg-secondary border-primary/40 rounded-lg text-sm focus:border-primary/60 focus:ring-primary/80 disabled:opacity-50 disabled:pointer-events-none"
+                  class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/60 focus:ring-primary/80 disabled:opacity-50 disabled:pointer-events-none"
                 />
               </div>
 
@@ -72,7 +71,7 @@
                 >
                 <input
                   type="text"
-                  class="py-3 px-4 block w-full bg-secondary border-primary/40 rounded-lg text-sm focus:border-primary/60 focus:ring-primary/80 disabled:opacity-50 disabled:pointer-events-none"
+                  class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/60 focus:ring-primary/80 disabled:opacity-50 disabled:pointer-events-none"
                 />
               </div>
             </div>
@@ -85,7 +84,7 @@
               </label>
               <textarea
                 rows="4"
-                class="py-3 px-4 block w-full bg-secondary border-primary/40 rounded-lg text-sm focus:border-primary/60 focus:ring-primary/80 disabled:opacity-50 disabled:pointer-events-none"
+                class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/60 focus:ring-primary/80 disabled:opacity-50 disabled:pointer-events-none"
               ></textarea>
             </div>
           </div>
