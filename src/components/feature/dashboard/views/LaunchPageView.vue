@@ -6,6 +6,8 @@
   </div>
   <!-- End Features -->
   <div id="products"><HeaderProductsComponent /></div>
+  <div><FeaturedProductsComponent /></div>
+  <div><PopularProductsComponent /></div>
   <div><ProductsCategoryComponent /></div>
 </template>
 
@@ -13,6 +15,8 @@
 import FeaturedCarousel from "../components/Carousel.vue";
 import ProductsCategoryComponent from "../components/ProductsCategoryComponent.vue";
 import HeaderProductsComponent from "../components/HeaderProductsComponent.vue";
+import FeaturedProductsComponent from "../components/FeaturedProductsComponent.vue";
+import PopularProductsComponent from "../components/PopularProductsComponent.vue";
 import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";
 

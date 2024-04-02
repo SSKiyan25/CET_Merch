@@ -44,16 +44,25 @@
   >
     <div class="p-4 rounded-lg">
       <h1
-        class="text-secondary font-semibold text-2xl md:text-5xl"
+        class="text-secondary font-black text-2xl md:text-5xl"
         style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
       >
         CET MERCHANDISE
       </h1>
     </div>
+    <div class="pl-5 pb-4 w-1/3">
+      <p
+        class="text-white text-xs md:text-sm font-semibold text-wrap"
+        style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
+      >
+        Get your hands on the latest CET Merchandise. From t-shirts to lanyards
+        and more!
+      </p>
+    </div>
     <div class="pt-2 ps-4">
-      <div class="overflow-hidden border-4 border-primary rounded-lg">
+      <div class="overflow-hidden rounded-lg">
         <button
-          class="bg-primary p-4 transform transition-all duration-500 hover:scale-110 text-primary-foreground text-base md:text-xl font-bold"
+          class="bg-white p-4 transform transition-all duration-500 hover:scale-110 text-black text-base md:text-xl font-bold"
           v-scroll-to="'#products'"
         >
           Shop Now

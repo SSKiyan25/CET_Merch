@@ -1,5 +1,5 @@
 <template>
-  <nav class="w-full sticky top-0 bg-secondary border-primary/20 border-b z-40">
+  <nav class="w-full sticky top-0 bg-accent border-primary/20 border-b z-40">
     <div class="px-0 pl-0">
       <div class="flex items-center justify-between p-3">
         <div class="flex items-center justify-start rtl:justify-end">
@@ -26,17 +26,39 @@
           <div
             class="flex flex-row items-center justify-center h-full max-w-1/2 text-center absolute text-background"
           >
-            <router-link to="/">
-              <img src="/logo-2.png" class="w-auto h-14" />
-            </router-link>
-            <router-link to="/">
-              <span
-                class="text-2xl md:text-2xl lg:text-2xl uppercase text-primary font-bold truncate"
+            <div class="flex flex-row items-center pr-12">
+              <router-link to="/">
+                <img src="/logo-2.png" class="w-auto h-14" />
+              </router-link>
+              <router-link to="/">
+                <span
+                  class="text-2xl md:text-2xl lg:text-2xl uppercase text-primary font-bold truncate"
+                >
+                  <span>CET</span>
+                </span>
+              </router-link>
+            </div>
+
+            <div class="border-l border-black border-opacity-60 space-x-2">
+              <router-link
+                to="/"
+                class="hover:opacity-80 hover:bg-background-slate-600"
               >
-                <span v-if="state.isMobile">CET</span>
-                <span v-else>College of Engineering and Technology</span>
-              </span>
-            </router-link>
+                <span class="text-black pl-2">Home </span>
+              </router-link>
+              <router-link
+                to="/"
+                class="border-l border-black border-opacity-60"
+              >
+                <span class="text-black pl-2">Products</span>
+              </router-link>
+              <router-link
+                to="/"
+                class="border-l border-black border-opacity-60"
+              >
+                <span class="text-black pl-2">Contact Us</span>
+              </router-link>
+            </div>
           </div>
         </div>
         <div
