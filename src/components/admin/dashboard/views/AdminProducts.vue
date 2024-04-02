@@ -409,7 +409,7 @@
                                       class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
                                     >
                                       <div
-                                        class="relative p-4 w-full max-w-2xl max-h-full bg-secondary rounded-lg shadow overflow-y-auto"
+                                        class="relative p-4 w-full max-w-4xl max-h-full bg-background rounded-lg shadow overflow-y-auto"
                                         style="max-height: 90vh"
                                       >
                                         <div
@@ -524,7 +524,7 @@
                                                 :key="index"
                                                 class="text-xs text-secondary-foreground"
                                               >
-                                                {{ size
+                                                {{ size.value }}-{{ size.stocks
                                                 }}<span
                                                   v-if="
                                                     index <

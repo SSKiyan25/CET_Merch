@@ -16,7 +16,7 @@
         </p>
       </div>
     </div>
-    <div class="flex flex-col p-4 border-2 rounded-lg py-5">
+    <div class="flex flex-col p-4 border-2 rounded-lg py-5 bg-slate-200">
       <div class="flex flex-row justify-between border-b-2">
         <div class="flex flex-row">
           <h1 class="font-bold text-xl tracking-wide mt-1">Orders</h1>
@@ -149,9 +149,9 @@
         <div class="flex flex-col">
           <div class="overflow-x-auto">
             <div class="min-w-full inline-block align-middle">
-              <div class="bg-secondary border-t-2 shadow-sm overflow-hidden">
+              <div class="bg-slate-100 border-t-2 shadow-sm overflow-hidden">
                 <table class="min-w-full divide-y divide-primary/50">
-                  <thead class="bg-secondary">
+                  <thead class="bg-slate-300">
                     <tr>
                       <th scope="col" class="pl-4 w-1/12 py-2 text-start">
                         <span
@@ -270,9 +270,7 @@
                             <button
                               class="rounded-lg bg-amber-700 py-1.5 px-4 cursor-auto"
                             >
-                              <span
-                                class="text-xs font-medium text-secondary-foreground pb-1"
-                              >
+                              <span class="text-xs font-medium text-white pb-1">
                                 Pending
                               </span>
                             </button>
@@ -281,9 +279,7 @@
                             <button
                               class="rounded-lg bg-amber-700 py-1.5 px-4 cursor-auto"
                             >
-                              <span
-                                class="text-xs font-medium text-secondary-foreground pb-1"
-                              >
+                              <span class="text-xs font-medium text-white pb-1">
                                 Declined
                               </span>
                             </button>
@@ -295,9 +291,7 @@
                             <button
                               class="rounded-lg bg-green-700 py-1.5 px-4 cursor-auto"
                             >
-                              <span
-                                class="text-xs font-medium text-secondary-foreground pb-1"
-                              >
+                              <span class="text-xs font-medium text-white pb-1">
                                 Paid
                               </span>
                             </button>
@@ -598,7 +592,7 @@
                     <div class="inline-flex gap-x-2">
                       <button
                         type="button"
-                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-primary/20 bg-muted text-secondary-foreground shadow-sm hover:bg-primary/50 hover:border-muted disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
+                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-primary/20 bg-background text-secondary-foreground shadow-sm hover:bg-primary/50 hover:border-muted disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
                         @click.prevent="prevPage"
                       >
                         <svg
@@ -620,7 +614,7 @@
 
                       <button
                         type="button"
-                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-primary/20 bg-muted text-secondary-foreground shadow-sm hover:bg-primary/50 hover:border-muted disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
+                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-primary/20 bg-background text-secondary-foreground shadow-sm hover:bg-primary/50 hover:border-muted disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
                         @click.prevent="nextPage"
                       >
                         Next
