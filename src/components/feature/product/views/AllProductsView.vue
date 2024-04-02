@@ -93,47 +93,64 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-row px-2 md:px-4 py-8 justify-start rounded-3xl">
+    <div class="p-1"></div>
+    <div class="flex flex-row px-2 md:px-4 py-8 justify-start bg-gray-200">
       <div class="max-w-full justify-start items-center">
         <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5">
-          <div class="flex flex-col bg-white shadow-md rounded-sm">
-            <div class="overflow-hidden">
-              <div
-                class="h-full flex flex-col border-b-2 border-primary/60 justify-center items-center max-h-[22rem]"
+          <div v-if="isLoading">
+            <div class="flex flex-col items-center justify-center h-full">
+              <span
+                class="material-symbols-outlined text-4xl text-primary animate-spin"
               >
-                <router-link to="/">
-                  <img
-                    src="/1-Lanyard.png"
-                    class="transform transition-all duration-500 hover:scale-110 max-h-[20rem] md:max-h-[22rem] object-cover rounded-t-sm"
-                  />
-                </router-link>
-              </div>
+                autorenew
+              </span>
             </div>
-            <div class="p-2 md:p-3">
-              <div class="flex flex-row justify-between">
-                <span
-                  class="block pb-2 pt-1 md:text-xs font-semibold uppercase text-secondary-foreground/80"
+          </div>
+          <div v-else>
+            <div
+              v-for="product in products"
+              :key="product.id"
+              class="flex flex-col bg-white shadow-lg rounded-sm"
+            >
+              <div class="overflow-hidden">
+                <div
+                  class="h-full flex flex-col border-b-2 border-primary/60 justify-center items-center max-h-[22rem]"
                 >
-                  Category
-                </span>
-                <span
-                  class="block pb-2 pl-2 pt-1 text-xs md:text-sm font-semibold uppercase text-primary"
-                >
-                  (P )
-                </span>
+                  <router-link :to="`/product/${product.id}`">
+                    <img
+                      :src="product.coverPhoto"
+                      class="transform transition-all duration-500 hover:scale-110 max-h-[20rem] md:max-h-[22rem] object-cover rounded-t-sm"
+                    />
+                  </router-link>
+                </div>
               </div>
-              <router-link to="/"
-                ><h3
-                  class="text-lg md:text-2xl font-bold text-secondary-foreground truncate"
+              <div class="p-2 md:p-3">
+                <div class="flex flex-row justify-between">
+                  <span
+                    class="block pb-2 pt-1 md:text-xs font-semibold uppercase text-secondary-foreground/80"
+                  >
+                    {{ product.category }}
+                  </span>
+                  <span
+                    class="block pb-2 pl-2 pt-1 text-xs md:text-sm font-semibold uppercase text-primary"
+                  >
+                    ({{ product.price[product.price.length - 1].originalPrice }}
+                    )
+                  </span>
+                </div>
+                <router-link to="/"
+                  ><h3
+                    class="text-lg md:text-xl font-bold text-secondary-foreground truncate"
+                  >
+                    {{ product.name }}
+                  </h3>
+                </router-link>
+                <p
+                  class="mt-3 text-secondary-foreground text-xs whitespace-wrap text-justify truncate"
                 >
-                  Name
-                </h3>
-              </router-link>
-              <p
-                class="mt-3 text-secondary-foreground text-xs whitespace-wrap text-justify truncate"
-              >
-                Description
-              </p>
+                  {{ product.description }}
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -158,6 +175,9 @@ import {
 } from "../../../ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "../../../ui/popover";
 import { Filter } from "lucide-vue-next";
+import { setup as setupProductsController } from "../controllers/productsController";
+
+const { products, isLoading } = setupProductsController();
 
 const open = ref(false);
 const value = ref<string>("");
