@@ -45,6 +45,7 @@ provide("toggleSidebar", toggleSidebar);
         $route.name === 'adminInbox' ||
         $route.name === 'product' ||
         $route.name === 'confirmOrder' ||
+        $route.name === 'products' ||
         $route.name === 'submitOrder' ||
         $route.name === 'contactUs',
     }"

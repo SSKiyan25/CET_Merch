@@ -47,7 +47,7 @@
                 <span class="text-black pl-2">Home </span>
               </router-link>
               <router-link
-                to="/"
+                to="/products"
                 class="border-l border-black border-opacity-60"
               >
                 <span class="text-black pl-2">Products</span>
