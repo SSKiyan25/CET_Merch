@@ -45,24 +45,16 @@ export const addToCart = async (newAddToCart: cartData) => {
 
   // Fetch the product data
   const productDoc = doc(db, "products", newAddToCart.productId);
-  const productData = (await getDoc(productDoc)).data();
+  const productSnapshot = await getDoc(productDoc);
 
-  if (!productData) {
+  if (!productSnapshot.exists()) {
     throw new Error("Product data not found");
   }
-
-  // If the user doesn't have an orders field, add it
-  if (!userData.orders) {
-    userData.orders = [];
-    await updateDoc(userDoc, { ...userData });
-  }
-
+  let productData = productSnapshot.data();
   const orderCollection = collection(db, "userOrder");
-  let orderDoc;
-  let currentOrderData;
 
   // Check if the user has an order in queue
-  const querySnapshot = await getDocs(
+  await getDocs(
     query(
       orderCollection,
       where("orderStatus", "==", "OnQueue"),
@@ -70,17 +62,6 @@ export const addToCart = async (newAddToCart: cartData) => {
       where("faction", "==", productData.faction)
     )
   );
-
-  if (!querySnapshot.empty) {
-    const docSnapshot = querySnapshot.docs[0];
-    orderDoc = doc(db, "userOrder", docSnapshot.id);
-    currentOrderData = docSnapshot.data() as orderData;
-
-    // Add the product to the cart
-    currentOrderData.cart.push(newAddToCart);
-    await updateDoc(orderDoc, { ...currentOrderData });
-    return;
-  }
 
   const orderCountSnapshot = await getDocs(orderCollection);
   const newOrder: orderData = {
@@ -96,13 +77,10 @@ export const addToCart = async (newAddToCart: cartData) => {
     faction: productData.faction,
     dateOrdered: new Date().toISOString(),
   };
-  const newOrderDoc = await addDoc(orderCollection, newOrder);
-  userData.orders.push({
-    userOrderID: newOrderDoc.id,
-    status: "OnQueue",
-    paymentStatus: "pending",
-  });
-  await updateDoc(userDoc, { ...userData });
+  await addDoc(orderCollection, newOrder);
+
+  productData.views += 1;
+  await updateDoc(productDoc, { ...productData });
 };
 
 export const getOnQueueOrders = async (): Promise<

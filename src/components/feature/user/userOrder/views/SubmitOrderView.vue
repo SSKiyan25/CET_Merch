@@ -252,6 +252,7 @@ const order = ref<DocumentData | null | undefined>(null);
 const cache = new Map();
 const products = ref<any[]>([]);
 const ifSuccess = ref(false);
+const orderRefNum = ref("");
 
 const formData = ref({
   firstName: "",
@@ -326,7 +327,7 @@ const getNumberOfOrders = async (faction: string) => {
 
 function getFactionPrefix(faction: string) {
   if (faction === "CET") {
-    return "CT";
+    return "CET";
   } else if (faction.startsWith("BS")) {
     return faction.slice(2);
   } else {
@@ -372,9 +373,10 @@ const submitOrder = async (formData: any) => {
     const userSnap = await getDoc(userRef);
     if (userSnap.exists()) {
       const docRef = doc(db, "userOrder", orderId);
-      const orderRefNum = await generateOrderRefNum();
+      const orderRefNumValue = await generateOrderRefNum();
+      orderRefNum.value = orderRefNumValue;
       await updateDoc(docRef, {
-        orderRefNum,
+        orderRefNum: orderRefNumValue,
         userName: formData.lastName + ", " + formData.firstName,
         userContactNumber: formData.phoneNumber,
         studentId: formData.studentId,
@@ -385,31 +387,13 @@ const submitOrder = async (formData: any) => {
         orderStatus: "processing",
         dateOrdered: new Date().toDateString(),
       });
-      if (order.value) {
-        order.value.orderRefNum = orderRefNum;
-      }
-
-      // Get the orders array
-      const orders = userSnap.data().orders;
-      // Find the index of the order to update
-      const orderIndex = orders.findIndex(
-        (order: any) => order.userOrderID === orderId
-      );
-      if (orderIndex !== -1) {
-        // Update the order
-        orders[orderIndex] = {
-          paymentStatus: "pending",
-          status: "processing",
-          userOrderID: orderId,
-        };
-        // Update the orders array in Firestore
-        await updateDoc(userRef, { orders });
-      }
+      setTimeout(() => {
+        loading.value = false;
+      }, 2500);
+      ifSuccess.value = true;
     } else {
       console.log("No such user!");
     }
-    loading.value = false;
-    ifSuccess.value = true;
   } catch (error) {
     console.error("Error updating document:", error);
     loading.value = false;

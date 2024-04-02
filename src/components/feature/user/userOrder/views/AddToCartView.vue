@@ -50,7 +50,7 @@
             <div
               class="flex flex-col flex-wrap py-6"
               v-if="
-                (product.sizes && product.sizes[0] !== '') ||
+                (product.sizes && product.sizes[0].value !== '') ||
                 product.sizes.length === 0
               "
             >
@@ -58,12 +58,14 @@
               <div class="flex flex-row flex-wrap py-4 pl-4 space-x-1">
                 <Button
                   v-for="size in product.sizes"
-                  :key="size"
-                  :variant="selectedSize === size ? 'default' : 'secondary'"
+                  :key="size.value"
+                  :variant="
+                    selectedSize.value === size.value ? 'default' : 'secondary'
+                  "
                   @click.prevent="selectSize(size)"
                   class="mb-2"
                 >
-                  {{ size }}
+                  {{ size.value }} - {{ size.stocks }}
                 </Button>
               </div>
             </div>
@@ -242,12 +244,17 @@ type PriceType = {
   originalPrice: number;
 };
 
+type sizesData = {
+  value: string;
+  stocks: number;
+};
+
 type ProductType = {
   id: string;
   name: string;
   category: string;
   price: PriceType[];
-  sizes: string[];
+  sizes: sizesData[];
   faction: string;
 };
 type GetProductByIdType = (id: string) => ProductType;
@@ -308,7 +315,7 @@ const handleFormCartSubmit = async () => {
           newAddToCartData.value.quantity
         ).toFixed(2)
       ),
-      size: selectedSize.value,
+      size: selectedSize.value.value,
     };
     await handleAddToCartSubmit(newAddToCartData.value);
 
@@ -354,11 +361,15 @@ const handleFormCartSubmit = async () => {
   }
 };
 
-let _selectedSize = ref("");
+let _selectedSize = ref({ value: "", stocks: 0 });
 
 const selectedSize = computed({
   get: () => {
-    if (product.value && product.value.sizes && _selectedSize.value === "") {
+    if (
+      product.value &&
+      product.value.sizes &&
+      _selectedSize.value.value === ""
+    ) {
       _selectedSize.value = product.value.sizes[0];
     }
     return _selectedSize.value;
@@ -368,7 +379,7 @@ const selectedSize = computed({
   },
 });
 
-const selectSize = (size: string) => {
+const selectSize = (size: sizesData) => {
   selectedSize.value = size;
 };
 
