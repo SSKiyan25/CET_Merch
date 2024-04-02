@@ -34,7 +34,7 @@
                 type="text"
                 id="product-name"
                 v-model="newProduct.name"
-                class="p-2 border text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                class="p-2 border text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
                 placeholder="Enter product name"
                 required
               />
@@ -50,7 +50,7 @@
               <select
                 id="product-faction"
                 v-model="newProduct.faction"
-                class="p-2 border text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                class="p-2 border text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
                 required
               >
                 <option disabled value="">Please select a faction</option>
@@ -76,7 +76,7 @@
               <select
                 id="product-category"
                 v-model="newProduct.category"
-                class="p-2 border text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                class="p-2 border text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
                 required
               >
                 <option disabled value="">Please select a category</option>
@@ -99,7 +99,7 @@
                   id="product-original-price"
                   v-model="newProduct.price[0].originalPrice"
                   step="0.01"
-                  class="p-2 border text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                  class="p-2 border text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
                   placeholder="Enter product price"
                   required
                 />
@@ -117,7 +117,7 @@
                   id="product-discounted-price"
                   v-model="newProduct.price[0].discountedPrice"
                   step="0.01"
-                  class="p-2 border text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                  class="p-2 border text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
                   placeholder="Enter discounted price (optional)"
                 />
               </div>
@@ -138,7 +138,7 @@
                     type="checkbox"
                     value="none"
                     v-model="naChecked"
-                    class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
+                    class="w-4 h-4 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2"
                   />
                   <label
                     for="inline-checkbox-xs"
@@ -164,7 +164,7 @@
                       type="text"
                       v-model="size.value"
                       v-bind:disabled="naChecked"
-                      class="w-14 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
+                      class="w-14 h-8 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
                       pattern="\S+"
                       title="This field should not contain spaces."
                     />
@@ -173,7 +173,7 @@
                       type="number"
                       min="0"
                       v-model="size.stocks"
-                      class="w-16 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
+                      class="w-16 h-8 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
                     />
                     <button
                       title="Click to add more options"
@@ -182,7 +182,7 @@
                       @click.prevent="addSize"
                       v-bind:disabled="naChecked"
                     >
-                      <span class="text-xs font-semibold">Add</span>
+                      <span class="text-xs text-white font-semibold">Add</span>
                     </button>
                   </div>
                 </div>
@@ -197,7 +197,7 @@
               id="product-description"
               rows="5"
               v-model="newProduct.description"
-              class="p-2 border rounded-lg text-xs bg-secondary border-primary/40 text-secondary-foreground"
+              class="p-2 border rounded-lg text-xs bg-background border-primary/40 text-secondary-foreground"
               placeholder="Enter product description"
             ></textarea>
           </div>
@@ -239,7 +239,7 @@
                 id="is-hidden"
                 type="checkbox"
                 v-model="newProduct.isPublished"
-                class="w-8 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
+                class="w-8 h-8 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2"
               />
               <label
                 for="is-hidden"

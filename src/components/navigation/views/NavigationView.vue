@@ -6,7 +6,7 @@
           <button
             @click.prevent="toggleSidebar"
             type="button"
-            class="inline-flex items-center p-2 text-sm text-black/50 rounded-lg sm:hidden hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-secondary bg-secondary border-accent"
+            class="inline-flex items-center p-2 text-sm text-black/50 rounded-lg sm:hidden hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-secondary border-accent"
           >
             <span class="sr-only">Open sidebar</span>
             <svg

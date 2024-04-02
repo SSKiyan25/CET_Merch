@@ -40,19 +40,19 @@
   </div>
 
   <div
-    class="absolute bottom-48 md:bottom-0 left-0 flex flex-col items-center justify-end w-full h-full p-2 pl-8 md:pb-28 md:pl-20 md:items-start"
+    class="absolute bottom-48 md:bottom-0 left-0 flex flex-col items-center justify-end w-full h-full pb-20 p-2 md:pb-28 md:pl-20 lg:pb-36 md:items-start"
   >
     <div class="p-4 rounded-lg">
       <h1
-        class="text-secondary font-black text-2xl md:text-5xl"
+        class="text-white font-black text-3xl md:text-5xl"
         style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
       >
         CET MERCHANDISE
       </h1>
     </div>
-    <div class="pl-5 pb-4 w-1/3">
+    <div class="md:pl-5 pb-4 w-1/2 md:w-1/3">
       <p
-        class="text-white text-xs md:text-sm font-semibold text-wrap"
+        class="text-white text-center md:text-start text-xs md:text-sm font-semibold text-wrap"
         style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
       >
         Get your hands on the latest CET Merchandise. From t-shirts to lanyards

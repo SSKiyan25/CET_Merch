@@ -29,7 +29,7 @@
               type="button"
               title="Add Product"
             >
-              <Plus class="text-secondary" /></button
+              <Plus class="text-white" /></button
           ></router-link>
 
           <form>
@@ -112,7 +112,7 @@
         <div class="flex flex-col">
           <div class="overflow-x-auto">
             <div class="min-w-full inline-block align-middle">
-              <div class="bg-slate-100 border-t-2 shadow-sm overflow-hidden">
+              <div class="bg-slate-100 shadow-sm overflow-hidden">
                 <!-- Table -->
                 <table class="min-w-full divide-y divide-primary/50">
                   <thead class="bg-secondary-50">
@@ -266,17 +266,17 @@
                       </td>
                       <td>
                         <div
-                          class="py-3 px-5 flex items-center justify-start gap-x-2"
+                          class="py-3 px-5 flex items-center justify-start gap-x-2 text-white"
                         >
                           <div
                             v-if="product.isPublished"
-                            class="bg-green-500 p-2 rounded-md text-center"
+                            class="bg-green-500 p-2 rounded-md text-center shadow-md"
                           >
                             <span class="text-xs font-medium">Published </span>
                           </div>
                           <div
                             v-else
-                            class="bg-amber-700 p-2 rounded-md ml-1.5"
+                            class="bg-amber-700 shadow-md p-2 rounded-md ml-1.5"
                           >
                             <span class="text-xs font-medium">Hidden </span>
                           </div>

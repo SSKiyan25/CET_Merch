@@ -24,13 +24,11 @@
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
           <div
-            class="flex flex-col items-start bg-accent/50 rounded-sm space-x-4 w-80 h-32 p-4 shadow"
+            class="flex flex-col items-start bg-secondary rounded-sm space-x-4 w-80 h-32 p-4 shadow"
           >
             <div class="flex items-center space-x-4 pt-2">
               <router-link to="admin/inbox" class="bg-blue-600 p-2 rounded-sm">
-                <span
-                  class="material-symbols-outlined p-2 text-4xl text-secondary"
-                >
+                <span class="material-symbols-outlined p-2 text-4xl text-white">
                   mail
                 </span>
               </router-link>
@@ -41,13 +39,11 @@
             </div>
           </div>
           <div
-            class="flex flex-col items-start bg-accent/50 rounded-sm space-x-4 w-80 h-32 p-4 shadow"
+            class="flex flex-col items-start bg-secondary rounded-sm space-x-4 w-80 h-32 p-4 shadow"
           >
             <div class="flex items-center space-x-4 pt-2">
               <router-link to="admin/orders" class="bg-red-600 p-2 rounded-sm">
-                <span
-                  class="material-symbols-outlined text-secondary p-2 text-4xl"
-                >
+                <span class="material-symbols-outlined text-white p-2 text-4xl">
                   pending_actions
                 </span>
               </router-link>
@@ -60,16 +56,14 @@
             </div>
           </div>
           <div
-            class="flex flex-col items-start bg-accent/50 rounded-sm space-x-4 w-80 h-32 p-4 shadow"
+            class="flex flex-col items-start bg-secondary rounded-sm space-x-4 w-80 h-32 p-4 shadow"
           >
             <div class="flex items-center space-x-4 pt-2">
               <router-link
                 to="admin/products"
                 class="bg-green-600 p-2 rounded-sm"
               >
-                <span
-                  class="material-symbols-outlined p-2 text-4xl text-secondary"
-                >
+                <span class="material-symbols-outlined p-2 text-4xl text-white">
                   inventory
                 </span>
               </router-link>

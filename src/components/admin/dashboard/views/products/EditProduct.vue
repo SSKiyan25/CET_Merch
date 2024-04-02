@@ -30,7 +30,7 @@
                 type="text"
                 id="product-name"
                 v-model="product.name"
-                class="p-2 border-2 text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                class="p-2 border-2 text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
                 placeholder="{{ product.name }}"
                 required
               />
@@ -45,7 +45,7 @@
               <select
                 id="product-faction"
                 v-model="product.faction"
-                class="p-2 border text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                class="p-2 border text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
                 required
               >
                 <option
@@ -70,7 +70,7 @@
               <select
                 id="product-faction"
                 v-model="product.category"
-                class="p-2 border text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                class="p-2 border text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
                 required
               >
                 <option
@@ -82,7 +82,7 @@
                 </option>
               </select>
             </div>
-            <div class="flex flex-row w-1/2">
+            <div class="flex flex-row w-1/2 space-x-1">
               <div class="flex flex-col w-1/2 pl-2">
                 <label
                   for="product-original-price"
@@ -95,7 +95,7 @@
                   id="product-original-price"
                   v-model="latestPrice.originalPrice"
                   step="0.01"
-                  class="p-2 border-2 text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                  class="p-2 border-2 text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
                   placeholder="{{ latestPrice.originalPrice }}"
                   required
                 />
@@ -113,7 +113,7 @@
                   id="product-discounted-price"
                   v-model="latestPrice.discountedPrice"
                   step="0.01"
-                  class="p-2 border-2 text-sm rounded-lg bg-secondary border-primary/40 text-secondary-foreground"
+                  class="p-2 border-2 text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
                   placeholder="{{ latestPrice.discountedPrice }}"
                   required
                 />
@@ -131,7 +131,7 @@
                   type="checkbox"
                   value="S"
                   v-model="naChecked"
-                  class="w-4 h-4 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
+                  class="w-4 h-4 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2"
                 />
                 <label
                   for="inline-checkbox-s"
@@ -157,7 +157,7 @@
                         type="text"
                         v-model="size.value"
                         v-bind:disabled="naChecked"
-                        class="w-16 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
+                        class="w-16 h-8 text-primary/80 bg-backgroudn border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
                         pattern="\S+"
                         title="This field should not contain spaces."
                       />
@@ -168,7 +168,7 @@
                         v-model="size.stocks"
                         v-bind:disabled="naChecked"
                         min="0"
-                        class="w-16 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
+                        class="w-16 h-8 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
                       />
                       <button
                         title="Click to add more options"
@@ -176,7 +176,9 @@
                         @click.prevent="removeSize(index)"
                         v-bind:disabled="naChecked"
                       >
-                        <span class="text-xs font-semibold">Remove</span>
+                        <span class="text-xs text-white font-semibold"
+                          >Remove</span
+                        >
                       </button>
                       <button
                         title="Click to add more options"
@@ -184,7 +186,9 @@
                         @click.prevent="addSize"
                         v-bind:disabled="naChecked"
                       >
-                        <span class="text-xs font-semibold">Add</span>
+                        <span class="text-xs text-white font-semibold"
+                          >Add</span
+                        >
                       </button>
                     </div>
                   </div>
@@ -200,7 +204,7 @@
               id="product-description"
               rows="5"
               v-model="product.description"
-              class="p-2 border-2 rounded-lg text-xs bg-secondary border-primary/40 text-secondary-foreground"
+              class="p-2 border-2 rounded-lg text-xs bg-background border-primary/40 text-secondary-foreground"
               placeholder="{{ product.description }}"
             ></textarea>
           </div>
@@ -235,7 +239,7 @@
               >Add/Delete Product Photos</label
             >
             <input
-              class="block w-full text-xs border-2 rounded-lg h-10"
+              class="block w-full text-xs border-2 rounded-lg h-9"
               id="multiple_files"
               accept="image/*"
               type="file"
@@ -292,7 +296,7 @@
             </div>
             <div class="flex items-center justify-end space-x-2 py-8">
               <Button
-                variant="destructive"
+                variant="ghost"
                 @click.prevent="cancel"
                 class="p-2 text-sm rounded-lg text-secondary-foreground"
               >
@@ -300,7 +304,7 @@
               </Button>
               <button
                 type="submit"
-                class="p-2 bg-primary text-sm text-primary-foreground hover:bg-primary/80 font-semibold rounded-lg"
+                class="p-2 bg-emerald-700 text-sm text-primary-foreground hover:bg-primary/80 font-semibold rounded-lg"
               >
                 Update Product
               </button>

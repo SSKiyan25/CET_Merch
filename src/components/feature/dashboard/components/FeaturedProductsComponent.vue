@@ -7,11 +7,11 @@
         <span
           class="font-black text-secondary-foreground tracking-wide text-2xl uppercase"
         >
-          Featured <span class="text-primary">Products</span>
+          Featured <span class="text-red-600">Products</span>
         </span>
       </div>
     </div>
-    <div class="flex flex-col pt-4 bg-stone-300">
+    <div class="flex flex-col pt-4 bg-gray-100 shadow-md">
       <div class="flex flex-row px-4 md:px-16">
         <Carousel class="w-full max-w-5/6" :opts="{ align: 'start' }">
           <CarouselContent>
@@ -30,10 +30,12 @@
                 </div>
               </div>
               <!--Product Card-->
-              <div class="flex flex-row px-4 md:px-16 pt-4 pb-8 justify-center">
+              <div
+                class="flex flex-row px-4 md:px-16 pt-2 pb-8 justify-center rounded-3xl"
+              >
                 <div class="max-w-[75rem] justify-center items-center">
-                  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-                    <div class="flex flex-col bg-white shadow-sm rounded-sm">
+                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
+                    <div class="flex flex-col bg-white shadow-md rounded-sm">
                       <div class="overflow-hidden">
                         <div
                           class="h-full flex flex-col border-b-2 border-primary/60 justify-center items-center max-h-[22rem]"
@@ -46,10 +48,10 @@
                           </router-link>
                         </div>
                       </div>
-                      <div class="p-4 md:p-6">
-                        <div class="flex flex-row">
+                      <div class="p-2 md:p-3">
+                        <div class="flex flex-row justify-between">
                           <span
-                            class="block pb-2 pt-1 text-xs md:text-sm font-semibold uppercase text-secondary-foreground/80"
+                            class="block pb-2 pt-1 md:text-xs font-semibold uppercase text-secondary-foreground/80"
                           >
                             Category
                           </span>
@@ -61,13 +63,13 @@
                         </div>
                         <router-link to="/"
                           ><h3
-                            class="text-xl md:text-2xl font-bold text-secondary-foreground text-wrap"
+                            class="text-lg md:text-2xl font-bold text-secondary-foreground truncate"
                           >
                             Name
                           </h3>
                         </router-link>
                         <p
-                          class="mt-3 text-secondary-foreground text-xs md:text-sm whitespace-wrap text-justify truncate"
+                          class="mt-3 text-secondary-foreground text-xs whitespace-wrap text-justify truncate"
                         >
                           Description
                         </p>
@@ -78,8 +80,8 @@
               </div>
             </CarouselItem>
           </CarouselContent>
-          <CarouselPrevious class="ml-6 md:ml-8 opacity-40 hover:opacity-100" />
-          <CarouselNext class="mr-6 md:mr-8 opacity-40 hover:opacity-100" />
+          <CarouselPrevious class="ml-6 md:ml-4 opacity-20 hover:opacity-100" />
+          <CarouselNext class="mr-6 md:mr-4 opacity-20 hover:opacity-100" />
         </Carousel>
       </div>
     </div>
