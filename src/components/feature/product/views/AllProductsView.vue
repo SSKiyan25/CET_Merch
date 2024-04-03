@@ -114,7 +114,10 @@
               </div>
             </div>
           </div>
-          <div class="flex flex-row px-2 md:px-4 py-8 justify-start">
+          <div
+            id="products"
+            class="flex flex-row px-2 md:px-4 py-8 justify-start"
+          >
             <div
               class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 space-x-4"
             >

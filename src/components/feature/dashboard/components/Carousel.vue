@@ -44,7 +44,7 @@
 
   <div
     v-if="!loading"
-    class="absolute bottom-48 md:bottom-0 left-0 flex flex-col items-center justify-end w-full h-full pb-20 p-2 md:pb-28 md:pl-20 lg:pb-36 md:items-start"
+    class="absolute bottom-48 md:bottom-0 left-0 flex flex-col items-center justify-end w-full h-full pb-20 p-2 md:pb-28 md:pl-20 lg:pb-36 md:items-start opacity-90"
   >
     <div class="p-4 rounded-lg">
       <h1

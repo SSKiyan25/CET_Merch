@@ -4,6 +4,26 @@
       <div class="flex items-center justify-between p-3">
         <div class="flex items-center justify-start rtl:justify-end">
           <button
+            v-if="
+              $route.name &&
+              typeof $route.name === 'string' &&
+              ![
+                'launchPage',
+                'login',
+                'signup',
+                'adminDashboard',
+                'adminProducts',
+                'adminAddProduct',
+                'adminEditProduct',
+                'adminOrders',
+                'adminInbox',
+                'product',
+                'confirmOrder',
+                'products',
+                'submitOrder',
+                'contactUs',
+              ].includes($route.name)
+            "
             @click.prevent="toggleSidebar"
             type="button"
             class="inline-flex items-center p-2 text-sm text-black/50 rounded-lg sm:hidden hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-secondary border-accent"
@@ -26,20 +46,22 @@
           <div
             class="flex flex-row items-center justify-center h-full max-w-1/2 text-center absolute text-background"
           >
-            <div class="flex flex-row items-center pr-12">
+            <div class="flex flex-row items-center md:pr-12">
               <router-link to="/">
-                <img src="/logo-2.png" class="w-auto h-14" />
+                <img src="/logo-2.png" class="w-8 h-8 md:w-14 md:h-14" />
               </router-link>
               <router-link to="/">
                 <span
-                  class="text-2xl md:text-2xl lg:text-2xl uppercase text-primary font-bold truncate"
+                  class="text-xs md:text-2xl lg:text-2xl uppercase text-primary font-bold truncate"
                 >
                   <span>CET STORE</span>
                 </span>
               </router-link>
             </div>
 
-            <div class="border-l border-black border-opacity-60 space-x-2">
+            <div
+              class="border-l hidden md:block border-black border-opacity-60 space-x-2"
+            >
               <router-link
                 to="/"
                 class="hover:opacity-80 hover:bg-background-slate-600"
@@ -70,7 +92,7 @@
         <div
           class="flex flex-row justify-end items-center w-full md:order-2 pr-2"
         >
-          <div class="relative w-1/3 md:w-full max-w-sm items-center">
+          <div class="relative w-2/5 md:w-full max-w-sm items-center">
             <Input
               id="search"
               type="text"

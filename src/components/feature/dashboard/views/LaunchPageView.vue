@@ -8,12 +8,11 @@
   <div id="products"><HeaderProductsComponent /></div>
   <div><FeaturedProductsComponent /></div>
   <div><PopularProductsComponent /></div>
-  <div><ProductsCategoryComponent /></div>
+  <div class="pb-32"></div>
 </template>
 
 <script setup lang="ts">
 import FeaturedCarousel from "../components/Carousel.vue";
-import ProductsCategoryComponent from "../components/ProductsCategoryComponent.vue";
 import HeaderProductsComponent from "../components/HeaderProductsComponent.vue";
 import FeaturedProductsComponent from "../components/FeaturedProductsComponent.vue";
 import PopularProductsComponent from "../components/PopularProductsComponent.vue";
