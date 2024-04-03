@@ -1,6 +1,6 @@
 <template>
   <UserSidebar />
-  <div class="p-4 ml-2 pt-16 sm:ml-64 pb-16">
+  <div class="p-4 ml-2 sm:ml-64 pb-16">
     <div class="flex flex-row justify-start py-10">
       <div class="flex">
         <span class="material-symbols-outlined p-2 text-5xl">
@@ -24,7 +24,7 @@
         </div>
         <div class="flex flex-row pb-2 space-x-2">
           <form>
-            <div class="flex relative w-full max-w-sm items-center">
+            <div class="flex relative w-full max-w-sm space-x-2 items-center">
               <Input
                 id="search"
                 type="text"
@@ -134,7 +134,7 @@
           <div class="flex flex-row justify-between pt-4 px-4">
             <div>
               <span>Status: </span>
-              <Button variant="destructive" class="cursor-default">
+              <Button variant="default" class="cursor-default">
                 <span>Not Paid</span>
               </Button>
             </div>

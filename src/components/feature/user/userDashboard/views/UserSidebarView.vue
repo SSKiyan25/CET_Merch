@@ -2,23 +2,26 @@
   <aside
     v-show="isSidebarVisible"
     :class="{
-      'fixed top-0 left-0 z-30 w-64 h-full pt-20 transition-transform bg-secondary border-accent border-r sm:translate-x-0': true,
+      'fixed top-0 left-0 z-30 w-64 h-full pt-20 transition-transform bg-background border-primary border-r sm:translate-x-0': true,
       '-translate-x-full': !isSidebarVisible,
     }"
   >
-    <div class="h-full px-3 pb-4 overflow-y-auto bg-secondary border-accent">
+    <div class="h-full px-3 pb-4 overflow-y-auto bg-background border-primary">
       <ul class="space-y-2 font-medium">
         <li>
           <router-link
             to="/dashboard"
             class="flex items-center p-2 text-secondary-foreground rounded-lg hover:bg-primary/10 group"
             :class="{
-              'text-primary-foreground bg-primary/80':
+              'text-white hover:text-primary bg-primary/80':
                 $route.path === '/dashboard',
             }"
           >
             <svg
               class="w-5 h-5 text-secondary-foreground transition duration-75 group-hover:text-primary"
+              :class="{
+                'text-white': $route.path === '/dashboard',
+              }"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
@@ -40,11 +43,15 @@
             to="/dashboard"
             class="flex items-center p-2 text-secondary-foreground rounded-lg hover:bg-primary/10 group"
             :class="{
-              'text-primary-foreground bg-primary/80': $route.path === '/',
+              'text-white hover:text-primary bg-primary/80':
+                $route.path === '/',
             }"
           >
             <svg
               class="flex-shrink-0 w-5 h-5 text-secondary-foreground transition duration-75 group-hover:text-primary"
+              :class="{
+                'text-white': $route.path === '/',
+              }"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
@@ -66,12 +73,15 @@
             to="/dashboard/orders"
             class="flex items-center p-2 text-secondary-foreground rounded-lg hover:bg-primary/10 group"
             :class="{
-              'text-primary-foreground bg-primary/80':
+              'text-white hover:text-primary bg-primary/80':
                 $route.path === '/dashboard/orders',
             }"
           >
             <svg
               class="flex-shrink-0 w-5 h-5 text-secondary-foreground transition duration-75 group-hover:text-primary"
+              :class="{
+                'text-white': $route.path === '/dashboard/orders',
+              }"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"

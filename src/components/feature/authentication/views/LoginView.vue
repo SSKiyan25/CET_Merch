@@ -1,11 +1,11 @@
 <template>
   <div class="flex pt-12 pb-20 justify-center">
     <div
-      class="p-7 sm:w-full md:w-1/2 lg:w-1/3 items-center justify-center bg-accent border border-primary/20 rounded-xl shadow-sm"
+      class="p-7 sm:w-full md:w-1/2 lg:w-1/3 items-center justify-center bg-slate-100 border border-primary/20 rounded-xl shadow-sm"
     >
       <div class="p-4 sm:p-7">
         <div class="text-center">
-          <h1 class="block text-2xl font-bold text-white">Sign in</h1>
+          <h1 class="block text-2xl font-bold text-black">Sign in</h1>
           <p class="py-2 text-sm text-secondary-foreground">
             Don't have an account yet?
             <router-link
@@ -45,7 +45,7 @@
                     id="email"
                     name="email"
                     v-model="email"
-                    class="py-3 px-4 block w-full border-primary/40 rounded-lg text-sm focus:border-primary/50 focus:ring-primary/90 disabled:opacity-50 disabled:pointer-events-none bg-muted"
+                    class="py-3 px-4 block w-full border-primary/40 rounded-lg text-sm focus:border-primary/50 focus:ring-primary/90 disabled:opacity-50 disabled:pointer-events-none bg-background"
                     :class="{
                       'py-3 px-4 block w-full border-red-600 rounded-lg text-sm focus:border-red-700 focus:ring-red-800 disabled:opacity-50 disabled:pointer-events-none bg-muted':
                         emailError,
@@ -133,13 +133,11 @@
                     id="remember-me"
                     name="remember-me"
                     type="checkbox"
-                    class="shrink-0 mt-0.5 rounded text-primary-foreground focus:ring-primary/50 bg-secondary border-primary/80 checked:bg-white checked:border-primary dark:focus:ring-offset-primary/20"
+                    class="shrink-0 mt-0.5 rounded text-primary-foreground focus:ring-primary/50 bg-background border-primary/80 checked:bg-primary checked:border-primary dark:focus:ring-offset-primary/20"
                   />
                 </div>
                 <div class="ms-3">
-                  <label for="remember-me" class="text-sm dark:text-white"
-                    >Remember me</label
-                  >
+                  <label for="remember-me" class="text-sm">Remember me</label>
                 </div>
               </div>
               <!-- End Checkbox -->

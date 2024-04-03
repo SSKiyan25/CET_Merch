@@ -5,7 +5,7 @@
       @mouseenter="plugin.stop"
       @mouseleave="[plugin.reset(), plugin.play(), console.log('Running')]"
     >
-      <CarouselContent>
+      <CarouselContent class="border-0 border-none">
         <CarouselItem v-for="(url, index) in imageUrls" :key="index">
           <div class="p-1">
             <Card v-if="loading">

@@ -97,7 +97,7 @@
               id="search"
               type="text"
               placeholder="Search Product..."
-              class="pl-8 md:pl-12 dark:opacity-50"
+              class="pl-8 text-[10px] md:text-sm md:pl-12 dark:opacity-50"
             />
             <span
               class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
@@ -118,18 +118,18 @@
             v-if="!user"
             class="flex md:order-2 md:space-x-0 rtl:space-x-reverse"
           >
-            <div class="flex-auto justify-end md:space-x-1">
+            <div class="flex flex-row items-center justify-end md:space-x-1">
               <router-link
                 to="/login"
-                class="font-medium rounded-lg md:text-sm text-xs px-4 py-2 md:px-5 md:py-2.5"
+                class="font-medium rounded-lg text-[10px] md:text-sm px-3 py-2 md:px-5 md:py-2.5 items-center"
               >
                 Login
               </router-link>
               <router-link
                 to="/signup"
-                class="bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5"
+                class="bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-lg px-3 py-1 md:px-5 md:py-2.5 items-center"
               >
-                Sign up
+                <span class="text-[10px] md:text-sm"> Sign up</span>
               </router-link>
             </div>
           </div>
@@ -163,33 +163,33 @@
 
             <div
               :class="{ hidden: !dropdownUserVisible }"
-              class="absolute z-50 mt-56 -ml-12 text-base list-none divide-y divide-secondary/50 rounded shadow bg-secondary-foreground border-accent max-w-48"
+              class="absolute z-50 mt-56 -ml-12 text-base list-none divide-y divide-primary rounded shadow bg-slate-100 border-accent max-w-48"
               id="dropdown-user"
             >
               <div class="px-4 py-3">
-                <p class="text-sm text-secondary">{{ username }}</p>
+                <p class="text-sm text-primary">{{ username }}</p>
               </div>
               <ul class="py-1">
                 <li>
                   <router-link
                     to="/dashboard"
-                    class="block px-4 py-2 text-sm text-secondary/70 hover:bg-primary/20"
+                    class="block px-4 py-2 text-sm text-black hover:bg-primary/20"
                     role="menuitem"
                     >Dashboard
                   </router-link>
                 </li>
                 <li>
                   <a
-                    class="block px-4 py-2 text-sm text-muted-foreground hover:bg-primary/20 pointer-events-auto cursor-pointer"
+                    class="block px-4 py-2 text-sm text-black hover:bg-primary/20 pointer-events-auto cursor-pointer"
                     role="menuitem"
                   >
-                    Settings
+                    Orders
                   </a>
                 </li>
                 <li>
                   <a
                     @click.prevent="handleSignout"
-                    class="block px-4 py-2 text-sm text-muted-foreground hover:bg-primary/20 pointer-events-auto cursor-pointer"
+                    class="block px-4 py-2 text-sm text-black hover:bg-primary/20 pointer-events-auto cursor-pointer"
                     role="menuitem"
                   >
                     Sign out

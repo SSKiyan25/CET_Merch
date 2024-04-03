@@ -1,6 +1,6 @@
 <template>
   <UserSidebar />
-  <div class="p-4 ml-2 pt-16 sm:ml-64">
+  <div class="p-4 ml-2 sm:ml-64">
     <div class="flex flex-row justify-start py-10">
       <div class="flex">
         <span class="material-symbols-outlined py-2 px-2 text-5xl">
@@ -64,7 +64,7 @@
     <div class="flex flex-col p-4 mt-16 border-2 rounded-lg">
       <div class="flex flex-row border-b-2">
         <h1 class="font-bold text-xl text-primary tracking-wide pb-2">
-          Recent Orders
+          Recent Order
         </h1>
       </div>
       <div class="pt-8">

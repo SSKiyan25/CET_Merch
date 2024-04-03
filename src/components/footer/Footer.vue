@@ -1,20 +1,21 @@
 <template>
   <footer
-    class="relative w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 mx-auto border-t-2 z-0"
+    class="relative w-full max-w-full py-10 bg-stone-100 px-4 sm:px-6 lg:px-8 mx-auto border-t z-0"
   >
     <!-- Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 items-center gap-5 text-center">
+    <div class="flex flex-row justify-center items-center text-center">
       <div>
         <a
-          class="flex-none text-xl font-semibold dark:focus:outline-none dark:focus:ring-1"
+          class="flex-none text-base opacity-70 font-semibold dark:focus:outline-none dark:focus:ring-1 uppercase"
           href="#"
           aria-label="Brand"
-          >CS3 Shoppee</a
         >
+          &copy College of Engineering and Technology 2024
+        </a>
       </div>
       <!-- End Col -->
 
-      <ul class="text-center">
+      <!-- <ul class="text-center">
         <li
           class="inline-block relative pe-8 last:pe-0 last-of-type:before:hidden before:absolute before:top-1/2 before:end-3 before:-translate-y-1/2 before:content-['/'] text-muted-foreground"
         >
@@ -45,11 +46,11 @@
             Contact
           </a>
         </li>
-      </ul>
+      </ul> -->
       <!-- End Col -->
 
       <!-- Social Brands -->
-      <div class="md:text-end space-x-2">
+      <!-- <div class="md:text-end space-x-2">
         <a
           class="size-8 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent disabled:opacity-50 disabled:pointer-events-none dark:text-gray-400dark:focus:outline-none dark:focus:ring-1"
           href="#"
@@ -118,7 +119,7 @@
             />
           </svg>
         </a>
-      </div>
+      </div> -->
       <!-- End Social Brands -->
     </div>
     <!-- End Grid -->

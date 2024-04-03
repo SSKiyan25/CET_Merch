@@ -1,10 +1,10 @@
 <template>
   <div class="flex pt-12 pb-20 justify-center">
     <div
-      class="p-7 sm:w-full md:w-1/2 lg:w-1/2 items-center justify-center bg-accent border border-primary/20 rounded-xl shadow-sm"
+      class="p-7 sm:w-full md:w-1/2 lg:w-1/2 items-center justify-center bg-slate-100 border border-primary/20 rounded-xl shadow-sm"
     >
       <div class="text-center border-b pb-2 border-secondary-foreground/20">
-        <h1 class="block text-4xl font-bold text-white">Sign up</h1>
+        <h1 class="block text-4xl font-bold text-black">Sign up</h1>
         <p class="py-2 text-sm text-secondary-foreground">
           Already have an account?
           <router-link
@@ -27,7 +27,7 @@
             <input
               type="text"
               id="first_name"
-              class="bg-secondary border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
+              class="bg-background border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
               placeholder="Juan"
               v-model="firstName"
               required
@@ -42,7 +42,7 @@
             <input
               type="text"
               id="last_name"
-              class="bg-secondary border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
+              class="bg-background border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
               placeholder="Dela Cruz"
               v-model="lastName"
               required
@@ -58,7 +58,7 @@
             </label>
             <select
               id="department"
-              class="bg-secondary border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
+              class="bg-background border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
               v-model="department"
             >
               <option value="" disabled selected>Select your department</option>
@@ -80,7 +80,7 @@
             <input
               type="text"
               id="studentId"
-              class="bg-secondary border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
+              class="bg-background border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
               v-model="studentId"
               placeholder="(XX-X-XXXXX)"
             />
@@ -94,7 +94,7 @@
             <input
               type="text"
               id="username"
-              class="bg-secondary border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
+              class="bg-background border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
               v-model="username"
               placeholder="Panday"
             />
@@ -108,7 +108,7 @@
             <input
               type="text"
               id="phoneNumber"
-              class="bg-secondary border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
+              class="bg-background border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
               v-model="phoneNumber"
               placeholder="+63"
             />
@@ -123,7 +123,7 @@
           <input
             type="email"
             id="email"
-            class="bg-secondary border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
+            class="bg-background border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
             placeholder="example@gmail.com"
             v-model="email"
             required
@@ -138,9 +138,9 @@
           <input
             type="password"
             id="password"
-            class="bg-secondary border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
+            class="bg-background border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
             :class="{
-              'bg-secondary border border-red-600 text-secondary-foreground text-sm rounded-lg focus:ring-red-700 focus:border-red-800 block w-full p-2.5':
+              'bg-backgroudn border border-red-600 text-secondary-foreground text-sm rounded-lg focus:ring-red-700 focus:border-red-800 block w-full p-2.5':
                 errorPassword,
             }"
             v-model="password"
@@ -157,9 +157,9 @@
           <input
             type="password"
             id="confirm_password"
-            class="bg-secondary border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
+            class="bg-background border border-primary/50 text-secondary-foreground text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5"
             :class="{
-              'bg-secondary border border-red-600 text-secondary-foreground text-sm rounded-lg focus:ring-red-700 focus:border-red-800 block w-full p-2.5':
+              'bg-backgroudn border border-red-600 text-secondary-foreground text-sm rounded-lg focus:ring-red-700 focus:border-red-800 block w-full p-2.5':
                 errorPassword,
             }"
             v-model="confirmPassword"
@@ -173,7 +173,7 @@
               id="remember"
               type="checkbox"
               value=""
-              class="w-4 h-4 text-primary border border-primary/70 rounded bg-secondary focus:ring-3 focus:ring-primary"
+              class="w-4 h-4 text-primary border border-primary/70 rounded bg-background focus:ring-3 focus:ring-primary"
               required
             />
           </div>
@@ -188,7 +188,7 @@
         </div>
         <button
           type="submit"
-          class="text-secondary-foreground bg-primary/70 hover:bg-primary/80 focus:ring-4 focus:outline-none focus:ring-primary/70 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+          class="text-secondary-foreground bg-secondary hover:bg-secondary/80 focus:ring-4 focus:outline-none focus:ring-primary/70 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
           Submit
         </button>
