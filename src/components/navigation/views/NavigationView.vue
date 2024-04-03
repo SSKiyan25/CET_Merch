@@ -96,7 +96,7 @@
             <Input
               id="search"
               type="text"
-              placeholder="Search..."
+              placeholder="Search Product..."
               class="pl-8 md:pl-12 dark:opacity-50"
             />
             <span

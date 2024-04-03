@@ -35,6 +35,8 @@ module.exports = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        gold: "#D4AF37",
+        "light-gold": "#F7EF8A",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -64,6 +66,7 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",
         lg: "var(--radius)",
@@ -94,6 +97,11 @@ module.exports = {
         "collapsible-down": "collapsible-down 0.2s ease-in-out",
         "collapsible-up": "collapsible-up 0.2s ease-in-out",
       },
+      backgroundImage: (theme) => ({
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-radial-at-t":
+          "radial-gradient(at top, var(--tw-gradient-stops))",
+      }),
     },
   },
   plugins: [animate, require("flowbite/plugin")],
