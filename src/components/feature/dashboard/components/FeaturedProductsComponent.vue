@@ -3,12 +3,23 @@
     <div
       class="flex flex-col md:flex-row pt-12 pb-2 justify-between border-b-2 border-primary mx-auto"
     >
-      <div class="flex flex-row items-center text-primary md:mb:0">
-        <span
-          class="font-black text-secondary-foreground tracking-wide text-2xl uppercase"
-        >
-          Featured <span class="text-red-600">Products</span>
-        </span>
+      <div
+        class="flex flex-row justify-between items-center text-primary w-full"
+      >
+        <div class="flex">
+          <label
+            class="font-black text-secondary-foreground tracking-wide text-2xl uppercase"
+          >
+            Featured <span class="text-red-600">Products</span>
+          </label>
+        </div>
+        <div class="flex pr-4">
+          <router-link to="/products">
+            <label class="text-xs uppercase hover:underline cursor-pointer"
+              >View All</label
+            >
+          </router-link>
+        </div>
       </div>
     </div>
     <div class="flex flex-col pt-4 bg-gray-100 shadow-md">

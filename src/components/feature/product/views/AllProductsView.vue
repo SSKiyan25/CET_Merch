@@ -1,161 +1,179 @@
 <template>
-  <div class="max-w-screen h-auto pb-4 mx-auto border-b-2">
-    <div>
-      <FeaturedCarousel />
-    </div>
-  </div>
-  <div class="mx-auto w-11/12 h-screen">
-    <div
-      class="flex flex-col md:flex-row pt-12 pb-2 justify-between border-b-2 border-primary mx-auto"
-    >
-      <div class="flex flex-row items-center text-primary md:mb:0">
-        <span
-          class="font-black text-secondary-foreground tracking-wide text-2xl uppercase"
-        >
-          Collections
-        </span>
+  <div class="h-auto">
+    <div class="max-w-screen pb-4 mx-auto border-b-2">
+      <div>
+        <FeaturedCarousel />
       </div>
-      <div class="flex flex-row items-center">
-        <div class="flex flex-col">
-          <form>
-            <div class="min-w-xl mx-auto">
-              <Popover v-model:open="open">
-                <PopoverTrigger as-child>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    :aria-expanded="open"
-                    class="w-full md:w-[200px] justify-between"
-                  >
-                    {{
-                      value
-                        ? frameworks.find(
-                            (framework) => framework.value === value
-                          )?.label
-                        : "Select Department"
-                    }}
-                    <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent class="w-full md:w-[200px]">
-                  <Command>
-                    <CommandInput class="h-9" placeholder="Search Category" />
-                    <CommandEmpty>No framework found.</CommandEmpty>
-                    <CommandList>
-                      <CommandGroup>
-                        <CommandItem
-                          v-for="framework in frameworks"
-                          :key="framework.value"
-                          :value="framework.value"
-                          @select="
-                            (ev) => {
-                              if (typeof ev.detail.value === 'string') {
-                                value = ev.detail.value;
+    </div>
+    <div class="mx-auto w-11/12">
+      <div
+        class="flex flex-col md:flex-row pt-12 pb-2 justify-between border-b-2 border-primary mx-auto"
+      >
+        <div class="flex flex-row items-center text-primary md:mb:0">
+          <span
+            class="font-black text-secondary-foreground tracking-wide text-2xl uppercase"
+          >
+            Collections
+          </span>
+        </div>
+        <div class="flex flex-row items-center">
+          <div class="flex flex-col">
+            <form>
+              <div class="min-w-xl mx-auto">
+                <Popover v-model:open="open">
+                  <PopoverTrigger as-child>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      :aria-expanded="open"
+                      class="w-full md:w-[200px] justify-between"
+                    >
+                      {{
+                        value
+                          ? frameworks.find(
+                              (framework) => framework.value === value
+                            )?.label
+                          : "Select Department"
+                      }}
+                      <ChevronsUpDown
+                        class="ml-2 h-4 w-4 shrink-0 opacity-50"
+                      />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent class="w-full md:w-[200px]">
+                    <Command>
+                      <CommandInput class="h-9" placeholder="Search Category" />
+                      <CommandEmpty>No framework found.</CommandEmpty>
+                      <CommandList>
+                        <CommandGroup>
+                          <CommandItem
+                            v-for="framework in frameworks"
+                            :key="framework.value"
+                            :value="framework.value"
+                            @select="
+                              (ev) => {
+                                if (typeof ev.detail.value === 'string') {
+                                  value = ev.detail.value;
+                                }
+                                open = false;
                               }
-                              open = false;
-                            }
-                          "
-                          class="cursor-pointer"
-                        >
-                          {{ framework.label }}
-                          <Check
-                            :class="
-                              cn(
-                                'ml-auto h-4 w-4',
-                                value === framework.value
-                                  ? 'opacity-100'
-                                  : 'opacity-0'
-                              )
                             "
-                          />
-                        </CommandItem>
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-            </div>
-          </form>
-        </div>
-        <div class="flex flex-row px-1 items-center">
-          <Popover
-            ><PopoverTrigger as-child>
-              <button
-                class="p-2 bg-background border rounded-sm hover:bg-background/40 flex flex-row"
-                title="Filter"
-              >
-                <span class="pr-2">Filter:</span>
-                <Filter />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent class="w-48"> Test</PopoverContent>
-          </Popover>
+                            class="cursor-pointer"
+                          >
+                            {{ framework.label }}
+                            <Check
+                              :class="
+                                cn(
+                                  'ml-auto h-4 w-4',
+                                  value === framework.value
+                                    ? 'opacity-100'
+                                    : 'opacity-0'
+                                )
+                              "
+                            />
+                          </CommandItem>
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </form>
+          </div>
+          <div class="flex flex-row px-1 items-center">
+            <Popover
+              ><PopoverTrigger as-child>
+                <button
+                  class="p-2 bg-background border rounded-sm hover:bg-background/40 flex flex-row"
+                  title="Filter"
+                >
+                  <span class="pr-2">Filter:</span>
+                  <Filter />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent class="w-48"> Test</PopoverContent>
+            </Popover>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="p-1"></div>
-    <div class="flex flex-row px-2 md:px-4 py-8 justify-start bg-gray-200">
-      <div class="max-w-full justify-start items-center">
-        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5">
-          <div v-if="isLoading">
+      <div class="p-1"></div>
+      <!-- Product Cards -->
+      <div class="flex flex-col justify-start bg-gray-200">
+        <div class="flex flex-row px-4 md:px-8">
+          <div
+            v-if="isLoading"
+            class="flex max-w-[75reh] h-full pt-8 justify-center items-center"
+          >
             <div class="flex flex-col items-center justify-center h-full">
-              <span
-                class="material-symbols-outlined text-4xl text-primary animate-spin"
-              >
-                autorenew
-              </span>
+              <div class="flex flex-col items-center justify-center">
+                <span
+                  class="material-symbols-outlined text-6xl text-primary animate-spin"
+                >
+                  autorenew
+                </span>
+              </div>
             </div>
           </div>
-          <div v-else>
+          <div class="flex flex-row px-2 md:px-4 py-8 justify-start">
             <div
-              v-for="product in products"
-              :key="product.id"
-              class="flex flex-col bg-white shadow-lg rounded-sm"
+              class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 space-x-4"
             >
-              <div class="overflow-hidden">
-                <div
-                  class="h-full flex flex-col border-b-2 border-primary/60 justify-center items-center max-h-[22rem]"
-                >
-                  <router-link :to="`/product/${product.id}`">
-                    <img
-                      :src="product.coverPhoto"
-                      class="transform transition-all duration-500 hover:scale-110 max-h-[20rem] md:max-h-[22rem] object-cover rounded-t-sm"
-                    />
-                  </router-link>
+              <div
+                v-if="!isLoading"
+                v-for="product in products"
+                :key="product.id"
+                class="max-w-[75rem] justify-center items-center"
+              >
+                <div class="group flex flex-col bg-white shadow-lg">
+                  <div class="overflow-hidden border-b-2 border-primary/60">
+                    <div
+                      class="h-full flex flex-col justify-center items-center max-h-[22rem]"
+                    >
+                      <router-link :to="`/product/${product.id}`">
+                        <img
+                          :src="product.coverPhoto"
+                          class="transform transition-all duration-500 hover:scale-110 h-[12rem] md:h-[16rem] object-cover rounded-t-sm"
+                        />
+                      </router-link>
+                    </div>
+                  </div>
+                  <div class="p-2 md:p-4">
+                    <div class="flex flex-row justify-between">
+                      <span
+                        class="block pb-2 pt-1 md:text-xs font-semibold uppercase text-secondary-foreground/80"
+                      >
+                        {{ product.category }}
+                      </span>
+                      <span
+                        class="block pb-2 pl-2 pt-1 text-xs md:text-sm font-semibold uppercase text-primary"
+                      >
+                        (P{{
+                          product.price[product.price.length - 1].originalPrice
+                        }}
+                        )
+                      </span>
+                    </div>
+                    <router-link to="/"
+                      ><h3
+                        class="text-lg md:text-xl font-bold text-secondary-foreground truncate"
+                      >
+                        {{ product.name }}
+                      </h3>
+                    </router-link>
+                    <p
+                      class="mt-3 text-secondary-foreground text-xs whitespace-wrap text-justify truncate"
+                    >
+                      {{ product.description }}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div class="p-2 md:p-3">
-                <div class="flex flex-row justify-between">
-                  <span
-                    class="block pb-2 pt-1 md:text-xs font-semibold uppercase text-secondary-foreground/80"
-                  >
-                    {{ product.category }}
-                  </span>
-                  <span
-                    class="block pb-2 pl-2 pt-1 text-xs md:text-sm font-semibold uppercase text-primary"
-                  >
-                    ({{ product.price[product.price.length - 1].originalPrice }}
-                    )
-                  </span>
-                </div>
-                <router-link to="/"
-                  ><h3
-                    class="text-lg md:text-xl font-bold text-secondary-foreground truncate"
-                  >
-                    {{ product.name }}
-                  </h3>
-                </router-link>
-                <p
-                  class="mt-3 text-secondary-foreground text-xs whitespace-wrap text-justify truncate"
-                >
-                  {{ product.description }}
-                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <div class="pb-12"></div>
   </div>
 </template>
 

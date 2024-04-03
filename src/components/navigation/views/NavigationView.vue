@@ -56,6 +56,12 @@
                 to="/contactUs"
                 class="border-l border-black border-opacity-60"
               >
+                <span class="text-black pl-2">About Us</span>
+              </router-link>
+              <router-link
+                to="/contactUs"
+                class="border-l border-black border-opacity-60"
+              >
                 <span class="text-black pl-2">Contact Us</span>
               </router-link>
             </div>

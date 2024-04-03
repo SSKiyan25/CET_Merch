@@ -294,7 +294,7 @@
     v-if="isUploadSuccessful"
     class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
   >
-    <div class="p-8 bg-secondary rounded-xl shadow space-y-4">
+    <div class="p-8 bg-background rounded-xl shadow space-y-4">
       <div class="flex flex-col justify-center items-center">
         <span class="text-xl font-bold text-secondary-foreground pt-4"
           >Product Added Successfully</span

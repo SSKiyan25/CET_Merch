@@ -13,11 +13,21 @@
           <span class="material-symbols-outlined text-sm pt-0.5">
             navigate_next
           </span>
-          <span class="text-xs">Products</span>
+          <router-link
+            to="/products"
+            class="items-center flex flex-row hover:text-primary hover:underline"
+          >
+            <span class="text-xs">Products</span>
+          </router-link>
+
           <span class="material-symbols-outlined text-sm pt-0.5">
             navigate_next
           </span>
-          <span class="text-xs text-primary">{{ product?.category }} </span>
+          <span class="text-xs text-primary/50">{{ product?.category }} </span>
+          <span class="material-symbols-outlined text-sm pt-0.5">
+            navigate_next
+          </span>
+          <span class="text-xs text-primary">{{ product?.name }} </span>
         </div>
       </div>
     </div>
@@ -89,76 +99,90 @@
                   {{ product?.name }}
                 </h2>
               </div>
-              <div class="flex flex-row">
-                <span class="text-2xl font-semibold text-primary">
-                  P
-                  {{
-                    product?.price[product.price.length - 1].originalPrice
-                  }}</span
-                >
-                <span class="text-xl pl-2">(</span>
-                <div class="flex items-center">
-                  <svg
-                    class="w-4 h-4 text-yellow-300 ms-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path
-                      d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
-                    />
-                  </svg>
-                  <svg
-                    class="w-4 h-4 text-yellow-300 ms-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path
-                      d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
-                    />
-                  </svg>
-                  <svg
-                    class="w-4 h-4 text-yellow-300 ms-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path
-                      d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
-                    />
-                  </svg>
-                  <svg
-                    class="w-4 h-4 text-yellow-300 ms-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path
-                      d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
-                    />
-                  </svg>
-                  <svg
-                    class="w-4 h-4 ms-1 text-gray-300 dark:text-gray-500"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path
-                      d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
-                    />
-                  </svg>
+              <div class="flex flex-col">
+                <div class="flex flex-row justify-between items-center">
+                  <div class="flex flex-row">
+                    <span class="text-2xl font-semibold text-primary">
+                      P
+                      {{
+                        product?.price[product.price.length - 1].originalPrice
+                      }}</span
+                    >
+                    <span class="text-xl pl-2">(</span>
+                    <div class="flex items-center">
+                      <svg
+                        class="w-4 h-4 text-yellow-300 ms-1"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 22 20"
+                      >
+                        <path
+                          d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
+                        />
+                      </svg>
+                      <svg
+                        class="w-4 h-4 text-yellow-300 ms-1"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 22 20"
+                      >
+                        <path
+                          d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
+                        />
+                      </svg>
+                      <svg
+                        class="w-4 h-4 text-yellow-300 ms-1"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 22 20"
+                      >
+                        <path
+                          d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
+                        />
+                      </svg>
+                      <svg
+                        class="w-4 h-4 text-yellow-300 ms-1"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 22 20"
+                      >
+                        <path
+                          d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
+                        />
+                      </svg>
+                      <svg
+                        class="w-4 h-4 ms-1 text-gray-300 dark:text-gray-500"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 22 20"
+                      >
+                        <path
+                          d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"
+                        />
+                      </svg>
+                    </div>
+                    <span class="text-xl">)</span>
+                  </div>
+                  <div></div>
                 </div>
-                <span class="text-xl">)</span>
+                <div class="flex">
+                  <div>
+                    <span class="text-[13.5px] text-gray-500 pr-8"
+                      >Sold: {{ product?.totalOrders }}</span
+                    >
+                  </div>
+                </div>
               </div>
 
               <div class="flex flex-wrap">
-                <p class="text-muted-foreground text-justify px-8 text-wrap">
+                <p
+                  class="text-secondary-foreground/60 text-justify px-8 text-wrap"
+                >
                   {{ product?.description }}
                 </p>
               </div>
@@ -170,7 +194,9 @@
                   >
                     No Available Size
                   </span>
-                  <span v-else>{{ product?.sizes.join(" | ") }}</span>
+                  <span v-else v-for="size in product?.sizes" :key="size.value"
+                    >{{ size.value }} |
+                  </span>
                 </p>
               </div>
               <div class="flex justify-center md:justify-start">
