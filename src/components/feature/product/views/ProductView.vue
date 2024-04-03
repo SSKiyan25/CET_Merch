@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div class="h-auto">
     <div class="pt-4 pb-8 md:pt-8 px-2 md:px-8">
       <div class="flex flex-row items-center">
         <router-link to="/" class="cursor-pointer text-primary/50">
@@ -32,7 +32,7 @@
       </div>
     </div>
     <div
-      class="max-w-[85rem] h-[62rem] base:h-[64rem] md:h-[36rem] lg:h-[44rem] px-4 py-4 sm:px-6 lg:px-12 lg:py-4 mx-auto mt-8"
+      class="max-w-[85rem] h-[96rem] base:h-[64rem] md:h-[36rem] lg:h-[44rem] px-4 py-4 sm:px-6 lg:px-12 lg:py-4 mx-auto mt-8"
     >
       <div class="md:grid md:grid-cols-2 md:gap-12 xl:gap-18 pb-2">
         <div
