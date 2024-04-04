@@ -179,12 +179,13 @@
                   </router-link>
                 </li>
                 <li>
-                  <a
+                  <router-link
+                    to="/dashboard/orders"
                     class="block px-4 py-2 text-sm text-black hover:bg-primary/20 pointer-events-auto cursor-pointer"
                     role="menuitem"
                   >
                     Orders
-                  </a>
+                  </router-link>
                 </li>
                 <li>
                   <a
