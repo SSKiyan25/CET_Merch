@@ -96,6 +96,9 @@
             <Input
               id="search"
               type="text"
+              v-model="searchTerm"
+              @focus="isSearchFocused = true"
+              @blur="() => $nextTick(() => (isSearchFocused = false))"
               placeholder="Search Product..."
               class="pl-8 text-[10px] md:text-sm md:pl-12 dark:opacity-50"
             />
@@ -112,6 +115,25 @@
             >
               <button><SlidersHorizontal class="size-4 md:size-6" /></button>
             </span>
+            <div
+              v-if="isSearchFocused && filteredProducts.length > 0"
+              class="search-results absolute bg-background border rounded-b-xl w-full p-3 space-y-2"
+            >
+              <div
+                v-for="product in filteredProducts"
+                :key="product.id"
+                class="hover:bg-primary/10 p-2 cursor-pointer"
+                @mousedown="$router.push(`/product/${product.id}`)"
+              >
+                {{ product.name }}
+              </div>
+            </div>
+            <div
+              v-else-if="isSearchFocused && searchTerm"
+              class="search-results absolute bg-background border rounded-b-xl w-full p-3 space-y-2"
+            >
+              No Results Found
+            </div>
           </div>
           <!--Sign In/Up Icons-->
           <div
@@ -215,6 +237,7 @@ import {
   Ref,
   onUnmounted,
   reactive,
+  computed,
 } from "vue";
 import { initFlowbite } from "flowbite";
 import { auth } from "@/firebase/init.ts";
@@ -228,13 +251,25 @@ import { Search } from "lucide-vue-next";
 import { Input } from "@/components/ui/input";
 import { SlidersHorizontal } from "lucide-vue-next";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import { setup as setupSearchController } from "../controllers/searchProductController.ts";
 //import Cart from "@/components/feature/user/userOrder/views/AddToCartView.vue";
 
 const router = useRouter();
 const user = ref<User | null>(null);
 const userEmail = ref("");
 const username = ref("");
+const searchTerm = ref("");
+const isSearchFocused = ref(false);
+const { products } = setupSearchController();
 
+const filteredProducts = computed(() => {
+  if (!searchTerm.value) {
+    return [];
+  }
+  return products.value.filter((product) =>
+    product.name.toLowerCase().includes(searchTerm.value.toLowerCase())
+  );
+});
 const dropdownUserVisible = ref(false);
 
 const toggleUserDropdown = () => {

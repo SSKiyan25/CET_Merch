@@ -116,14 +116,14 @@
           </div>
           <div
             id="products"
-            class="flex flex-row px-2 md:px-4 py-8 justify-start"
+            class="flex flex-row px-2 md:px-4 py-8 justify-center"
           >
             <div
               class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 space-x-4"
             >
               <div
                 v-if="!isLoading"
-                v-for="product in products"
+                v-for="product in filteredProducts"
                 :key="product.id"
                 class="max-w-[75rem] justify-center items-center"
               >
@@ -172,6 +172,17 @@
                 </div>
               </div>
             </div>
+            <div
+              v-if="!isLoading && filteredProducts.length === 0"
+              class="flex flex-row text-primary max-w-full justify-center items-center mx-auto"
+            >
+              <div class="flex flex-col items-center justify-center">
+                <span class="material-symbols-outlined text-6xl text-primary">
+                  search_off
+                </span>
+                No Results
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -181,7 +192,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import FeaturedCarousel from "../../dashboard/components/Carousel.vue";
 import { Button } from "../../../ui/button";
 import { Check, ChevronsUpDown } from "lucide-vue-next";
@@ -204,11 +215,22 @@ const open = ref(false);
 const value = ref<string>("");
 
 const frameworks = [
-  { value: "T-Shirt", label: "T-Shirt" },
-  { value: "Polo-Shirt", label: "Polo-Shirt" },
-  { value: "Lanyard", label: "Lanyard" },
-  { value: "Hoodie", label: "Hoodie" },
-  { value: "Stickers", label: "Stickers" },
-  { value: "All", label: "All" },
+  { value: "All", label: "Show All" },
+  { value: "CET", label: "CET" },
+  { value: "BSCS", label: "BSCS" },
+  { value: "BSCE", label: "BSCE" },
+  { value: "BSGE", label: "BSGE" },
+  { value: "BSME", label: "BSME" },
+  { value: "BSMet", label: "BSMet" },
+  { value: "BSABE", label: "BSABE" },
 ];
+
+const filteredProducts = computed(() => {
+  const result =
+    value.value === "All" || !value.value
+      ? products.value
+      : products.value.filter((product) => product.faction === value.value);
+  console.log(result); // Log the result
+  return result;
+});
 </script>
