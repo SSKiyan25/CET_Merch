@@ -10,7 +10,7 @@
         </span>
       </div>
       <div class="flex flex-col">
-        <h1 class="text-2xl">Welcome to the Admin Dashboard</h1>
+        <h1 class="text-2xl">Welcome to the Seller Dashboard</h1>
         <p class="text-sm py-1 text-secondary-foreground/60">
           This is the admin dashboard. You can manage your products, users, and
           other settings from here.
@@ -24,7 +24,7 @@
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
           <div
-            class="flex flex-col items-start bg-secondary rounded-sm space-x-4 w-80 h-32 p-4 shadow"
+            class="flex flex-col items-start bg-gradient-to-br from-gold to-light-gold rounded-sm space-x-4 w-80 h-32 p-4 shadow-lg"
           >
             <div class="flex items-center space-x-4 pt-2">
               <router-link to="admin/inbox" class="bg-blue-600 p-2 rounded-sm">
@@ -39,7 +39,7 @@
             </div>
           </div>
           <div
-            class="flex flex-col items-start bg-secondary rounded-sm space-x-4 w-80 h-32 p-4 shadow"
+            class="flex flex-col items-start bg-gradient-to-br from-gold to-light-gold rounded-sm space-x-4 w-80 h-32 p-4 shadow-lg"
           >
             <div class="flex items-center space-x-4 pt-2">
               <router-link to="admin/orders" class="bg-red-600 p-2 rounded-sm">
@@ -51,12 +51,14 @@
                 <span class="text-lg font-base whitespace-nowrap"
                   >Pending Orders</span
                 >
-                <span class="font-bold text-primary">1</span>
+                <span class="font-bold text-primary">{{
+                  totalPendingOrders
+                }}</span>
               </div>
             </div>
           </div>
           <div
-            class="flex flex-col items-start bg-secondary rounded-sm space-x-4 w-80 h-32 p-4 shadow"
+            class="flex flex-col items-start bg-gradient-to-br from-gold to-light-gold rounded-sm space-x-4 w-80 h-32 p-4 shadow-lg"
           >
             <div class="flex items-center space-x-4 pt-2">
               <router-link
@@ -71,7 +73,7 @@
                 <span class="text-lg font-base whitespace-nowrap"
                   >Total Products</span
                 >
-                <span class="font-bold text-primary">1</span>
+                <span class="font-bold text-primary">{{ totalProducts }}</span>
               </div>
             </div>
           </div>
@@ -196,6 +198,9 @@
               <th>Sales</th>
             </tr>
           </thead>
+          <tbody>
+            <tr></tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -225,6 +230,29 @@ import { Button } from "@/components/ui/button";
 import { setup as setupControllerFeatured } from "../controllers/adminUploadFeaturedController.ts";
 import { useRouter } from "vue-router";
 import AdminSidebar from "../views/AdminSidebar.vue";
+import {
+  fetchProductsForSeller,
+  fetchTotalPendingOrders,
+} from "../controllers/adminDashboardController.ts";
+
+let totalProducts = ref(0);
+let totalPendingOrders = ref(0);
+
+const fetchTotalProducts = async () => {
+  const result = await fetchProductsForSeller();
+  if (result) {
+    totalProducts.value = result.totalProducts;
+  } else {
+    console.error("Failed to fetch products");
+  }
+};
+
+const fetchTotalPending = async () => {
+  totalPendingOrders.value = await fetchTotalPendingOrders();
+};
+
+fetchTotalProducts();
+fetchTotalPending();
 
 const {
   onFileChange,

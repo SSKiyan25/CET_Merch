@@ -123,6 +123,38 @@ export const fetchOrders = async () => {
   );
 };
 
+export const fetchPendingOrdersCount = async () => {
+  if (!auth.currentUser) {
+    throw new Error("User not authenticated");
+  }
+
+  // Fetch the current user's data
+  const userDoc = doc(db, "users", auth.currentUser.uid);
+  const userData = (await getDoc(userDoc)).data();
+
+  if (!userData) {
+    throw new Error("User data not found");
+  }
+
+  const ordersCollection = collection(db, "userOrder");
+  let querySnapshot;
+
+  if (userData.isAdmin) {
+    querySnapshot = await getDocs(
+      query(ordersCollection, where("orderStatus", "==", "processing"))
+    );
+  } else {
+    querySnapshot = await getDocs(
+      query(
+        ordersCollection,
+        where("faction", "==", userData.faction),
+        where("orderStatus", "==", "processing")
+      )
+    );
+  }
+  return querySnapshot.size;
+};
+
 export const updateOrder = async (
   orderId: string,
   updateData: Partial<Order>
