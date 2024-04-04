@@ -30,6 +30,7 @@
                 type="text"
                 placeholder="Search..."
                 class="pl-10"
+                v-model="searchTerm"
               />
               <span
                 class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
@@ -43,10 +44,11 @@
                       variant="outline"
                       role="combobox"
                       :aria-expanded="open"
-                      class="w-[130px] justify-between text-xs"
+                      class="w-[180px] justify-between text-xs"
+                      v-model="value"
                     >
                       {{
-                        value
+                        value && value !== "all"
                           ? frameworks.find(
                               (framework) => framework.value === value
                             )?.label
@@ -57,7 +59,7 @@
                       />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent class="w-[120px] p-0">
+                  <PopoverContent class="w-[180px] p-0">
                     <Command>
                       <CommandInput class="h-9" placeholder="Search Category" />
                       <CommandEmpty>No framework found.</CommandEmpty>
@@ -100,33 +102,42 @@
         </div>
       </div>
       <!--Order Section-->
-      <div OTEN class="pt-8">
+      <div class="pt-8" v-for="(order, index) in filteredOrders" :key="index">
         <div class="flex flex-col border pt-2 pb-4">
           <div class="flex flex-row justify-between py-2 px-3">
             <div>
               <span class="text-sm font-semibold"
                 >Order Reference Number:
               </span>
-              <span class="pl-2 text-primary font-semibold">#12345</span>
+              <span class="pl-2 text-primary font-semibold">{{
+                order.orderRefNum
+              }}</span>
             </div>
             <div>
-              <span class="text-xs">Date Ordered: March 28, 2024</span>
+              <span class="text-xs">{{ order.dateOrdered }}</span>
             </div>
           </div>
-          <div class="px-2">
+          <div
+            class="px-2"
+            v-for="(item, itemIndex) in order.cart"
+            :key="itemIndex"
+          >
             <div
               class="flex flex-row items-center bg-secondary rounded-lg w-1/3 h-18"
             >
               <div class="p-4">
-                <img src="/1-Lanyard.png" class="w-40 h-auto rounded-sm" />
+                <img
+                  :src="item.productDetails.coverPhoto"
+                  class="w-40 h-auto rounded-sm"
+                />
               </div>
               <div
                 class="flex flex-col text-xs space-y-2 whitespace-normal text-wrap"
               >
-                <span>Product Name: New T-Shirt</span>
-                <span>Size: M</span>
-                <span>Quantity: 2</span>
-                <span>Total Amount: P150.00</span>
+                <span>Product Name: {{ item.productDetails.name }}</span>
+                <span>Size: {{ item.size }}</span>
+                <span>Quantity: {{ item.quantity }}</span>
+                <span>Total Amount: P{{ item.totalAmount }}</span>
               </div>
             </div>
           </div>
@@ -134,15 +145,25 @@
           <div class="flex flex-row justify-between pt-4 px-4">
             <div>
               <span>Status: </span>
-              <Button variant="default" class="cursor-default">
-                <span>Not Paid</span>
+              <Button
+                v-if="order.paymentStatus === 'pending'"
+                variant="default"
+                class="cursor-default capitalize"
+              >
+                <span>{{ order.paymentStatus }}</span>
               </Button>
+              <button
+                v-if="order.paymentStatus === 'paid'"
+                class="p-3 bg-emerald-600 text-white rounded-sm cursor-default capitalize"
+              >
+                <span>{{ order.paymentStatus }}</span>
+              </button>
             </div>
             <div>
               <span
                 >Total Payment:
                 <span class="text-primary font-semibold underline"
-                  >P150.00
+                  >{{ order.totalPayment }}
                 </span>
               </span>
               <span class="pl-1">(Cash)</span>
@@ -155,7 +176,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { initFlowbite } from "flowbite";
 import UserSidebar from "../views/UserSidebarView.vue";
 import { MagnifyingGlassIcon } from "@radix-icons/vue";
@@ -168,22 +189,62 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { getUserOrders } from "../controllers/userController.ts";
+import { DocumentData } from "firebase/firestore";
 
-const open = ref(false);
-const value = ref<string>("");
+const orders = ref<DocumentData[]>([]);
 
-onMounted(() => {
+onMounted(async () => {
   initFlowbite();
+  orders.value = await getUserOrders();
 });
 
+const open = ref(false);
+const value = ref<string>("all");
+const searchTerm = ref<string>("");
+
 const frameworks = [
-  { value: "Paid", label: "Paid" },
-  { value: "Pending", label: "Pending" },
-  { value: "Declined", label: "Declined" },
+  { value: "all", label: "Show All" },
+  { value: "paid", label: "Paid" },
+  { value: "pending", label: "Pending" },
+  { value: "peclined", label: "Declined" },
+  { value: "pancelled", label: "Cancelled" },
   { value: "T-Shirt", label: "T-Shirt" },
   { value: "Polo-Shirt", label: "Polo-Shirt" },
   { value: "Lace", label: "Lace" },
   { value: "Hoodie", label: "Hoodie" },
   { value: "Stickers", label: "Stickers" },
 ];
+
+const filteredOrders = computed(() => {
+  let filtered = orders.value;
+
+  if (value.value !== "all") {
+    filtered = filtered.filter((order) => {
+      if (["paid", "pending", "declined", "cancelled"].includes(value.value)) {
+        return order.paymentStatus === value.value;
+      }
+
+      return order.cart.some(
+        (item: any) => item.productDetails.category === value.value
+      );
+    });
+  }
+
+  if (searchTerm.value) {
+    filtered = filtered.filter((order) =>
+      order.orderRefNum.includes(searchTerm.value)
+    );
+  }
+
+  return filtered;
+});
 </script>

@@ -387,7 +387,7 @@ const submitOrder = async (formData: any) => {
         paymentMethod: formData.paymentMethod,
         paymentStatus: "pending",
         orderStatus: "processing",
-        dateOrdered: new Date().toDateString(),
+        dateOrdered: new Date().toISOString(),
       });
       orderRefNumDisplay.value = orderRefNumValue;
       loading.value = false;

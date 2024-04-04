@@ -30,24 +30,25 @@ function requireAuth(
   __: RouteLocationNormalized,
   next: NavigationGuardNext
 ) {
-  const user = auth.currentUser;
   const userData = ref<DocumentData | null>(null);
-  console.log(user);
-  if (user) {
-    const docRef = doc(db, "users", user.uid);
-    getDoc(docRef).then((docSnap) => {
-      if (docSnap.exists()) {
-        console.log("Document data:");
-        userData.value = docSnap.data();
-      } else {
-        console.log("No such document!");
-      }
-      next();
-    });
-  } else {
-    console.log("Not authorized");
-    next({ name: "login" });
-  }
+
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      const docRef = doc(db, "users", user.uid);
+      getDoc(docRef).then((docSnap) => {
+        if (docSnap.exists()) {
+          console.log("Document data:");
+          userData.value = docSnap.data();
+        } else {
+          console.log("No such document!");
+        }
+        next();
+      });
+    } else {
+      console.log("Not authorized");
+      next({ name: "login" });
+    }
+  });
 }
 
 async function requireAdminAuth(
