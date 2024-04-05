@@ -122,7 +122,7 @@
               <div
                 v-for="product in filteredProducts"
                 :key="product.id"
-                class="hover:bg-primary/10 p-2 cursor-pointer"
+                class="hover:bg-primary/10 p-2 cursor-pointer text-xs"
                 @mousedown="$router.push(`/product/${product.id}`)"
               >
                 {{ product.name }}
@@ -130,7 +130,7 @@
             </div>
             <div
               v-else-if="isSearchFocused && searchTerm"
-              class="search-results absolute bg-background border rounded-b-xl w-full p-3 space-y-2"
+              class="search-results text-xs absolute bg-background border rounded-b-xl w-full p-3 space-y-2"
             >
               No Results Found
             </div>

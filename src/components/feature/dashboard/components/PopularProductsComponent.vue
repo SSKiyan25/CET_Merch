@@ -41,7 +41,7 @@
                       v-if="!isLoading"
                       v-for="product in products"
                       :key="product.id"
-                      class="flex flex-col bg-white shadow-md rounded-sm"
+                      class="flex flex-col bg-white shadow-lg border border-primary/20 rounded-sm"
                     >
                       <div class="overflow-hidden border-b-2 border-primary/60">
                         <div
@@ -74,13 +74,13 @@
                         </div>
                         <router-link to="/"
                           ><h3
-                            class="text-lg md:text-2xl font-bold text-secondary-foreground truncate"
+                            class="text-lg md:text-2xl font-bold text-secondary-foreground truncate hover:underline"
                           >
                             {{ product.name }}
                           </h3>
                         </router-link>
                         <p
-                          class="mt-3 text-secondary-foreground text-xs whitespace-wrap text-justify truncate"
+                          class="mt-3 opacity-60 text-secondary-foreground text-[10px] whitespace-wrap text-justify truncate"
                         >
                           {{ product.description }}
                         </p>
