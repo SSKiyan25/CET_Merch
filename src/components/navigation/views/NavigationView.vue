@@ -180,6 +180,90 @@
                     </span>
                   </button>
                 </SheetTrigger>
+                <SheetContent class="bg-gray-100">
+                  <SheetHeader>
+                    <SheetTitle> Cart </SheetTitle>
+                    <SheetDescription></SheetDescription>
+                  </SheetHeader>
+                  <div v-for="(order, index) in orderData" :key="index">
+                    <div class="flex flex-col flex-wrap py-6">
+                      <div class="flex flex-row items-center">
+                        <span class="material-symbols-outlined">
+                          <span class="material-symbols-outlined">
+                            add_shopping_cart
+                          </span>
+                        </span>
+                        <Label class="pl-1"> Cart Number: </Label>
+                        <Label class="ml-2 text-primary">
+                          {{ index + 1 }}</Label
+                        >
+                      </div>
+                      <div v-if="order.cart.length > 0">
+                        <div
+                          v-for="(product, productIndex) in order.cart"
+                          :key="productIndex"
+                        >
+                          <Accordion type="single" collapsible>
+                            <AccordionItem value="item-1">
+                              <AccordionTrigger>
+                                <div class="flex justify-between">
+                                  <span class="text-primary text-xs pr-1"
+                                    >{{
+                                      product.product
+                                        ? product.product.name
+                                        : "Product not found"
+                                    }}
+                                    -
+                                  </span>
+                                  <span class="text-primary text-xs">
+                                    {{
+                                      product.product
+                                        ? product.product.faction
+                                        : "Product not found"
+                                    }}
+                                  </span>
+                                </div>
+                              </AccordionTrigger>
+                              <AccordionContent>
+                                <div class="flex justify-between px-4">
+                                  <Label
+                                    >Quantity: {{ product.quantity }}</Label
+                                  >
+                                  <Label v-if="product.size !== 'N/A'"
+                                    >Size: {{ product.size }}</Label
+                                  >
+                                  <Label
+                                    >Total Price: {{ product.totalPrice }}
+                                  </Label>
+                                </div>
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Accordion>
+                        </div>
+                      </div>
+                    </div>
+                    <SheetFooter>
+                      <SheetClose as-child v-if="!ifCartEmpty">
+                        <router-link
+                          :to="{
+                            name: 'confirmOrder',
+                            params: { id: order.id },
+                          }"
+                        >
+                          <Button>Edit Cart</Button>
+                        </router-link>
+                        <router-link
+                          :to="{
+                            name: 'confirmOrder',
+                            params: { id: order.id },
+                          }"
+                        >
+                          <Button type="submit">Submit Order </Button>
+                        </router-link>
+                      </SheetClose>
+                    </SheetFooter>
+                  </div>
+                </SheetContent>
               </Sheet>
             </div>
 
@@ -250,9 +334,28 @@ import { User as UserIcon } from "lucide-vue-next";
 import { Search } from "lucide-vue-next";
 import { Input } from "@/components/ui/input";
 import { SlidersHorizontal } from "lucide-vue-next";
-import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetTrigger,
+  SheetTitle,
+  SheetDescription,
+  SheetClose,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+} from "@/components/ui/sheet";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { setup as setupSearchController } from "../controllers/searchProductController.ts";
-//import Cart from "@/components/feature/user/userOrder/views/AddToCartView.vue";
+import {
+  getOnQueueOrdersController,
+  orderDataWithProduct,
+} from "../controllers/orderSheetController";
 
 const router = useRouter();
 const user = ref<User | null>(null);
@@ -340,6 +443,23 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener("resize", checkScreenSize);
+});
+
+//Cart Sheet
+const orderData = ref<orderDataWithProduct[] | null>(null);
+const ifCartEmpty = ref(true);
+
+onMounted(async () => {
+  const results = await getOnQueueOrdersController();
+  if (results.length > 0) {
+    const onQueueOrders = results.filter(
+      (result) => result.orderStatus === "OnQueue"
+    );
+    orderData.value = onQueueOrders;
+    ifCartEmpty.value = onQueueOrders.every(
+      (result) => result.cart.length === 0
+    );
+  }
 });
 
 defineExpose({
