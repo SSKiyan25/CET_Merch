@@ -5,9 +5,10 @@
         <FeaturedCarousel />
       </div>
     </div>
+    <div></div>
     <div class="mx-auto w-11/12">
       <div
-        class="flex flex-col md:flex-row pt-12 pb-2 justify-between border-b-2 border-primary mx-auto"
+        class="flex flex-col md:flex-row pt-12 pb-2 justify-between border-b-2 border-primary mx-auto sticky"
       >
         <div class="flex flex-row items-center text-primary md:mb:0">
           <span
@@ -118,16 +119,14 @@
             id="products"
             class="flex flex-row px-2 md:px-4 py-8 justify-center"
           >
-            <div
-              class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 space-x-4"
-            >
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
               <div
                 v-if="!isLoading"
                 v-for="product in filteredProducts"
                 :key="product.id"
-                class="max-w-[75rem] justify-center items-center"
+                class="max-w-[75rem] justify-center items-center hover:border border-primary/70"
               >
-                <div class="group flex flex-col bg-white shadow-lg">
+                <div class="group flex flex-col bg-white drop-shadow-lg">
                   <div class="overflow-hidden border-b-2 border-primary/60">
                     <div
                       class="h-full flex flex-col justify-center items-center max-h-[22rem]"
@@ -135,7 +134,7 @@
                       <router-link :to="`/product/${product.id}`">
                         <img
                           :src="product.coverPhoto"
-                          class="transform transition-all duration-500 hover:scale-110 h-[12rem] md:h-[16rem] object-cover rounded-t-sm"
+                          class="transform transition-all duration-500 hover:scale-110 h-[8rem] md:h-[16rem] object-cover rounded-t-sm"
                         />
                       </router-link>
                     </div>
@@ -158,13 +157,13 @@
                     </div>
                     <router-link :to="`/product/${product.id}`"
                       ><h3
-                        class="text-lg md:text-xl font-bold text-secondary-foreground truncate"
+                        class="text-lg md:text-xl font-bold text-secondary-foreground truncate hover:underline"
                       >
                         {{ product.name }}
                       </h3>
                     </router-link>
                     <p
-                      class="mt-3 text-secondary-foreground text-xs whitespace-wrap text-justify truncate"
+                      class="mt-3 text-secondary-foreground text-[10px] opacity-60 whitespace-wrap text-justify truncate"
                     >
                       {{ product.description }}
                     </p>

@@ -268,9 +268,11 @@
             </div>
 
             <div
-              :class="{ hidden: !dropdownUserVisible }"
+              v-if="dropdownUserVisible"
               class="absolute z-50 mt-56 -ml-12 text-base list-none divide-y divide-primary rounded shadow bg-slate-100 border-accent max-w-48"
               id="dropdown-user"
+              v-on:focusout="dropdownUserVisible = false"
+              tab-index="0"
             >
               <div class="px-4 py-3">
                 <p class="text-sm text-primary">{{ username }}</p>
@@ -322,6 +324,7 @@ import {
   onUnmounted,
   reactive,
   computed,
+  onBeforeUnmount,
 } from "vue";
 import { initFlowbite } from "flowbite";
 import { auth } from "@/firebase/init.ts";
@@ -335,6 +338,7 @@ import { Search } from "lucide-vue-next";
 import { Input } from "@/components/ui/input";
 import { SlidersHorizontal } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import {
   Sheet,
   SheetTrigger,
@@ -373,11 +377,30 @@ const filteredProducts = computed(() => {
     product.name.toLowerCase().includes(searchTerm.value.toLowerCase())
   );
 });
+
 const dropdownUserVisible = ref(false);
 
 const toggleUserDropdown = () => {
   dropdownUserVisible.value = !dropdownUserVisible.value;
+  console.log(
+    "toggleUserDropdown called, dropdownUserVisible:",
+    dropdownUserVisible.value
+  );
 };
+const closeDropdown = (event: any) => {
+  const dropdownUser = document.getElementById("dropdown-user");
+  if (dropdownUser && !dropdownUser.contains(event.target)) {
+    dropdownUserVisible.value = false;
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("scroll", closeDropdown);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("click", closeDropdown);
+});
 
 auth.onAuthStateChanged(async (currentUser) => {
   if (currentUser) {

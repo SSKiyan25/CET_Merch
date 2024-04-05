@@ -64,6 +64,7 @@
                   "
                   @click.prevent="selectSize(size)"
                   class="mb-2"
+                  v-bind:disabled="size.stocks === 0"
                 >
                   {{ size.value }} - {{ size.stocks }}
                 </Button>
