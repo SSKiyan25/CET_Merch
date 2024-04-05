@@ -156,7 +156,7 @@
                         )
                       </span>
                     </div>
-                    <router-link to="/"
+                    <router-link :to="`/product/${product.id}`"
                       ><h3
                         class="text-lg md:text-xl font-bold text-secondary-foreground truncate"
                       >

@@ -285,7 +285,7 @@
                 id="is-hidden"
                 type="checkbox"
                 v-model="product.isPublished"
-                class="w-8 h-8 text-primary/80 bg-secondary border-primary/40 rounded focus:ring-primary focus:ring-2"
+                class="w-8 h-8 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2"
               />
               <label
                 for="is-hidden"

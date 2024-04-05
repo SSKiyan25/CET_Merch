@@ -31,19 +31,26 @@
               </div>
               <!--Product Card-->
               <div
-                class="flex flex-row px-4 md:px-16 pt-2 pb-8 justify-center rounded-3xl"
+                class="flex flex-row px-4 md:px-8 pt-2 pb-8 justify-center rounded-3xl"
               >
                 <div class="max-w-[75rem] justify-center items-center">
-                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
-                    <div class="flex flex-col bg-white shadow-md rounded-sm">
-                      <div class="overflow-hidden">
+                  <div
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+                  >
+                    <div
+                      v-if="!isLoading"
+                      v-for="product in products"
+                      :key="product.id"
+                      class="flex flex-col bg-white shadow-md rounded-sm"
+                    >
+                      <div class="overflow-hidden border-b-2 border-primary/60">
                         <div
-                          class="h-full flex flex-col border-b-2 border-primary/60 justify-center items-center max-h-[22rem]"
+                          class="flex flex-col justify-center items-center max-h-[22rem]"
                         >
                           <router-link to="/">
                             <img
-                              src="/1-Lanyard.png"
-                              class="transform transition-all duration-500 hover:scale-110 max-h-[20rem] md:max-h-[22rem] object-cover rounded-t-sm"
+                              :src="product.coverPhoto"
+                              class="transform transition-all duration-500 hover:scale-110 h-[20rem] md:h-[16rem] object-cover rounded-t-sm"
                             />
                           </router-link>
                         </div>
@@ -53,25 +60,29 @@
                           <span
                             class="block pb-2 pt-1 md:text-xs font-semibold uppercase text-secondary-foreground/80"
                           >
-                            Category
+                            {{ product.category }}
                           </span>
                           <span
                             class="block pb-2 pl-2 pt-1 text-xs md:text-sm font-semibold uppercase text-primary"
                           >
-                            (P )
+                            (P{{
+                              product.price[product.price.length - 1]
+                                .originalPrice
+                            }}
+                            )
                           </span>
                         </div>
                         <router-link to="/"
                           ><h3
                             class="text-lg md:text-2xl font-bold text-secondary-foreground truncate"
                           >
-                            Name
+                            {{ product.name }}
                           </h3>
                         </router-link>
                         <p
                           class="mt-3 text-secondary-foreground text-xs whitespace-wrap text-justify truncate"
                         >
-                          Description
+                          {{ product.description }}
                         </p>
                       </div>
                     </div>
@@ -96,4 +107,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "../../../ui/carousel";
+import { setup as setupPopularProductsController } from "../controllers/popularProductsController.ts";
+
+const { products, isLoading } = setupPopularProductsController();
 </script>
