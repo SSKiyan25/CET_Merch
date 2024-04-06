@@ -1,8 +1,43 @@
 <template>
   <div class="h-auto">
     <div class="max-w-screen pb-4 mx-auto border-b-2">
-      <div>
-        <FeaturedCarousel />
+      <div class="flex bg-inherit items-center justify-center p-2 relative">
+        <img
+          src="/homepage/products-1.jpg"
+          class="object-cover md:object-fit brightness-50 backdrop-contrast-50 backdrop-hue-rotate-90"
+          style="width: 1920px; height: 620px"
+        />
+      </div>
+    </div>
+    <div
+      class="absolute bottom-48 md:bottom-0 left-0 flex flex-col items-center justify-end w-full h-full pb-20 p-2 md:pb-28 md:pl-20 lg:pb-36 md:items-start opacity-90"
+    >
+      <div class="p-4 rounded-lg">
+        <h1
+          class="text-white uppercase font-black text-3xl md:text-5xl"
+          style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
+        >
+          CET Products
+        </h1>
+      </div>
+      <div class="md:pl-5 pb-4 w-1/2 md:w-1/3">
+        <p
+          class="text-white text-center md:text-start text-xs md:text-sm font-semibold text-wrap"
+          style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
+        >
+          Get your hands on the latest CET Merchandise. From t-shirts to
+          lanyards and more!
+        </p>
+      </div>
+      <div class="pt-2 ps-4">
+        <div class="overflow-hidden rounded-lg">
+          <button
+            class="bg-white p-4 transform transition-all duration-500 hover:scale-110 text-black text-base md:text-xl font-bold"
+            v-scroll-to="'#products'"
+          >
+            Shop Now
+          </button>
+        </div>
       </div>
     </div>
     <div></div>
@@ -82,18 +117,24 @@
             </form>
           </div>
           <div class="flex flex-row px-1 items-center">
-            <Popover
-              ><PopoverTrigger as-child>
-                <button
-                  class="p-2 bg-background border rounded-sm hover:bg-background/40 flex flex-row"
-                  title="Filter"
+            <DropdownMenu>
+              <DropdownMenuTrigger as-child>
+                <Button variant="outline"
+                  ><span class="pr-2">Filter:</span> <Filter />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent class="w-48">
+                <DropdownMenuLabel>Category</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuCheckboxItem
+                  v-for="item in dropdownItems"
+                  :key="item.value"
+                  @click.prevent="selectedItem = item.value"
                 >
-                  <span class="pr-2">Filter:</span>
-                  <Filter />
-                </button>
-              </PopoverTrigger>
-              <PopoverContent class="w-48"> Test</PopoverContent>
-            </Popover>
+                  {{ item.label }}
+                </DropdownMenuCheckboxItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
@@ -192,7 +233,6 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import FeaturedCarousel from "../../dashboard/components/Carousel.vue";
 import { Button } from "../../../ui/button";
 import { Check, ChevronsUpDown } from "lucide-vue-next";
 import { cn } from "../../../../lib/utils";
@@ -204,6 +244,14 @@ import {
   CommandItem,
   CommandList,
 } from "../../../ui/command";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "../../../ui/popover";
 import { Filter } from "lucide-vue-next";
 import { setup as setupProductsController } from "../controllers/productsController";
@@ -224,12 +272,31 @@ const frameworks = [
   { value: "BSABE", label: "BSABE" },
 ];
 
+const selectedItem = ref<string>("");
+
+const dropdownItems = [
+  { value: "All", label: "Show All" },
+  { value: "T-Shirt", label: "T-Shirt" },
+  { value: "Polo-Shirt", label: "Polo-Shirt" },
+  { value: "Lanyard", label: "Lanyard" },
+  { value: "Hoodie", label: "Hoodie" },
+  { value: "Stickers", label: "Stickers" },
+  { value: "Other", label: "Other" },
+];
+
 const filteredProducts = computed(() => {
-  const result =
+  let result =
     value.value === "All" || !value.value
       ? products.value
       : products.value.filter((product) => product.faction === value.value);
-  console.log(result); // Log the result
+
+  if (selectedItem.value !== "All" && selectedItem.value !== "") {
+    result = result.filter(
+      (product) => product.category === selectedItem.value
+    );
+  }
+
+  console.log(result);
   return result;
 });
 </script>
