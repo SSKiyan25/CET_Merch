@@ -1,7 +1,9 @@
 <template>
   <div class="h-auto">
     <div class="max-w-screen pb-4 mx-auto border-b-2">
-      <div class="flex bg-inherit items-center justify-center p-2 relative">
+      <div
+        class="flex bg-inherit items-center justify-center shadow-2xl relative"
+      >
         <img
           src="/homepage/products-1.jpg"
           class="object-cover md:object-fit brightness-50 backdrop-contrast-50 backdrop-hue-rotate-90"

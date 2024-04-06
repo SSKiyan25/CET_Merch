@@ -22,7 +22,7 @@
                 </div>
               </CardContent>
             </Card>
-            <Card v-else class="bg-background/0">
+            <Card v-else class="bg-background/0 shadow-2xl">
               <CardContent
                 class="flex bg-inherit items-center justify-center p-2 relative"
               >

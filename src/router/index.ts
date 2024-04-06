@@ -21,6 +21,7 @@ import ContactUs from "../components/feature/contactUs/views/ContactUsView.vue";
 import UserDashboard from "../components/feature/user/userDashboard/views/UserDashboardView.vue";
 import UserOrders from "../components/feature/user/userDashboard/views/UserOrdersView.vue";
 import AllProducts from "../components/feature/product/views/AllProductsView.vue";
+import AboutUs from "../components/feature/aboutUs/views/AboutUsView.vue";
 import { ref } from "vue";
 import { auth, db } from "../firebase/init.ts";
 import { DocumentData, getDoc, doc } from "firebase/firestore";
@@ -179,6 +180,11 @@ const routes: RouteRecordRaw[] = [
     path: "/products",
     name: "products",
     component: AllProducts,
+  },
+  {
+    path: "/aboutUs",
+    name: "aboutUs",
+    component: AboutUs,
   },
 ];
 

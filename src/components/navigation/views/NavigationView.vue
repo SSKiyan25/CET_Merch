@@ -22,6 +22,7 @@
                 'products',
                 'submitOrder',
                 'contactUs',
+                'aboutUs',
               ].includes($route.name)
             "
             @click.prevent="toggleSidebar"
@@ -75,7 +76,7 @@
                 <span class="text-black pl-2">Products</span>
               </router-link>
               <router-link
-                to="/contactUs"
+                to="/aboutUs"
                 class="border-l border-black border-opacity-60"
               >
                 <span class="text-black pl-2">About Us</span>
