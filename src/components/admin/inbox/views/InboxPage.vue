@@ -1,7 +1,7 @@
 <template>
   <NavBar />
   <AdminSidebar />
-  <div class="p-4 bg-slate-50 ml-2 pt-16 sm:ml-64 pb-16">
+  <div class="p-4 bg-slate-100 h-screen ml-2 sm:ml-64 pb-16">
     <div class="flex flex-row justify-start py-10">
       <div class="flex">
         <span class="material-symbols-outlined p-2 text-5xl"> mail </span>
@@ -20,7 +20,7 @@
           <h1 class="font-bold text-xl tracking-wide mb-2">Inbox</h1>
         </div>
         <!--Other Functionalities Put here-->
-        <div class="flex flex-row justify-start">
+        <div class="flex flex-row justify-start space-x-2">
           <div class="relative w-full max-w-xs items-center">
             <Input
               id="search"
@@ -60,56 +60,70 @@
         <div class="flex flex-col">
           <div class="overflow-x-auto">
             <div class="min-w-full inline-block align-middle">
-              <div class="bg-slate-100 border-t-2 shadow-sm overflow-hidden">
+              <div class="bg-slate-200 border-t-2 shadow-sm overflow-hidden">
                 <table class="min-w-full divide-y divide-primary/50">
-                  <thead class="bg-slate-200">
+                  <thead class="bg-slate-300">
                     <tr>
                       <th
                         scope="col"
-                        class="px-6 py-3 w-2/12 text-left text-xs font-medium text-secondary-foreground uppercase tracking-wider"
-                      >
-                        Name
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 w-2/12 text-left text-xs font-medium text-secondary-foreground uppercase tracking-wider"
-                      >
-                        Email
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 w-4/12 text-left text-xs font-medium text-secondary-foreground uppercase tracking-wider"
-                      >
-                        Message
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-secondary-foreground uppercase tracking-wider"
-                      >
-                        Status
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-secondary-foreground uppercase tracking-wider"
+                        class="px-6 py-3 w-2/12 text-left text-xs font-bold text-secondary-foreground uppercase tracking-wider"
                       >
                         Date
                       </th>
                       <th
                         scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-secondary-foreground uppercase tracking-wider"
+                        class="px-6 py-3 text-left text-xs font-bold text-secondary-foreground uppercase tracking-wider"
+                      >
+                        Name
+                      </th>
+                      <th
+                        scope="col"
+                        class="px-6 py-3 w-2/12 text-left text-xs font-bold text-secondary-foreground uppercase tracking-wider"
+                      >
+                        Email
+                      </th>
+                      <th
+                        scope="col"
+                        class="px-6 py-3 w-3/12 text-left text-xs font-bold text-secondary-foreground uppercase tracking-wider"
+                      >
+                        Message
+                      </th>
+                      <th
+                        scope="col"
+                        class="px-6 py-3 text-left text-xs font-bold text-secondary-foreground uppercase tracking-wider"
+                      >
+                        Status
+                      </th>
+
+                      <th
+                        scope="col"
+                        class="px-6 py-3 text-left text-xs font-bold text-secondary-foreground uppercase tracking-wider"
                       >
                         Actions
                       </th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-primary/50">
-                    <tr class="hover:bg-primary/10">
+                    <tr
+                      v-for="message in inboxMessages"
+                      :key="message.id"
+                      class="hover:bg-primary/10"
+                    >
                       <td>
                         <div class="pl-5 py-3">
                           <span
                             class="text-xs text-secondary-foreground/60 whitespace-nowrap"
                           >
-                            John Doe
+                            {{ formatDate(message.dateSent) }}
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="pl-5 py-3">
+                          <span
+                            class="text-xs text-secondary-foreground/90 whitespace-nowrap"
+                          >
+                            {{ message.username }}
                           </span>
                         </div>
                       </td>
@@ -118,40 +132,42 @@
                           <span
                             class="text-xs text-secondary-foreground/60 whitespace-nowrap"
                           >
-                            john.doe@example.com
+                            {{ message.email }}
                           </span>
                         </div>
                       </td>
                       <td>
-                        <div class="pl-5 py-3">
+                        <div class="pl-5 py-3 max-w-[200px] overflow-hidden">
                           <span
-                            class="text-xs text-secondary-foreground/60 whitespace-wrap"
+                            class="text-xs text-secondary-foreground/60 truncate"
                           >
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit. Nulla nec purus feugiat, molestie ipsum et,
-                            consequat nibh.
+                            {{ message.message }}
                           </span>
                         </div>
                       </td>
                       <td>
                         <div class="pl-4 py-3">
-                          <button class="rounded-lg bg-red-500 px-3 py-1">
+                          <button
+                            v-if="message.status === 'unread'"
+                            class="rounded-lg bg-red-700 px-3 py-1"
+                          >
                             <span
-                              class="text-xs font-medium text-secondary-foreground cursor-none"
-                              >Unread</span
+                              class="text-xs font-medium text-white cursor-none capitalize"
+                              >{{ message.status }}</span
+                            >
+                          </button>
+                          <button
+                            v-if="message.status === 'done'"
+                            class="rounded-lg bg-emerald-700 px-3 py-1"
+                          >
+                            <span
+                              class="text-xs font-medium text-white cursor-none capitalize"
+                              >{{ message.status }}</span
                             >
                           </button>
                         </div>
                       </td>
-                      <td>
-                        <div class="pl-5 py-3">
-                          <span
-                            class="text-xs text-secondary-foreground/60 whitespace-nowrap"
-                          >
-                            5 Jul 2024
-                          </span>
-                        </div>
-                      </td>
+
                       <td>
                         <div
                           class="hs-dropdown relative inline-block [--placement:bottom-right] py-1 pl-5"
@@ -186,8 +202,8 @@
                   class="px-6 py-4 grod gap-3 md:flex md:justify-between md:items-center border-t border-primary/20"
                 >
                   <div>
-                    <p class="text-sm text-gray-400">
-                      <span class="font-semibold text-gray-200"> 1-N </span>
+                    <p class="text-sm">
+                      <span class="font-semibold"> 1-N </span>
                       results
                     </p>
                   </div>
@@ -252,7 +268,7 @@ import AdminSidebar from "@/components/admin/dashboard/views/AdminSidebar.vue";
 import { MagnifyingGlassIcon } from "@radix-icons/vue";
 import { Input } from "@/components/ui/input";
 import type { DropdownMenuCheckboxItemProps } from "radix-vue";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -263,10 +279,26 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Filter } from "lucide-vue-next";
+import { Inbox } from "../models/inboxModel.ts";
+import { fetchInboxMessages } from "../controllers/inboxController.ts";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
 const unread = ref<Checked>(false);
 const starred = ref<Checked>(false);
 const done = ref<Checked>(false);
+
+const inboxMessages = ref<Inbox[]>([]);
+onMounted(async () => {
+  inboxMessages.value = await fetchInboxMessages();
+});
+
+const formatDate = (dateString: string) => {
+  const dateOptions = { year: "numeric", month: "long", day: "numeric" };
+  const timeOptions = { hour: "2-digit", minute: "2-digit" };
+  const date = new Date(dateString);
+  const formattedDate = (date.toLocaleDateString as any)([], dateOptions);
+  const formattedTime = (date.toLocaleTimeString as any)([], timeOptions);
+  return `${formattedDate} (${formattedTime})`;
+};
 </script>
