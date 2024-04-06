@@ -4,11 +4,12 @@ import { useRoute } from "vue-router";
 import {
   fetchPopularProducts,
   fetchProductById,
+  Product,
 } from "../models/productsModel.ts";
 
 export const setup = () => {
   const route = useRoute();
-  const products = ref<any[]>([]);
+  const products = ref<Product[]>([]);
   const product = ref<any>(null);
   const isLoading = ref(true);
 

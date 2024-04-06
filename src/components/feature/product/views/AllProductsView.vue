@@ -167,14 +167,17 @@
                 v-if="!isLoading"
                 v-for="product in filteredProducts"
                 :key="product.id"
-                class="max-w-[75rem] justify-center items-center hover:border border-primary/70"
+                class="max-w-[75rem] justify-center items-center hover:drop-shadow-xl"
               >
                 <div class="group flex flex-col bg-white drop-shadow-lg">
                   <div class="overflow-hidden border-b-2 border-primary/60">
                     <div
                       class="h-full flex flex-col justify-center items-center max-h-[22rem]"
                     >
-                      <router-link :to="`/product/${product.id}`">
+                      <router-link
+                        :to="`/product/${product.id}`"
+                        @click.prevent="incrementViewCount(product)"
+                      >
                         <img
                           :src="product.coverPhoto"
                           class="transform transition-all duration-500 hover:scale-110 h-[8rem] md:h-[16rem] object-cover rounded-t-sm"
@@ -183,33 +186,34 @@
                     </div>
                   </div>
                   <div class="p-2 md:p-4">
-                    <div class="flex flex-row justify-between">
+                    <div class="flex flex-col">
                       <span
-                        class="block pb-2 pt-1 md:text-xs font-semibold uppercase text-secondary-foreground/80"
-                      >
-                        {{ product.category }}
-                      </span>
-                      <span
-                        class="block pb-2 pl-2 pt-1 text-xs md:text-sm font-semibold uppercase text-primary"
-                      >
-                        (P{{
-                          product.price[product.price.length - 1].originalPrice
-                        }}
-                        )
-                      </span>
-                    </div>
-                    <router-link :to="`/product/${product.id}`"
-                      ><h3
-                        class="text-lg md:text-xl font-bold text-secondary-foreground truncate hover:underline"
+                        class="text-sm md:text-base font-bold text-secondary-foreground truncate hover:underline"
                       >
                         {{ product.name }}
-                      </h3>
-                    </router-link>
-                    <p
-                      class="mt-3 text-secondary-foreground text-[10px] opacity-60 whitespace-wrap text-justify truncate"
-                    >
-                      {{ product.description }}
-                    </p>
+                      </span>
+                      <span
+                        class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
+                        >P
+                        {{
+                          product.price[product.price.length - 1].originalPrice
+                        }}
+                      </span>
+                      <div
+                        class="flex flex-row justify-between items-center text-xs"
+                      >
+                        <div>
+                          <span> {{ product.totalOrders }} Sold | </span>
+                          <span> {{ product.views }} Views</span>
+                        </div>
+                        <div>
+                          <span>
+                            <span> {{ product.category }} | </span>
+                            <span> {{ product.faction }} </span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -258,7 +262,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../../../ui/popover";
 import { Filter } from "lucide-vue-next";
 import { setup as setupProductsController } from "../controllers/productsController";
 
-const { products, isLoading } = setupProductsController();
+const { products, isLoading, incrementViewCount } = setupProductsController();
 
 const open = ref(false);
 const value = ref<string>("");

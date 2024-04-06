@@ -55,35 +55,37 @@
                           </router-link>
                         </div>
                       </div>
-                      <div class="p-2 md:p-3">
-                        <div class="flex flex-row justify-between">
+                      <div class="p-2 md:p-4">
+                        <div class="flex flex-col">
                           <span
-                            class="block pb-2 pt-1 md:text-xs font-semibold uppercase text-secondary-foreground/80"
+                            class="text-sm md:text-base font-bold text-secondary-foreground truncate hover:underline"
                           >
-                            {{ product.category }}
+                            {{ product.name }}
                           </span>
                           <span
-                            class="block pb-2 pl-2 pt-1 text-xs md:text-sm font-semibold uppercase text-primary"
+                            class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
                           >
-                            (P{{
+                            P
+                            {{
                               product.price[product.price.length - 1]
                                 .originalPrice
                             }}
-                            )
                           </span>
-                        </div>
-                        <router-link to="/"
-                          ><h3
-                            class="text-lg md:text-2xl font-bold text-secondary-foreground truncate hover:underline"
+                          <div
+                            class="flex flex-row justify-between items-center text-xs"
                           >
-                            {{ product.name }}
-                          </h3>
-                        </router-link>
-                        <p
-                          class="mt-3 opacity-60 text-secondary-foreground text-[10px] whitespace-wrap text-justify truncate"
-                        >
-                          {{ product.description }}
-                        </p>
+                            <div>
+                              <span> {{ product.totalOrders }} Sold | </span>
+                              <span> {{ product.views }} Views</span>
+                            </div>
+                            <div>
+                              <span>
+                                <span> {{ product.category }} | </span>
+                                <span> {{ product.faction }} </span>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

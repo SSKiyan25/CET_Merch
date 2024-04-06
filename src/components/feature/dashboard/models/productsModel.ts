@@ -11,12 +11,28 @@ import {
 } from "firebase/firestore";
 
 export interface Product {
-  id: string;
-  name: string;
-  price: number;
+  category: string;
+  coverPhoto: string;
+  dateCreated: string;
   description: string;
-  imageUrl: string;
+  discountedPrice: number;
+  faction: string;
+  id: string;
+  isArchived: boolean;
   isPublished: boolean;
+  lastModified: string;
+  name: string;
+  originalPrice: number;
+  photos: string[];
+  price: {
+    dateCreated: string;
+    discountedPrice: number;
+    originalPrice: number;
+  }[];
+  sizes: { stocks: number; value: string }[];
+  status: string;
+  totalOrders: number;
+  views: number;
 }
 
 export const fetchProducts = async () => {

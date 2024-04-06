@@ -79,7 +79,6 @@ export const addToCart = async (newAddToCart: cartData) => {
   };
   await addDoc(orderCollection, newOrder);
 
-  productData.views += 1;
   await updateDoc(productDoc, { ...productData });
 };
 

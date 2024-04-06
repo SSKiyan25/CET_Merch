@@ -1,4 +1,4 @@
-import { db } from "@/firebase/init.ts";
+import { db, auth } from "@/firebase/init.ts";
 import {
   collection,
   getDocs,
@@ -6,6 +6,9 @@ import {
   getDoc,
   query,
   where,
+  updateDoc,
+  setDoc,
+  FieldValue,
 } from "firebase/firestore";
 
 export interface Product {
@@ -56,4 +59,52 @@ export const fetchProductById = async (id: string) => {
     } as Product;
   }
   return null;
+};
+
+export const fetchUser = async () => {
+  if (!auth.currentUser) {
+    console.error("No current user");
+    return null;
+  }
+
+  try {
+    const userDoc = doc(db, "users", auth.currentUser.uid);
+    const userSnapshot = await getDoc(userDoc);
+    const userData = userSnapshot.data();
+
+    if (!userData) {
+      throw new Error("User data is null");
+    }
+
+    if (!userData.lastViewed) {
+      userData.lastViewed = {};
+    }
+
+    return userData;
+  } catch (error) {
+    console.error("Failed to fetch user data:", error);
+    return null;
+  }
+};
+
+export const updateProduct = async (product: Product) => {
+  const productRef = doc(db, "products", product.id);
+  await updateDoc(productRef, {
+    views: product.views,
+  });
+};
+
+export const updateUser = async (user: any) => {
+  if (!auth.currentUser) {
+    console.error("No current user");
+    return;
+  }
+  const userRef = doc(db, "users", auth.currentUser.uid);
+  await setDoc(
+    userRef,
+    {
+      lastViewed: user.lastViewed,
+    },
+    { merge: true }
+  );
 };
