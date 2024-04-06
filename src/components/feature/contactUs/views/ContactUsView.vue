@@ -19,7 +19,7 @@
           <h2 class="text-xl font-semibold text-primary">Fill in the form</h2>
         </div>
 
-        <form>
+        <form @submit.prevent="sendInquiry">
           <div class="grid gap-4 lg:gap-6 pt-8">
             <!-- Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
@@ -31,6 +31,8 @@
                 >
                 <input
                   type="text"
+                  id="hs-firstname-contact-1"
+                  v-model="inbox.firstName"
                   class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/60 focus:ring-primary/80 disabled:opacity-50 disabled:pointer-events-none"
                 />
               </div>
@@ -43,6 +45,8 @@
                 >
                 <input
                   type="text"
+                  id="hs-lastname-contact-1"
+                  v-model="inbox.lastName"
                   class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/60 focus:ring-primary/80 disabled:opacity-50 disabled:pointer-events-none"
                 />
               </div>
@@ -59,7 +63,10 @@
                 >
                 <input
                   type="email"
+                  id="hs-email-contacts-1"
+                  v-model="inbox.email"
                   class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/60 focus:ring-primary/80 disabled:opacity-50 disabled:pointer-events-none"
+                  required
                 />
               </div>
 
@@ -71,6 +78,56 @@
                 >
                 <input
                   type="text"
+                  id="hs-phone-number-1"
+                  v-model="inbox.phoneNumber"
+                  class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/60 focus:ring-primary/80 disabled:opacity-50 disabled:pointer-events-none"
+                />
+              </div>
+            </div>
+            <!-- End Grid -->
+
+            <div>
+              <label
+                for="hs-message-contacts-1"
+                class="block mb-2 text-sm text-secondary-foreground font-medium"
+                >Details
+              </label>
+              <textarea
+                rows="4"
+                v-model.lazy="inbox.message"
+                class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/60 focus:ring-primary/80 disabled:opacity-50 disabled:pointer-events-none"
+              ></textarea>
+            </div>
+
+            <label class="text-sm text-primary font-semibold"
+              >If Student (Optional):
+            </label>
+            <!-- Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+              <div>
+                <label
+                  for="student-id"
+                  class="block mb-2 text-sm text-secondary-foreground font-medium"
+                  >Student ID</label
+                >
+                <input
+                  type="text"
+                  id="student-id"
+                  v-model="inbox.studentId"
+                  class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/60 focus:ring-primary/80 disabled:opacity-50 disabled:pointer-events-none"
+                />
+              </div>
+
+              <div>
+                <label
+                  for="department"
+                  class="block mb-2 text-sm text-secondary-foreground font-medium"
+                  >Department</label
+                >
+                <input
+                  type="text"
+                  id="department"
+                  v-model="inbox.department"
                   class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/60 focus:ring-primary/80 disabled:opacity-50 disabled:pointer-events-none"
                 />
               </div>
@@ -80,14 +137,28 @@
             <div>
               <label
                 class="block mb-2 text-sm text-secondary-foreground font-medium"
-                >Details
+                >Send to:
               </label>
-              <textarea
-                rows="4"
-                class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/60 focus:ring-primary/80 disabled:opacity-50 disabled:pointer-events-none"
-              ></textarea>
+              <select
+                id="send-to"
+                v-model="inbox.faction"
+                class="p-2 border w-full text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
+                required
+              >
+                <option disabled value="">
+                  Please select the seller to message
+                </option>
+                <option value="CET">CET</option>
+                <option value="BSCS">BSCS</option>
+                <option value="BSCE">BSCE</option>
+                <option value="BSGE">BSGE</option>
+                <option value="BSME">BSME</option>
+                <option value="BSMet">BSMet</option>
+                <option value="BSABE">BSABE</option>
+              </select>
             </div>
           </div>
+
           <!-- End Grid -->
 
           <div class="mt-6 grid">
@@ -111,6 +182,40 @@
   </div>
   <!-- End Contact Us -->
   <div class="pb-12"></div>
+  <div>
+    <LoadingComponent v-if="isLoading" />
+  </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from "vue";
+import { Inbox } from "../models/contactModel.ts";
+import {
+  createInboxMessage,
+  isLoading,
+} from "../controllers/contactController.ts";
+import LoadingComponent from "../../misc/LoadingComponent.vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
+
+const inbox = ref({
+  username: "", // Add this line
+  firstName: "",
+  lastName: "",
+  email: "",
+  phoneNumber: "",
+  message: "",
+  studentId: "",
+  department: "",
+  faction: "",
+  dateSent: "",
+  status: "unread",
+} as Inbox);
+
+const sendInquiry = async () => {
+  inbox.value.dateSent = new Date().toISOString();
+  inbox.value.status = "unread";
+  inbox.value.username = `${inbox.value.firstName}, ${inbox.value.lastName}`;
+  await createInboxMessage(inbox.value, router);
+};
+</script>

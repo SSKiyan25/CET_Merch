@@ -6,10 +6,13 @@
           class="group bg-gradient-to-br from-gold to-light-gold h-20 w-auto md:h-[12rem] md:w-full shadow-lg rounded-sm"
         >
           <div
-            class="flex flex-row border-primary/60 justify-start items-start max-h-[22rem] pl-1 md:pl-4 pt-5"
+            class="flex flex-row border-primary/60 justify-start items-start pl-1 md:pl-4 pt-5"
           >
-            <div class="w-12 h-28 md:w-48 md:h-64">
-              <img src="/1-Lanyard.png" class="object-cover rounded-sm" />
+            <div class="">
+              <img
+                src="/homepage/about-1.jpg"
+                class="md:w-48 md:h-36 object-cover brightness-90 rounded-lg"
+              />
             </div>
             <div class="flex flex-col -space-y-1 md:space-y-2">
               <span
@@ -31,8 +34,11 @@
           <div
             class="flex flex-row border-primary/60 justify-start items-start max-h-[22rem] pl-1 md:pl-4 pt-5"
           >
-            <div class="w-12 h-28 md:w-48 md:h-64">
-              <img src="/1-Lanyard.png" class="object-cover rounded-sm" />
+            <div class="">
+              <img
+                src="/homepage/products-1.jpg"
+                class="md:w-48 md:h-36 object-cover brightness-90 rounded-lg shadow-xl"
+              />
             </div>
             <div class="flex flex-col -space-y-1 md:space-y-2">
               <span
@@ -59,7 +65,10 @@
             class="flex flex-row border-primary/60 justify-start items-start max-h-[22rem] pl-1 md:pl-4 pt-5"
           >
             <div class="w-12 h-28 md:w-48 md:h-64">
-              <img src="/1-Lanyard.png" class="object-cover rounded-sm" />
+              <img
+                src="/homepage/gallery-1.jpg"
+                class="md:w-48 md:h-36 object-cover brightness-90 rounded-lg shadow-xl"
+              />
             </div>
             <div class="flex flex-col -space-y-1 md:space-y-2">
               <span

@@ -1,7 +1,7 @@
 <template>
   <NavBar />
   <AdminSidebar />
-  <div class="p-4 ml-2 pt-16 sm:ml-64 pb-16">
+  <div class="p-4 bg-slate-50 ml-2 pt-16 sm:ml-64 pb-16">
     <div class="flex flex-row justify-start py-10">
       <div class="flex">
         <span class="material-symbols-outlined p-2 text-5xl"> mail </span>
@@ -60,9 +60,9 @@
         <div class="flex flex-col">
           <div class="overflow-x-auto">
             <div class="min-w-full inline-block align-middle">
-              <div class="bg-secondary border-t-2 shadow-sm overflow-hidden">
+              <div class="bg-slate-100 border-t-2 shadow-sm overflow-hidden">
                 <table class="min-w-full divide-y divide-primary/50">
-                  <thead class="bg-secondary">
+                  <thead class="bg-slate-200">
                     <tr>
                       <th
                         scope="col"
@@ -195,7 +195,7 @@
                     <div class="inline-flex gap-x-2">
                       <button
                         type="button"
-                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-primary/20 bg-muted text-secondary-foreground shadow-sm hover:bg-primary/50 hover:border-muted disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
+                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-primary/20 bg-secondary text-secondary-foreground shadow-sm hover:bg-primary/50 hover:border-muted disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
                       >
                         <svg
                           class="flex-shrink-0 size-4"
@@ -216,7 +216,7 @@
 
                       <button
                         type="button"
-                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-primary/20 bg-muted text-secondary-foreground shadow-sm hover:bg-primary/50 hover:border-muted disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
+                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-primary/20 bg-secondary text-secondary-foreground shadow-sm hover:bg-primary/50 hover:border-muted disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
                       >
                         Next
                         <svg

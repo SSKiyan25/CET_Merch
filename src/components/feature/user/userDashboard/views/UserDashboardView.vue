@@ -8,10 +8,10 @@
         </span>
       </div>
       <div class="flex flex-col">
-        <h1 class="text-2xl">Welcome to the Your Profile</h1>
+        <h1 class="text-2xl">Welcome to Your Profile</h1>
         <p class="text-sm py-1 text-secondary-foreground/60">
-          This is the your dashboard where you can manage your orders, inbox,
-          and other settings from here.
+          This is your dashboard where you can manage your orders, inbox, and
+          other settings from here.
         </p>
       </div>
     </div>
