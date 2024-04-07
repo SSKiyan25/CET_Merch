@@ -4,12 +4,11 @@ import { useRoute } from "vue-router";
 import {
   fetchPopularProducts,
   fetchProductById,
-  Product,
 } from "../models/productsModel.ts";
 
 export const setup = () => {
   const route = useRoute();
-  const products = ref<Product[]>([]);
+  const products = ref<any[]>([]);
   const product = ref<any>(null);
   const isLoading = ref(true);
 
@@ -17,7 +16,6 @@ export const setup = () => {
     initFlowbite();
     try {
       products.value = await fetchPopularProducts();
-      // Check if route has id parameter
       if (route.params.id) {
         const id = route.params.id as string;
         product.value = await fetchProductById(id);

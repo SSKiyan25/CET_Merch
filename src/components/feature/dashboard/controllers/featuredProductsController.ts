@@ -16,7 +16,6 @@ export const setup = () => {
     initFlowbite();
     try {
       products.value = await fetchFeaturedProducts();
-      // Check if route has id parameter
       if (route.params.id) {
         const id = route.params.id as string;
         product.value = await fetchProductById(id);

@@ -44,12 +44,11 @@ export const setup = () => {
     const now = Date.now();
 
     if (!lastViewed || now - lastViewed >= 12 * 60 * 60 * 1000) {
-      // 12 hours in milliseconds
       product.views += 1;
       user.value.lastViewed[product.id] = now;
 
-      await updateProduct(product); // update the product in the database
-      await updateUser(user.value); // update the user in the database
+      await updateProduct(product);
+      await updateUser(user.value);
     }
   };
 

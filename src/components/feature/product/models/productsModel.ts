@@ -8,7 +8,6 @@ import {
   where,
   updateDoc,
   setDoc,
-  FieldValue,
 } from "firebase/firestore";
 
 export interface Product {

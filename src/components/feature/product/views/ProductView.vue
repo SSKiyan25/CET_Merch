@@ -170,18 +170,19 @@
                   </div>
                   <div></div>
                 </div>
-                <div class="flex">
-                  <div>
-                    <span class="text-[13.5px] text-gray-500 pr-8"
-                      >Sold: {{ product?.totalOrders }}</span
-                    >
-                  </div>
+                <div class="flex flex-row pt-2">
+                  <span class="text-[13.5px] text-gray-500 pr-2"
+                    >Sold: {{ product?.totalOrders }}</span
+                  >
+                  <span class="text-[13.5px] text-gray-500 pr-8"
+                    >| Views: {{ product?.views }}</span
+                  >
                 </div>
               </div>
 
               <div class="flex flex-wrap">
                 <p
-                  class="text-secondary-foreground/60 text-justify px-8 text-wrap"
+                  class="text-secondary-foreground/60 text-sm text-justify px-8 text-wrap"
                 >
                   {{ product?.description }}
                 </p>
@@ -198,6 +199,10 @@
                     >{{ size.value }} |
                   </span>
                 </p>
+              </div>
+              <div>
+                <span class="pr-2">Seller:</span>
+                <span class="font-bold">{{ product?.faction }}</span>
               </div>
               <div class="flex justify-center md:justify-start">
                 <Sheet>

@@ -111,11 +111,6 @@
               />
             </span>
 
-            <span
-              class="absolute end-0 inset-y-0 flex items-center justify-center px-2 opacity-60"
-            >
-              <button><SlidersHorizontal class="size-4 md:size-6" /></button>
-            </span>
             <div
               v-if="isSearchFocused && filteredProducts.length > 0"
               class="search-results absolute bg-background border rounded-b-xl w-full p-3 space-y-2"
@@ -126,7 +121,12 @@
                 class="hover:bg-primary/10 p-2 cursor-pointer text-xs"
                 @mousedown="$router.push(`/product/${product.id}`)"
               >
-                {{ product.name }}
+                <div class="flex flex-row items-center justify-between">
+                  <span> {{ product.name }}</span>
+                  <span class="material-symbols-outlined text-xs">
+                    arrow_outward
+                  </span>
+                </div>
               </div>
             </div>
             <div
@@ -337,7 +337,6 @@ import { signOut } from "firebase/auth";
 import { User as UserIcon } from "lucide-vue-next";
 import { Search } from "lucide-vue-next";
 import { Input } from "@/components/ui/input";
-import { SlidersHorizontal } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {

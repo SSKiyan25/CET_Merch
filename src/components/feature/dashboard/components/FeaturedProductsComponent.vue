@@ -54,13 +54,16 @@
                       v-if="!isLoading"
                       v-for="product in products"
                       :key="product.id"
-                      class="flex flex-col bg-white shadow-lg border border-primary/20 rounded-sm"
+                      class="flex flex-col bg-white shadow-lg border hover:drop-shadow-xl border-primary/20 rounded-sm"
                     >
                       <div class="overflow-hidden border-b-2 border-primary/60">
                         <div
                           class="h-full flex flex-col justify-center items-center max-h-[22rem]"
                         >
-                          <router-link to="/">
+                          <router-link
+                            :to="`/product/${product.id}`"
+                            @click.prevent="incrementViewCount(product)"
+                          >
                             <img
                               :src="product.coverPhoto"
                               class="transform transition-all duration-500 hover:scale-110 h-[8rem] md:h-[16rem] object-cover rounded-t-sm"
@@ -70,11 +73,16 @@
                       </div>
                       <div class="p-2 md:p-4">
                         <div class="flex flex-col">
-                          <span
-                            class="text-sm md:text-base font-bold text-secondary-foreground truncate hover:underline"
+                          <router-link
+                            :to="`/product/${product.id}`"
+                            @click.prevent="incrementViewCount(product)"
                           >
-                            {{ product.name }}
-                          </span>
+                            <span
+                              class="text-sm md:text-base font-bold text-secondary-foreground truncate hover:underline"
+                            >
+                              {{ product.name }}
+                            </span></router-link
+                          >
                           <span
                             class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
                             >P
@@ -122,6 +130,8 @@ import {
   CarouselPrevious,
 } from "../../../ui/carousel";
 import { setup as setupFeaturedProductsController } from "../controllers/featuredProductsController.ts";
+import { setup as setupProductViews } from "@/components/feature/product/controllers/productsController.ts";
 
 const { products, isLoading } = setupFeaturedProductsController();
+const { incrementViewCount } = setupProductViews();
 </script>
