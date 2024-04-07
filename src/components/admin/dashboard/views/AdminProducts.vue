@@ -164,7 +164,7 @@
                           <span
                             class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                           >
-                            Sizes
+                            Sizes | Stocks
                           </span>
                         </div>
                       </th>
@@ -346,11 +346,13 @@
                               v-if="
                                 (product.sizes[0] === '' &&
                                   product.sizes.length === 1) ||
-                                product.sizes.length === 0
+                                (product.sizes.length === 0 &&
+                                  product.generalStocks > 0) ||
+                                product.generalStocks
                               "
                               class="text-xs text-secondary-foreground/80"
                             >
-                              N/A
+                              {{ product.generalStocks }}
                             </span>
                           </p>
                         </div>

@@ -343,7 +343,7 @@
                             v-if="product.isPreOrdered"
                             class="text-[10px] text-primary truncate"
                           >
-                            (Pre-ordered)
+                            (Pre-order)
                           </span>
                         </div>
                       </td>

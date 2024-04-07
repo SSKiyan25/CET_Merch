@@ -5,7 +5,7 @@ interface cartData {
   productId: string;
   quantity: number;
   totalPrice: number;
-  size: string;
+  size?: string;
   isPreOrdered: boolean;
 }
 

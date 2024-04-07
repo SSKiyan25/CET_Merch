@@ -28,7 +28,7 @@ type cartData = {
   productId: string;
   quantity: number;
   totalPrice: number;
-  size: string;
+  size?: string;
   isPreOrdered: boolean;
 };
 
@@ -55,7 +55,7 @@ export const addToCart = async (newAddToCart: cartData) => {
   const orderCollection = collection(db, "userOrder");
 
   // Check if the user has an order in queue
-  await getDocs(
+  const orderSnapshot = await getDocs(
     query(
       orderCollection,
       where("orderStatus", "==", "OnQueue"),
@@ -64,21 +64,31 @@ export const addToCart = async (newAddToCart: cartData) => {
     )
   );
 
-  const orderCountSnapshot = await getDocs(orderCollection);
-  const newOrder: orderData = {
-    orderNumber: orderCountSnapshot.size + 1,
-    userId: auth.currentUser.uid,
-    userName: "",
-    userContactNumber: "",
-    cart: [newAddToCart],
-    totalPrice: newAddToCart.totalPrice,
-    paymentStatus: "",
-    paymentMethod: "",
-    orderStatus: "OnQueue",
-    faction: productData.faction,
-    dateOrdered: new Date().toISOString(),
-  };
-  await addDoc(orderCollection, newOrder);
+  if (!orderSnapshot.empty) {
+    // If an order exists, add the product to the existing order
+    const existingOrder = orderSnapshot.docs[0];
+    const existingOrderData = existingOrder.data();
+    existingOrderData.cart.push(newAddToCart);
+    existingOrderData.totalPrice += newAddToCart.totalPrice;
+    await updateDoc(doc(db, "userOrder", existingOrder.id), existingOrderData);
+  } else {
+    // If no order exists, create a new order
+    const orderCountSnapshot = await getDocs(orderCollection);
+    const newOrder: orderData = {
+      orderNumber: orderCountSnapshot.size + 1,
+      userId: auth.currentUser.uid,
+      userName: "",
+      userContactNumber: "",
+      cart: [newAddToCart],
+      totalPrice: newAddToCart.totalPrice,
+      paymentStatus: "",
+      paymentMethod: "",
+      orderStatus: "OnQueue",
+      faction: productData.faction,
+      dateOrdered: new Date().toISOString(),
+    };
+    await addDoc(orderCollection, newOrder);
+  }
 
   await updateDoc(productDoc, { ...productData });
 };

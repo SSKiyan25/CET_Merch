@@ -49,10 +49,7 @@
             </div>
             <div
               class="flex flex-col flex-wrap py-6"
-              v-if="
-                (product.sizes && product.sizes[0].value !== '') ||
-                product.sizes.length === 0
-              "
+              v-if="product.sizes.length > 0 && product.sizes[0].value !== ''"
             >
               <span class="text-sm"> Available Sizes</span>
               <div class="flex flex-row flex-wrap py-4 pl-4 space-x-1">
@@ -72,12 +69,19 @@
                 </Button>
               </div>
             </div>
+            <div v-else class="py-4">
+              <div>
+                <span class="text-sm"
+                  >Stocks:
+                  <span class="underline font-bold">{{
+                    product.generalStocks
+                  }}</span>
+                </span>
+              </div>
+            </div>
             <div
               class="flex flex-col space-y-2"
-              v-if="
-                (product.sizes && product.sizes[0].value !== '') ||
-                product.sizes.length === 0
-              "
+              v-if="product.sizes.length > 0 && product.sizes[0].value !== ''"
             >
               <div class="flex flex-row items-center">
                 <span class="text-xs"
@@ -127,6 +131,52 @@
                 </button>
               </div>
             </div>
+            <div v-else class="pb-4">
+              <div class="flex flex-row items-center">
+                <span class="text-xs"
+                  >Out of Stocks? Click
+                  <button
+                    class="p-2 rounded-sm bg-emerald-700 text-white"
+                    @click.prevent="newAddToCartData.isPreOrdered = true"
+                    v-bind:disabled="product.generalStocks > 0"
+                    :class="{
+                      'cursor-not-allowed opacity-50':
+                        product.generalStocks > 0,
+                    }"
+                  >
+                    Pre-Order
+                  </button>
+                  <HoverCard>
+                    <HoverCardTrigger
+                      ><span
+                        class="material-symbols-outlined text-sm pt-2.5 pl-1 opacity-80 cursor-pointer"
+                      >
+                        help
+                      </span></HoverCardTrigger
+                    >
+                    <HoverCardContent
+                      ><span class="text-xs">
+                        Please note, choosing to pre-order may result in a delay
+                        in receiving your order.</span
+                      >
+                    </HoverCardContent>
+                  </HoverCard>
+                </span>
+              </div>
+              <!--Pre-Order Input Field-->
+              <div
+                v-show="newAddToCartData.isPreOrdered"
+                class="flex flex-row pt-4 space-x-2 text-xs items-center"
+              >
+                <label class="font-bold text-sm">Pre-Ordered!</label>
+                <button
+                  @click.prevent="newAddToCartData.isPreOrdered = false"
+                  class="p-2 rounded-sm bg-red-700 text-white"
+                >
+                  Undo
+                </button>
+              </div>
+            </div>
 
             <div class="flex flex-row pt-4">
               <span class="pt-2.5 pr-2 text-xs md:text-sm"> Quantity : </span>
@@ -170,7 +220,7 @@
         </TabsContent>
       </form>
       <TabsContent value="order">
-        <div v-for="(order, index) in orderData" :key="index">
+        <div v-for="(order, index) in orderData" :key="index" class="pb-8">
           <div class="flex flex-col flex-wrap py-2">
             <div class="flex flex-row items-center">
               <span class="material-symbols-outlined">
@@ -210,7 +260,7 @@
                     <AccordionContent>
                       <div class="flex justify-between px-4">
                         <Label>Quantity: {{ product.quantity }}</Label>
-                        <Label v-if="product.size !== 'N/A'"
+                        <Label v-if="product.size !== ''"
                           >Size: {{ product.size }}</Label
                         >
                         <Label>Total Price: {{ product.totalPrice }} </Label>
@@ -327,6 +377,7 @@ type ProductType = {
   category: string;
   price: PriceType[];
   sizes: sizesData[];
+  generalStocks: number;
   faction: string;
 };
 type GetProductByIdType = (id: string) => ProductType;
@@ -378,15 +429,6 @@ const handleFormCartSubmit = async () => {
     return;
   }
 
-  if (
-    newAddToCartData.value.isPreOrdered &&
-    newAddToCartData.value.size === ""
-  ) {
-    alert("Please enter a valid size for pre-ordered product");
-    console.error("Size cannot be empty for pre-ordered product");
-    isLoading.value = false;
-    return;
-  }
   console.log("Form submitted");
   if (auth.currentUser) {
     newAddToCartData.value = {
@@ -400,7 +442,9 @@ const handleFormCartSubmit = async () => {
       ),
       size: newAddToCartData.value.isPreOrdered
         ? newAddToCartData.value.size
-        : selectedSize.value.value,
+        : product.value.sizes.length > 0
+        ? selectedSize.value.value
+        : newAddToCartData.value.size,
       isPreOrdered: newAddToCartData.value.isPreOrdered,
     };
     await handleAddToCartSubmit(newAddToCartData.value);

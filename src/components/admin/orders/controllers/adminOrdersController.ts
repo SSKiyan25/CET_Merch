@@ -32,7 +32,7 @@ export const setup = () => {
         purchaseDate: "",
       };
 
-      // Iterate over the cart items and decrement the totalOrders and stocks for each product
+      // Iterate over the cart items and decrement the totalOrders, totalSales and stocks for each product
       for (const item of order.cart) {
         const productData = await getProductDetails(item.productId);
         if (productData) {
@@ -44,9 +44,9 @@ export const setup = () => {
           }
           productUpdateData = {
             totalOrders: productData.totalOrders - item.quantity,
+            totalSales: (productData.totalSales || 0) - item.totalPrice,
             sizes: productData.sizes,
           };
-          console.log(sizeIndex);
           await updateProduct(item.productId, productUpdateData);
         }
       }
@@ -57,7 +57,7 @@ export const setup = () => {
         purchaseDate: new Date().toISOString(),
       };
 
-      // Iterate over the cart items and increment the totalOrders and stocks for each product
+      // Iterate over the cart items and increment the totalOrders, totalSales and stocks for each product
       for (const item of order.cart) {
         const productData = await getProductDetails(item.productId);
         if (productData) {
@@ -69,9 +69,9 @@ export const setup = () => {
           }
           productUpdateData = {
             totalOrders: productData.totalOrders + item.quantity,
+            totalSales: (productData.totalSales || 0) + item.totalPrice,
             sizes: productData.sizes,
           };
-          console.log(sizeIndex);
           await updateProduct(item.productId, productUpdateData);
         }
       }

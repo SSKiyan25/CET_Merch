@@ -6,7 +6,6 @@ import {
   doc,
   getDoc,
   updateDoc,
-  setDoc,
 } from "firebase/firestore";
 import { db, auth } from "@/firebase/init.ts";
 import { Inbox } from "../models/inboxModel.ts";

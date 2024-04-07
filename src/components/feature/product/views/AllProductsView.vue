@@ -180,7 +180,7 @@
                       >
                         <img
                           :src="product.coverPhoto"
-                          class="transform transition-all duration-500 hover:scale-110 h-[8rem] md:h-[16rem] object-cover rounded-t-sm"
+                          class="transform transition-all duration-500 hover:scale-110 w-[10rem] md:w-[18rem] h-[8rem] md:h-[16rem] object-cover rounded-t-sm"
                         />
                       </router-link>
                     </div>

@@ -188,6 +188,27 @@
                 </div>
               </div>
             </div>
+            <div class="pt-4 flex-flex-col items-center">
+              <label class="text-xs opacity-70 italic"
+                >*Accessible if N/A checkbox is clicked</label
+              >
+              <div
+                class="flex flex-row border w-1/5 items-center rounded-sm p-2 space-x-2"
+                :class="`flex flex-row border w-1/5 items-center rounded-sm p-2 space-x-2 ${
+                  !naChecked ? 'opacity-50' : ''
+                }`"
+              >
+                <label class="text-sm">General Stocks:</label>
+                <input
+                  type="number"
+                  min="1"
+                  max="2000"
+                  v-model="newProduct.generalStocks"
+                  v-bind:disabled="!naChecked"
+                  class="rounded-sm p-2 text-xs"
+                />
+              </div>
+            </div>
           </div>
           <div class="flex flex-col mt-4">
             <label for="product-description" class="text-sm font-medium py-2">
@@ -275,7 +296,7 @@
     v-if="isLoading && !isUploadSuccessful"
     class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
   >
-    <div class="p-8 bg-secondary rounded-xl shadow space-y-4">
+    <div class="p-8 bg-background rounded-xl shadow space-y-4">
       <div class="flex flex-row">
         <span class="text-xl font-bold text-secondary-foreground pt-4 pl-8"
           >Uploading</span
@@ -283,10 +304,7 @@
         <span><img src="/upload_fire.gif" class="h-16 w-auto" /></span>
       </div>
 
-      <Progress
-        v-model="progress"
-        class="w-full border-2 border-background/20"
-      />
+      <Progress v-model="progress" class="w-full border-2 border-primary" />
     </div>
   </div>
   <!--File Uploading Sucessfully-->
@@ -387,11 +405,12 @@ interface ProductData {
   photos: File[];
   isPublished: boolean;
   isArchived: boolean;
-  status: string;
   views: number;
   totalOrders: number;
   dateCreated: string;
   lastModified: string;
+  totalSales: number;
+  generalStocks: number;
 }
 
 const newProduct = ref<ProductData>({
@@ -416,11 +435,12 @@ const newProduct = ref<ProductData>({
   photos: [],
   isPublished: false,
   isArchived: false,
-  status: "",
   views: 0,
   totalOrders: 0,
   dateCreated: "",
   lastModified: "",
+  totalSales: 0,
+  generalStocks: 0,
 });
 
 const coverPhotoInput = ref<HTMLInputElement | null>(null);
@@ -435,14 +455,6 @@ watchEffect((cleanupFn) => {
   const timer = setTimeout(() => (progress.value = 66), 500);
   cleanupFn(() => clearTimeout(timer));
 });
-
-watch(
-  newProduct,
-  (newValue) => {
-    newValue.status = newValue.isPublished ? "Published" : "Hidden";
-  },
-  { deep: true }
-);
 
 const naChecked = ref(false);
 const otherSizes = ref<sizeData[]>([{ value: "", stocks: 0 }]);
@@ -500,16 +512,27 @@ const handleFormSubmit = async (): Promise<boolean> => {
   }
 
   try {
+    if (user && userData && userData.faction) {
+      if (user && userData.faction !== "all") {
+        newProduct.value.faction = userData.faction;
+      }
+    }
     isLoading.value = true;
+
     //Checking if there was a file uploaded
     console.log("Cover photo files:", coverPhotoInput.value?.files);
     console.log("Product photos files:", productPhotosInput.value?.files);
 
     if (coverPhotoInput.value?.files) {
       const originalCoverPhoto = coverPhotoInput.value.files[0];
+      const uniqueFileName = `${
+        newProduct.value.name
+      }_coverPhoto_${new Date().toISOString()}_${user.uid}_${Math.floor(
+        Math.random() * 1000
+      )}`;
       newProduct.value.coverPhoto = new File(
         [originalCoverPhoto],
-        `${newProduct.value.name}_coverPhoto`,
+        uniqueFileName,
         { type: originalCoverPhoto.type }
       );
     } else {
@@ -518,14 +541,16 @@ const handleFormSubmit = async (): Promise<boolean> => {
 
     if (productPhotosInput.value?.files) {
       newProduct.value.photos = Array.from(productPhotosInput.value.files).map(
-        (originalPhoto, index) =>
-          new File(
-            [originalPhoto],
-            `${newProduct.value.name}_Photo[${index}]${originalPhoto.name.slice(
-              originalPhoto.name.lastIndexOf(".")
-            )}`,
-            { type: originalPhoto.type }
-          )
+        (originalPhoto, index) => {
+          const uniqueFileName = `${
+            newProduct.value.name
+          }_Photo[${index}]${new Date().toISOString()}_${user.uid}_${Math.floor(
+            Math.random() * 1000
+          )}${originalPhoto.name.slice(originalPhoto.name.lastIndexOf("."))}`;
+          return new File([originalPhoto], uniqueFileName, {
+            type: originalPhoto.type,
+          });
+        }
       );
     } else {
       newProduct.value.photos = [];
@@ -534,20 +559,12 @@ const handleFormSubmit = async (): Promise<boolean> => {
     // Upload cover photo
     const coverPhotoRef = storageRef(
       storage,
-      `gs://csshoppee-76342.appspot.com/products/${newProduct.value.name}/${newProduct.value.coverPhoto.name}`
+      `gs://csshoppee-76342.appspot.com/products/${newProduct.value.faction}/${newProduct.value.name}/${newProduct.value.coverPhoto.name}`
     );
-
-    const metadata = {
-      customMetadata: {
-        role: userData?.role || "",
-        faction: userData?.faction || "",
-      },
-    };
 
     const coverPhotoUploadTask = uploadBytesResumable(
       coverPhotoRef,
-      newProduct.value.coverPhoto,
-      metadata
+      newProduct.value.coverPhoto
     );
 
     let coverPhotoURL = "";
@@ -568,19 +585,17 @@ const handleFormSubmit = async (): Promise<boolean> => {
       }
     );
 
-    // Wait for the upload to complete
     await coverPhotoUploadTask;
 
     console.log("Cover photo URL after upload:", coverPhotoURL);
 
-    // Upload other product photos
     const photosUploadPromises = newProduct.value.photos.map((photo: File) => {
       return new Promise(async (resolve, reject) => {
         const photoRef = storageRef(
           storage,
-          `gs://csshoppee-76342.appspot.com/products/${newProduct.value.name}/${photo.name}`
+          `gs://csshoppee-76342.appspot.com/products/${newProduct.value.faction}/${newProduct.value.name}/${photo.name}`
         );
-        const photoUploadTask = uploadBytesResumable(photoRef, photo, metadata);
+        const photoUploadTask = uploadBytesResumable(photoRef, photo);
 
         photoUploadTask.on(
           "state_changed",
@@ -606,13 +621,7 @@ const handleFormSubmit = async (): Promise<boolean> => {
     const photosURLs = await Promise.all(photosUploadPromises);
     console.log("Photo URLs:", photosURLs);
 
-    // Add product data to Firestore
-    if (user && userData && userData.faction) {
-      if (user && userData.faction !== "all") {
-        newProduct.value.faction = userData.faction;
-      }
-    }
-
+    //Upload Product Data to the Firestore Database
     newProduct.value.price = newProduct.value.price.map((price) => ({
       ...price,
       dateCreated: new Date().toISOString(),
@@ -628,11 +637,12 @@ const handleFormSubmit = async (): Promise<boolean> => {
       photos: photosURLs,
       isPublished: newProduct.value.isPublished,
       isArchived: false,
-      status: newProduct.value.status,
       views: 0,
       totalOrders: 0,
       dateCreated: new Date().toISOString(),
       lastModified: "",
+      totalSales: 0,
+      generalStocks: newProduct.value.generalStocks,
     };
 
     const docRef = await addDoc(collection(db, "products"), productData);
@@ -662,11 +672,12 @@ const handleFormSubmit = async (): Promise<boolean> => {
       photos: [],
       isPublished: false,
       isArchived: false,
-      status: "",
       views: 0,
       totalOrders: 0,
       dateCreated: "",
       lastModified: "",
+      totalSales: 0,
+      generalStocks: 0,
     };
     isLoading.value = false;
     isUploadSuccessful.value = true;

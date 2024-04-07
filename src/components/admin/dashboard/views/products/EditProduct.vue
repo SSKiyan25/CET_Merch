@@ -157,7 +157,7 @@
                         type="text"
                         v-model="size.value"
                         v-bind:disabled="naChecked"
-                        class="w-16 h-8 text-primary/80 bg-backgroudn border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
+                        class="w-16 h-8 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
                         pattern="\S+"
                         title="This field should not contain spaces."
                       />
@@ -193,6 +193,27 @@
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+            <div class="pt-4 flex-flex-col items-center">
+              <label class="text-xs opacity-70 italic"
+                >*Accessible if N/A checkbox is clicked</label
+              >
+              <div
+                class="flex flex-row border w-1/5 items-center rounded-sm p-2 space-x-2"
+                :class="`flex flex-row border w-1/5 items-center rounded-sm p-2 space-x-2 ${
+                  !naChecked ? 'opacity-50' : ''
+                }`"
+              >
+                <label class="text-sm">General Stocks:</label>
+                <input
+                  type="number"
+                  min="1"
+                  max="2000"
+                  v-model="product.generalStocks"
+                  v-bind:disabled="!naChecked"
+                  class="rounded-sm p-2 text-xs"
+                />
               </div>
             </div>
           </div>
@@ -337,7 +358,7 @@ import AdminSidebar from "../AdminSidebar.vue";
 import { Button } from "@/components/ui/button";
 import { setup as setupProductController } from "@/components/admin/dashboard/controllers/adminProductsController.ts";
 import { useRouter } from "vue-router";
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, nextTick } from "vue";
 
 const naChecked = ref(false);
 const router = useRouter();
@@ -361,10 +382,13 @@ const addSize = () => {
 
 let originalSizes = ref<any[]>([]);
 
-watch(product, (newValue) => {
+watch(product, async (newValue) => {
   if (newValue && newValue.sizes) {
     allSizes.value = newValue.sizes;
     originalSizes.value = [...newValue.sizes];
+  } else {
+    allSizes.value = [{ value: "", stocks: 0 }];
+    await nextTick();
   }
 });
 
@@ -372,9 +396,13 @@ watch(naChecked, (newValue) => {
   if (newValue) {
     allSizes.value = [{ value: "", stocks: 0 }];
   } else {
-    allSizes.value = [...originalSizes.value];
+    allSizes.value =
+      originalSizes.value.length > 0
+        ? [...originalSizes.value]
+        : [{ value: "", stocks: 0 }];
   }
 });
+
 const removeSize = (index: number) => {
   if (allSizes.value.length > 1) {
     allSizes.value.splice(index, 1);

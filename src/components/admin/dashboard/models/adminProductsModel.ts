@@ -1,4 +1,4 @@
-import { db, storage } from "@/firebase/init.ts";
+import { db, storage, auth } from "@/firebase/init.ts";
 import {
   collection,
   getDocs,
@@ -11,6 +11,7 @@ import {
   limit,
   orderBy,
   DocumentSnapshot,
+  DocumentReference,
 } from "firebase/firestore";
 import {
   uploadBytesResumable,
@@ -76,10 +77,14 @@ export const fetchProduct = async (id: string) => {
   return null;
 };
 
-async function uploadFileToFirebase(file: File, productName: string) {
+async function uploadFileToFirebase(
+  file: File,
+  productFaction: string,
+  productName: string
+) {
   const storageReference = storageRef(
     storage,
-    `gs://csshoppee-76342.appspot.com/products/${productName}/${file.name}`
+    `gs://csshoppee-76342.appspot.com/products/${productFaction}/${productName}/${file.name}`
   );
   const uploadTask = uploadBytesResumable(storageReference, file);
 
@@ -116,6 +121,27 @@ export const updateProduct = async (
 ) => {
   const productRef = doc(db, "products", id);
 
+  let userRef: DocumentReference | null = null;
+  let userDoc: DocumentSnapshot | null = null;
+  let userData: {
+    faction?: string;
+    role?: string;
+    isAdmin?: boolean;
+  } | null = null;
+
+  const user = auth.currentUser;
+  if (user) {
+    userRef = doc(db, "users", user.uid);
+    if (userRef) {
+      userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        userData = userDoc.data() as { faction?: string };
+      }
+    }
+  } else {
+    throw new Error("User not found");
+  }
+
   if (coverPhotoFile) {
     // Delete the existing cover photo from Firebase Storage
     if (productData.coverPhoto) {
@@ -126,14 +152,16 @@ export const updateProduct = async (
     // Create a new File object for the cover photo
     const newCoverPhoto = new File(
       [coverPhotoFile],
-      `${productData.name}_coverPhoto`,
+      `${productData.name}_coverPhoto_${new Date().toISOString()}_${
+        user.uid
+      }_${Math.floor(Math.random() * 1000)}`,
       { type: coverPhotoFile.type }
     );
 
     // Upload the new cover photo to Firebase Storage
     const storageReference = storageRef(
       storage,
-      `gs://csshoppee-76342.appspot.com/products/${productData.name}/${newCoverPhoto.name}`
+      `gs://csshoppee-76342.appspot.com/products/${productData.faction}/${productData.name}/${newCoverPhoto.name}`
     );
     const uploadTask = uploadBytesResumable(storageReference, newCoverPhoto);
 
@@ -146,15 +174,12 @@ export const updateProduct = async (
           console.log("Upload is " + progress + "% done");
         },
         (error) => {
-          // Handle unsuccessful uploads
           console.error(error);
           reject(error);
         },
         async () => {
-          // Handle successful uploads on complete
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
           console.log("File available at", downloadURL);
-          // Here you can update your product data with the URL of the uploaded image
           productData.coverPhoto = downloadURL;
           resolve(downloadURL);
         }
@@ -166,12 +191,15 @@ export const updateProduct = async (
     // Create new File objects for the additional photos and upload them
     for (let i = 0; i < additionalPhotosFiles.length; i++) {
       const file = additionalPhotosFiles[i];
-      const newPhotoName = `${productData.name}_Photo[${i}]${file.name.slice(
-        file.name.lastIndexOf(".")
-      )}`;
+      const newPhotoName = `${
+        productData.name
+      }_Photo[${i}]_${new Date().toISOString()}_${user.uid}_${Math.floor(
+        Math.random() * 1000
+      )}${file.name.slice(file.name.lastIndexOf("."))}`;
       const newPhotoFile = new File([file], newPhotoName, { type: file.type });
       const downloadURL = await uploadFileToFirebase(
         newPhotoFile,
+        productData.faction,
         productData.name
       );
       productData.photos.push(downloadURL);

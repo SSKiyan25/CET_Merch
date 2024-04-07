@@ -33,8 +33,10 @@
                 </span>
               </router-link>
               <div class="flex flex-col">
-                <span class="text-lg font-base">Inbox</span>
-                <span class="font-bold text-primary">1</span>
+                <span class="text-lg font-base">Unread Messages</span>
+                <span class="font-bold text-primary">
+                  {{ totalUnreadMessages }}
+                </span>
               </div>
             </div>
           </div>
@@ -182,7 +184,7 @@
       </div>
     </div>
   </div>
-  <div class="p-4 ml-2 sm:ml-64 pb-8">
+  <div class="p-4 ml-2 sm:ml-64 pb-28">
     <div class="flex flex-col p-4 border-2 rounded-lg">
       <div class="flex flex-row border-b-2 border-primary pb-2">
         <h1 class="font-bold text-xl tracking-wide">Products Statistics</h1>
@@ -191,15 +193,21 @@
         <table class="min-w-full divide-y divide-primary/50">
           <thead>
             <tr>
-              <th>Product Name</th>
-              <th>Category</th>
-              <th>Views</th>
-              <th>Total Orders</th>
-              <th>Sales</th>
+              <th class="text-left p-2">Product Name</th>
+              <th class="text-center p-2">Category</th>
+              <th class="text-center p-2">Views</th>
+              <th class="text-center p-2">Total Orders</th>
+              <th class="text-center p-2">Sales</th>
             </tr>
           </thead>
           <tbody>
-            <tr></tr>
+            <tr v-for="product in products" class="py-4 text-xs">
+              <td class="text-left p-2">{{ product?.name }}</td>
+              <td class="text-center p-2">{{ product?.category }}</td>
+              <td class="text-center p-2">{{ product?.views }}</td>
+              <td class="text-center p-2">{{ product?.totalOrders }}</td>
+              <td class="text-center p-2">{{ product?.totalSales }}</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -208,7 +216,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted, Ref } from "vue";
 import NavBar from "../views/AdminNavBar.vue";
 import {
   Popover,
@@ -233,10 +241,25 @@ import AdminSidebar from "../views/AdminSidebar.vue";
 import {
   fetchProductsForSeller,
   fetchTotalPendingOrders,
+  fetchTotalUnreadMessages,
+  fetchDashboardProducts,
 } from "../controllers/adminDashboardController.ts";
 
 let totalProducts = ref(0);
 let totalPendingOrders = ref(0);
+let totalUnreadMessages = ref(0);
+
+let totalSales: Ref<{ [productId: string]: number }> = ref({});
+let products: Ref<
+  ({
+    id: string;
+    name: string;
+    category: string;
+    views: number;
+    totalOrders: number;
+    totalSales: number;
+  } | null)[]
+> = ref([]);
 
 const fetchTotalProducts = async () => {
   const result = await fetchProductsForSeller();
@@ -251,9 +274,32 @@ const fetchTotalPending = async () => {
   totalPendingOrders.value = await fetchTotalPendingOrders();
 };
 
-fetchTotalProducts();
-fetchTotalPending();
+const fetchTotalUnread = async () => {
+  const result = await fetchTotalUnreadMessages();
+  if (result !== undefined) {
+    totalUnreadMessages.value = result;
+  } else {
+    console.error("Failed to fetch unread messages");
+  }
+};
 
+onMounted(async () => {
+  const result = await fetchDashboardProducts();
+  if (result !== undefined) {
+    products.value = result.filter((item) => item !== null) as {
+      id: string;
+      name: string;
+      category: string;
+      views: number;
+      totalOrders: number;
+      totalSales: number;
+    }[];
+
+    console.log(products.value);
+  } else {
+    console.error("Failed to fetch dashboard products");
+  }
+});
 const {
   onFileChange,
   uploadFeaturedImage,
@@ -271,4 +317,8 @@ const handleContinueClick = () => {
   isSuccessPopoverOpen.value = false;
   router.go(0);
 };
+
+fetchTotalProducts();
+fetchTotalPending();
+fetchTotalUnread();
 </script>

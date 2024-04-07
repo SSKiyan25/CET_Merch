@@ -36,7 +36,7 @@
     >
       <div class="md:grid md:grid-cols-2 md:gap-12 xl:gap-18 pb-2">
         <div
-          class="flex flex-col items-center bg-secondary/50 rounded-sm shadow-sm overflow-hidden pt-10 -mt-8 px-4"
+          class="flex flex-col items-center bg-white rounded-sm shadow-sm overflow-hidden pt-10 -mt-8 px-4"
         >
           <!--Featured Photo-->
           <div class="items-center justify-center -mt-6 pb-3">

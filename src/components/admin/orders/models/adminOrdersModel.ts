@@ -56,6 +56,7 @@ export interface ProductData {
   totalOrders: number;
   dateCreated: string;
   lastModified: string;
+  totalSales: number;
 }
 
 export const getProductDetails = async (productId: string) => {
