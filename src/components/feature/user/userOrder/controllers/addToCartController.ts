@@ -6,6 +6,7 @@ interface cartData {
   quantity: number;
   totalPrice: number;
   size: string;
+  isPreOrdered: boolean;
 }
 
 export interface orderData {
@@ -29,6 +30,7 @@ export const setup = () => {
     quantity: 0,
     totalPrice: 0,
     size: "",
+    isPreOrdered: false,
   });
 
   const handleAddToCartSubmit = async (newAddToCart: cartData) => {

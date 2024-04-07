@@ -105,7 +105,7 @@
                   </thead>
                   <tbody class="divide-y divide-primary/50">
                     <tr
-                      v-for="message in inboxMessages"
+                      v-for="(message, index) in inboxMessages"
                       :key="message.id"
                       class="hover:bg-primary/10"
                     >
@@ -158,7 +158,7 @@
                           </button>
                           <button
                             v-if="message.status === 'done'"
-                            class="rounded-lg bg-emerald-700 px-3 py-1"
+                            class="rounded-lg bg-emerald-700 px-4 py-1"
                           >
                             <span
                               class="text-xs font-medium text-white cursor-none capitalize"
@@ -177,6 +177,7 @@
                               <button
                                 class="bg-blue-600 text-white p-2 rounded-sm"
                                 title="View Details"
+                                @click.prevent="toggleDetails(message)"
                               >
                                 <span class="material-symbols-outlined text-sm">
                                   visibility
@@ -194,6 +195,46 @@
                           </div>
                         </div>
                       </td>
+                      <div v-if="inboxFullDetails[index]">
+                        <div
+                          class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-80"
+                        >
+                          <div
+                            class="relative w-full max-w-xl max-h-full bg-background rounded-lg shadow overflow-y-auto p-4"
+                            style="max-height: 90vh"
+                          >
+                            <div class="flex flex-col bg-background rounded-lg">
+                              <div class="border-b py-3">
+                                <span>Date: </span>
+                                <span>{{ formatDate(message.dateSent) }}</span>
+                              </div>
+                              <div
+                                class="flex flex-row items-center justify-between pt-4 px-2 text-sm font-semibold"
+                              >
+                                <div>
+                                  <span> From: </span>
+                                  <span>{{ message.username }}</span>
+                                </div>
+                                <div>
+                                  <span>Email: </span>
+                                  <span>{{ message.email }}</span>
+                                </div>
+                              </div>
+                              <div
+                                class="flex flex-col text-xs py-4 px-4 space-y-2 text-justify"
+                              >
+                                <span class="font-semibold">Message: </span>
+                                <span class="pl-2">{{ message.message }}</span>
+                              </div>
+                              <div class="flex flex-row justify-end">
+                                <Button @click.prevent="toggleDetails(message)">
+                                  Close
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </tr>
                   </tbody>
                 </table>
@@ -280,7 +321,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Filter } from "lucide-vue-next";
 import { Inbox } from "../models/inboxModel.ts";
-import { fetchInboxMessages } from "../controllers/inboxController.ts";
+import {
+  fetchInboxMessages,
+  updateInboxMessage,
+} from "../controllers/inboxController.ts";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
@@ -292,6 +336,18 @@ const inboxMessages = ref<Inbox[]>([]);
 onMounted(async () => {
   inboxMessages.value = await fetchInboxMessages();
 });
+
+const inboxFullDetails = ref(inboxMessages.value.map(() => false));
+
+const toggleDetails = async (inbox: Inbox) => {
+  const index = inboxMessages.value.indexOf(inbox);
+  if (index !== -1) {
+    inboxFullDetails.value[index] = !inboxFullDetails.value[index];
+
+    inbox.status = "done";
+    await updateInboxMessage(inbox);
+  }
+};
 
 const formatDate = (dateString: string) => {
   const dateOptions = { year: "numeric", month: "long", day: "numeric" };

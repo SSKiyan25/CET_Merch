@@ -328,7 +328,7 @@
                         <div
                           v-for="product in order.cart"
                           :key="product"
-                          class="px-2 text-wrap whitespace-normal"
+                          class="px-2 text-wrap whitespace-normal items-center"
                         >
                           <span
                             class="text-xs text-secondary-foreground/80 truncate"
@@ -339,6 +339,12 @@
                             {{ product.details.name }} -
                             {{ product.size }}</span
                           >
+                          <span
+                            v-if="product.isPreOrdered"
+                            class="text-[10px] text-primary truncate"
+                          >
+                            (Pre-ordered)
+                          </span>
                         </div>
                       </td>
                       <td>

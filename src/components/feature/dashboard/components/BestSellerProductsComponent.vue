@@ -5,7 +5,7 @@
     <div class="flex flex-col justify-center items-center">
       <div class="">
         <h1
-          class="tracking-wide text-5xl font-black drop-shadow-xl text-primary"
+          class="tracking-wide text-xl md:text-5xl font-black drop-shadow-xl text-primary"
         >
           BEST SELLING PRODUCTS
         </h1>

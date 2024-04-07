@@ -226,16 +226,19 @@
                                 </div>
                               </AccordionTrigger>
                               <AccordionContent>
-                                <div class="flex justify-between px-4">
-                                  <Label
-                                    >Quantity: {{ product.quantity }}</Label
-                                  >
-                                  <Label v-if="product.size !== 'N/A'"
-                                    >Size: {{ product.size }}</Label
-                                  >
-                                  <Label
+                                <div
+                                  class="flex justify-between px-4 text-[10px] md:text-sm"
+                                >
+                                  <label
+                                    >Quantity: {{ product.quantity }}
+                                  </label>
+
+                                  <label v-if="product.size !== 'N/A'"
+                                    >Size: {{ product.size }}
+                                  </label>
+                                  <label
                                     >Total Price: {{ product.totalPrice }}
-                                  </Label>
+                                  </label>
                                 </div>
                               </AccordionContent>
                             </AccordionItem>
@@ -245,22 +248,29 @@
                     </div>
                     <SheetFooter>
                       <SheetClose as-child v-if="!ifCartEmpty">
-                        <router-link
-                          :to="{
-                            name: 'confirmOrder',
-                            params: { id: order.id },
-                          }"
-                        >
-                          <Button>Edit Cart</Button>
-                        </router-link>
-                        <router-link
-                          :to="{
-                            name: 'confirmOrder',
-                            params: { id: order.id },
-                          }"
-                        >
-                          <Button type="submit">Submit Order </Button>
-                        </router-link>
+                        <div class="flex flex-row items-center space-x-2">
+                          <router-link
+                            :to="{
+                              name: 'confirmOrder',
+                              params: { id: order.id },
+                            }"
+                          >
+                            <Button>Edit Cart</Button>
+                          </router-link>
+                          <router-link
+                            :to="{
+                              name: 'confirmOrder',
+                              params: { id: order.id },
+                            }"
+                          >
+                            <button
+                              class="p-2.5 text-sm bg-emerald-600 text-white rounded-sm"
+                              type="submit"
+                            >
+                              Submit Order
+                            </button>
+                          </router-link>
+                        </div>
                       </SheetClose>
                     </SheetFooter>
                   </div>
@@ -279,6 +289,14 @@
                 <p class="text-sm text-primary">{{ username }}</p>
               </div>
               <ul class="py-1">
+                <li>
+                  <router-link
+                    to="/admin"
+                    class="block px-4 py-2 text-sm text-black hover:bg-primary/20"
+                    role="menuitem"
+                    >Seller Dashboard
+                  </router-link>
+                </li>
                 <li>
                   <router-link
                     to="/dashboard"
@@ -365,6 +383,7 @@ const router = useRouter();
 const user = ref<User | null>(null);
 const userEmail = ref("");
 const username = ref("");
+const isSeller = ref(false);
 const searchTerm = ref("");
 const isSearchFocused = ref(false);
 const { products } = setupSearchController();
@@ -414,6 +433,9 @@ auth.onAuthStateChanged(async (currentUser) => {
     if (userSnap.exists()) {
       // The document exists, update the user data
       username.value = userSnap.data().username || "";
+      if (userSnap.data().role == "seller" || userSnap.data().role == "admin") {
+        isSeller.value = true;
+      }
     } else {
       console.error("No such document!");
     }
@@ -421,6 +443,7 @@ auth.onAuthStateChanged(async (currentUser) => {
     user.value = null;
     userEmail.value = "";
     username.value = "";
+    isSeller.value = false;
   }
 });
 

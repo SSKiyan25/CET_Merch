@@ -18,7 +18,7 @@
               <span
                 class="pl-1"
                 :class="{ 'text-primary/90': selectedTab === 'cart' }"
-                >Order</span
+                >Add To Cart</span
               >
             </TabsTrigger>
             <TabsTrigger value="order">
@@ -31,7 +31,7 @@
               <span
                 class="pl-2"
                 :class="{ 'text-primary/90': selectedTab === 'order' }"
-                >Order List</span
+                >Cart</span
               >
             </TabsTrigger>
           </TabsList>
@@ -40,7 +40,7 @@
       </SheetHeader>
       <form @submit.prevent="handleFormCartSubmit">
         <TabsContent value="cart">
-          <div class="flex flex-col flex-wrap py-6">
+          <div class="flex flex-col flex-wrap py-2">
             <div class="flex flex-col">
               <Label>Product - {{ product.category }}</Label>
               <span class="pt-4 pl-4 text-primary font-bold">
@@ -64,12 +64,70 @@
                   "
                   @click.prevent="selectSize(size)"
                   class="mb-2"
-                  v-bind:disabled="size.stocks === 0"
+                  v-bind:disabled="
+                    size.stocks === 0 || newAddToCartData.isPreOrdered
+                  "
                 >
                   {{ size.value }} - {{ size.stocks }}
                 </Button>
               </div>
             </div>
+            <div
+              class="flex flex-col space-y-2"
+              v-if="
+                (product.sizes && product.sizes[0].value !== '') ||
+                product.sizes.length === 0
+              "
+            >
+              <div class="flex flex-row items-center">
+                <span class="text-xs"
+                  >Size Not Available? Click
+                  <button
+                    class="p-2 rounded-sm bg-emerald-700 text-white"
+                    @click.prevent="newAddToCartData.isPreOrdered = true"
+                  >
+                    Pre-Order
+                  </button>
+                  <HoverCard>
+                    <HoverCardTrigger
+                      ><span
+                        class="material-symbols-outlined text-sm pt-2.5 pl-1 opacity-80 cursor-pointer"
+                      >
+                        help
+                      </span></HoverCardTrigger
+                    >
+                    <HoverCardContent
+                      ><span class="text-xs">
+                        Please note, choosing to pre-order may result in a delay
+                        in receiving your order.</span
+                      >
+                    </HoverCardContent>
+                  </HoverCard>
+                </span>
+              </div>
+              <!--Pre-Order Input Field-->
+              <div
+                v-show="newAddToCartData.isPreOrdered"
+                class="flex flex-row space-x-2 text-xs items-center"
+              >
+                <label>Size: </label>
+                <input
+                  v-model="newAddToCartData.size"
+                  type="text"
+                  class="p-2 w-24 h-8 text-xs rounded-sm"
+                />
+                <button
+                  @click.prevent="
+                    newAddToCartData.isPreOrdered = false;
+                    newAddToCartData.size = '';
+                  "
+                  class="p-2 rounded-sm bg-red-700 text-white"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+
             <div class="flex flex-row pt-4">
               <span class="pt-2.5 pr-2 text-xs md:text-sm"> Quantity : </span>
               <Input
@@ -79,6 +137,7 @@
                 placeholder="0"
                 class="px-2 py-2 w-1/6 text-base text-center"
                 v-model="newAddToCartData.quantity"
+                required
               />
               <span class="pt-2.5 px-2 text-xs md:text-sm"
                 >Initial Price :</span
@@ -112,7 +171,7 @@
       </form>
       <TabsContent value="order">
         <div v-for="(order, index) in orderData" :key="index">
-          <div class="flex flex-col flex-wrap py-6">
+          <div class="flex flex-col flex-wrap py-2">
             <div class="flex flex-row items-center">
               <span class="material-symbols-outlined">
                 <span class="material-symbols-outlined">
@@ -162,24 +221,31 @@
               </div>
             </div>
           </div>
-          <SheetFooter>
+          <SheetFooter class="overflow-auto">
             <SheetClose as-child v-if="!ifCartEmpty">
-              <router-link
-                :to="{
-                  name: 'confirmOrder',
-                  params: { id: order.id },
-                }"
-              >
-                <Button variant="destructive">Edit Cart</Button>
-              </router-link>
-              <router-link
-                :to="{
-                  name: 'confirmOrder',
-                  params: { id: order.id },
-                }"
-              >
-                <Button type="submit">Submit Order </Button>
-              </router-link>
+              <div class="flex flex-row items-center space-x-2">
+                <router-link
+                  :to="{
+                    name: 'confirmOrder',
+                    params: { id: order.id },
+                  }"
+                >
+                  <Button>Edit Cart</Button>
+                </router-link>
+                <router-link
+                  :to="{
+                    name: 'confirmOrder',
+                    params: { id: order.id },
+                  }"
+                >
+                  <button
+                    class="p-2.5 text-sm bg-emerald-700 text-white rounded-sm"
+                    type="submit"
+                  >
+                    Submit Order
+                  </button>
+                </router-link>
+              </div>
             </SheetClose>
           </SheetFooter>
         </div>
@@ -234,6 +300,11 @@ import LoadingComponent from "../components/LoadingComponent.vue";
 import SucessfulComponent from "../components/SucessfulComponent.vue";
 import { db } from "@/firebase/init.ts";
 import { query, where, getDocs, collection } from "firebase/firestore";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 const router = useRouter();
 const orderData = ref<OrderDataType[] | null>(null);
@@ -303,6 +374,17 @@ const handleFormCartSubmit = async () => {
   if (newAddToCartData.value.quantity === 0) {
     alert("Please enter a valid number of quantity");
     console.error("Quantity cannot be 0");
+    isLoading.value = false;
+    return;
+  }
+
+  if (
+    newAddToCartData.value.isPreOrdered &&
+    newAddToCartData.value.size === ""
+  ) {
+    alert("Please enter a valid size for pre-ordered product");
+    console.error("Size cannot be empty for pre-ordered product");
+    isLoading.value = false;
     return;
   }
   console.log("Form submitted");
@@ -316,7 +398,10 @@ const handleFormCartSubmit = async () => {
           newAddToCartData.value.quantity
         ).toFixed(2)
       ),
-      size: selectedSize.value.value,
+      size: newAddToCartData.value.isPreOrdered
+        ? newAddToCartData.value.size
+        : selectedSize.value.value,
+      isPreOrdered: newAddToCartData.value.isPreOrdered,
     };
     await handleAddToCartSubmit(newAddToCartData.value);
 
@@ -329,6 +414,7 @@ const handleFormCartSubmit = async () => {
       quantity: 0,
       totalPrice: 0,
       size: "",
+      isPreOrdered: false,
     };
 
     // Fetch the updated order data

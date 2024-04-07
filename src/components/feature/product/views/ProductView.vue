@@ -80,10 +80,10 @@
                 </CarouselItem>
               </CarouselContent>
               <CarouselPrevious
-                class="ml-24 sm:ml-16 opacity-40 hover:opacity-100"
+                class="ml-12 sm:ml-16 opacity-40 hover:opacity-100"
               />
               <CarouselNext
-                class="mr-24 sm:mr-16 opacity-40 hover:opacity-100"
+                class="mr-12 sm:mr-16 opacity-40 hover:opacity-100"
               />
             </Carousel>
           </div>
@@ -239,7 +239,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import Cart from "@/components/feature/user/userOrder/views/AddToCartView.vue";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import Loading from "@/components/feature/misc/LoadingComponent.vue";
-import { setup as setupProductController } from "@/components/feature/dashboard/controllers/productsController.ts";
+import { setup as setupProductController } from "../controllers/productsController.ts";
 import { setupProductController as setupProduct } from "../controllers/productController.ts";
 import { DocumentData } from "firebase/firestore";
 

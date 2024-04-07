@@ -29,6 +29,7 @@ type cartData = {
   quantity: number;
   totalPrice: number;
   size: string;
+  isPreOrdered: boolean;
 };
 
 export const addToCart = async (newAddToCart: cartData) => {

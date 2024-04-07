@@ -5,6 +5,8 @@ import {
   where,
   doc,
   getDoc,
+  updateDoc,
+  setDoc,
 } from "firebase/firestore";
 import { db, auth } from "@/firebase/init.ts";
 import { Inbox } from "../models/inboxModel.ts";
@@ -69,4 +71,11 @@ export const fetchInboxMessages = async (): Promise<Inbox[]> => {
   });
 
   return inboxMessages;
+};
+
+export const updateInboxMessage = async (inbox: Inbox): Promise<void> => {
+  const inboxDoc = doc(db, "inbox", inbox.id);
+  await updateDoc(inboxDoc, {
+    status: inbox.status,
+  });
 };

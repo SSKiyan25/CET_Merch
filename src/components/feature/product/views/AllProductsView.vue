@@ -12,7 +12,7 @@
       </div>
     </div>
     <div
-      class="absolute bottom-48 md:bottom-0 left-0 flex flex-col items-center justify-end w-full h-full pb-20 p-2 md:pb-28 md:pl-20 lg:pb-36 md:items-start opacity-90"
+      class="absolute bottom-48 md:bottom-0 left-0 flex flex-col items-center justify-end w-full h-full pb-20 p-2 md:pb-28 md:pl-20 lg:pb-36 xl:pb-[28rem] md:items-start opacity-90"
     >
       <div class="p-4 rounded-lg">
         <h1
@@ -162,7 +162,7 @@
             id="products"
             class="flex flex-row px-2 md:px-4 py-8 justify-center"
           >
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
               <div
                 v-if="!isLoading"
                 v-for="product in filteredProducts"

@@ -35,7 +35,7 @@
               >
                 <div class="max-w-[75rem] justify-center items-center">
                   <div
-                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+                    class="flex flex-row justify-center items-center space-x-4"
                   >
                     <div
                       v-if="!isLoading"
