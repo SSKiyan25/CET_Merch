@@ -344,12 +344,12 @@ import {
   reactive,
   computed,
   onBeforeUnmount,
+  watch,
 } from "vue";
 import { initFlowbite } from "flowbite";
-import { auth } from "@/firebase/init.ts";
 import type { User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/firebase/init.ts";
+import { db, auth } from "@/firebase/init.ts";
 import { useRouter } from "vue-router";
 import { signOut } from "firebase/auth";
 import { User as UserIcon } from "lucide-vue-next";
@@ -493,19 +493,21 @@ onUnmounted(() => {
 
 //Cart Sheet
 const orderData = ref<orderDataWithProduct[] | null>(null);
-const ifCartEmpty = ref(true);
+const ifCartEmpty = computed(() => {
+  return orderData.value?.every((order) => order.cart.length === 0) ?? true;
+});
 
-onMounted(async () => {
-  const results = await getOnQueueOrdersController();
-  if (results.length > 0) {
-    const onQueueOrders = results.filter(
-      (result) => result.orderStatus === "OnQueue"
-    );
-    orderData.value = onQueueOrders;
-    ifCartEmpty.value = onQueueOrders.every(
-      (result) => result.cart.length === 0
-    );
-  }
+onMounted(() => {
+  const onQueueOrdersWithProduct = getOnQueueOrdersController();
+
+  watch(onQueueOrdersWithProduct, (newOrders) => {
+    if (newOrders) {
+      orderData.value = newOrders.filter(
+        (result: any) => result.orderStatus === "OnQueue"
+      );
+    }
+    console.log("orderData: ", orderData.value);
+  });
 });
 
 defineExpose({

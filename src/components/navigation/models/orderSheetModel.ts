@@ -1,12 +1,13 @@
 import {
   collection,
-  getDocs,
+  onSnapshot,
   query,
   where,
   doc,
   getDoc,
 } from "firebase/firestore";
 import { db, auth } from "@/firebase/init.ts";
+import { ref } from "vue";
 
 type orderData = {
   orderNumber: number;
@@ -37,23 +38,23 @@ type ProductData = {
   faction: string;
 };
 
-export const getOnQueueOrders = (): Promise<
-  { id: string; data: orderData }[]
-> => {
-  return new Promise(async (resolve, reject) => {
-    auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        const onQueueOrders: { id: string; data: orderData }[] = [];
+export const getOnQueueOrders = () => {
+  const onQueueOrders = ref<{ id: string; data: orderData }[]>([]);
 
-        const querySnapshot = await getDocs(
-          query(
-            collection(db, "userOrder"),
-            where("orderStatus", "==", "OnQueue"),
-            where("userId", "==", user.uid)
-          )
-        );
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      const ordersCollection = collection(db, "userOrder");
+      const userQuery = query(
+        ordersCollection,
+        where("orderStatus", "==", "OnQueue"),
+        where("userId", "==", user.uid)
+      );
 
-        for (const doc of querySnapshot.docs) {
+      // Listen for real-time updates
+      onSnapshot(userQuery, async (snapshot) => {
+        const newOnQueueOrders: { id: string; data: orderData }[] = [];
+
+        for (const doc of snapshot.docs) {
           const order = doc.data() as orderData;
 
           for (const cartItem of order.cart) {
@@ -61,15 +62,15 @@ export const getOnQueueOrders = (): Promise<
             cartItem.product = product;
           }
 
-          onQueueOrders.push({ id: doc.id, data: order });
+          newOnQueueOrders.push({ id: doc.id, data: order });
         }
 
-        resolve(onQueueOrders);
-      } else {
-        reject(new Error("User not authenticated"));
-      }
-    });
+        onQueueOrders.value = newOnQueueOrders;
+      });
+    }
   });
+
+  return onQueueOrders;
 };
 
 export const getProductById = async (

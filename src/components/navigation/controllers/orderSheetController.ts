@@ -1,4 +1,5 @@
-import { getOnQueueOrders, getProductById } from "../models/orderSheetModel.ts";
+import { getOnQueueOrders } from "../models/orderSheetModel.ts";
+import { Ref, ref, watch } from "vue";
 
 interface ProductData {
   id: string;
@@ -37,25 +38,31 @@ export interface orderDataWithProduct extends orderData {
   cart: cartDataWithProduct[];
 }
 
-export const getOnQueueOrdersController = async (): Promise<
-  orderDataWithProduct[]
-> => {
-  const orders = await getOnQueueOrders();
+export const getOnQueueOrdersController = () => {
+  const onQueueOrders = getOnQueueOrders();
+  const onQueueOrdersWithProduct = ref<orderDataWithProduct[] | null>(null);
 
-  const ordersWithProductData: orderDataWithProduct[] = await Promise.all(
-    orders.map(async (order) => {
-      const cartWithProductData: cartDataWithProduct[] = await Promise.all(
-        order.data.cart.map(
-          async (cartItem: cartData): Promise<cartDataWithProduct> => {
-            const product = await getProductById(cartItem.productId);
-            return { ...cartItem, product };
-          }
-        )
-      );
+  watch(onQueueOrders, (newOrders) => {
+    if (newOrders) {
+      const updatedOrdersWithProduct: orderDataWithProduct[] = [];
 
-      return { ...order.data, cart: cartWithProductData, id: order.id };
-    })
-  );
+      newOrders.forEach((order: any) => {
+        const cartWithProductData: cartDataWithProduct[] = (
+          order.data.cart as cartDataWithProduct[]
+        ).map((cartItem: cartDataWithProduct): cartDataWithProduct => {
+          return { ...cartItem, product: cartItem.product };
+        });
 
-  return ordersWithProductData;
+        updatedOrdersWithProduct.push({
+          ...order.data,
+          cart: cartWithProductData,
+          id: order.id,
+        });
+      });
+
+      onQueueOrdersWithProduct.value = updatedOrdersWithProduct;
+    }
+  });
+
+  return onQueueOrdersWithProduct;
 };
