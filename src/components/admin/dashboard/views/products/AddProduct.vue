@@ -164,7 +164,7 @@
                       type="text"
                       v-model="size.value"
                       v-bind:disabled="naChecked"
-                      class="w-14 h-8 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
+                      class="w-48 h-8 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2 text-[10px]"
                       pattern="\S+"
                       title="This field should not contain spaces."
                     />

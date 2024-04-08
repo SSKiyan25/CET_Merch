@@ -174,7 +174,7 @@
                           Product/s
                         </span>
                       </th>
-                      <th scope="col" class="py-2 w-2/12 text-start">
+                      <th scope="col" class="py-2 w-1/12 text-start">
                         <span
                           class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
@@ -186,6 +186,13 @@
                           class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
                           Total
+                        </span>
+                      </th>
+                      <th scope="col" class="py-2 text-start">
+                        <span
+                          class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
+                        >
+                          Order Status
                         </span>
                       </th>
                       <th scope="col" class="py-2 text-start">
@@ -213,6 +220,17 @@
                   </thead>
                   <tbody class="divide-y divide-primary/50">
                     <tr v-if="loadingPage">
+                      <td class="p-4">
+                        <div
+                          class="flex items-center justify-start pl-4 h-full w-full"
+                        >
+                          <span
+                            class="material-symbols-outlined text-2xl text-primary animate-spin"
+                          >
+                            autorenew
+                          </span>
+                        </div>
+                      </td>
                       <td class="p-4">
                         <div
                           class="flex items-center justify-start pl-4 h-full w-full"
@@ -320,7 +338,7 @@
                         <div class="p-3">
                           <span
                             class="text-xs font-medium text-secondary-foreground/80"
-                            >{{ order.dateOrdered }}</span
+                            >{{ formatDate(order.dateOrdered) }}</span
                           >
                         </div>
                       </td>
@@ -349,7 +367,8 @@
                       </td>
                       <td>
                         <div class="">
-                          <span class="text-xs text-secondary-foreground/60"
+                          <span
+                            class="text-xs text-secondary-foreground/60 truncate"
                             >{{ order.userName }}
                           </span>
                         </div>
@@ -359,6 +378,40 @@
                           <span class="text-xs text-secondary-foreground/60"
                             >P{{ order.totalPrice }}
                           </span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="text-[12px] text-white font-medium">
+                          <button
+                            v-if="order.orderStatus === 'processing'"
+                            class="rounded-lg bg-amber-700 p-2.5 cursor-auto"
+                          >
+                            Processing
+                          </button>
+                          <button
+                            v-else-if="order.orderStatus === 'ready'"
+                            class="rounded-lg bg-blue-700 ml-1.5 p-2.5 cursor-auto"
+                          >
+                            Ready
+                          </button>
+                          <button
+                            v-else-if="order.orderStatus === 'done'"
+                            class="rounded-lg bg-emerald-700 ml-2 p-2.5 cursor-auto"
+                          >
+                            Done
+                          </button>
+                          <button
+                            v-else-if="order.orderStatus === 'cancelled'"
+                            class="rounded-lg bg-red-700 p-2.5 cursor-auto"
+                          >
+                            Cancelled
+                          </button>
+                          <button
+                            v-else-if="order.orderStatus === 'decline'"
+                            class="rounded-lg bg-red-900 p-2.5 cursor-auto"
+                          >
+                            Declined
+                          </button>
                         </div>
                       </td>
                       <td>
@@ -372,9 +425,9 @@
                               </span>
                             </button>
                           </div>
-                          <div v-if="order.paymentStatus === 'declined'">
+                          <div v-if="order.paymentStatus === 'decline'">
                             <button
-                              class="rounded-lg bg-amber-700 py-1.5 px-4 cursor-auto"
+                              class="rounded-lg bg-red-900 py-1.5 px-4 cursor-auto"
                             >
                               <span class="text-xs font-medium text-white pb-1">
                                 Declined
@@ -434,8 +487,19 @@
                                   <button
                                     class="bg-red-600 text-white p-2 rounded-sm"
                                     title="Decline Order"
+                                    v-bind:disabled="
+                                      order.orderStatus === 'done'
+                                    "
+                                    :class="{
+                                      'cursor-not-allowed opacity-50':
+                                        order.orderStatus === 'done',
+                                    }"
                                   >
                                     <span
+                                      :class="{
+                                        'cursor-not-allowed':
+                                          order.orderStatus === 'done',
+                                      }"
                                       class="material-symbols-outlined text-sm"
                                     >
                                       block
@@ -447,22 +511,22 @@
                                     <AlertDialogTitle>
                                       Decline Order
                                     </AlertDialogTitle>
-                                    <AlertDialogDescription>
+                                    <AlertDialogDescription class="text-black">
                                       Are you sure you want to decline this
                                       order?
                                     </AlertDialogDescription>
                                   </AlertDialogHeader>
                                   <AlertDialogFooter>
                                     <AlertDialogAction
+                                      class="bg-background hover:bg-gray-100 text-secondary-foreground"
+                                    >
+                                      Cancel
+                                    </AlertDialogAction>
+                                    <AlertDialogAction
                                       @click.prevent="declineOrder(order)"
                                       class="bg-red-600 hover:bg-red-700 text-white"
                                     >
                                       Decline
-                                    </AlertDialogAction>
-                                    <AlertDialogAction
-                                      class="bg-secondary hover:bg-secondary/80 text-secondary-foreground"
-                                    >
-                                      Cancel
                                     </AlertDialogAction>
                                   </AlertDialogFooter>
                                 </AlertDialogContent>
@@ -479,7 +543,9 @@
                             class="relative w-full max-w-xl max-h-full bg-background rounded-lg shadow overflow-y-auto p-4"
                             style="max-height: 90vh"
                           >
-                            <div class="flex flex-col bg-background rounded-lg">
+                            <div
+                              class="flex flex-col relative bg-background rounded-lg"
+                            >
                               <div
                                 class="border-b border-secondary-foreground/50 py-3"
                               >
@@ -591,10 +657,20 @@
                                     <span class="pl-2 opacity-80"
                                       >Amount: {{ product.totalPrice }}</span
                                     >
+                                    <span
+                                      v-if="product.isPreOrdered"
+                                      class="pl-2 font-bold text-primary"
+                                    >
+                                      || Pre-Ordered! ||
+                                    </span>
                                   </div>
                                 </div>
                                 <div
                                   class="flex flex-row items-center space-x-1 pt-4"
+                                  :class="{
+                                    'opacity-50 cursor-not-allowed':
+                                      order.orderStatus === 'cancelled',
+                                  }"
                                   v-if="order.orderStatus !== 'done'"
                                 >
                                   <input
@@ -602,11 +678,23 @@
                                     id="checkbox"
                                     class="w-4 h-4 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2"
                                     :checked="order.orderStatus === 'ready'"
+                                    v-bind:disabled="
+                                      order.orderStatus === 'cancelled'
+                                    "
+                                    :class="{
+                                      'cursor-not-allowed':
+                                        order.orderStatus === 'cancelled',
+                                    }"
                                     @change="readyOrder(order)"
                                   />
-                                  <span class="text-sm"
-                                    >Mark order as ready to get</span
-                                  >
+                                  <span
+                                    :class="{
+                                      'cursor-not-allowed':
+                                        order.orderStatus === 'cancelled',
+                                    }"
+                                    class="text-sm"
+                                    >Mark order as ready to get
+                                  </span>
                                 </div>
                               </div>
                               <div
@@ -649,26 +737,38 @@
                               <div class="flex flex-row justify-between p-4">
                                 <div
                                   class="flex flex-row items-center justify-start"
+                                  :class="{
+                                    'opacity-50 cursor-not-allowed':
+                                      order.orderStatus === 'cancelled',
+                                  }"
                                 >
                                   <input
                                     type="checkbox"
                                     id="checkbox"
                                     class="w-6 h-6 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2"
+                                    :class="{
+                                      'cursor-not-allowed':
+                                        order.orderStatus === 'cancelled',
+                                    }"
                                     :checked="order.paymentStatus === 'paid'"
+                                    v-bind:disabled="
+                                      order.orderStatus === 'cancelled'
+                                    "
                                     @change="markAsPaid(order)"
                                   />
-                                  <label for="checkbox" class="pl-2 text-sm"
+                                  <label
+                                    :class="{
+                                      'cursor-not-allowed':
+                                        order.orderStatus === 'cancelled',
+                                    }"
+                                    for="checkbox"
+                                    class="pl-2 text-sm"
                                     >Mark Status as Paid
                                   </label>
                                 </div>
                                 <div
                                   class="flex flex-row justify-end space-x-2"
                                 >
-                                  <button
-                                    class="p-2 bg-emerald-600 font-semibold text-white rounded-sm hover:bg-primary/90"
-                                  >
-                                    Contact Customer
-                                  </button>
                                   <Button
                                     variant="default"
                                     @click.prevent="toggleDetails(order)"
@@ -677,6 +777,17 @@
                                   </Button>
                                 </div>
                               </div>
+                            </div>
+                            <!--Loading if checkbox marked/unmarked-->
+                            <div
+                              v-if="loadingCheckbox"
+                              class="flex inset-0 items-center justify-center absolute w-full h-full z-50 bg-black bg-opacity-30"
+                            >
+                              <span
+                                class="material-symbols-outlined text-9xl text-primary animate-spin opacity-90"
+                              >
+                                autorenew
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -690,7 +801,7 @@
                 >
                   <div class="flex flex-row items-center">
                     <p class="text-sm text-secondary-foreground">
-                      <span class="font-semibold text-gray-200"
+                      <span class="font-semibold text-black"
                         >Showing {{ (currentPage - 1) * itemsPerPage + 1 }}-{{
                           Math.min(
                             currentPage * itemsPerPage,
@@ -700,9 +811,7 @@
                       </span>
                       results
                     </p>
-                    <p
-                      class="pl-1 text-sm text-secondary-foreground opacity-50"
-                    >
+                    <p class="pl-1 text-sm text-black opacity-50">
                       out of {{ orders.length }} total orders
                     </p>
                   </div>
@@ -805,8 +914,14 @@ const open = ref(false);
 const searchTerm = ref("");
 const value = ref<string>("all");
 
-const { orders, markAsPaid, declineOrder, readyOrder, loadingPage } =
-  setupOrdersController();
+const {
+  orders,
+  markAsPaid,
+  declineOrder,
+  readyOrder,
+  loadingPage,
+  loadingCheckbox,
+} = setupOrdersController();
 
 const date = ref({
   start: new Date(2024, 0, 1),
@@ -877,5 +992,14 @@ const nextPage = () => {
   if (currentPage.value < totalPages.value) {
     currentPage.value++;
   }
+};
+
+const formatDate = (dateString: string) => {
+  const dateOptions = { year: "numeric", month: "long", day: "numeric" };
+  const timeOptions = { hour: "2-digit", minute: "2-digit" };
+  const date = new Date(dateString);
+  const formattedDate = (date.toLocaleDateString as any)([], dateOptions);
+  const formattedTime = (date.toLocaleTimeString as any)([], timeOptions);
+  return `${formattedDate} (${formattedTime})`;
 };
 </script>

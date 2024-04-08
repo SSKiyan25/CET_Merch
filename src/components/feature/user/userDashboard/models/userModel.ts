@@ -6,6 +6,7 @@ import {
   query,
   where,
   getDocs,
+  updateDoc,
 } from "firebase/firestore";
 
 export const fetchUserOrders = async () => {
@@ -51,4 +52,25 @@ export const fetchProduct = async (id: string) => {
     return data ? { id: singleProductSnapshot.id, ...data } : null;
   }
   return null;
+};
+
+export const cancelUserOrder = async (order: any) => {
+  const q = query(
+    collection(db, "userOrder"),
+    where("orderRefNum", "==", order.orderRefNum)
+  );
+  const querySnapshot = await getDocs(q);
+  console.log("Query Snapshot", querySnapshot.docs[0]);
+  if (!querySnapshot.empty) {
+    const docSnapshot = querySnapshot.docs[0];
+    const orderRef = docSnapshot.ref;
+    console.log("Order Ref", orderRef);
+    await updateDoc(orderRef, {
+      orderStatus: "cancelled",
+    });
+  } else {
+    console.error(
+      `No document found with order reference number ${order.orderRefNum}`
+    );
+  }
 };

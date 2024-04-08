@@ -1,4 +1,8 @@
-import { fetchUserOrders, fetchProduct } from "../models/userModel.ts";
+import {
+  fetchUserOrders,
+  fetchProduct,
+  cancelUserOrder,
+} from "../models/userModel.ts";
 
 export const getUserOrders = async () => {
   const orders = await fetchUserOrders();
@@ -9,7 +13,13 @@ export const getUserOrders = async () => {
       const product = await fetchProduct(item.productId);
       item.productDetails = product;
     }
+    order.id = order.id;
+    console.log("Controller order id: ", order.id);
   }
 
   return orders;
+};
+
+export const cancelOrder = async (order: any) => {
+  await cancelUserOrder(order);
 };

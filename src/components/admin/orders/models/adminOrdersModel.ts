@@ -92,7 +92,13 @@ export const fetchOrders = async () => {
     querySnapshot = await getDocs(
       query(
         ordersCollection,
-        where("orderStatus", "in", ["processing", "done", "ready"])
+        where("orderStatus", "in", [
+          "processing",
+          "done",
+          "ready",
+          "cancelled",
+          "decline",
+        ])
       )
     );
   } else {
@@ -101,7 +107,13 @@ export const fetchOrders = async () => {
       query(
         ordersCollection,
         where("faction", "==", userData.faction),
-        where("orderStatus", "in", ["processing", "done", "ready"])
+        where("orderStatus", "in", [
+          "processing",
+          "done",
+          "ready",
+          "cancelled",
+          "decline",
+        ])
       )
     );
   }

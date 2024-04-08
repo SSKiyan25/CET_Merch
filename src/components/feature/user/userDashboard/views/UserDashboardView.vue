@@ -63,7 +63,7 @@
 
     <div
       v-if="recentOrder && !isLoading"
-      class="flex flex-col p-4 mt-16 border-2 rounded-lg"
+      class="flex flex-col p-4 mt-16 border-2 rounded-lg overflow-auto"
     >
       <div class="flex flex-row border-b-2">
         <h1 class="font-bold text-xl text-primary tracking-wide pb-2">
@@ -72,7 +72,7 @@
       </div>
       <div class="pt-8">
         <div class="flex flex-col border pt-2 pb-4">
-          <div class="flex flex-row justify-between py-2 px-3">
+          <div class="flex flex-row justify-between items-center py-2 px-3">
             <div>
               <span class="text-sm font-semibold"
                 >Order Reference Number:
@@ -80,51 +80,120 @@
               <span class="pl-2 text-primary font-semibold">{{
                 recentOrder.orderRefNum
               }}</span>
+              <AlertDialog>
+                <AlertDialogTrigger>
+                  <button>
+                    <span
+                      class="text-[10px] pl-2 font-semibold text-blue-900 hover:underline"
+                      >Cancel Order?</span
+                    >
+                  </button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle> Cancel Order </AlertDialogTitle>
+                    <AlertDialogDescription class="text-black">
+                      Are you sure you want to cancel this order? This action
+                      cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogAction
+                      class="bg-background text-black hover:bg-gray-300"
+                    >
+                      Close</AlertDialogAction
+                    >
+                    <AlertDialogAction>
+                      <button @click.prevent="cancelOrder(recentOrder)">
+                        Cancel Order
+                      </button>
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
             <div>
-              <span class="text-xs">{{ recentOrder.dateOrdered }}</span>
+              <span class="text-xs">{{
+                formatDate(recentOrder.dateOrdered)
+              }}</span>
             </div>
           </div>
-          <div
-            class="px-2"
-            v-for="(item, itemIndex) in recentOrder.cart"
-            :key="itemIndex"
-          >
+          <div class="flex flex-row flex-wrap">
             <div
-              class="flex flex-row items-center bg-secondary rounded-lg w-1/3 h-18"
+              class="px-2"
+              v-for="(item, itemIndex) in recentOrder.cart"
+              :key="itemIndex"
             >
-              <div class="p-4">
-                <img
-                  :src="item.productDetails.coverPhoto"
-                  class="w-40 h-auto rounded-sm"
-                />
-              </div>
               <div
-                class="flex flex-col text-xs space-y-2 whitespace-normal text-wrap"
+                class="flex flex-row items-center bg-gradient-to-br from-gold to-light-gold rounded-lg w-76 h-18 pr-4"
               >
-                <span>Product Name: {{ item.productDetails.name }}</span>
-                <span>Size: {{ item.size }}</span>
-                <span>Quantity: {{ item.quantity }}</span>
-                <span>Total Amount: P{{ item.totalPrice }}</span>
+                <div class="p-4">
+                  <img
+                    :src="item.productDetails.coverPhoto"
+                    class="w-30 h-20 rounded-sm"
+                  />
+                </div>
+                <div
+                  class="flex flex-col text-[10px] font-semibold space-y-2 whitespace-normal text-wrap"
+                >
+                  <span>Product Name: {{ item.productDetails.name }}</span>
+                  <span>Size: {{ item.size }}</span>
+                  <span>Quantity: {{ item.quantity }}</span>
+                  <span>Total Amount: P{{ item.totalPrice }}</span>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="flex flex-row justify-between pt-4 px-4">
+          <div
+            class="flex flex-row justify-between pt-4 px-4 text-xs items-center"
+          >
             <div>
-              <span>Status: </span>
+              <span>Order Status: </span>
+              <button
+                v-if="recentOrder.orderStatus === 'processing'"
+                class="p-2 bg-amber-600 text-white rounded-sm cursor-default capitalize"
+              >
+                <span>{{ recentOrder.orderStatus }}</span>
+              </button>
               <Button
-                v-if="recentOrder.paymentStatus === 'pending'"
+                v-else-if="recentOrder.orderStatus === 'declined'"
                 variant="default"
                 class="cursor-default capitalize"
               >
-                <span>{{ recentOrder.paymentStatus }}</span>
+                <span>{{ recentOrder.orderStatus }}</span>
+              </Button>
+              <Button
+                v-else-if="recentOrder.orderStatus === 'cancelled'"
+                variant="default"
+                class="cursor-default capitalize"
+              >
+                <span>{{ recentOrder.orderStatus }}</span>
               </Button>
               <button
-                v-if="recentOrder.paymentStatus === 'paid'"
-                class="p-3 bg-emerald-600 text-white rounded-sm cursor-default capitalize"
+                v-else-if="recentOrder.orderStatus === 'done'"
+                class="p-2 bg-emerald-600 text-white rounded-sm cursor-default capitalize"
               >
-                <span>{{ recentOrder.paymentStatus }}</span>
+                <span>{{ recentOrder.orderStatus }}</span>
+              </button>
+              <button
+                v-else-if="recentOrder.orderStatus === 'ready'"
+                class="p-2 bg-blue-600 text-white rounded-sm cursor-default capitalize"
+              >
+                <span>{{ recentOrder.orderStatus }} to get!</span>
+              </button>
+              <span class="px-2">Payment Status:</span>
+              <button
+                v-if="recentOrder.paymentStatus === 'pending'"
+                class="p-2 bg-red-600 text-white rounded-sm cursor-default capitalize"
+              >
+                Pending
+              </button>
+              <button
+                v-if="recentOrder.paymentStatus === 'paid'"
+                class="p-2 bg-emerald-600 text-white rounded-sm cursor-default capitalize"
+              >
+                Paid
               </button>
             </div>
             <div>
@@ -158,8 +227,18 @@ import { onMounted, ref, watch } from "vue";
 import { initFlowbite } from "flowbite";
 import { Button } from "@/components/ui/button";
 import UserSidebar from "../views/UserSidebarView.vue";
-import { getUserOrders } from "../controllers/userController.ts";
+import { getUserOrders, cancelOrder } from "../controllers/userController.ts";
 import { DocumentData } from "firebase/firestore";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const orders = ref<DocumentData[]>([]);
 const isLoading = ref(false);
@@ -193,4 +272,13 @@ watch(orders, (newOrders) => {
 });
 
 console.log(recentOrder.value);
+
+const formatDate = (dateString: string) => {
+  const dateOptions = { year: "numeric", month: "long", day: "numeric" };
+  const timeOptions = { hour: "2-digit", minute: "2-digit" };
+  const date = new Date(dateString);
+  const formattedDate = (date.toLocaleDateString as any)([], dateOptions);
+  const formattedTime = (date.toLocaleTimeString as any)([], timeOptions);
+  return `${formattedDate} (${formattedTime})`;
+};
 </script>

@@ -12,6 +12,7 @@ export const setup = () => {
   const order = ref<Order | null>(null);
   const orders = ref<Order[]>([]);
   const loadingPage = ref(false);
+  const loadingCheckbox = ref(false);
 
   onMounted(async () => {
     loadingPage.value = true;
@@ -21,6 +22,7 @@ export const setup = () => {
   });
 
   const markAsPaid = async (order: Order) => {
+    loadingCheckbox.value = true;
     let updateData;
     let productUpdateData;
 
@@ -78,9 +80,11 @@ export const setup = () => {
     }
     await updateOrder(order.id, updateData);
     orders.value = await fetchOrders();
+    loadingCheckbox.value = false;
   };
 
   const readyOrder = async (order: Order) => {
+    loadingCheckbox.value = true;
     let updateData;
     //If checkbox was unchecked
     if (order.orderStatus === "ready") {
@@ -98,6 +102,7 @@ export const setup = () => {
 
     // Refresh the orders
     orders.value = await fetchOrders();
+    loadingCheckbox.value = false;
   };
 
   const declineOrder = async (order: Order) => {
@@ -118,5 +123,6 @@ export const setup = () => {
     declineOrder,
     readyOrder,
     loadingPage,
+    loadingCheckbox,
   };
 };
