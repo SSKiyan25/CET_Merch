@@ -7,6 +7,7 @@ import {
   where,
   getDocs,
   updateDoc,
+  orderBy,
 } from "firebase/firestore";
 
 export const fetchUserOrders = async () => {
@@ -17,21 +18,23 @@ export const fetchUserOrders = async () => {
   // Fetch the current user's orders
   const ordersCollection = collection(db, "userOrder");
 
-  // Query where orderStatus is less than "OnQueue"
+  // Query where orderStatus is less than "OnQueue" and order by dateOrdered
   const querySnapshot1 = await getDocs(
     query(
       ordersCollection,
       where("userId", "==", auth.currentUser.uid),
-      where("orderStatus", "<", "OnQueue")
+      where("orderStatus", "<", "OnQueue"),
+      orderBy("dateOrdered", "desc")
     )
   );
 
-  // Query where orderStatus is greater than "OnQueue"
+  // Query where orderStatus is greater than "OnQueue" and order by dateOrdered
   const querySnapshot2 = await getDocs(
     query(
       ordersCollection,
       where("userId", "==", auth.currentUser.uid),
-      where("orderStatus", ">", "OnQueue")
+      where("orderStatus", ">", "OnQueue"),
+      orderBy("dateOrdered", "desc")
     )
   );
 

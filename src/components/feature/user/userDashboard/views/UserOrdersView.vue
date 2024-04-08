@@ -35,7 +35,7 @@
               <span
                 class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
               >
-                <MagnifyingGlassIcon class="size-6 text-muted-foreground" />
+                <MagnifyingGlassIcon class="size-4 text-gray-700" />
               </span>
               <div class="text-xs">
                 <Popover v-model:open="open">
@@ -59,10 +59,10 @@
                       />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent class="w-[180px] p-0">
+                  <PopoverContent class="w-[200px] p-0">
                     <Command>
                       <CommandInput class="h-9" placeholder="Search Category" />
-                      <CommandEmpty>No framework found.</CommandEmpty>
+                      <CommandEmpty>No category found.</CommandEmpty>
                       <CommandList>
                         <CommandGroup>
                           <CommandItem
@@ -101,8 +101,22 @@
           </form>
         </div>
       </div>
+      <div v-if="isLoading">
+        <div class="flex items-center justify-center pl-4 py-8 h-full w-full">
+          <span
+            class="material-symbols-outlined text-6xl text-primary animate-spin"
+          >
+            autorenew
+          </span>
+        </div>
+      </div>
       <!--Order Section-->
-      <div class="pt-8" v-for="(order, index) in filteredOrders" :key="index">
+      <div
+        v-else-if="!isLoading && filteredUserOrders.length > 0"
+        class="pt-8"
+        v-for="(order, index) in filteredUserOrders"
+        :key="index"
+      >
         <div class="flex flex-col border pt-2 pb-4 overflow-auto">
           <div class="flex flex-row justify-between py-2 px-3">
             <div>
@@ -114,11 +128,21 @@
               }}</span>
               <AlertDialog v-if="order.orderStatus !== 'done'">
                 <AlertDialogTrigger>
-                  <button>
+                  <button
+                    v-bind:disabled="
+                      order.orderStatus === 'decline' ||
+                      order.orderStatus === 'cancelled'
+                    "
+                  >
                     <span
                       class="text-[10px] pl-2 font-semibold text-blue-900 hover:underline"
-                      >Cancel Order?</span
-                    >
+                      :class="{
+                        'opacity-50 cursor-not-allowed':
+                          order.orderStatus === 'decline' ||
+                          order.orderStatus === 'cancelled',
+                      }"
+                      >Cancel Order?
+                    </span>
                   </button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -135,7 +159,7 @@
                       class="bg-background text-black hover:bg-gray-300"
                       >Close</AlertDialogAction
                     >
-                    <AlertDialogAction @click="console.log('Order Cancelled!')">
+                    <AlertDialogAction @click.prevent="cancelOrder(order)">
                       Cancel Order
                     </AlertDialogAction>
                   </AlertDialogFooter>
@@ -184,13 +208,18 @@
               >
                 <span>{{ order.orderStatus }}</span>
               </button>
-              <Button
-                v-else-if="order.orderStatus === 'declined'"
-                variant="default"
-                class="cursor-default capitalize"
+              <button
+                v-else-if="order.orderStatus === 'decline'"
+                class="p-2 bg-red-900 text-white rounded-sm cursor-default capitalize"
               >
-                <span>{{ order.orderStatus }}</span>
-              </Button>
+                <span>Declined</span>
+              </button>
+              <button
+                v-else-if="order.orderStatus === 'cancelled'"
+                class="p-2 bg-red-700 text-white rounded-sm cursor-default capitalize"
+              >
+                <span>Cancelled</span>
+              </button>
               <button
                 v-else-if="order.orderStatus === 'done'"
                 class="p-2 bg-emerald-600 text-white rounded-sm cursor-default capitalize"
@@ -206,9 +235,15 @@
               <span class="px-2">Payment Status:</span>
               <button
                 v-if="order.paymentStatus === 'pending'"
-                class="p-2 bg-red-600 text-white rounded-sm cursor-default capitalize"
+                class="p-2 bg-amber-600 text-white rounded-sm cursor-default capitalize"
               >
                 Pending
+              </button>
+              <button
+                v-if="order.paymentStatus === 'decline'"
+                class="p-2 bg-red-900 text-white rounded-sm cursor-default capitalize"
+              >
+                Declined
               </button>
               <button
                 v-else-if="order.paymentStatus === 'paid'"
@@ -220,13 +255,27 @@
             <div>
               <span
                 >Total Payment:
-                <span class="text-primary font-semibold underline"
+                <span class="text-primary font-semibold underline text-2xl"
                   >{{ order.totalPrice }}
                 </span>
               </span>
               <span class="pl-1">(Cash)</span>
             </div>
           </div>
+        </div>
+      </div>
+      <!--If filtered Products is 0 || No result-->
+      <div v-else-if="!isLoading && filteredUserOrders.length === 0">
+        <div
+          class="flex flex-col items-center justify-center pl-4 py-8 h-full w-full space-x-2"
+        >
+          <span class="material-symbols-outlined text-6xl text-primary"
+            >sentiment_very_dissatisfied
+          </span>
+          <span class="text-lg font-bold text-primary"> No Orders Found </span>
+          <span class="text-xs text-gray-500">
+            Try changing your filter or search criteria.
+          </span>
         </div>
       </div>
     </div>
@@ -255,7 +304,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { getUserOrders } from "../controllers/userController.ts";
+import { getUserOrders, cancelOrder } from "../controllers/userController.ts";
 import { DocumentData } from "firebase/firestore";
 import {
   AlertDialog,
@@ -269,10 +318,13 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const orders = ref<DocumentData[]>([]);
+const isLoading = ref(false);
 
 onMounted(async () => {
+  isLoading.value = true;
   initFlowbite();
   orders.value = await getUserOrders();
+  isLoading.value = false;
 });
 
 const open = ref(false);
@@ -283,30 +335,25 @@ const frameworks = [
   { value: "all", label: "Show All" },
   { value: "paid", label: "Paid" },
   { value: "pending", label: "Pending" },
-  { value: "peclined", label: "Declined" },
-  { value: "pancelled", label: "Cancelled" },
-  { value: "T-Shirt", label: "T-Shirt" },
-  { value: "Polo-Shirt", label: "Polo-Shirt" },
-  { value: "Lace", label: "Lace" },
-  { value: "Hoodie", label: "Hoodie" },
-  { value: "Stickers", label: "Stickers" },
+  { value: "ready", label: "Ready to Get" },
+  { value: "decline", label: "Declined" },
+  { value: "cancelled", label: "Cancelled" },
 ];
 
-const filteredOrders = computed(() => {
+const filteredUserOrders = computed(() => {
   let filtered = orders.value;
 
-  if (value.value !== "all") {
-    filtered = filtered.filter((order) => {
-      if (["paid", "pending", "declined", "cancelled"].includes(value.value)) {
-        return order.paymentStatus === value.value;
-      }
-
-      return order.cart.some(
-        (item: any) => item.productDetails.category === value.value
-      );
-    });
+  // Filter by orderStatus
+  if (["decline", "cancelled", "done", "ready"].includes(value.value)) {
+    filtered = filtered.filter((order) => order.orderStatus === value.value);
   }
 
+  // Filter by paymentStatus
+  if (["paid", "pending"].includes(value.value)) {
+    filtered = filtered.filter((order) => order.paymentStatus === value.value);
+  }
+
+  // Filter by searchTerm
   if (searchTerm.value) {
     filtered = filtered.filter((order) =>
       order.orderRefNum.includes(searchTerm.value)

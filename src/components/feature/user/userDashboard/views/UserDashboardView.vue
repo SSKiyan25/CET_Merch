@@ -61,17 +61,17 @@
       </div>
     </div>
 
-    <div
-      v-if="recentOrder && !isLoading"
-      class="flex flex-col p-4 mt-16 border-2 rounded-lg overflow-auto"
-    >
+    <div class="flex flex-col p-4 mt-16 border-2 rounded-lg overflow-auto">
       <div class="flex flex-row border-b-2">
         <h1 class="font-bold text-xl text-primary tracking-wide pb-2">
           Recent Order
         </h1>
       </div>
       <div class="pt-8">
-        <div class="flex flex-col border pt-2 pb-4">
+        <div
+          v-if="recentOrder && !isLoading"
+          class="flex flex-col border pt-2 pb-4"
+        >
           <div class="flex flex-row justify-between items-center py-2 px-3">
             <div>
               <span class="text-sm font-semibold"
@@ -82,11 +82,21 @@
               }}</span>
               <AlertDialog>
                 <AlertDialogTrigger>
-                  <button>
+                  <button
+                    v-bind:disabled="
+                      recentOrder.orderStatus === 'decline' ||
+                      recentOrder.orderStatus === 'cancelled'
+                    "
+                  >
                     <span
                       class="text-[10px] pl-2 font-semibold text-blue-900 hover:underline"
-                      >Cancel Order?</span
-                    >
+                      :class="{
+                        'opacity-50 cursor-not-allowed':
+                          recentOrder.orderStatus === 'decline' ||
+                          recentOrder.orderStatus === 'cancelled',
+                      }"
+                      >Cancel Order?
+                    </span>
                   </button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -248,7 +258,6 @@ onMounted(async () => {
   isLoading.value = true;
   initFlowbite();
   orders.value = await getUserOrders();
-  console.log(orders.value); // Check if orders array is populated
   isLoading.value = false;
 });
 
@@ -257,10 +266,8 @@ watch(orders, (newOrders) => {
   if (newOrders.length === 0) {
     recentOrder.value = null;
   } else {
-    console.log(newOrders[0]); // Check if dateOrdered field is present
+    console.log(newOrders[0]);
     recentOrder.value = newOrders.reduce((latestOrder, currentOrder) => {
-      console.log(new Date(latestOrder.dateOrdered)); // Check if dateOrdered can be parsed
-      console.log(new Date(currentOrder.dateOrdered)); // Check if dateOrdered can be parsed
       return new Date(latestOrder.dateOrdered) >
         new Date(currentOrder.dateOrdered)
         ? latestOrder
