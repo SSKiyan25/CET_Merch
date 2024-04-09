@@ -40,10 +40,10 @@ export const handleSignup = async (router: any) => {
       const userDoc = doc(db, "users", user.uid);
       await setDoc(userDoc, {
         name: `${lastName.value}, ${firstName.value}`,
-        department: department.value,
+        faction: department.value,
         studentId: studentId.value,
         username: username.value,
-        emailAddress: email.value,
+        email: email.value,
         role: role.value,
       });
 

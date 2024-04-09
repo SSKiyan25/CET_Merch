@@ -2,11 +2,11 @@
   <aside
     v-show="isSidebarVisible"
     :class="{
-      'fixed top-0 left-0 z-30 w-64 h-full pt-20 transition-transform bg-background border-primary border-r sm:translate-x-0': true,
+      'fixed top-0 left-0 z-30 w-[15rem] h-full pt-20 transition-transform bg-background border-primary border-r sm:translate-x-0': true,
       '-translate-x-full': !isSidebarVisible,
     }"
   >
-    <div class="h-full px-3 pb-4 overflow-y-auto bg-background border-primary">
+    <div class="h-full px-3 py-4 overflow-y-auto bg-background border-primary">
       <ul class="space-y-2 font-medium">
         <li>
           <router-link

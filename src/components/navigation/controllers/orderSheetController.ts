@@ -1,5 +1,5 @@
 import { getOnQueueOrders } from "../models/orderSheetModel.ts";
-import { Ref, ref, watch } from "vue";
+import { ref, watch } from "vue";
 
 interface ProductData {
   id: string;

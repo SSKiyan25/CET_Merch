@@ -484,8 +484,6 @@ const handleFormCartSubmit = async () => {
       selectedTab.value = "order";
     }, 1500);
   } else {
-    // Handle the case where no user is logged in
-    alert("Please login to add product to your cart");
     router.push({ name: "login" });
     console.error("No user is logged in");
     isLoading.value = false;

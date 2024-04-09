@@ -17,48 +17,123 @@
     </div>
 
     <div class="flex flex-col p-4 border-2 rounded-lg">
-      <div class="flex flex-row border-b-2">
+      <div class="relative flex flex-row border-b-2">
         <h1 class="font-bold text-xl text-primary tracking-wide pb-2">
           General Information
         </h1>
       </div>
+      <form>
+        <div class="relative">
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-8 pl-4 pb-4 text-sm"
+          >
+            <div>
+              <span class="font-semibold">Username: </span>
+              <input
+                type="text"
+                id="username"
+                class="p-1.5 text-xs min-w-56 border border-primary rounded-sm"
+                v-bind:disabled="!isEditing"
+                :class="{ 'opacity-50 border border-gray-400': !isEditing }"
+                placeholder="No Existing Username"
+                v-model="formData.username"
+              />
+            </div>
+            <div>
+              <span class="font-semibold">Email: </span>
+              <input
+                type="email"
+                id="email"
+                class="p-1.5 text-xs min-w-48 border border-primary rounded-sm"
+                v-bind:disabled="!isEditing"
+                :class="{ 'opacity-50 border border-gray-400': !isEditing }"
+                placeholder="No Existing Email"
+                v-model="formData.emailAddress"
+              />
+            </div>
+            <div></div>
 
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-8 pl-4 pb-4 text-sm"
-      >
-        <div>
-          <span class="font-semibold">Username: </span>
-          <span class="pl-2 opacity-80">TestUserName</span>
-        </div>
-        <div>
-          <span class="font-semibold">Email: </span>
-          <span class="pl-2 underline opacity-80">test@gmail.com</span>
-        </div>
-        <div></div>
+            <div>
+              <span class="font-semibold">Name: </span>
+              <input
+                type="text"
+                id="name"
+                class="p-1.5 text-xs min-w-56 border border-primary rounded-sm"
+                placeholder="No Existing Name"
+                v-bind:disabled="!isEditing"
+                :class="{ 'opacity-50 border border-gray-400': !isEditing }"
+                v-model="formData.name"
+              />
+            </div>
+            <div>
+              <span class="font-semibold">Student ID: </span>
+              <input
+                type="text"
+                id="student-id"
+                class="p-1.5 text-xs border border-primary rounded-sm"
+                placeholder="No Existing Student ID"
+                v-bind:disabled="!isEditing"
+                :class="{ 'opacity-50 border border-gray-400': !isEditing }"
+                v-model="formData.studentId"
+              />
+            </div>
+            <div>
+              <span class="font-semibold">Department: </span>
+              <input
+                type="text"
+                id="department"
+                class="p-1.5 text-xs min-w-56 border border-primary rounded-sm"
+                v-bind:disabled="!isEditing"
+                :class="{ 'opacity-50 border border-gray-400': !isEditing }"
+                placeholder="No Existing Department"
+                v-model="formData.department"
+              />
+            </div>
+            <div>
+              <span class="font-semibold">Phone: </span>
+              <input
+                type="text"
+                id="phone-number"
+                class="py-1.5 min-w-56 text-xs border border-primary rounded-sm text-start"
+                v-bind:disabled="!isEditing"
+                :class="{ 'opacity-50 border border-gray-400': !isEditing }"
+                placeholder="No Existing Phone Number"
+                v-model="formData.phoneNumber"
+              />
+            </div>
+            <div></div>
 
-        <div>
-          <span class="font-semibold">Name: </span>
-          <span class="pl-2 opacity-80">Test User</span>
+            <div></div>
+          </div>
+          <div
+            v-if="editLoading"
+            class="flex items-center justify-center absolute inset-0 z-50 bg-black w-auto h-auto bg-opacity-10"
+          >
+            <span
+              class="material-symbols-outlined text-6xl text-primary animate-spin opacity-90"
+            >
+              autorenew
+            </span>
+          </div>
         </div>
-        <div>
-          <span class="font-semibold">Student ID: </span>
-          <span class="pl-2 opacity-80"> 20-1-01709 </span>
-        </div>
-        <div>
-          <span class="font-semibold">Department: </span>
-          <span class="pl-2 opacity-80">DCST</span>
-        </div>
-        <div>
-          <span class="font-semibold">Phone: </span>
-          <span class="pl-2 opacity-80">+8801234567890</span>
-        </div>
-        <div></div>
 
-        <div></div>
-      </div>
-      <div class="flex flex-row border-t pt-2 pr-2 justify-end items-center">
-        <Button variant="destructive">Edit</Button>
-      </div>
+        <div class="flex flex-row border-t pt-2 pr-2 justify-end items-center">
+          <button
+            v-if="!isEditing"
+            @click.prevent="isEditing = true"
+            class="py-2 px-4 rounded-sm text-white bg-red-800"
+          >
+            Edit
+          </button>
+          <button
+            v-if="isEditing"
+            @click.prevent="saveChanges"
+            class="py-2 px-4 rounded-sm text-white bg-emerald-800"
+          >
+            Save Changes
+          </button>
+        </div>
+      </form>
     </div>
 
     <div class="flex flex-col p-4 mt-16 border-2 rounded-lg overflow-auto">
@@ -217,6 +292,22 @@
             </div>
           </div>
         </div>
+        <div v-else-if="!isLoading && !recentOrder">
+          <div
+            class="flex flex-col items-center justify-center pl-4 py-8 h-full w-full space-x-2"
+          >
+            <span class="material-symbols-outlined text-6xl text-primary"
+              >sentiment_very_dissatisfied
+            </span>
+            <span class="text-lg font-bold text-primary">
+              No Recent Order Found.
+            </span>
+            <span class="text-xs text-gray-500 text-center">
+              You haven't placed any orders yet. Start shopping now and see your
+              order here.
+            </span>
+          </div>
+        </div>
       </div>
       <div v-if="isLoading">
         <div class="flex items-center justify-center pl-4 h-full w-full">
@@ -234,11 +325,12 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
+import { db, auth } from "@/firebase/init.ts";
 import { initFlowbite } from "flowbite";
 import { Button } from "@/components/ui/button";
 import UserSidebar from "../views/UserSidebarView.vue";
 import { getUserOrders, cancelOrder } from "../controllers/userController.ts";
-import { DocumentData } from "firebase/firestore";
+import { DocumentData, doc, getDoc, updateDoc } from "firebase/firestore";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -253,6 +345,17 @@ import {
 const orders = ref<DocumentData[]>([]);
 const isLoading = ref(false);
 const recentOrder = ref<DocumentData | null>(null);
+const isEditing = ref(false);
+const editLoading = ref(false);
+
+const formData = ref({
+  username: "",
+  name: "",
+  emailAddress: "",
+  phoneNumber: "",
+  studentId: "",
+  department: "",
+});
 
 onMounted(async () => {
   isLoading.value = true;
@@ -260,6 +363,48 @@ onMounted(async () => {
   orders.value = await getUserOrders();
   isLoading.value = false;
 });
+
+onMounted(async () => {
+  const userId = auth.currentUser?.uid;
+  if (userId) {
+    const userRef = doc(db, "users", userId);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      const userData = userSnap.data();
+      formData.value.username = userData.username || "";
+      formData.value.name = userData.name || "";
+      formData.value.emailAddress = userData.email || "";
+      formData.value.phoneNumber = userData.phoneNumber || "";
+      formData.value.department = userData.faction || "";
+      formData.value.studentId = userData.studentId || "";
+    }
+  }
+});
+
+const editUserProfile = async () => {
+  const userId = auth.currentUser?.uid;
+  if (userId) {
+    const userRef = doc(db, "users", userId);
+    try {
+      await updateDoc(userRef, {
+        username: formData.value.username,
+        name: formData.value.name,
+        email: formData.value.emailAddress,
+        phoneNumber: formData.value.phoneNumber,
+        faction: formData.value.department,
+        studentId: formData.value.studentId,
+      });
+      console.log("User profile updated successfully");
+    } catch (error) {
+      console.error("Error updating user profile: ", error);
+    }
+  }
+};
+
+const saveChanges = () => {
+  editUserProfile();
+  isEditing.value = false;
+};
 
 watch(orders, (newOrders) => {
   isLoading.value = true;
@@ -275,10 +420,7 @@ watch(orders, (newOrders) => {
     });
   }
   isLoading.value = false;
-  console.log("Recent Order: ", recentOrder.value);
 });
-
-console.log(recentOrder.value);
 
 const formatDate = (dateString: string) => {
   const dateOptions = { year: "numeric", month: "long", day: "numeric" };
