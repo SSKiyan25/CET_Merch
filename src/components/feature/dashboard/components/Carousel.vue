@@ -1,5 +1,5 @@
 <template>
-  <div class="flex relative">
+  <div class="relative max-w-screen mx-auto">
     <Carousel
       :plugins="[plugin]"
       @mouseenter="plugin.stop"
@@ -9,8 +9,8 @@
         <CarouselItem v-for="(url, index) in imageUrls" :key="index">
           <div class="p-1">
             <Card v-if="loading">
-              <CardContent
-                ><div
+              <CardContent>
+                <div
                   class="flex flex-col h-full w-full items-center justify-center"
                   style="width: 1920px; height: 620px"
                 >
@@ -37,36 +37,30 @@
           </div>
         </CarouselItem>
       </CarouselContent>
-      <CarouselPrevious class="ml-20 opacity-40 hover:opacity-100" />
-      <CarouselNext class="mr-20 opacity-40 hover:opacity-100" />
     </Carousel>
-  </div>
-
-  <div
-    v-if="!loading"
-    class="absolute bottom-48 md:bottom-0 left-0 flex flex-col items-center justify-end w-full h-full pb-20 p-2 md:pb-28 md:pl-20 lg:pb-36 xl:pb-[28rem] md:items-start opacity-90"
-  >
-    <div class="p-4 rounded-lg">
-      <h1
-        class="text-white font-black text-3xl md:text-5xl"
-        style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
+    <!--Overlayed content-->
+    <div
+      class="absolute bottom-0 left-0 flex flex-col items-center md:items-start justify-center md:justify-end w-full h-full p-6 md:p-20 space-y-4 backdrop-filter text-white"
+      style="backdrop-filter: blur(1px)"
+    >
+      <div
+        class="flex flex-col items-center md:items-start justify-center md:justify-start w-full space-y-2"
       >
-        CET MERCHANDISE
-      </h1>
-    </div>
-    <div class="md:pl-5 pb-4 w-1/2 md:w-1/3">
-      <p
-        class="text-white text-center md:text-start text-xs md:text-sm font-semibold text-wrap"
-        style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
-      >
-        Get your hands on the latest CET Merchandise. From t-shirts to lanyards
-        and more!
-      </p>
-    </div>
-    <div class="pt-2 ps-4">
-      <div class="overflow-hidden rounded-lg">
+        <h1
+          class="text-white font-black text-3xl md:text-5xl"
+          style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
+        >
+          CET MERCHANDISE
+        </h1>
+        <p
+          class="text-white text-center md:text-start text-xs md:text-sm font-semibold text-wrap"
+          style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
+        >
+          Get your hands on the latest CET Merchandise. From t-shirts to
+          lanyards and more!
+        </p>
         <button
-          class="bg-white p-4 transform transition-all duration-500 hover:scale-110 text-black text-base md:text-xl font-bold"
+          class="bg-white p-4 transform transition-all duration-500 hover:scale-110 text-black text-base md:text-xl font-bold rounded-md"
           v-scroll-to="'#products'"
         >
           Shop Now
@@ -86,11 +80,8 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
-//import LoadingComponent from "../../misc/LoadingComponent.vue";
 
 const imageUrls = ref<string[]>([]);
 const loading = ref(false);

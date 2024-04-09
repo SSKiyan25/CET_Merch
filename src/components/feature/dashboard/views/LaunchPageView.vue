@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-screen h-auto pb-4 mx-auto border-b-2">
+  <div class="relative max-w-screen h-auto pb-4 mx-auto border-b-2">
     <div>
       <FeaturedCarousel />
     </div>

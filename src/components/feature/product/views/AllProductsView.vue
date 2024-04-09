@@ -1,5 +1,5 @@
 <template>
-  <div class="h-auto">
+  <div class="relative h-auto">
     <div class="max-w-screen pb-4 mx-auto border-b-2">
       <div
         class="flex bg-inherit items-center justify-center shadow-2xl relative"
@@ -9,30 +9,24 @@
           class="object-cover md:object-fit brightness-50 backdrop-contrast-50 backdrop-hue-rotate-90"
           style="width: 1920px; height: 620px"
         />
-      </div>
-    </div>
-    <div
-      class="absolute bottom-48 md:bottom-0 left-0 flex flex-col items-center justify-end w-full h-full pb-20 p-2 md:pb-28 md:pl-20 lg:pb-36 xl:pb-[28rem] md:items-start opacity-90"
-    >
-      <div class="p-4 rounded-lg">
-        <h1
-          class="text-white uppercase font-black text-3xl md:text-5xl"
-          style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
+        <!--Overlayed content-->
+        <div
+          class="absolute bottom-0 left-0 flex flex-col items-start justify-end w-full h-full p-2 md:p-20 space-y-4 backdrop-filter text-white"
+          style="backdrop-filter: blur(1px)"
         >
-          CET Products
-        </h1>
-      </div>
-      <div class="md:pl-5 pb-4 w-1/2 md:w-1/3">
-        <p
-          class="text-white text-center md:text-start text-xs md:text-sm font-semibold text-wrap"
-          style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
-        >
-          Get your hands on the latest CET Merchandise. From t-shirts to
-          lanyards and more!
-        </p>
-      </div>
-      <div class="pt-2 ps-4">
-        <div class="overflow-hidden rounded-lg">
+          <h1
+            class="uppercase font-black text-3xl md:text-5xl"
+            style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
+          >
+            CET Products
+          </h1>
+          <p
+            class="text-center md:text-start text-xs md:text-sm font-semibold text-wrap"
+            style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
+          >
+            Get your hands on the latest CET Merchandise. From t-shirts to
+            lanyards and more!
+          </p>
           <button
             class="bg-white p-4 transform transition-all duration-500 hover:scale-110 text-black text-base md:text-xl font-bold"
             v-scroll-to="'#products'"
@@ -47,7 +41,7 @@
       <div
         class="flex flex-col md:flex-row pt-12 pb-2 justify-between border-b-2 border-primary mx-auto sticky"
       >
-        <div class="flex flex-row items-center text-primary md:mb:0">
+        <div class="flex flex-row items-center text-primary pb-4 md:pb:0">
           <span
             class="font-black text-secondary-foreground tracking-wide text-2xl uppercase"
           >
@@ -132,6 +126,7 @@
                   v-for="item in dropdownItems"
                   :key="item.value"
                   @click.prevent="selectedItem = item.value"
+                  v-model:checked="item.checked"
                 >
                   {{ item.label }}
                 </DropdownMenuCheckboxItem>
@@ -162,7 +157,9 @@
             id="products"
             class="flex flex-row px-2 md:px-4 py-8 justify-center"
           >
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+            <div
+              class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-2"
+            >
               <div
                 v-if="!isLoading"
                 v-for="product in filteredProducts"
@@ -218,17 +215,17 @@
                 </div>
               </div>
             </div>
-            <div
-              v-if="!isLoading && filteredProducts.length === 0"
-              class="flex flex-row text-primary max-w-full justify-center items-center mx-auto"
-            >
-              <div class="flex flex-col items-center justify-center">
-                <span class="material-symbols-outlined text-6xl text-primary">
-                  search_off
-                </span>
-                No Results
-              </div>
-            </div>
+          </div>
+        </div>
+        <div
+          v-if="!isLoading && filteredProducts.length === 0"
+          class="flex flex-row text-primary min-w-full min-h-full pb-16 justify-center items-center mx-auto"
+        >
+          <div class="flex flex-col items-center justify-center">
+            <span class="material-symbols-outlined text-6xl text-primary">
+              search_off
+            </span>
+            No Results
           </div>
         </div>
       </div>
@@ -238,7 +235,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { Button } from "../../../ui/button";
 import { Check, ChevronsUpDown } from "lucide-vue-next";
 import { cn } from "../../../../lib/utils";
@@ -280,15 +277,23 @@ const frameworks = [
 
 const selectedItem = ref<string>("");
 
-const dropdownItems = [
-  { value: "All", label: "Show All" },
-  { value: "T-Shirt", label: "T-Shirt" },
-  { value: "Polo-Shirt", label: "Polo-Shirt" },
-  { value: "Lanyard", label: "Lanyard" },
-  { value: "Hoodie", label: "Hoodie" },
-  { value: "Stickers", label: "Stickers" },
-  { value: "Other", label: "Other" },
-];
+const dropdownItems = ref([
+  { value: "All", label: "Show All", checked: false },
+  { value: "T-Shirt", label: "T-Shirt", checked: false },
+  { value: "Polo-Shirt", label: "Polo-Shirt", checked: false },
+  { value: "Lanyard", label: "Lanyard", checked: false },
+  { value: "Hoodie", label: "Hoodie", checked: false },
+  { value: "Stickers", label: "Stickers", checked: false },
+  { value: "Other", label: "Other", checked: false },
+]);
+
+watch(selectedItem, (newVal) => {
+  if (newVal === "All") {
+    dropdownItems.value.forEach((item) => {
+      item.checked = item.value === "All";
+    });
+  }
+});
 
 const filteredProducts = computed(() => {
   let result =
@@ -296,13 +301,13 @@ const filteredProducts = computed(() => {
       ? products.value
       : products.value.filter((product) => product.faction === value.value);
 
-  if (selectedItem.value !== "All" && selectedItem.value !== "") {
-    result = result.filter(
-      (product) => product.category === selectedItem.value
+  const checkedItems = dropdownItems.value.filter((item) => item.checked);
+  if (checkedItems.length > 0 && checkedItems[0].value !== "All") {
+    result = result.filter((product) =>
+      checkedItems.some((item) => product.category === item.value)
     );
   }
 
-  console.log(result);
   return result;
 });
 </script>

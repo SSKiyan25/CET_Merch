@@ -76,6 +76,23 @@ export const fetchPopularProducts = async () => {
   })) as Product[];
 };
 
+export const fetchBestSellingProducts = async () => {
+  const productCollection = collection(db, "products");
+  const q = query(
+    productCollection,
+    where("isArchived", "==", false),
+    where("isPublished", "==", true),
+    where("totalSales", ">", 0),
+    orderBy("totalSales", "desc"),
+    limit(3)
+  );
+  const productSnapshot = await getDocs(q);
+  return productSnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Product[];
+};
+
 export const fetchProductById = async (id: string) => {
   const productRef = doc(db, "products", id);
   const singleProductSnapshot = await getDoc(productRef);
