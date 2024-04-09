@@ -5,8 +5,8 @@
     </div>
   </div>
   <!-- End Features -->
-  <div id="products"><HeaderProductsComponent /></div>
-  <div><FeaturedProductsComponent /></div>
+  <div><HeaderProductsComponent /></div>
+  <div id="products"><FeaturedProductsComponent /></div>
   <div class="pt-12"><BestSellerProductsComponent /></div>
   <div><PopularProductsComponent /></div>
   <div class="pb-32"></div>

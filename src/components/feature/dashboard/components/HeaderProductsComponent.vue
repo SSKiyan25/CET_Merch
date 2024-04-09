@@ -56,7 +56,7 @@
         <div class="aspect-w-16 aspect-h-9">
           <img
             class="w-full h-48 object-cover rounded-t-xl"
-            src="https://images.unsplash.com/photo-1668863699009-1e3b4118675d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3387&q=80"
+            src="/homepage/gallery-1.jpg"
             alt="Image Description"
           />
         </div>

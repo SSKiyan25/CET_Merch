@@ -3,120 +3,91 @@
     <div
       class="flex flex-col md:flex-row pt-12 pb-2 justify-between border-b-2 border-primary mx-auto"
     >
-      <div class="flex flex-row items-center text-primary md:mb:0">
-        <span
-          class="font-black text-secondary-foreground tracking-wide text-2xl uppercase"
-        >
-          Popular <span class="text-red-600">Products</span>
-        </span>
+      <div
+        class="flex flex-row justify-between items-center text-primary w-full"
+      >
+        <div class="flex">
+          <label
+            class="font-black text-secondary-foreground tracking-wide text-lg md:text-2xl uppercase"
+          >
+            Popular <span class="text-red-600">Products</span>
+          </label>
+        </div>
+        <div class="flex pr-4">
+          <router-link to="/products">
+            <label
+              class="text-[10px] md:text-xs uppercase hover:underline cursor-pointer"
+              >View All Products</label
+            >
+          </router-link>
+        </div>
       </div>
     </div>
-    <div class="flex flex-col pt-4 bg-gray-100 shadow-md">
-      <div class="flex flex-row px-4 md:px-16">
-        <Carousel class="w-full max-w-5/6" :opts="{ align: 'start' }">
-          <CarouselContent>
-            <CarouselItem
-              ><div
-                class="hidden max-w-[75reh] h-full pt-8 justify-center items-center"
+    <div class="flex w-full flex-col pt-4 bg-gray-100 shadow-md">
+      <div
+        class="grid grid-cols-2 md:grid-cols-4 gap-4 xl:gap-18 pb-8 px-4 md:px-16"
+      >
+        <div
+          v-if="!isLoading"
+          v-for="product in products"
+          :key="product.id"
+          class="flex flex-col bg-white shadow-lg border border-primary/20 rounded-sm hover:drop-shadow-xl w-full h-auto md:w-full md:h-[22rem]"
+        >
+          <div class="overflow-hidden border-b-2 border-primary/60">
+            <div class="flex flex-col justify-center items-center">
+              <router-link
+                :to="`product/${product.id}`"
+                @click.prevent="incrementViewCount(product)"
               >
-                <div class="flex flex-col items-center justify-center h-full">
-                  <div class="flex flex-col items-center justify-center">
-                    <span
-                      class="material-symbols-outlined text-6xl text-primary animate-spin"
-                    >
-                      autorenew
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <!--Product Card-->
+                <img
+                  :src="product.coverPhoto"
+                  class="transform transition-all duration-500 hover:scale-110 w-full md:w-full h-[8rem] md:h-[16rem] object-cover rounded-t-sm"
+                />
+              </router-link>
+            </div>
+          </div>
+          <div class="p-2 md:p-4 w-full">
+            <div class="flex flex-col w-full whitespace-normal">
+              <router-link
+                :to="`/product/${product.id}`"
+                @click.prevent="incrementViewCount(product)"
+                class="truncate"
+              >
+                <span
+                  class="w-full text-xs md:text-base font-bold text-secondary-foreground truncate hover:underline"
+                >
+                  {{ product.name }}
+                </span>
+              </router-link>
+              <span
+                class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
+              >
+                P
+                {{ product.price[product.price.length - 1].originalPrice }}
+              </span>
               <div
-                class="flex flex-row px-4 md:px-8 pt-2 pb-8 justify-center rounded-3xl"
+                class="flex flex-row justify-between items-center text-[8px] md:text-xs"
               >
-                <div class="max-w-[75rem] justify-center items-center">
-                  <div
-                    class="flex flex-row justify-center items-center space-x-4"
-                  >
-                    <div
-                      v-if="!isLoading"
-                      v-for="product in products"
-                      :key="product.id"
-                      class="flex flex-col bg-white shadow-lg border border-primary/20 rounded-sm hover:drop-shadow-xl"
-                    >
-                      <div class="overflow-hidden border-b-2 border-primary/60">
-                        <div
-                          class="flex flex-col justify-center items-center max-h-[22rem]"
-                        >
-                          <router-link
-                            :to="`product/${product.id}`"
-                            @click.prevent="incrementViewCount(product)"
-                          >
-                            <img
-                              :src="product.coverPhoto"
-                              class="transform transition-all duration-500 hover:scale-110 w-[10rem] md:w-[18rem] h-[8rem] md:h-[16rem] object-cover rounded-t-sm"
-                            />
-                          </router-link>
-                        </div>
-                      </div>
-                      <div class="p-2 md:p-4">
-                        <div class="flex flex-col">
-                          <router-link
-                            :to="`/product/${product.id}`"
-                            @click.prevent="incrementViewCount(product)"
-                          >
-                            <span
-                              class="text-sm md:text-base font-bold text-secondary-foreground truncate hover:underline"
-                            >
-                              {{ product.name }}
-                            </span></router-link
-                          >
-                          <span
-                            class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
-                          >
-                            P
-                            {{
-                              product.price[product.price.length - 1]
-                                .originalPrice
-                            }}
-                          </span>
-                          <div
-                            class="flex flex-row justify-between items-center text-xs"
-                          >
-                            <div>
-                              <span> {{ product.totalOrders }} Sold | </span>
-                              <span> {{ product.views }} Views</span>
-                            </div>
-                            <div>
-                              <span>
-                                <span> {{ product.category }} | </span>
-                                <span> {{ product.faction }} </span>
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <div>
+                  <span> {{ product.totalOrders }} Sold | </span>
+                  <span> {{ product.views }} Views</span>
+                </div>
+                <div>
+                  <span>
+                    <span> {{ product.category }} | </span>
+                    <span> {{ product.faction }} </span>
+                  </span>
                 </div>
               </div>
-            </CarouselItem>
-          </CarouselContent>
-          <CarouselPrevious class="ml-6 md:ml-4 opacity-20 hover:opacity-100" />
-          <CarouselNext class="mr-6 md:mr-4 opacity-20 hover:opacity-100" />
-        </Carousel>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "../../../ui/carousel";
 import { setup as setupPopularProductsController } from "../controllers/popularProductsController.ts";
 import { setup as setupProductViews } from "@/components/feature/product/controllers/productsController.ts";
 

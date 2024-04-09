@@ -11,8 +11,7 @@
             <Card v-if="loading">
               <CardContent>
                 <div
-                  class="flex flex-col h-full w-full items-center justify-center"
-                  style="width: 1920px; height: 620px"
+                  class="flex flex-col w-[1920px] h-[240px] md:h-[620px] md:w-[1920px] items-center justify-center"
                 >
                   <span
                     class="material-symbols-outlined text-9xl text-primary animate-spin"
@@ -29,8 +28,7 @@
                 <img
                   :src="url"
                   alt="Carousel image"
-                  class="object-cover md:object-fit brightness-50 backdrop-contrast-50 backdrop-hue-rotate-90"
-                  style="width: 1920px; height: 620px"
+                  class="object-cover md:object-fit brightness-50 backdrop-contrast-50 backdrop-hue-rotate-90 w-[1920px] h-[360px] md:h-[620px] md:w-[1920px]"
                 />
               </CardContent>
             </Card>
@@ -40,27 +38,27 @@
     </Carousel>
     <!--Overlayed content-->
     <div
-      class="absolute bottom-0 left-0 flex flex-col items-center md:items-start justify-center md:justify-end w-full h-full p-6 md:p-20 space-y-4 backdrop-filter text-white"
+      class="absolute bottom-0 left-0 flex flex-col items-center md:items-start justify-center md:justify-end w-full h-full p-6 pt-48 md:p-20 space-y-4 backdrop-filter text-white"
       style="backdrop-filter: blur(1px)"
     >
       <div
         class="flex flex-col items-center md:items-start justify-center md:justify-start w-full space-y-2"
       >
         <h1
-          class="text-white font-black text-3xl md:text-5xl"
+          class="text-white font-black text-2xl md:text-5xl"
           style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
         >
           CET MERCHANDISE
         </h1>
         <p
-          class="text-white text-center md:text-start text-xs md:text-sm font-semibold text-wrap"
+          class="text-white text-center md:text-start text-[10px] md:text-sm font-semibold text-wrap"
           style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
         >
           Get your hands on the latest CET Merchandise. From t-shirts to
           lanyards and more!
         </p>
         <button
-          class="bg-white p-4 transform transition-all duration-500 hover:scale-110 text-black text-base md:text-xl font-bold rounded-md"
+          class="bg-white p-2 md:p-4 transform transition-all duration-500 hover:scale-110 text-black text-sm md:text-xl font-bold rounded-md"
           v-scroll-to="'#products'"
         >
           Shop Now

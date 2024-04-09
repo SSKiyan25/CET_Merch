@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-[40rem] shadow-sm bg-slate-100 pt-8">
+  <div class="w-full h-[24rem] md:h-[40rem] shadow-sm bg-slate-100 pt-8">
     <div class="flex flex-col justify-center items-center">
       <div class="">
         <p
@@ -12,7 +12,7 @@
         class="flex flex-row justify-center space-x-3 space-y-2 px-4 md:px-12 pt-10 pb-8"
       >
         <div class="max-w-[75rem] justify-center items-center">
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+          <div class="grid grid-cols-2 md:grid-cols-4">
             <div
               v-if="!isLoading"
               v-for="product in products"
@@ -29,7 +29,7 @@
                     ><img
                       :src="product.coverPhoto"
                       alt=""
-                      class="transform transition-all duration-500 hover:scale-110 object-cover w-96 h-[20rem]"
+                      class="transform transition-all duration-500 hover:scale-110 object-cover w-96 h-[8rem] md:h-[20rem]"
                   /></router-link>
                 </div>
               </div>
@@ -53,7 +53,7 @@
                     {{ product.price[product.price.length - 1].originalPrice }}
                   </span>
                   <div
-                    class="flex flex-row justify-between items-center text-xs"
+                    class="flex flex-row justify-between items-center text-[9px] md:text-xs"
                   >
                     <div>
                       <span> {{ product.totalOrders }} Sold | </span>
