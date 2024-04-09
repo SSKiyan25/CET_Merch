@@ -189,7 +189,7 @@
       <div class="flex flex-row border-b-2 border-primary pb-2">
         <h1 class="font-bold text-xl tracking-wide">Products Statistics</h1>
       </div>
-      <div class="p-5">
+      <div class="p-5 overflow-auto">
         <table class="min-w-full divide-y divide-primary/50">
           <thead>
             <tr>

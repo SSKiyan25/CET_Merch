@@ -17,7 +17,9 @@
       </div>
     </div>
     <div class="flex flex-col p-4 border-2 rounded-lg py-5 bg-slate-200">
-      <div class="flex flex-row justify-between border-b-2">
+      <div
+        class="flex flex-col md:flex-row justify-between border-b-2 space-y-2"
+      >
         <div class="flex flex-row">
           <h1 class="font-bold text-xl tracking-wide mt-1">Orders</h1>
           <div class="flex flex-row pl-2">
@@ -29,7 +31,7 @@
                     :variant="'outline'"
                     :class="
                       cn(
-                        'w-[300px] justify-start text-left font-normal',
+                        'w-[210px] md:w-[300px] justify-start text-left font-normal',
                         !date && 'text-muted-foreground'
                       )
                     "
@@ -566,7 +568,7 @@
                                   >
                                 </div>
                                 <div
-                                  class="flex flex-col pl-8 space-y-2 text-sm opacity-80"
+                                  class="flex flex-col pl-2 md:pl-8 space-y-2 text-xs md:text-sm opacity-80"
                                 >
                                   <div class="flex flex-row justify-between">
                                     <div class="flex flex-row">
@@ -587,7 +589,9 @@
                                       }}</span>
                                     </div>
                                   </div>
-                                  <div class="flex flex-row justify-between">
+                                  <div
+                                    class="flex flex-col md:flex-row justify-between space-y-2"
+                                  >
                                     <div class="flex flex-row">
                                       <span class="font-bold">Email: </span>
                                       <span
@@ -599,7 +603,7 @@
                                       v-if="order.userContactNumber"
                                       class="flex flex-row"
                                     >
-                                      <span class="font-bold pl-4"
+                                      <span class="font-bold md:pl-4"
                                         >Contact Number:
                                       </span>
                                       <span class="pl-2"
@@ -632,7 +636,7 @@
                                   <div
                                     v-for="(product, index) in order.cart"
                                     :key="product"
-                                    class="pl-2 text-xs"
+                                    class="pl-2 text-[10px] md:text-xs"
                                   >
                                     <span class="opacity-80">
                                       {{ index + 1 }} |</span

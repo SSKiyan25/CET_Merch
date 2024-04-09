@@ -1,15 +1,15 @@
 <template>
   <UserSidebar />
-  <div class="p-4 ml-2 sm:ml-64">
-    <div class="flex flex-row justify-start py-10">
+  <div class="p-4 sm:ml-64">
+    <div class="flex flex-row justify-start py-4 px-4 md:py-10 space-x-2">
       <div class="flex">
-        <span class="material-symbols-outlined py-2 px-2 text-5xl">
-          dashboard
-        </span>
+        <span class="material-symbols-outlined py-2 text-5xl"> dashboard </span>
       </div>
       <div class="flex flex-col">
-        <h1 class="text-2xl">Welcome to Your Profile</h1>
-        <p class="text-sm py-1 text-secondary-foreground/60">
+        <h1 class="text-lg md:text-2xl">Welcome to Your Profile</h1>
+        <p
+          class="text-xs md:text-sm py-1 text-justify text-secondary-foreground/60"
+        >
           This is your dashboard where you can manage your orders, inbox, and
           other settings from here.
         </p>

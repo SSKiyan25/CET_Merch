@@ -25,7 +25,7 @@
     </div>
     <div class="flex w-full flex-col pt-4 bg-gray-100 shadow-md">
       <div
-        class="grid grid-cols-2 md:grid-cols-4 gap-4 xl:gap-18 pb-8 px-4 md:px-16"
+        class="grid grid-cols-2 md:grid-cols-4 gap-2 xl:gap-18 pb-8 px-4 md:px-16"
       >
         <div
           v-if="!isLoading"

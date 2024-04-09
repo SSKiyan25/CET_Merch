@@ -12,7 +12,7 @@
         class="flex flex-row justify-center space-x-3 space-y-2 px-4 md:px-12 pt-10 pb-8"
       >
         <div class="justify-center items-center">
-          <div class="grid grid-cols-2 md:grid-cols-4 gaps-4">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
             <div
               v-if="!isLoading"
               v-for="product in products"
