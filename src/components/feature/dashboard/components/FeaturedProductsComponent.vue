@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto w-11/12">
     <div
-      class="flex flex-col md:flex-row pt-12 pb-2 justify-between border-b-2 border-primary mx-auto"
+      class="flex flex-col md:flex-row pb-2 justify-between border-b-2 border-primary mx-auto"
     >
       <div
         class="flex flex-row justify-between items-center text-primary w-full"

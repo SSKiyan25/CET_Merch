@@ -1,92 +1,92 @@
 <template>
-  <div class="w-full px-2 md:px-8">
-    <div class="w-full pt-4">
-      <div class="grid grid-cols-3 gap-1 md:gap-2">
-        <div
-          class="group bg-gradient-to-br from-gold to-light-gold h-20 w-auto md:h-[12rem] md:w-full shadow-lg rounded-sm hover:drop-shadow-2xl hover:contrast-125"
-        >
-          <div
-            class="flex flex-row border-primary/60 justify-start items-start pl-1 md:pl-4 pt-5"
-          >
-            <div class="">
-              <img
-                src="/homepage/about-1.jpg"
-                class="md:w-48 md:h-36 object-cover brightness-90 rounded-sm drop-shadow-xl"
-              />
-            </div>
-            <div class="flex flex-col -space-y-1 md:space-y-2">
-              <span
-                class="text-[7px] pl-1 pt-1 md:text-sm md:pl-8 md:pt-8 uppercase opacity-70"
-                >Read our
-              </span>
-              <router-link to="" class="hover:underline">
-                <span
-                  class="text-[10px] text-primary pl-1 md:pl-8 md:text-3xl font-bold text-wrap uppercase"
-                  >About Page
-                </span>
-              </router-link>
-            </div>
-          </div>
+  <!-- Card Blog -->
+  <div class="max-w-full px-4 py-4 sm:px-6 lg:px-8 lg:py-8 mx-auto">
+    <!-- Grid -->
+    <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-6 mb-10 lg:mb-14">
+      <a
+        class="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800"
+        href="#"
+      >
+        <div class="aspect-w-16 aspect-h-2">
+          <img
+            class="w-full h-48 object-cover rounded-t-xl brightness-50"
+            src="/homepage/products-2.jpg"
+            alt="Image Description"
+          />
         </div>
-        <div
-          class="group bg-gradient-to-br from-gold to-light-gold h-20 w-auto md:h-[12rem] md:w-full shadow-lg rounded-sm hover:drop-shadow-2xl hover:contrast-125"
-        >
-          <div
-            class="flex flex-row border-primary/60 justify-start items-start max-h-[22rem] pl-1 md:pl-4 pt-5"
+        <div class="p-4 md:p-5">
+          <p class="mt-2 text-xs uppercase text-gray-600 dark:text-gray-400">
+            Products
+          </p>
+          <h3
+            class="mt-2 text-lg font-medium text-gray-800 group-hover:text-blue-600 dark:text-gray-300 dark:group-hover:text-white"
           >
-            <div class="">
-              <img
-                src="/homepage/products-1.jpg"
-                class="md:w-48 md:h-36 object-cover brightness-90 rounded-sm drop-shadow-xl"
-              />
-            </div>
-            <div class="flex flex-col -space-y-1 md:space-y-2">
-              <span
-                class="text-[7px] pl-1 pt-1 md:text-sm md:pl-8 md:pt-9 uppercase opacity-70"
-                >Buy our
-              </span>
-              <router-link
-                to="/products"
-                class="hover:underline hover:underline-offset-4"
-              >
-                <span
-                  class="text-[10px] text-primary pl-1 md:pl-8 md:text-3xl font-bold text-wrap uppercase"
-                >
-                  Products
-                </span>
-              </router-link>
-            </div>
-          </div>
+            High-quality and affordable products for you
+          </h3>
         </div>
-        <div
-          class="group bg-gradient-to-br from-gold to-light-gold h-20 w-auto md:h-[12rem] md:w-full shadow-lg rounded-sm hover:drop-shadow-2xl hover:contrast-125"
-        >
-          <div
-            class="flex flex-row border-primary/60 justify-start items-start max-h-[22rem] pl-1 md:pl-4 pt-5"
+      </a>
+
+      <a
+        class="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800"
+        href="#"
+      >
+        <div class="aspect-w-16 aspect-h-9">
+          <img
+            class="w-full h-48 object-cover brightness-50 rounded-t-xl"
+            src="/about_us_page/cover.jpg"
+            alt="Image Description"
+          />
+        </div>
+        <div class="p-4 md:p-5">
+          <p class="mt-2 text-xs uppercase text-gray-600 dark:text-gray-400">
+            About Us
+          </p>
+          <h3
+            class="mt-2 text-lg font-medium text-gray-800 group-hover:text-blue-600 dark:text-gray-300 dark:group-hover:text-white"
           >
-            <div class="w-12 h-28 md:w-48 md:h-64">
-              <img
-                src="/homepage/gallery-1.jpg"
-                class="md:w-48 md:h-36 object-cover brightness-90 rounded-sm drop-shadow-xl"
-              />
-            </div>
-            <div class="flex flex-col -space-y-1 md:space-y-2">
-              <span
-                class="text-[7px] pl-1 pt-1 md:text-sm md:pl-8 md:pt-9 uppercase opacity-70"
-                >View Our
-              </span>
-              <router-link to="" class="hover:underline">
-                <span
-                  class="text-[10px] text-primary pl-1 md:pl-8 md:text-3xl font-bold text-wrap uppercase"
-                  >Gallery
-                </span>
-              </router-link>
-            </div>
-          </div>
+            Discover our CET Organizations
+          </h3>
         </div>
-      </div>
+      </a>
+
+      <a
+        class="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800"
+        href="#"
+      >
+        <div class="aspect-w-16 aspect-h-9">
+          <img
+            class="w-full h-48 object-cover rounded-t-xl"
+            src="https://images.unsplash.com/photo-1668863699009-1e3b4118675d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3387&q=80"
+            alt="Image Description"
+          />
+        </div>
+        <div class="p-4 md:p-5">
+          <p class="mt-2 text-xs uppercase text-gray-600 dark:text-gray-400">
+            Gallery
+          </p>
+          <h3
+            class="mt-2 text-lg font-medium text-gray-800 group-hover:text-blue-600 dark:text-gray-300 dark:group-hover:text-white"
+          >
+            Browse our events this academic year
+          </h3>
+        </div>
+      </a>
     </div>
+    <!-- Title -->
+    <div class="max-w-9xl text-center mx-auto mb-10 lg:mb-14">
+      <h2
+        class="text-2xl font-bold md:text-4xl md:leading-tight dark:text-white"
+      >
+        Enjoy your experience with this e-store!
+      </h2>
+      <p class="mt-1 text-gray-600 dark:text-gray-400">
+        We look forward to your orders and feedbacks.
+      </p>
+    </div>
+    <!-- End Title -->
+    <!-- End Grid -->
   </div>
+  <!-- End Card Blog -->
 </template>
 
 <script setup lang="ts"></script>
