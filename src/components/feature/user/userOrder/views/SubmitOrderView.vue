@@ -89,7 +89,7 @@
                 >
                 <input
                   type="email"
-                  v-model="formData.emailAddress"
+                  v-model="formData.email"
                   class="py-3 px-4 block w-full bg-background border-primary/40 rounded-lg text-sm focus:border-primary/70 focus:ring-primary/60 disabled:opacity-50 disabled:pointer-events-none"
                   required
                 />
@@ -132,11 +132,14 @@
                 >
                 <select
                   v-model="formData.paymentMethod"
-                  class="py-3 px-4 block w-full bg-backgroudn border-primary/40 rounded-lg text-sm focus:border-primary/70 focus:ring-primary/60 disabled:opacity-50 disabled:pointer-events-none"
+                  class="py-3 px-4 block w-full bg-backgroudn border-primary/40 rounded-lg text-sm focus:border-primary/70 focus:ring-primary/60 disabled:opacity-50 disabled:pointer-events-none overflow-auto max-h-60"
+                  disabled
                   required
                 >
                   <option value="cash">Cash</option>
-                  <option value="gcash">GCash</option>
+                  <option disabled value="gcash">
+                    GCash (Not yet supported)
+                  </option>
                 </select>
               </div>
             </div>
@@ -212,7 +215,7 @@
           {{ orderRefNumDisplay }}
         </span>
         <span class="text-sm text-secondary-foreground/70 pt-2">
-          (Show this to the CS3 treasurer for your payment.)
+          (Show this to the {{ productFaction }} treasurer for your payment.)
         </span>
         <div class="flex pt-4 space-x-2">
           <router-link
@@ -257,10 +260,10 @@ const orderRefNum = ref("");
 const formData = ref({
   firstName: "",
   lastName: "",
-  emailAddress: "",
+  email: "",
   phoneNumber: "",
   studentId: "",
-  paymentMethod: "",
+  paymentMethod: "cash",
 });
 
 const fetchProductDetails = async (productId: string) => {
@@ -317,6 +320,13 @@ const totalPrice = computed(() => {
   } else {
     return 0;
   }
+});
+
+const productFaction = computed(() => {
+  if (products.value.length > 0) {
+    return products.value[0].details.faction;
+  }
+  return "";
 });
 
 const getNumberOfOrders = async (faction: string) => {
@@ -383,7 +393,7 @@ const submitOrder = async (formData: any) => {
         userContactNumber: formData.phoneNumber,
         studentId: formData.studentId,
         totalPrice: totalPrice.value,
-        userEmailAddress: formData.emailAddress,
+        userEmailAddress: formData.email,
         paymentMethod: formData.paymentMethod,
         paymentStatus: "pending",
         orderStatus: "processing",
@@ -411,8 +421,8 @@ onMounted(async () => {
       const userData = userSnap.data();
       formData.value.firstName = userData.name.split(", ")[1] || "";
       formData.value.lastName = userData.name.split(", ")[0] || "";
-      formData.value.emailAddress = userData.emailAddress || "";
-      //formData.value.phoneNumber =
+      formData.value.email = userData.email || "";
+      formData.value.phoneNumber = userData.phoneNumber || "";
       formData.value.studentId = userData.studentId || "";
     }
   }

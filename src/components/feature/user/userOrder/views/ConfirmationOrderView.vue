@@ -1,5 +1,5 @@
 <template>
-  <div class="flex pt-24 pb-36 justify-center">
+  <div class="flex pt-12 md:pt-24 pb-36 justify-center">
     <div
       class="p-7 w-full md:w-3/4 lg:w-5/6 items-center justify-center bg-accent border border-primary/20 rounded-xl shadow-sm overflow-auto"
     >
@@ -93,17 +93,19 @@
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogAction
-                          class="bg-primary hover:bg-destructive/80 text-white"
-                          @click.prevent="deleteProductController(index)"
-                        >
-                          Delete
-                        </AlertDialogAction>
-                        <AlertDialogAction
-                          class="bg-secondary pb-2 hover:bg-secondary/80 text-white"
-                        >
-                          Cancel
-                        </AlertDialogAction>
+                        <div class="flex flex-row justify-end space-x-2">
+                          <AlertDialogAction
+                            class="bg-background pb-2 hover:bg-slate-200 text-black"
+                          >
+                            Cancel
+                          </AlertDialogAction>
+                          <AlertDialogAction
+                            class="bg-primary hover:bg-destructive/80 text-white"
+                            @click.prevent="deleteProductController(index)"
+                          >
+                            Delete
+                          </AlertDialogAction>
+                        </div>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
@@ -117,7 +119,9 @@
         <div class="flex flex-row justify-between">
           <div class="flex flex-row items-center justify-center space-x-2 pl-2">
             <router-link to="/"
-              ><button class="bg-primary text-white rounded-sm p-2">
+              ><button
+                class="bg-primary text-white text-xs md:text-sm rounded-sm p-2"
+              >
                 Back
               </button>
             </router-link>

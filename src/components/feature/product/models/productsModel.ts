@@ -107,3 +107,28 @@ export const updateUser = async (user: any) => {
     { merge: true }
   );
 };
+
+export const fetchSellerProducts = async (productId: string) => {
+  // Fetch the product to get its faction
+  const productRef = doc(db, "products", productId);
+  const productSnapshot = await getDoc(productRef);
+  if (!productSnapshot.exists()) {
+    console.error("Product not found");
+    return null;
+  }
+  const productData = productSnapshot.data() as Product;
+
+  // Fetch all products with the same faction
+  const productCollection = collection(db, "products");
+  const q = query(
+    productCollection,
+    where("faction", "==", productData.faction),
+    where("isArchived", "==", false),
+    where("isPublished", "==", true)
+  );
+  const productsSnapshot = await getDocs(q);
+  return productsSnapshot.docs.map((doc: any) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Product[];
+};

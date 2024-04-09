@@ -1,5 +1,5 @@
 <template>
-  <div class="h-auto">
+  <div class="relative h-auto">
     <div class="pt-4 pb-8 md:pt-8 px-2 md:px-8">
       <div class="flex flex-row items-center">
         <router-link to="/" class="cursor-pointer text-primary/50">
@@ -32,7 +32,7 @@
       </div>
     </div>
     <div
-      class="max-w-[85rem] h-[96rem] base:h-[64rem] md:h-[36rem] lg:h-[44rem] px-4 py-4 sm:px-6 lg:px-12 lg:py-4 mx-auto mt-8"
+      class="max-w-[85rem] max-h-[96rem] base:max-h-[64rem] md:max-h-[36rem] lg:h-[44rem] px-4 py-4 sm:px-6 lg:px-12 lg:py-4 mx-auto mt-8"
     >
       <div class="md:grid md:grid-cols-2 md:gap-12 xl:gap-18 pb-2">
         <div
@@ -221,6 +221,92 @@
   <div v-if="loading">
     <Loading />
   </div>
+  <div class="mx-auto w-11/12 md:pt-32">
+    <div
+      class="flex flex-col md:flex-row pb-2 justify-between border-b-2 border-primary mx-auto"
+    >
+      <div
+        class="flex flex-row justify-between items-center text-primary w-full"
+      >
+        <div class="flex">
+          <label
+            class="font-bold text-secondary-foreground tracking-wide text-xs md:text-2xl capitalize"
+          >
+            More <span class="text-red-600">Products </span> From This Seller
+          </label>
+        </div>
+        <div class="flex pr-4">
+          <router-link to="/products">
+            <label
+              class="text-[8px] md:text-xs uppercase hover:underline cursor-pointer"
+              >View All Products</label
+            >
+          </router-link>
+        </div>
+      </div>
+    </div>
+    <div class="flex w-full flex-col pt-4 bg-gray-100 shadow-md">
+      <div
+        class="grid grid-cols-2 md:grid-cols-4 gap-4 xl:gap-18 pb-8 px-4 md:px-16"
+      >
+        <div
+          v-if="!isLoading"
+          v-for="product in sellerProducts"
+          :key="product.id"
+          class="flex flex-col bg-white shadow-lg border border-primary/20 rounded-sm hover:drop-shadow-xl w-full h-auto md:w-full md:h-[22rem]"
+        >
+          <div class="overflow-hidden border-b-2 border-primary/60">
+            <div class="flex flex-col justify-center items-center">
+              <router-link
+                :to="`product/${product.id}`"
+                @click.prevent="incrementViewCount(product)"
+              >
+                <img
+                  :src="product.coverPhoto"
+                  class="transform transition-all duration-500 hover:scale-110 w-full md:w-full h-[8rem] md:h-[16rem] object-cover rounded-t-sm"
+                />
+              </router-link>
+            </div>
+          </div>
+          <div class="p-2 md:p-4 w-full">
+            <div class="flex flex-col w-full whitespace-normal">
+              <router-link
+                :to="`/product/${product.id}`"
+                @click.prevent="incrementViewCount(product)"
+                class="truncate"
+              >
+                <span
+                  class="w-full text-xs md:text-base font-bold text-secondary-foreground truncate hover:underline"
+                >
+                  {{ product.name }}
+                </span>
+              </router-link>
+              <span
+                class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
+              >
+                P
+                {{ product.price[product.price.length - 1].originalPrice }}
+              </span>
+              <div
+                class="flex flex-row justify-between items-center text-[8px] md:text-xs"
+              >
+                <div>
+                  <span> {{ product.totalOrders }} Sold | </span>
+                  <span> {{ product.views }} Views</span>
+                </div>
+                <div>
+                  <span>
+                    <span> {{ product.category }} | </span>
+                    <span> {{ product.faction }} </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="pb-16"></div>
 </template>
 
@@ -249,7 +335,8 @@ const currentId = route.params.id as string;
 
 console.log("product: ", product);
 
-const { products } = setupProductController();
+const { products, sellerProducts, isLoading, incrementViewCount } =
+  setupProductController();
 
 const getProductById = (id: string) => {
   return products.value.find((product) => product.id === id);

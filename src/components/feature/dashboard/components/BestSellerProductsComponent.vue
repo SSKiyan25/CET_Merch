@@ -11,17 +11,17 @@
       <div
         class="flex flex-row justify-center space-x-3 space-y-2 px-4 md:px-12 pt-10 pb-8"
       >
-        <div class="max-w-[75rem] justify-center items-center">
-          <div class="grid grid-cols-2 md:grid-cols-4">
+        <div class="justify-center items-center">
+          <div class="grid grid-cols-2 md:grid-cols-4 gaps-4">
             <div
               v-if="!isLoading"
               v-for="product in products"
               :key="product.id"
-              class="group flex flex-col bg-white border border-primary/50 shadow-xl hover:drop-shadow-xl"
+              class="flex flex-col bg-white border border-primary/50 shadow-xl hover:drop-shadow-xl w-full h-auto md:w-[24rem] md:h-[28rem]"
             >
               <div class="overflow-hidden border-b">
                 <div
-                  class="h-full flex flex-col border-primary/60 justify-center items-center max-h-[22rem]"
+                  class="h-full flex flex-col border-primary/60 justify-center items-center"
                 >
                   <router-link
                     :to="`/product/${product.id}`"
@@ -29,15 +29,16 @@
                     ><img
                       :src="product.coverPhoto"
                       alt=""
-                      class="transform transition-all duration-500 hover:scale-110 object-cover w-96 h-[8rem] md:h-[20rem]"
+                      class="transform transition-all duration-500 hover:scale-110 object-cover w-full h-[8rem] md:w-full md:h-[20rem]"
                   /></router-link>
                 </div>
               </div>
-              <div class="p-2 md:p-5">
+              <div class="p-2 md:p-5 w-full">
                 <div class="flex flex-col">
                   <router-link
                     :to="`/product/${product.id}`"
                     @click.prevent="incrementViewCount(product)"
+                    class="truncate"
                   >
                     <span
                       class="text-sm md:text-base font-bold text-secondary-foreground truncate hover:underline"

@@ -7,6 +7,7 @@ import {
   fetchUser,
   updateProduct,
   updateUser,
+  fetchSellerProducts,
 } from "../models/productsModel";
 
 interface User {
@@ -19,6 +20,7 @@ export const setup = () => {
   const product = ref<Product | null>(null);
   const isLoading = ref(false);
   const user = ref<User | null>(null);
+  const sellerProducts = ref<Product[]>([]);
 
   onMounted(async () => {
     isLoading.value = true;
@@ -28,6 +30,10 @@ export const setup = () => {
       if (route.params.id) {
         const id = route.params.id as string;
         product.value = await fetchProductById(id);
+        const fetchedSellerProducts = await fetchSellerProducts(id);
+        if (fetchedSellerProducts) {
+          sellerProducts.value = fetchedSellerProducts;
+        }
       }
     } finally {
       isLoading.value = false;
@@ -61,5 +67,5 @@ export const setup = () => {
     }
   });
 
-  return { products, product, isLoading, incrementViewCount };
+  return { products, product, isLoading, incrementViewCount, sellerProducts };
 };

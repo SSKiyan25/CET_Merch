@@ -39,7 +39,7 @@
     <!--Overlayed content-->
     <div
       class="absolute bottom-0 left-0 flex flex-col items-center md:items-start justify-center md:justify-end w-full h-full p-6 pt-48 md:p-20 space-y-4 backdrop-filter text-white"
-      style="backdrop-filter: blur(1px)"
+      style="backdrop-filter: blur(0.5px)"
     >
       <div
         class="flex flex-col items-center md:items-start justify-center md:justify-start w-full space-y-2"

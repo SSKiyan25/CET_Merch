@@ -88,13 +88,6 @@
 </template>
 
 <script setup lang="ts">
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "../../../ui/carousel";
 import { setup as setupFeaturedProductsController } from "../controllers/featuredProductsController.ts";
 import { setup as setupProductViews } from "@/components/feature/product/controllers/productsController.ts";
 

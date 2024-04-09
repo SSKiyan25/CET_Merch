@@ -16,7 +16,7 @@
                 add_shopping_cart
               </span>
               <span
-                class="pl-1"
+                class="pl-1 text-xs md:text-sm"
                 :class="{ 'text-primary/90': selectedTab === 'cart' }"
                 >Add To Cart</span
               >
@@ -29,7 +29,7 @@
                 shopping_cart
               </span>
               <span
-                class="pl-2"
+                class="pl-2 text-xs md:text-sm"
                 :class="{ 'text-primary/90': selectedTab === 'order' }"
                 >Cart</span
               >
@@ -185,7 +185,7 @@
                 min="1"
                 max="1000"
                 placeholder="0"
-                class="px-2 py-2 w-1/6 text-base text-center"
+                class="px-2 py-2 w-1/6 text-xs md:text-base text-center"
                 v-model="newAddToCartData.quantity"
                 required
               />
@@ -239,7 +239,7 @@
                 <Accordion type="single" collapsible>
                   <AccordionItem value="item-1">
                     <AccordionTrigger>
-                      <div class="flex justify-between">
+                      <div class="flex justify-between truncate">
                         <span class="text-primary text-xs pr-1"
                           >{{
                             getProductById(product.productId)
@@ -258,12 +258,14 @@
                       </div>
                     </AccordionTrigger>
                     <AccordionContent>
-                      <div class="flex justify-between px-4">
-                        <Label>Quantity: {{ product.quantity }}</Label>
-                        <Label v-if="product.size !== ''"
-                          >Size: {{ product.size }}</Label
+                      <div
+                        class="flex flex-row justify-between px-4 text-[10px] md:text-sm"
+                      >
+                        <label>Quantity: {{ product.quantity }}</label>
+                        <label v-if="product.size !== ''"
+                          >Size: {{ product.size }}</label
                         >
-                        <Label>Total Price: {{ product.totalPrice }} </Label>
+                        <label>Total Price: {{ product.totalPrice }} </label>
                       </div>
                     </AccordionContent>
                   </AccordionItem>
@@ -271,7 +273,7 @@
               </div>
             </div>
           </div>
-          <SheetFooter class="overflow-auto">
+          <SheetFooter class="overflow-auto pt-2">
             <SheetClose as-child v-if="!ifCartEmpty">
               <div class="flex flex-row items-center space-x-2">
                 <router-link
@@ -280,7 +282,11 @@
                     params: { id: order.id },
                   }"
                 >
-                  <Button>Edit Cart</Button>
+                  <button
+                    class="p-2 text-xs md:p-2.5 md:text-sm bg-red-800 text-white rounded-sm"
+                  >
+                    Edit Cart
+                  </button>
                 </router-link>
                 <router-link
                   :to="{
@@ -289,7 +295,7 @@
                   }"
                 >
                   <button
-                    class="p-2.5 text-sm bg-emerald-700 text-white rounded-sm"
+                    class="p-2 text-xs md:p-2.5 md:text-sm bg-emerald-700 text-white rounded-sm"
                     type="submit"
                   >
                     Submit Order
