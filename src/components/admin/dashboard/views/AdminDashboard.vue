@@ -249,7 +249,6 @@ let totalProducts = ref(0);
 let totalPendingOrders = ref(0);
 let totalUnreadMessages = ref(0);
 
-let totalSales: Ref<{ [productId: string]: number }> = ref({});
 let products: Ref<
   ({
     id: string;
