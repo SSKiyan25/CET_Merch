@@ -1,7 +1,7 @@
 export interface Inbox {
   id?: string;
-  username: string; // Last Name + ', ' + First Name
-  firstName: string; // First Name
+  username: string;
+  firstName: string;
   lastName: string;
   email: string;
   phoneNumber: string;
