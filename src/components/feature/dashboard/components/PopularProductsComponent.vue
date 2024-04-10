@@ -88,8 +88,8 @@
 </template>
 
 <script setup lang="ts">
-import { setup as setupPopularProductsController } from "../controllers/popularProductsController.ts";
-import { setup as setupProductViews } from "@/components/feature/product/controllers/productsController.ts";
+import { setup as setupPopularProductsController } from "../controllers/popularProductsController";
+import { setup as setupProductViews } from "@/components/feature/product/controllers/productsController";
 
 const { products, isLoading } = setupPopularProductsController();
 const { incrementViewCount } = setupProductViews();

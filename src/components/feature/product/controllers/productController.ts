@@ -1,5 +1,5 @@
 import { ref, watch } from "vue";
-import { fetchProduct } from "../models/productModel.ts";
+import { fetchProduct } from "../models/productModel";
 import { DocumentData } from "firebase/firestore";
 
 export function setupProductController(route: any) {

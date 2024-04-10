@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { auth, db } from "@/firebase/init.ts";
+import { auth, db } from "@/firebase/init";
 import { doc, setDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 

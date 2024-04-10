@@ -137,7 +137,7 @@ import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";
 import { useRouter } from "vue-router";
 import { signOut } from "firebase/auth";
-import { auth } from "@/firebase/init.ts";
+import { auth } from "@/firebase/init";
 
 const router = useRouter();
 

@@ -736,7 +736,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { setup as setupProductController } from "../controllers/adminProductsController.ts";
+import { setup as setupProductController } from "../controllers/adminProductsController";
 import {
   AlertDialog,
   AlertDialogAction,

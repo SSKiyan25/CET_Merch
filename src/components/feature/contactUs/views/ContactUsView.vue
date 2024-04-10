@@ -189,11 +189,11 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { Inbox } from "../models/contactModel.ts";
+import { Inbox } from "../models/contactModel";
 import {
   createInboxMessage,
   isLoading,
-} from "../controllers/contactController.ts";
+} from "../controllers/contactController";
 import LoadingComponent from "../../misc/LoadingComponent.vue";
 import { useRouter } from "vue-router";
 const router = useRouter();

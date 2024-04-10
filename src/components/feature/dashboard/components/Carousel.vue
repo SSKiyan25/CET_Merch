@@ -71,7 +71,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { initFlowbite } from "flowbite";
-import { storage } from "@/firebase/init.ts";
+import { storage } from "@/firebase/init";
 import { listAll, ref as storageRef, getDownloadURL } from "firebase/storage";
 import Autoplay from "embla-carousel-autoplay";
 import {

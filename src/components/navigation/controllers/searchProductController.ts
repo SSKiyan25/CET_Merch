@@ -4,7 +4,7 @@ import {
   fetchProducts,
   fetchProductById,
   Product,
-} from "../models/searchProductModel.ts";
+} from "../models/searchProductModel";
 
 export const setup = () => {
   const route = useRoute();

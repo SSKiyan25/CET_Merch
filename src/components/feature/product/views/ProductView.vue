@@ -325,8 +325,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import Cart from "@/components/feature/user/userOrder/views/AddToCartView.vue";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import Loading from "@/components/feature/misc/LoadingComponent.vue";
-import { setup as setupProductController } from "../controllers/productsController.ts";
-import { setupProductController as setupProduct } from "../controllers/productController.ts";
+import { setup as setupProductController } from "../controllers/productsController";
+import { setupProductController as setupProduct } from "../controllers/productController";
 import { DocumentData } from "firebase/firestore";
 
 const route = useRoute();

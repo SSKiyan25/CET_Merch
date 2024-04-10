@@ -326,11 +326,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Filter } from "lucide-vue-next";
-import { Inbox } from "../models/inboxModel.ts";
+import { Inbox } from "../models/inboxModel";
 import {
   fetchInboxMessages,
   updateInboxMessage,
-} from "../controllers/inboxController.ts";
+} from "../controllers/inboxController";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 

@@ -217,7 +217,7 @@ import {
   errorPassword,
   phoneNumber,
   loading,
-} from "../models/SignUpModel.ts";
+} from "../models/SignUpModel";
 import LoadingComponent from "../../misc/LoadingComponent.vue";
 
 const router = useRouter();

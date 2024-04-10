@@ -1,4 +1,4 @@
-import { getOnQueueOrders } from "../models/orderSheetModel.ts";
+import { getOnQueueOrders } from "../models/orderSheetModel";
 import { ref, watch } from "vue";
 
 interface ProductData {

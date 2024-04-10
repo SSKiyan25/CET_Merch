@@ -356,7 +356,7 @@
 import NavBar from "../AdminNavBar.vue";
 import AdminSidebar from "../AdminSidebar.vue";
 import { Button } from "@/components/ui/button";
-import { setup as setupProductController } from "@/components/admin/dashboard/controllers/adminProductsController.ts";
+import { setup as setupProductController } from "@/components/admin/dashboard/controllers/adminProductsController";
 import { useRouter } from "vue-router";
 import { ref, computed, watch, nextTick } from "vue";
 

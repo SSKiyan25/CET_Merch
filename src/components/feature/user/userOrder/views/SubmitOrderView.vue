@@ -237,7 +237,7 @@
 <script setup lang="ts">
 import { ref, watch, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { db, auth } from "@/firebase/init.ts";
+import { db, auth } from "@/firebase/init";
 import {
   getDoc,
   doc,

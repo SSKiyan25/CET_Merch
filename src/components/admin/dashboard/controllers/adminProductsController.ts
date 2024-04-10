@@ -7,15 +7,15 @@ import {
   updateProduct,
   deleteProduct,
   deletePhoto,
-} from "../models/adminProductsModel.ts";
+} from "../models/adminProductsModel";
 import {
   DocumentReference,
   DocumentSnapshot,
   getDoc,
   doc,
 } from "firebase/firestore";
-import { auth, db } from "@/firebase/init.ts";
-import { fetchUser } from "../models/userModel.ts";
+import { auth, db } from "@/firebase/init";
+import { fetchUser } from "../models/userModel";
 
 type UserData = { faction?: string; products?: any; role?: string } | null;
 

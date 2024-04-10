@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { auth } from "@/firebase/init.ts";
+import { auth } from "@/firebase/init";
 import {
   fetchOrder as fetchOrderFromModel,
   fetchProductDetails,

@@ -1,4 +1,4 @@
-import { storage } from "@/firebase/init.ts";
+import { storage } from "@/firebase/init";
 import {
   uploadBytes,
   ref as storageRef,

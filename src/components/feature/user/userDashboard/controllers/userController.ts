@@ -2,7 +2,7 @@ import {
   fetchUserOrders,
   fetchProduct,
   cancelUserOrder,
-} from "../models/userModel.ts";
+} from "../models/userModel";
 
 export const getUserOrders = async () => {
   const orders = await fetchUserOrders();

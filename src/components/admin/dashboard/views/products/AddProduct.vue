@@ -331,7 +331,7 @@ import NavBar from "../AdminNavBar.vue";
 import AdminSidebar from "../AdminSidebar.vue";
 import { onMounted, ref, watchEffect, watch } from "vue";
 import { initFlowbite } from "flowbite";
-import { storage, db, auth } from "@/firebase/init.ts";
+import { storage, db, auth } from "@/firebase/init";
 import {
   getDownloadURL,
   ref as storageRef,

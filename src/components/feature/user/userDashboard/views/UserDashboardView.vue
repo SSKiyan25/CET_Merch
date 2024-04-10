@@ -325,11 +325,11 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
-import { db, auth } from "@/firebase/init.ts";
+import { db, auth } from "@/firebase/init";
 import { initFlowbite } from "flowbite";
 import { Button } from "@/components/ui/button";
 import UserSidebar from "../views/UserSidebarView.vue";
-import { getUserOrders, cancelOrder } from "../controllers/userController.ts";
+import { getUserOrders, cancelOrder } from "../controllers/userController";
 import { DocumentData, doc, getDoc, updateDoc } from "firebase/firestore";
 import {
   AlertDialog,

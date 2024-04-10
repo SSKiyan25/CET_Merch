@@ -1,4 +1,4 @@
-import { db, auth } from "@/firebase/init.ts";
+import { db, auth } from "@/firebase/init";
 import { doc, getDoc } from "firebase/firestore";
 
 export const fetchUser = async () => {

@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { addToCart, getOnQueueOrders } from "../models/addToCartModel.ts";
+import { addToCart, getOnQueueOrders } from "../models/addToCartModel";
 
 interface cartData {
   productId: string;

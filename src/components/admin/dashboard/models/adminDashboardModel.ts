@@ -1,6 +1,6 @@
-import { db } from "@/firebase/init.ts";
+import { db } from "@/firebase/init";
 import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
-import { fetchUser } from "../models/userModel.ts";
+import { fetchUser } from "../models/userModel";
 
 export const fetchSellerProducts = async () => {
   const productCollection = collection(db, "products");

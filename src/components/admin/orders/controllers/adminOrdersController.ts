@@ -6,7 +6,7 @@ import {
   updateOrder,
   updateProduct,
   getProductDetails,
-} from "../models/adminOrdersModel.ts";
+} from "../models/adminOrdersModel";
 
 export const setup = () => {
   const order = ref<Order | null>(null);

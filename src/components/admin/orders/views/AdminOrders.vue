@@ -911,8 +911,8 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-vue-next";
-import { Order } from "../models/adminOrdersModel.ts";
-import { setup as setupOrdersController } from "../controllers/adminOrdersController.ts";
+import { Order } from "../models/adminOrdersModel";
+import { setup as setupOrdersController } from "../controllers/adminOrdersController";
 
 const open = ref(false);
 const searchTerm = ref("");

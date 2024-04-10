@@ -43,10 +43,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { initFlowbite } from "flowbite";
-import { auth } from "@/firebase/init.ts";
+import { db, auth } from "@/firebase/init";
 import type { User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/firebase/init.ts";
 
 onMounted(() => {
   initFlowbite();

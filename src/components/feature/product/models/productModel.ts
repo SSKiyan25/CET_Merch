@@ -1,4 +1,4 @@
-import { db } from "@/firebase/init.ts";
+import { db } from "@/firebase/init";
 import { getDoc, doc, DocumentData } from "firebase/firestore";
 
 export async function fetchProduct(id: any): Promise<DocumentData | undefined> {

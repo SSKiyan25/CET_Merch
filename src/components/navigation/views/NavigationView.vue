@@ -349,7 +349,7 @@ import {
 import { initFlowbite } from "flowbite";
 import type { User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { db, auth } from "@/firebase/init.ts";
+import { db, auth } from "@/firebase/init";
 import { useRouter } from "vue-router";
 import { signOut } from "firebase/auth";
 import { User as UserIcon } from "lucide-vue-next";
@@ -373,7 +373,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { setup as setupSearchController } from "../controllers/searchProductController.ts";
+import { setup as setupSearchController } from "../controllers/searchProductController";
 import {
   getOnQueueOrdersController,
   orderDataWithProduct,

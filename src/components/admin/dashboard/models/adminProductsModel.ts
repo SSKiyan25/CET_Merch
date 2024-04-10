@@ -1,4 +1,4 @@
-import { db, storage, auth } from "@/firebase/init.ts";
+import { db, storage, auth } from "@/firebase/init";
 import {
   collection,
   getDocs,

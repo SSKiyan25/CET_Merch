@@ -4,8 +4,8 @@ import {
   uploadImage,
   fetchImages,
   deleteImage,
-} from "../models/adminFeaturedModel.ts";
-import { auth, db } from "@/firebase/init.ts";
+} from "../models/adminFeaturedModel";
+import { auth, db } from "@/firebase/init";
 import { getDoc, doc } from "firebase/firestore";
 
 export const setup = () => {

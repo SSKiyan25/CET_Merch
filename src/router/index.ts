@@ -23,7 +23,7 @@ import UserOrders from "../components/feature/user/userDashboard/views/UserOrder
 import AllProducts from "../components/feature/product/views/AllProductsView.vue";
 import AboutUs from "../components/feature/aboutUs/views/AboutUsView.vue";
 import { ref } from "vue";
-import { auth, db } from "../firebase/init.ts";
+import { auth, db } from "../firebase/init";
 import { DocumentData, getDoc, doc } from "firebase/firestore";
 
 function requireAuth(

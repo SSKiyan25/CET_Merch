@@ -6,7 +6,7 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
-import { db, auth } from "@/firebase/init.ts";
+import { db, auth } from "@/firebase/init";
 import { ref } from "vue";
 
 type orderData = {

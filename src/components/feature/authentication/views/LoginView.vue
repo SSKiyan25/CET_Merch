@@ -172,7 +172,7 @@ import {
   passwordError,
   emailError,
   handleGuestLogin,
-} from "../controllers/LoginController.ts";
+} from "../controllers/LoginController";
 import LoadingComponent from "../../misc/LoadingComponent.vue";
 
 const router = useRouter();

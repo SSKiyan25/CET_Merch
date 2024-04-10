@@ -4,7 +4,7 @@ import { useRoute } from "vue-router";
 import {
   fetchFeaturedProducts,
   fetchProductById,
-} from "../models/productsModel.ts";
+} from "../models/productsModel";
 
 export const setup = () => {
   const route = useRoute();

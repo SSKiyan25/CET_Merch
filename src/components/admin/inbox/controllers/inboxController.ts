@@ -7,8 +7,8 @@ import {
   getDoc,
   updateDoc,
 } from "firebase/firestore";
-import { db, auth } from "@/firebase/init.ts";
-import { Inbox } from "../models/inboxModel.ts";
+import { db, auth } from "@/firebase/init";
+import { Inbox } from "../models/inboxModel";
 
 const fetchUser = async () => {
   if (!auth.currentUser) {

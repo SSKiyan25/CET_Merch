@@ -343,8 +343,8 @@ import {
   setup as setupAddToCartController,
   getOnQueueOrdersController,
   orderData as OrderDataType,
-} from "../controllers/addToCartController.ts";
-import { auth } from "@/firebase/init.ts";
+} from "../controllers/addToCartController";
+import { db, auth } from "@/firebase/init";
 import { useRouter } from "vue-router";
 import {
   Accordion,
@@ -354,7 +354,6 @@ import {
 } from "@/components/ui/accordion";
 import LoadingComponent from "../components/LoadingComponent.vue";
 import SucessfulComponent from "../components/SucessfulComponent.vue";
-import { db } from "@/firebase/init.ts";
 import { query, where, getDocs, collection } from "firebase/firestore";
 import {
   HoverCard,

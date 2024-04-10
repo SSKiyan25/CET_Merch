@@ -1,8 +1,8 @@
-import { fetchProducts } from "../models/adminProductsModel.ts";
-import { fetchUser } from "../models/userModel.ts";
-import { fetchPendingOrdersCount } from "../../orders/models/adminOrdersModel.ts";
-import { fetchInboxMessages } from "../../inbox/controllers/inboxController.ts";
-import { fetchSellerProducts } from "../models/adminDashboardModel.ts";
+import { fetchProducts } from "../models/adminProductsModel";
+import { fetchUser } from "../models/userModel";
+import { fetchPendingOrdersCount } from "../../orders/models/adminOrdersModel";
+import { fetchInboxMessages } from "../../inbox/controllers/inboxController";
+import { fetchSellerProducts } from "../models/adminDashboardModel";
 import { DocumentSnapshot } from "firebase/firestore";
 
 export const fetchProductsForSeller = async (

@@ -235,7 +235,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { setup as setupControllerFeatured } from "../controllers/adminUploadFeaturedController.ts";
+import { setup as setupControllerFeatured } from "../controllers/adminUploadFeaturedController";
 import { useRouter } from "vue-router";
 import AdminSidebar from "../views/AdminSidebar.vue";
 import {
@@ -243,7 +243,7 @@ import {
   fetchTotalPendingOrders,
   fetchTotalUnreadMessages,
   fetchDashboardProducts,
-} from "../controllers/adminDashboardController.ts";
+} from "../controllers/adminDashboardController";
 
 let totalProducts = ref(0);
 let totalPendingOrders = ref(0);

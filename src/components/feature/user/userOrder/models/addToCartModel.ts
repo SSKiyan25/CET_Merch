@@ -8,7 +8,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { db, auth } from "@/firebase/init.ts";
+import { db, auth } from "@/firebase/init";
 
 type orderData = {
   orderNumber: number;

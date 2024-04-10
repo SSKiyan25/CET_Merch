@@ -1,7 +1,7 @@
 import { ref } from "vue";
-import { db } from "@/firebase/init.ts";
+import { db } from "@/firebase/init";
 import { collection, addDoc } from "firebase/firestore";
-import { Inbox } from "../models/contactModel.ts";
+import { Inbox } from "../models/contactModel";
 
 export const isLoading = ref(false);
 export const createInboxMessage = async (inbox: Inbox, router: any) => {

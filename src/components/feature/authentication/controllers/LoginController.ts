@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "@/firebase/init.ts";
+import { auth, db } from "@/firebase/init";
 import { getDoc, doc } from "firebase/firestore";
 
 export const email = ref("");

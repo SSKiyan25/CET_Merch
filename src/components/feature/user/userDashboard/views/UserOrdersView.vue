@@ -304,7 +304,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { getUserOrders, cancelOrder } from "../controllers/userController.ts";
+import { getUserOrders, cancelOrder } from "../controllers/userController";
 import { DocumentData } from "firebase/firestore";
 import {
   AlertDialog,
