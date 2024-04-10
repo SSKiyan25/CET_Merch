@@ -4,31 +4,35 @@
       <div
         class="flex bg-inherit items-center justify-center shadow-2xl relative"
       >
-        <img
-          src="/homepage/products-1.jpg"
-          class="object-cover md:object-fit brightness-50 backdrop-contrast-50 backdrop-hue-rotate-90"
-          style="width: 1920px; height: 620px"
-        />
+        <div
+          class="before:absolute before:inset-x-0 before:size-full before:bg-gradient-to-t before:from-gray-900/[.7] before:z-[1]"
+        >
+          <img
+            src="/homepage/products-1.jpg"
+            class="object-cover md:object-fit brightness-50 backdrop-contrast-50 backdrop-hue-rotate-90 md:w-[1920px] md:h-[620px] w-[1920px] h-[240px]"
+          />
+        </div>
+
         <!--Overlayed content-->
         <div
-          class="absolute bottom-0 left-0 flex flex-col items-start justify-end w-full h-full p-2 md:p-20 space-y-4 backdrop-filter text-white"
+          class="absolute bottom-0 left-0 inset-x-0 z-10 flex flex-col items-start justify-end w-full h-full p-5 md:p-20 space-y-1.5 md:space-y-4 backdrop-filter text-white"
           style="backdrop-filter: blur(1px)"
         >
           <h1
-            class="uppercase font-black text-3xl md:text-5xl"
+            class="uppercase font-black text-lg md:text-5xl"
             style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
           >
             CET Products
           </h1>
           <p
-            class="text-center md:text-start text-xs md:text-sm font-semibold text-wrap"
+            class="text-start text-[8px] md:text-sm font-semibold text-wrap"
             style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)"
           >
             Get your hands on the latest CET Merchandise. From t-shirts to
             lanyards and more!
           </p>
           <button
-            class="bg-white p-4 transform transition-all duration-500 hover:scale-110 text-black text-base md:text-xl font-bold"
+            class="bg-white p-1.5 md:p-4 transform transition-all duration-500 hover:scale-110 text-black rounded-md text-[10px] md:text-xl font-bold"
             v-scroll-to="'#products'"
           >
             Shop Now

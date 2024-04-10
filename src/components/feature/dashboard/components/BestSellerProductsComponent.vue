@@ -11,13 +11,13 @@
       <div
         class="flex flex-row justify-center space-x-3 space-y-2 px-4 md:px-12 pt-10 pb-8"
       >
-        <div class="justify-center items-center">
+        <div class="flex justify-center items-center">
           <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
             <div
               v-if="!isLoading"
               v-for="product in products"
               :key="product.id"
-              class="flex flex-col bg-white border border-primary/50 shadow-xl hover:drop-shadow-xl w-full h-auto md:w-[24rem] md:h-[28rem]"
+              class="flex flex-col bg-white border border-primary/50 shadow-xl hover:drop-shadow-xl w-full h-auto md:w-[21rem] md:h-[28rem]"
             >
               <div class="overflow-hidden border-b">
                 <div

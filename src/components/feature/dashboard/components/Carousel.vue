@@ -23,7 +23,7 @@
             </Card>
             <Card v-else class="bg-background/0 shadow-2xl">
               <CardContent
-                class="flex bg-inherit items-center justify-center p-2 relative"
+                class="flex bg-inherit items-center justify-center p-2 relative before:absolute before:inset-x-0 before:size-full before:bg-gradient-to-t before:from-gray-900/[.7] before:z-[1]"
               >
                 <img
                   :src="url"

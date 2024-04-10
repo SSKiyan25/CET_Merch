@@ -289,7 +289,7 @@
                 <p class="text-sm text-primary">{{ username }}</p>
               </div>
               <ul class="py-1">
-                <li>
+                <li v-if="isSeller">
                   <router-link
                     to="/admin"
                     class="block px-4 py-2 text-sm text-black hover:bg-primary/20"
