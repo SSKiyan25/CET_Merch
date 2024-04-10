@@ -18,5 +18,4 @@ export default defineConfig({
     },
     extensions: [".js", ".ts", ".json", ".jsx", ".mjs", ".tsx", ".vue"],
   },
-  base: "/",
 });
