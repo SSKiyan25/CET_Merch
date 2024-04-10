@@ -35,7 +35,7 @@
             class="bg-white p-2 md:p-4 transform transition-all rounded-md duration-500 hover:scale-110 text-black text-[10px] md:text-xl font-bold"
             v-scroll-to="'#products'"
           >
-            Shop Now
+            Know Us
           </button>
         </div>
       </div>

@@ -27,11 +27,12 @@
               type="text"
               placeholder="Search..."
               class="pl-10"
+              v-model="searchQuery"
             />
             <span
               class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
             >
-              <MagnifyingGlassIcon class="size-6 text-muted-foreground" />
+              <MagnifyingGlassIcon class="size-5 text-gray-600" />
             </span>
           </div>
           <div class="relative w-1/4 max-w-xs items-center">
@@ -42,13 +43,28 @@
               <DropdownMenuContent class="w-56">
                 <DropdownMenuLabel>Status</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuCheckboxItem v-model:checked="unread">
+                <DropdownMenuCheckboxItem
+                  v-model:checked="all"
+                  @change="checkAll"
+                >
+                  Show All
+                </DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem
+                  v-model:checked="unread"
+                  @change="checkOther"
+                >
                   Unread
                 </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem v-model:checked="starred">
+                <DropdownMenuCheckboxItem
+                  v-model:checked="starred"
+                  @change="checkOther"
+                >
                   Starred
                 </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem v-model:checked="done">
+                <DropdownMenuCheckboxItem
+                  v-model:checked="done"
+                  @change="checkOther"
+                >
                   Done
                 </DropdownMenuCheckboxItem>
               </DropdownMenuContent>
@@ -98,14 +114,12 @@
                       <th
                         scope="col"
                         class="px-6 py-3 text-left text-xs font-bold text-secondary-foreground uppercase tracking-wider"
-                      >
-                        Actions
-                      </th>
+                      ></th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-primary/50">
                     <tr
-                      v-for="(message, index) in inboxMessages"
+                      v-for="(message, index) in statusFilteredInboxMessages"
                       :key="message.id"
                       class="hover:bg-primary/10"
                     >
@@ -170,9 +184,9 @@
 
                       <td>
                         <div
-                          class="hs-dropdown relative inline-block [--placement:bottom-right] py-1 pl-5"
+                          class="hs-dropdown relative inline-block [--placement:bottom-right] py-1 pl-9"
                         >
-                          <div class="flex flex-row text-sm justify-end">
+                          <div class="flex flex-row text-sm justify-center">
                             <div class="rounded-sm cursor-pointer space-x-1">
                               <button
                                 class="bg-blue-600 text-white p-2 rounded-sm"
@@ -181,14 +195,6 @@
                               >
                                 <span class="material-symbols-outlined text-sm">
                                   visibility
-                                </span>
-                              </button>
-                              <button
-                                class="bg-red-600 text-white p-2 rounded-sm"
-                                title="Archive Order"
-                              >
-                                <span class="material-symbols-outlined text-sm">
-                                  delete
                                 </span>
                               </button>
                             </div>
@@ -309,7 +315,7 @@ import AdminSidebar from "@/components/admin/dashboard/views/AdminSidebar.vue";
 import { MagnifyingGlassIcon } from "@radix-icons/vue";
 import { Input } from "@/components/ui/input";
 import type { DropdownMenuCheckboxItemProps } from "radix-vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -331,6 +337,7 @@ type Checked = DropdownMenuCheckboxItemProps["checked"];
 const unread = ref<Checked>(false);
 const starred = ref<Checked>(false);
 const done = ref<Checked>(false);
+const all = ref<Checked>(true);
 
 const inboxMessages = ref<Inbox[]>([]);
 onMounted(async () => {
@@ -348,6 +355,47 @@ const toggleDetails = async (inbox: Inbox) => {
     await updateInboxMessage(inbox);
   }
 };
+
+const searchQuery = ref("");
+
+const checkAll = () => {
+  if (all.value) {
+    unread.value = false;
+    starred.value = false;
+    done.value = false;
+  }
+};
+
+const checkOther = () => {
+  if (unread.value || starred.value || done.value) {
+    all.value = false;
+  }
+};
+
+const filteredInboxMessages = computed(() => {
+  return inboxMessages.value.filter((message) => {
+    const lowerCaseQuery = searchQuery.value.toLowerCase();
+    return (
+      message.username.toLowerCase().includes(lowerCaseQuery) ||
+      message.email.toLowerCase().includes(lowerCaseQuery) ||
+      message.message.toLowerCase().includes(lowerCaseQuery) ||
+      formatDate(message.dateSent).toLowerCase().includes(lowerCaseQuery)
+    );
+  });
+});
+
+const statusFilteredInboxMessages = computed(() => {
+  if (all.value) {
+    return filteredInboxMessages.value;
+  }
+  return filteredInboxMessages.value.filter((message) => {
+    return (
+      (unread.value && message.status === "unread") ||
+      (starred.value && message.status === "starred") ||
+      (done.value && message.status === "done")
+    );
+  });
+});
 
 const formatDate = (dateString: string) => {
   const dateOptions = { year: "numeric", month: "long", day: "numeric" };
