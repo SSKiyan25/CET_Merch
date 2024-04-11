@@ -59,17 +59,22 @@
                   {{ product.name }}
                 </span>
               </router-link>
-              <span
-                class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
-              >
-                P
-                {{ product.price[product.price.length - 1].originalPrice }}
-              </span>
+              <div class="flex flex-row items-center">
+                <span
+                  class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
+                >
+                  P
+                  {{ product.price[product.price.length - 1].originalPrice }}
+                </span>
+                <span class="pl-2 opacity-80 text-[10px] md:text-xs">
+                  ({{ product.totalOrders }} Sold)
+                </span>
+              </div>
+
               <div
                 class="flex flex-row justify-between items-center text-[8px] md:text-xs"
               >
                 <div>
-                  <span> {{ product.totalOrders }} Sold | </span>
                   <span> {{ product.views }} Views</span>
                 </div>
                 <div>

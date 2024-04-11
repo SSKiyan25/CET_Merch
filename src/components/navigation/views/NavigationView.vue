@@ -59,34 +59,39 @@
                 </span>
               </router-link>
             </div>
-
-            <div
-              class="border-l hidden md:block border-black border-opacity-60 space-x-2"
-            >
-              <router-link
-                to="/"
-                class="hover:opacity-80 hover:bg-background-slate-600"
+            <div class="flex flex-row items-center">
+              <div
+                class="hidden md:block border-black border-opacity-60 space-x-2"
               >
-                <span class="text-black pl-2">Home </span>
-              </router-link>
-              <router-link
-                to="/products"
-                class="border-l border-black border-opacity-60"
-              >
-                <span class="text-black pl-2">Products</span>
-              </router-link>
-              <router-link
-                to="/aboutUs"
-                class="border-l border-black border-opacity-60"
-              >
-                <span class="text-black pl-2">About Us</span>
-              </router-link>
-              <router-link
-                to="/contactUs"
-                class="border-l border-black border-opacity-60"
-              >
-                <span class="text-black pl-2">Contact Us</span>
-              </router-link>
+                <router-link
+                  to="/"
+                  class="hover:opacity-80 hover:bg-background-slate-600"
+                  active-class="text-red-700 underline underline-offset-2 font-bold"
+                >
+                  <span class="text-black">Home </span>
+                </router-link>
+                <router-link
+                  to="/products"
+                  class="border-l border-black border-opacity-60"
+                  active-class="text-red-700 underline underline-offset-2 font-bold"
+                >
+                  <span class="text-black pl-2">Products</span>
+                </router-link>
+                <router-link
+                  to="/aboutUs"
+                  class="border-l border-black border-opacity-60"
+                  active-class="text-red-700 underline underline-offset-2 font-bold"
+                >
+                  <span class="text-black pl-2">About Us</span>
+                </router-link>
+                <router-link
+                  to="/contactUs"
+                  class="border-l border-black border-opacity-60"
+                  active-class="text-red-700 underline underline-offset-2 font-bold"
+                >
+                  <span class="text-black pl-2">Contact Us</span>
+                </router-link>
+              </div>
             </div>
           </div>
         </div>

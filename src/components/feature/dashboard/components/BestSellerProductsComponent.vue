@@ -12,6 +12,14 @@
         class="flex flex-row justify-center space-x-3 space-y-2 px-4 md:px-12 pt-10 pb-8"
       >
         <div class="flex justify-center items-center">
+          <div
+            v-if="products.length === 0"
+            class="flex max-w-full h-full pt-8 justify-center items-center"
+          >
+            <div class="flex flex-col justify-center">
+              <p class="text-lg md:text-2xl"></p>
+            </div>
+          </div>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
             <div
               v-if="!isLoading"
@@ -46,18 +54,25 @@
                       {{ product.name }}
                     </span></router-link
                   >
-
-                  <span
-                    class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
-                  >
-                    P
-                    {{ product.price[product.price.length - 1].originalPrice }}
-                  </span>
+                  <div class="flex flex-row items-center">
+                    <span
+                      class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
+                    >
+                      P
+                      {{
+                        product.price[product.price.length - 1].originalPrice
+                      }}
+                      <span
+                        class="pl-1 opacity-80 text-xs capitalize md:text-sm text-black"
+                      >
+                        ({{ product.totalOrders }} Sold)
+                      </span>
+                    </span>
+                  </div>
                   <div
                     class="flex flex-row justify-between items-center text-[9px] md:text-xs"
                   >
                     <div>
-                      <span> {{ product.totalOrders }} Sold | </span>
                       <span> {{ product.views }} Views</span>
                     </div>
                     <div>

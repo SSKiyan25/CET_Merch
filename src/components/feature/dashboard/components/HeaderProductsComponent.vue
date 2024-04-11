@@ -3,9 +3,9 @@
   <div class="max-w-full px-4 py-4 sm:px-6 lg:px-8 lg:py-8 mx-auto">
     <!-- Grid -->
     <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-6 mb-10 lg:mb-14">
-      <a
+      <router-link
         class="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800"
-        href="#"
+        to="/products"
       >
         <div class="aspect-w-16 aspect-h-2">
           <img
@@ -24,11 +24,11 @@
             High-quality and affordable products for you
           </h3>
         </div>
-      </a>
+      </router-link>
 
-      <a
+      <router-link
         class="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800"
-        href="#"
+        to="/aboutUs"
       >
         <div class="aspect-w-16 aspect-h-9">
           <img
@@ -47,11 +47,11 @@
             Discover our CET Organizations
           </h3>
         </div>
-      </a>
+      </router-link>
 
-      <a
+      <router-link
         class="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800"
-        href="#"
+        to=""
       >
         <div class="aspect-w-16 aspect-h-9">
           <img
@@ -70,14 +70,14 @@
             Browse our events this academic year
           </h3>
         </div>
-      </a>
+      </router-link>
     </div>
     <!-- Title -->
     <div class="max-w-9xl text-center mx-auto mb-10 lg:mb-14">
       <h2
         class="text-2xl font-bold md:text-4xl md:leading-tight dark:text-white"
       >
-        Enjoy your experience with this e-store!
+        Enjoy your experience with our e-store!
       </h2>
       <p class="mt-1 text-gray-600 dark:text-gray-400">
         We look forward to your orders and feedbacks.
