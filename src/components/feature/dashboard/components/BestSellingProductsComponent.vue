@@ -17,7 +17,9 @@
             class="flex max-w-full h-full pt-8 justify-center items-center"
           >
             <div class="flex flex-col justify-center">
-              <p class="text-lg md:text-2xl"></p>
+              <p class="text-lg md:text-2xl">
+                No best selling products available at the moment.
+              </p>
             </div>
           </div>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-2">

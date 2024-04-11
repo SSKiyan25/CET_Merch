@@ -15,11 +15,47 @@
       </div>
     </div>
     <div class="flex flex-col p-4 border-2 rounded-lg py-5">
-      <div class="flex flex-row justify-between border-b-2 pb-2">
-        <div class="flex flex-row">
-          <h1 class="font-bold text-xl tracking-wide mb-2">Inbox</h1>
+      <div
+        class="flex flex-col md:flex-row justify-between border-b-2 pb-2 space-y-2 md:space-y-0"
+      >
+        <div class="flex flex-row items-center">
+          <h1 class="font-bold text-xl tracking-wide mb-2 pr-2">Inbox</h1>
+          <div :class="cn('grid gap-2', $attrs.class ?? '')">
+            <Popover>
+              <PopoverTrigger as-child>
+                <Button
+                  id="date"
+                  :variant="'outline'"
+                  :class="
+                    cn(
+                      'w-[210px] md:w-[300px] justify-start text-left font-normal',
+                      !date && 'text-muted-foreground'
+                    )
+                  "
+                >
+                  <CalendarIcon class="mr-2 h-4 w-4" />
+
+                  <span>
+                    {{
+                      date.start
+                        ? date.end
+                          ? `${format(date.start, "LLL dd, y")} - ${format(
+                              date.end,
+                              "LLL dd, y"
+                            )}`
+                          : format(date.start, "LLL dd, y")
+                        : "Pick a date"
+                    }}
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent class="w-auto p-0">
+                <Calendar v-model.range="date" :columns="2" />
+              </PopoverContent>
+            </Popover>
+          </div>
         </div>
-        <!--Other Functionalities Put here-->
+
         <div class="flex flex-row justify-start space-x-2">
           <div class="relative w-full max-w-xs items-center">
             <Input
@@ -331,6 +367,20 @@ import {
   fetchInboxMessages,
   updateInboxMessage,
 } from "../controllers/inboxController";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-vue-next";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+
+const date = ref({
+  start: new Date(2024, 0, 1),
+  end: new Date(),
+});
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
@@ -385,16 +435,30 @@ const filteredInboxMessages = computed(() => {
 });
 
 const statusFilteredInboxMessages = computed(() => {
-  if (all.value) {
-    return filteredInboxMessages.value;
+  let messages = filteredInboxMessages.value;
+  if (!all.value) {
+    messages = messages.filter((message) => {
+      return (
+        (unread.value && message.status === "unread") ||
+        (starred.value && message.status === "starred") ||
+        (done.value && message.status === "done")
+      );
+    });
   }
-  return filteredInboxMessages.value.filter((message) => {
-    return (
-      (unread.value && message.status === "unread") ||
-      (starred.value && message.status === "starred") ||
-      (done.value && message.status === "done")
-    );
-  });
+
+  if (date.value.start && date.value.end) {
+    const startDate = new Date(date.value.start);
+    const endDate = new Date(date.value.end);
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(23, 59, 59, 999);
+
+    messages = messages.filter((message) => {
+      const messageDate = new Date(message.dateSent);
+      return messageDate >= startDate && messageDate <= endDate;
+    });
+  }
+
+  return messages;
 });
 
 const formatDate = (dateString: string) => {

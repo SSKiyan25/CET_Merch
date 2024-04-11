@@ -54,8 +54,10 @@
             </svg>
             <span class="flex-1 ms-3 whitespace-nowrap">Inbox</span>
             <span
+              v-if="totalUnreadMessages > 0"
               class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-primary-foreground bg-primary rounded-full"
-              >3</span
+            >
+              {{ totalUnreadMessages }}</span
             >
           </router-link>
         </li>
@@ -133,11 +135,12 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { initFlowbite } from "flowbite";
 import { useRouter } from "vue-router";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebase/init";
+import { fetchTotalUnreadMessages } from "../controllers/adminDashboardController";
 
 const router = useRouter();
 
@@ -155,4 +158,16 @@ const handleSignout = () => {
       console.log("Error signing out: ", error);
     });
 };
+let totalUnreadMessages = ref(0);
+
+const fetchTotalUnread = async () => {
+  const result = await fetchTotalUnreadMessages();
+  if (result !== undefined) {
+    totalUnreadMessages.value = result;
+  } else {
+    console.error("Failed to fetch unread messages");
+  }
+};
+
+fetchTotalUnread();
 </script>
