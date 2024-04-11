@@ -471,7 +471,7 @@ const addSize = () => {
   if (sizeExists) {
     alert("Size already existed");
   } else {
-    console.log("Adding new size");
+    //console.log("Adding new size");
     const newSize = { value: newSizeValue.value, stocks: 0 };
     otherSizes.value = [...otherSizes.value, newSize];
   }
@@ -487,9 +487,9 @@ watch(
   }
 );
 
-console.log(userData);
+//console.log(userData);
 const handleFormSubmit = async (): Promise<boolean> => {
-  console.log("Form submitted");
+  //console.log("Form submitted");
   let userRef: DocumentReference | null = null;
   let userDoc: DocumentSnapshot | null = null;
   let userData: {
@@ -518,10 +518,6 @@ const handleFormSubmit = async (): Promise<boolean> => {
       }
     }
     isLoading.value = true;
-
-    //Checking if there was a file uploaded
-    console.log("Cover photo files:", coverPhotoInput.value?.files);
-    console.log("Product photos files:", productPhotosInput.value?.files);
 
     if (coverPhotoInput.value?.files) {
       const originalCoverPhoto = coverPhotoInput.value.files[0];
@@ -581,13 +577,11 @@ const handleFormSubmit = async (): Promise<boolean> => {
       },
       async () => {
         coverPhotoURL = await getDownloadURL(coverPhotoRef);
-        console.log("Cover photo URL:", coverPhotoURL);
+        //console.log("Cover photo URL:", coverPhotoURL);
       }
     );
 
     await coverPhotoUploadTask;
-
-    console.log("Cover photo URL after upload:", coverPhotoURL);
 
     const photosUploadPromises = newProduct.value.photos.map((photo: File) => {
       return new Promise(async (resolve, reject) => {
@@ -611,7 +605,6 @@ const handleFormSubmit = async (): Promise<boolean> => {
           },
           async () => {
             const photoURL = await getDownloadURL(photoRef);
-            console.log("Photo URL:", photoURL);
             resolve(photoURL);
           }
         );
@@ -619,7 +612,6 @@ const handleFormSubmit = async (): Promise<boolean> => {
     });
 
     const photosURLs = await Promise.all(photosUploadPromises);
-    console.log("Photo URLs:", photosURLs);
 
     //Upload Product Data to the Firestore Database
     newProduct.value.price = newProduct.value.price.map((price) => ({
@@ -647,7 +639,6 @@ const handleFormSubmit = async (): Promise<boolean> => {
 
     const docRef = await addDoc(collection(db, "products"), productData);
     await setDoc(docRef, { id: docRef.id }, { merge: true });
-    console.log("Document reference:", docRef);
 
     // Reset form
     newProduct.value = {

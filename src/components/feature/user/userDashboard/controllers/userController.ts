@@ -14,7 +14,7 @@ export const getUserOrders = async () => {
       item.productDetails = product;
     }
     order.id = order.id;
-    console.log("Controller order id: ", order.id);
+    //console.log("Controller order id: ", order.id);
   }
 
   return orders;

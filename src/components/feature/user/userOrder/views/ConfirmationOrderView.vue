@@ -181,7 +181,7 @@ const orderId = computed(() => route.params.id);
 watch(
   orderId,
   (newOrderId, oldOrderId) => {
-    console.log(orderId);
+    //console.log(orderId);
     if (typeof newOrderId === "string" && newOrderId !== oldOrderId) {
       fetchOrderAndUpdate(newOrderId);
     }

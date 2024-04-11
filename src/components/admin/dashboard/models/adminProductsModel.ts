@@ -104,7 +104,7 @@ async function uploadFileToFirebase(
       async () => {
         // Handle successful uploads on complete
         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-        console.log("File available at", downloadURL);
+
         resolve(downloadURL);
       }
     );
@@ -185,7 +185,6 @@ export const updateProduct = async (
         },
         async () => {
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          console.log("File available at", downloadURL);
           productData.coverPhoto = downloadURL;
           resolve(downloadURL);
         }
@@ -213,10 +212,9 @@ export const updateProduct = async (
   }
 
   // Update the product price
-  console.log(productData);
   const productSnapshot = await getDoc(productRef);
   const product = productSnapshot.data();
-  console.log(product);
+
   if (product && product.price && product.price.length > 0) {
     const latestPrice = product.price[product.price.length - 1];
 
@@ -246,7 +244,6 @@ export const updateProduct = async (
   // Update the product dateModified
   productData.lastModified = new Date().toISOString();
 
-  console.log(productData);
   await updateDoc(productRef, productData);
 
   // Fetch the updated product data

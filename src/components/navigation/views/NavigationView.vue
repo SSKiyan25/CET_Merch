@@ -473,10 +473,7 @@ const dropdownUserVisible = ref(false);
 
 const toggleUserDropdown = () => {
   dropdownUserVisible.value = !dropdownUserVisible.value;
-  console.log(
-    "toggleUserDropdown called, dropdownUserVisible:",
-    dropdownUserVisible.value
-  );
+  //console.log("toggleUserDropdown called, dropdownUserVisible:",dropdownUserVisible.value);
 };
 const closeDropdown = (event: any) => {
   const dropdownUser = document.getElementById("dropdown-user");
@@ -578,7 +575,7 @@ onMounted(() => {
         (result: any) => result.orderStatus === "OnQueue"
       );
     }
-    console.log("orderData: ", orderData.value);
+    //console.log("orderData: ", orderData.value);
   });
 });
 

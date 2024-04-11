@@ -17,7 +17,8 @@ export const handleGuestLogin = (router: any) => {
   signInWithEmailAndPassword(auth, guestEmail, guestPassword)
     .then((credential) => {
       const user = credential.user;
-      console.log(user);
+      //console.log(user);
+      if (!user) return;
       // Redirect to regular dashboard
       router.push({ name: "launchPage" });
     })
@@ -35,7 +36,7 @@ export const handleLogin = (router: any) => {
   signInWithEmailAndPassword(auth, email.value, password.value)
     .then((credential) => {
       const user = credential.user;
-      console.log(user);
+      //console.log(user);
 
       // Fetch user data from Firestore
       getDoc(doc(db, "users", user.uid))

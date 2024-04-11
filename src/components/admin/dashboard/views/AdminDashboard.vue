@@ -294,7 +294,7 @@ onMounted(async () => {
       totalSales: number;
     }[];
 
-    console.log(products.value);
+    //console.log(products.value);
   } else {
     console.error("Failed to fetch dashboard products");
   }

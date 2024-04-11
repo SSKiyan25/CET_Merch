@@ -370,12 +370,11 @@
                                   class="bg-emerald-600 text-white p-2 rounded-sm"
                                   title="Edit Product"
                                   @click.prevent="
-                                    console.log(product.id);
                                     editProductController(
                                       product.id,
                                       product,
                                       null
-                                    );
+                                    )
                                   "
                                 >
                                   <span
