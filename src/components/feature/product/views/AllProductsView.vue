@@ -142,21 +142,21 @@
       <div class="p-1"></div>
       <!-- Product Cards -->
       <div class="flex flex-col justify-start bg-gray-200">
-        <div class="flex flex-row px-4 md:px-8">
-          <div
-            v-if="isLoading"
-            class="flex max-w-[75reh] h-full pt-8 justify-center items-center"
-          >
-            <div class="flex flex-col items-center justify-center h-full">
-              <div class="flex flex-col items-center justify-center">
-                <span
-                  class="material-symbols-outlined text-6xl text-primary animate-spin"
-                >
-                  autorenew
-                </span>
-              </div>
+        <div
+          v-if="isLoading"
+          class="flex max-w-full h-full pt-8 justify-center items-center"
+        >
+          <div class="flex flex-col items-center justify-center h-full">
+            <div class="flex flex-col items-center justify-center">
+              <span
+                class="material-symbols-outlined text-6xl text-primary animate-spin"
+              >
+                autorenew
+              </span>
             </div>
           </div>
+        </div>
+        <div class="flex flex-row px-4 md:px-8">
           <div
             id="products"
             class="flex flex-row px-2 md:px-4 py-8 justify-center"
@@ -193,18 +193,25 @@
                       >
                         {{ product.name }}
                       </span>
-                      <span
-                        class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
-                        >P
-                        {{
-                          product.price[product.price.length - 1].originalPrice
-                        }}
-                      </span>
+                      <div class="flex flex-row items-center">
+                        <span
+                          class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
+                        >
+                          P
+                          {{
+                            product.price[product.price.length - 1]
+                              .originalPrice
+                          }}
+                        </span>
+                        <span class="pl-2 opacity-80 text-[10px] md:text-xs">
+                          ({{ product.totalOrders }} Sold)
+                        </span>
+                      </div>
+
                       <div
-                        class="flex flex-row justify-between items-center text-xs"
+                        class="flex flex-row justify-between items-center text-[8px] md:text-xs"
                       >
                         <div>
-                          <span> {{ product.totalOrders }} Sold | </span>
                           <span> {{ product.views }} Views</span>
                         </div>
                         <div>

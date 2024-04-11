@@ -59,34 +59,39 @@
                 </span>
               </router-link>
             </div>
-
-            <div
-              class="border-l hidden md:block border-black border-opacity-60 space-x-2"
-            >
-              <router-link
-                to="/"
-                class="hover:opacity-80 hover:bg-background-slate-600"
+            <div class="flex flex-row items-center">
+              <div
+                class="hidden md:block border-black border-opacity-60 space-x-2"
               >
-                <span class="text-black pl-2">Home </span>
-              </router-link>
-              <router-link
-                to="/products"
-                class="border-l border-black border-opacity-60"
-              >
-                <span class="text-black pl-2">Products</span>
-              </router-link>
-              <router-link
-                to="/aboutUs"
-                class="border-l border-black border-opacity-60"
-              >
-                <span class="text-black pl-2">About Us</span>
-              </router-link>
-              <router-link
-                to="/contactUs"
-                class="border-l border-black border-opacity-60"
-              >
-                <span class="text-black pl-2">Contact Us</span>
-              </router-link>
+                <router-link
+                  to="/"
+                  class="hover:opacity-80 hover:bg-background-slate-600"
+                  active-class="text-red-700 underline underline-offset-2 font-bold"
+                >
+                  <span class="text-black">Home </span>
+                </router-link>
+                <router-link
+                  to="/products"
+                  class="border-l border-black border-opacity-60"
+                  active-class="text-red-700 underline underline-offset-2 font-bold"
+                >
+                  <span class="text-black pl-2">Products</span>
+                </router-link>
+                <router-link
+                  to="/aboutUs"
+                  class="border-l border-black border-opacity-60"
+                  active-class="text-red-700 underline underline-offset-2 font-bold"
+                >
+                  <span class="text-black pl-2">About Us</span>
+                </router-link>
+                <router-link
+                  to="/contactUs"
+                  class="border-l border-black border-opacity-60"
+                  active-class="text-red-700 underline underline-offset-2 font-bold"
+                >
+                  <span class="text-black pl-2">Contact Us</span>
+                </router-link>
+              </div>
             </div>
           </div>
         </div>
@@ -101,7 +106,7 @@
               @focus="isSearchFocused = true"
               @blur="() => $nextTick(() => (isSearchFocused = false))"
               placeholder="Search Product..."
-              class="pl-8 text-[10px] md:text-sm md:pl-12 dark:opacity-50"
+              class="pl-8 text-[10px] md:text-sm md:pl-10 dark:opacity-50"
             />
             <span
               class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
@@ -157,7 +162,10 @@
             </div>
           </div>
           <!--User Dropdown-->
-          <div v-else class="flex justify-between items-center w-[6rem] pr-2">
+          <div
+            v-else
+            class="flex flex-row justify-between items-center w-[6rem] pr-2 space-x-1"
+          >
             <div class="flex flex-row items-center ms-6">
               <button
                 type="button"
@@ -325,6 +333,63 @@
                 </li>
               </ul>
             </div>
+            <div
+              class="flex md:hidden items-center rounded-lg bg-slate-100 shadow-xl"
+            >
+              <Sheet>
+                <SheetTrigger as-child>
+                  <span class="material-symbols-outlined"> menu </span>
+                </SheetTrigger>
+                <SheetContent class="bg-gray-100">
+                  <SheetHeader>
+                    <SheetTitle>
+                      <div class="flex flex-row items-center">
+                        <Menu /> <span class="pl-1">Menu</span>
+                      </div>
+                    </SheetTitle>
+                    <SheetDescription></SheetDescription>
+                  </SheetHeader>
+                  <div class="flex flex-col space-y-2 pt-4">
+                    <router-link
+                      to="/"
+                      class="hover:bg-primary/10 p-4 rounded-sm cursor-pointer items-center"
+                      active-class="bg-primary/90 text-white font-bold"
+                    >
+                      <div class="flex flex-row items-center space-x-2">
+                        <Home /> <span>Home</span>
+                      </div>
+                    </router-link>
+                    <router-link
+                      to="/products"
+                      class="hover:bg-primary/10 p-4 rounded-sm cursor-pointer items-center"
+                      active-class="bg-primary/90 text-white font-bold"
+                    >
+                      <div class="flex flex-row items-center space-x-2">
+                        <ShoppingBasket /> <span>Products</span>
+                      </div>
+                    </router-link>
+                    <router-link
+                      to="/aboutUs"
+                      class="hover:bg-primary/10 p-4 rounded-sm cursor-pointer items-center"
+                      active-class="bg-primary/90 text-white font-bold"
+                    >
+                      <div class="flex flex-row items-center space-x-2">
+                        <Landmark /> <span>About Us</span>
+                      </div>
+                    </router-link>
+                    <router-link
+                      to="/contactUs"
+                      class="hover:bg-primary/10 p-4 rounded-sm cursor-pointer items-center"
+                      active-class="bg-primary/90 text-white font-bold"
+                    >
+                      <div class="flex flex-row items-center space-x-2">
+                        <Contact /> <span>Contact Us</span>
+                      </div>
+                    </router-link>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
         </div>
         <!--Search-->
@@ -352,8 +417,15 @@ import { doc, getDoc } from "firebase/firestore";
 import { db, auth } from "@/firebase/init";
 import { useRouter } from "vue-router";
 import { signOut } from "firebase/auth";
-import { User as UserIcon } from "lucide-vue-next";
-import { Search } from "lucide-vue-next";
+import {
+  User as UserIcon,
+  Home,
+  Search,
+  Menu,
+  ShoppingBasket,
+  Landmark,
+  Contact,
+} from "lucide-vue-next";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
