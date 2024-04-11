@@ -108,117 +108,67 @@
       type="button"
       class="text-blue-700 hover:text-white border border-blue-600 bg-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:bg-gray-900 dark:focus:ring-blue-800"
     >
-      All Events
+      All Organizations
     </button>
     <button
       type="button"
       class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
     >
-      Shoes
+      CET
     </button>
     <button
       type="button"
       class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
     >
-      Bags
+      CS3
     </button>
     <button
       type="button"
       class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
     >
-      Electronics
+      GEP
     </button>
     <button
       type="button"
       class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
     >
-      Gaming
+      MetSoc
+    </button>
+    <button
+      type="button"
+      class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+    >
+      PICE
+    </button>
+    <button
+      type="button"
+      class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+    >
+      PSABE
+    </button>
+    <button
+      type="button"
+      class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800"
+    >
+      PSME
     </button>
   </div>
   <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-    <div>
-      <img
-        class="h-auto max-w-full rounded-lg"
-        src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg"
-        alt=""
-      />
-    </div>
-    <div>
-      <img
-        class="h-auto max-w-full rounded-lg"
-        src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg"
-        alt=""
-      />
-    </div>
-    <div>
-      <img
-        class="h-auto max-w-full rounded-lg"
-        src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg"
-        alt=""
-      />
-    </div>
-    <div>
-      <img
-        class="h-auto max-w-full rounded-lg"
-        src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg"
-        alt=""
-      />
-    </div>
-    <div>
-      <img
-        class="h-auto max-w-full rounded-lg"
-        src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-4.jpg"
-        alt=""
-      />
-    </div>
-    <div>
-      <img
-        class="h-auto max-w-full rounded-lg"
-        src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-5.jpg"
-        alt=""
-      />
-    </div>
-    <div>
-      <img
-        class="h-auto max-w-full rounded-lg"
-        src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-6.jpg"
-        alt=""
-      />
-    </div>
-    <div>
-      <img
-        class="h-auto max-w-full rounded-lg"
-        src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-7.jpg"
-        alt=""
-      />
-    </div>
-    <div>
-      <img
-        class="h-auto max-w-full rounded-lg"
-        src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-8.jpg"
-        alt=""
-      />
-    </div>
-    <div>
-      <img
-        class="h-auto max-w-full rounded-lg"
-        src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-9.jpg"
-        alt=""
-      />
-    </div>
-    <div>
-      <img
-        class="h-auto max-w-full rounded-lg"
-        src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-10.jpg"
-        alt=""
-      />
-    </div>
-    <div>
-      <img
-        class="h-auto max-w-full rounded-lg"
-        src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-11.jpg"
-        alt=""
-      />
+    <div class="relative flex flex-col hover:drop-shadow-xl">
+      <div
+        class="before:absolute before:inset-x-0 before:size-full before:bg-gradient-to-t before:from-gray-900/[.7] before:z-[1]"
+      >
+        <img
+          class="h-[24rem] max-w-full rounded-lg object-cover"
+          src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg"
+          alt=""
+        />
+      </div>
+      <div
+        class="absolute bottom-0 left-0 inset-x-0 z-10 flex flex-col items-start justify-end w-full h-full p-1 md:p-4 space-y-1.5 md:space-y-4 text-white opacity-70 hover:opacity-100 cursor-pointer"
+      >
+        <h3 class="uppercase font-bold text-base md:text-lg">CET Products</h3>
+      </div>
     </div>
   </div>
 </template>
