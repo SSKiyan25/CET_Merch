@@ -396,7 +396,7 @@ const props = defineProps({
   },
 });
 
-console.log("productId in Cart component: ", props.productId);
+//console.log("productId in Cart component: ", props.productId);
 
 onMounted(async () => {
   const results = await getOnQueueOrdersController();
@@ -418,7 +418,7 @@ const injectedGetProductById = inject("getProductById") as (
   id: string
 ) => ProductType;
 const product = computed(() => injectedGetProductById(props.productId));
-console.log("Product data: ", product.value);
+//console.log("Product data: ", product.value);
 
 const { handleAddToCartSubmit, newAddToCartData } = setupAddToCartController();
 
@@ -518,7 +518,7 @@ const selectSize = (size: sizesData) => {
 };
 
 const totalOrdersOnQueue = ref(0);
-console.log("Total Orders on Queue: ", totalOrdersOnQueue.value);
+//console.log("Total Orders on Queue: ", totalOrdersOnQueue.value);
 async function fetchTotalOrdersOnQueue() {
   const userId = auth.currentUser?.uid;
   if (userId) {

@@ -333,7 +333,7 @@ const route = useRoute();
 const { product, loading } = setupProduct(route);
 const currentId = route.params.id as string;
 
-console.log("product: ", product);
+//console.log("product: ", product);
 
 const { products, sellerProducts, isLoading, incrementViewCount } =
   setupProductController();
@@ -365,5 +365,5 @@ const updateFeaturedPhoto = (newPhoto: string) => {
   featuredPhoto.value = newPhoto;
 };
 
-console.log("product: ", product);
+//console.log("product: ", product);
 </script>

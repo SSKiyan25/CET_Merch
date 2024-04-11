@@ -271,7 +271,7 @@ const fetchProductDetails = async (productId: string) => {
     const docRef = doc(db, "products", productId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      console.log(docSnap.data());
+      //console.log(docSnap.data());
       return docSnap.data();
     } else {
       console.log("No such document!");

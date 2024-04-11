@@ -92,7 +92,7 @@ const fetchImages = async () => {
   const res = await listAll(storageReference);
   const urls = await Promise.all(res.items.map((item) => getDownloadURL(item)));
   imageUrls.value = urls;
-  console.log(imageUrls.value);
+  //console.log(imageUrls.value);
 
   // Add a delay before setting loading back to false
   setTimeout(() => {

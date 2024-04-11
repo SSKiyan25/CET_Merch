@@ -64,11 +64,11 @@ export const cancelUserOrder = async (order: any) => {
     where("orderRefNum", "==", order.orderRefNum)
   );
   const querySnapshot = await getDocs(q);
-  console.log("Query Snapshot", querySnapshot.docs[0]);
+  //console.log("Query Snapshot", querySnapshot.docs[0]);
   if (!querySnapshot.empty) {
     const docSnapshot = querySnapshot.docs[0];
     const orderRef = docSnapshot.ref;
-    console.log("Order Ref", orderRef);
+    //console.log("Order Ref", orderRef);
     await updateDoc(orderRef, {
       orderStatus: "cancelled",
     });

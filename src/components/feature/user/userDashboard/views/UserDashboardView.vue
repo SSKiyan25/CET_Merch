@@ -411,7 +411,7 @@ watch(orders, (newOrders) => {
   if (newOrders.length === 0) {
     recentOrder.value = null;
   } else {
-    console.log(newOrders[0]);
+    //console.log(newOrders[0]);
     recentOrder.value = newOrders.reduce((latestOrder, currentOrder) => {
       return new Date(latestOrder.dateOrdered) >
         new Date(currentOrder.dateOrdered)

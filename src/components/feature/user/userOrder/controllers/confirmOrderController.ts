@@ -20,7 +20,7 @@ auth.onAuthStateChanged((user) => {
 });
 
 export async function fetchOrderAndUpdate(orderId: string) {
-  console.log("Controller: ", orderId);
+  //console.log("Controller: ", orderId);
   loading.value = true;
   const newId = userId.value;
   if (typeof newId === "string") {

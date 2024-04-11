@@ -2,7 +2,7 @@ import { getDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "@/firebase/init";
 
 export async function fetchOrder(orderId: string) {
-  console.log("Model: ", orderId);
+  //console.log("Model: ", orderId);
   if (!orderId) {
     throw new Error("Order ID is required");
   }
@@ -13,7 +13,7 @@ export async function fetchOrder(orderId: string) {
   if (!orderData) {
     throw new Error("Order not found");
   }
-  console.log("Model: ", orderData);
+  //console.log("Model: ", orderData);
   if (orderData.orderStatus !== "OnQueue") {
     throw new Error("Order is not OnQueue");
   }

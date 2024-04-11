@@ -34,7 +34,7 @@ export const setup = () => {
   });
 
   const handleAddToCartSubmit = async (newAddToCart: cartData) => {
-    console.log("New Add To Cart Data: ", newAddToCart);
+    //console.log("New Add To Cart Data: ", newAddToCart);
     await addToCart(newAddToCart);
   };
   return { handleAddToCartSubmit, newAddToCartData };
