@@ -15,9 +15,9 @@
     <!-- End Title -->
     <!-- Grid -->
     <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-6 mb-10 lg:mb-14">
-      <a
+      <router-link
         class="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800"
-        href="#"
+        to="/products"
       >
         <div class="aspect-w-16 aspect-h-2">
           <img
@@ -36,11 +36,11 @@
             High-quality and affordable products for you
           </h3>
         </div>
-      </a>
+      </router-link>
 
       <a
-        class="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800"
-        href="#"
+        class="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800 cursor-pointer"
+        v-scroll-to="'#gallery'"
       >
         <div class="aspect-w-16 aspect-h-9">
           <img
@@ -62,8 +62,8 @@
       </a>
 
       <a
-        class="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800"
-        href="#"
+        class="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800 cursor-pointer"
+        v-scroll-to="'#gallery'"
       >
         <div class="aspect-w-16 aspect-h-9">
           <img
