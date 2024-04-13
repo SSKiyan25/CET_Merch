@@ -1,5 +1,5 @@
 <template>
-  <div class="relative max-h-[36rem]">
+  <div id="aboutus" class="relative max-h-[36rem]">
     <div class="max-w-screen pb-4 mx-auto border-b-2">
       <div
         class="flex bg-inherit items-center justify-center shadow-2xl relative"
@@ -45,17 +45,17 @@
     class="max-w-[110rem] max-h-screen px-8 py-2 sm:px-6 lg:px-16 lg:py-14 mx-auto"
   >
     <!-- Grid -->
-    <div class="mt-5 lg:mt-16 grid lg:grid-cols-3 gap-8 lg:gap-12">
+    <div class="mt-5 lg:mt-10 grid lg:grid-cols-3 gap-8 lg:gap-12">
       <div class="lg:col-span-1">
         <h2
-          class="font-bold text-2xl md:text-3xl text-gray-800 dark:text-gray-200"
+          class="font-bold text-base md:text-3xl text-gray-800 dark:text-gray-200"
         >
-          We tackle the challenges start-ups face
+          Fueling Progress at VSU
         </h2>
-        <p class="mt-2 md:mt-4 text-gray-500">
-          Besides working with start-up enterprises as a partner for
-          digitalization, we have built enterprise products for common pain
-          points that we have encountered in various products and projects.
+        <p class="mt-2 md:mt-4 text-xs md:text-base text-gray-500">
+          Our organization is a catalyst for creativity and collaboration at
+          VSU. We ignite innovation through a diverse range of projects and
+          events, creating opportunities for growth and learning.
         </p>
       </div>
       <!-- End Col -->
@@ -83,12 +83,18 @@
               <line x1="16" x2="16" y1="16" y2="16" />
             </svg>
             <div class="grow">
-              <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
+              <h3
+                class="text-base md:text-lg font-bold text-gray-800 dark:text-white"
+              >
                 Creative minds
               </h3>
-              <p class="mt-1 text-gray-600 dark:text-gray-400">
-                We choose our teams carefully. Our people are the secret to
-                great work.
+              <p
+                class="mt-1 text-gray-600 text-xs md:text-sm dark:text-gray-400"
+              >
+                Our team is not just a group of individuals, but a collective of
+                problem solvers and innovators. They bring their unique
+                perspectives and creative thinking to every project, turning
+                ideas into impactful solutions.
               </p>
             </div>
           </div>
@@ -114,12 +120,17 @@
               />
             </svg>
             <div class="grow">
-              <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
-                Simple and affordable
+              <h3
+                class="text-base md:text-lg font-semibold text-gray-800 dark:text-white"
+              >
+                Community Builders
               </h3>
-              <p class="mt-1 text-gray-600 dark:text-gray-400">
-                From boarding passes to movie tickets, there's pretty much
-                nothing you can't store with Preline.
+              <p
+                class="text-xs md:text-sm mt-1 text-gray-600 dark:text-gray-400"
+              >
+                We're committed to enhancing the VSU community. Our projects and
+                events are designed to foster a sense of unity, engagement, and
+                enrichment among students, staff, and faculty.
               </p>
             </div>
           </div>
@@ -143,12 +154,18 @@
               <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
             </svg>
             <div class="grow">
-              <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
-                Industry-leading documentation
+              <h3
+                class="text-base md:text-lg font-semibold text-gray-800 dark:text-white"
+              >
+                Empowering Student Success
               </h3>
-              <p class="mt-1 text-gray-600 dark:text-gray-400">
-                Our documentation and extensive Client libraries contain
-                everything a business needs to build a custom integration.
+              <p
+                class="text-xs md:text-sm mt-1 text-gray-600 dark:text-gray-400"
+              >
+                We're dedicated to providing resources and support to help
+                students thrive. From workshops to mentorship programs, we offer
+                a variety of initiatives designed to enhance student success and
+                personal growth.
               </p>
             </div>
           </div>
@@ -174,12 +191,18 @@
               <path d="M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
             <div class="grow">
-              <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
-                Designing for people
+              <h3
+                class="text-base md:text-lg font-semibold text-gray-800 dark:text-white"
+              >
+                Your Voice Matters
               </h3>
-              <p class="mt-1 text-gray-600 dark:text-gray-400">
-                We actively pursue the right balance between functionality and
-                aesthetics, creating delightful experiences.
+              <p
+                class="text-xs md:text-sm mt-1 text-gray-600 dark:text-gray-400"
+              >
+                We believe in the power of student voices. Your ideas, feedback,
+                and perspectives are invaluable to us. We're committed to
+                listening and incorporating your input into our projects and
+                events.
               </p>
             </div>
           </div>
@@ -192,9 +215,9 @@
   </div>
 
   <!-- Card Blog -->
-  <div class="max-w-[85rem] px-4 py-1 sm:px-6 lg:px-8 lg:py-2 mx-auto">
+  <div class="max-w-[85rem] px-4 py-4 sm:px-6 lg:px-8 lg:py-4 mx-auto">
     <!-- Grid -->
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
       <!-- Card -->
       <a class="group block rounded-xl" href="#">
         <div class="aspect-w-16 aspect-h-9">
@@ -271,7 +294,6 @@
   </div>
   <!-- End Card Blog -->
 
-  <!-- Icon Blocks -->
   <div
     class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto space-y-4"
   >
@@ -291,8 +313,9 @@
             <h3 class="block font-bold text-gray-800">
               Computer Science Students' Society
             </h3>
-            <p class="text-gray-600">
-              The simplest way to keep your portfolio always up-to-date.
+            <p class="text-gray-600 text-xs md:text-sm">
+              The student course organization for Computer Science students at
+              Visayas State University.
             </p>
           </div>
 
@@ -334,8 +357,9 @@
             <h3 class="block font-bold text-gray-800">
               Geodetic Engineers of the Philippines
             </h3>
-            <p class="text-gray-600">
-              New design projects delivered to your inbox each morning.
+            <p class="text-gray-600 text-xs md:text-sm">
+              The student course organization for Geodetic Engineering students
+              at Visayas State University.
             </p>
           </div>
 
@@ -377,9 +401,9 @@
             <h3 class="block font-bold text-gray-800">
               Meteorological Society
             </h3>
-            <p class="text-gray-600">
-              Get your goods in front of millions of potential customers with
-              ease.
+            <p class="text-gray-600 text-xs md:text-sm">
+              The student course organization for Meteorology students at
+              Visayas State University.
             </p>
           </div>
 
@@ -422,8 +446,9 @@
             <h3 class="block font-bold text-gray-800">
               Philippine Institute of Civil Engineers
             </h3>
-            <p class="text-gray-600">
-              The simplest way to keep your portfolio always up-to-date.
+            <p class="text-gray-600 text-xs md:text-sm">
+              The student course organization for Civil Engineering students at
+              Visayas State University.
             </p>
           </div>
 
@@ -464,8 +489,9 @@
             <h3 class="block font-bold text-gray-800">
               Philippine Society of Agricultural and Biosystems Engineers
             </h3>
-            <p class="text-gray-600">
-              New design projects delivered to your inbox each morning.
+            <p class="text-gray-600 text-xs md:text-sm">
+              The student course organization for Agricultural and Biosystems
+              Engineering students at Visayas State University.
             </p>
           </div>
 
@@ -507,9 +533,9 @@
             <h3 class="block font-bold text-gray-800">
               Philippine Society of Mechanical Engineers
             </h3>
-            <p class="text-gray-600">
-              Get your goods in front of millions of potential customers with
-              ease.
+            <p class="text-gray-600 text-xs md:text-sm">
+              The student course organization for Mechanical Engineering
+              students at Visayas State University.
             </p>
           </div>
 
@@ -538,7 +564,9 @@
     </div>
   </div>
   <!-- End Icon Blocks -->
-  <CETGalleryComponent />
+
+  <!--Gallery-->
+  <div id="gallery"><CETGalleryComponent /></div>
   <CardComponent />
 </template>
 

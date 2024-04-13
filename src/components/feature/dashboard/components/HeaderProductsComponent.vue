@@ -51,7 +51,8 @@
 
       <router-link
         class="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-slate-900 dark:border-gray-800"
-        to=""
+        to="#"
+        @click.prevent="navigateAndScroll"
       >
         <div class="aspect-w-16 aspect-h-9">
           <img
@@ -89,4 +90,17 @@
   <!-- End Card Blog -->
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+import VueScrollTo from "vue-scrollto";
+import { nextTick } from "vue";
+
+const router = useRouter();
+
+const navigateAndScroll = async () => {
+  await router.push({ name: "aboutUs" });
+  // Wait for the DOM to update, then scroll to #gallery
+  await nextTick();
+  VueScrollTo.scrollTo("#gallery");
+};
+</script>
