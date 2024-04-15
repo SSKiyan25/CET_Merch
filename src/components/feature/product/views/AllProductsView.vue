@@ -9,7 +9,7 @@
         >
           <img
             src="/homepage/products-1.jpg"
-            class="object-cover md:object-fit brightness-50 backdrop-contrast-50 backdrop-hue-rotate-90 md:w-[1920px] md:h-[620px] w-[1920px] h-[240px]"
+            class="object-cover md:object-fit brightness-50 backdrop-contrast-50 backdrop-hue-rotate-90 md:w-[1920px] md:h-[720px] w-[1920px] h-[240px]"
           />
         </div>
 

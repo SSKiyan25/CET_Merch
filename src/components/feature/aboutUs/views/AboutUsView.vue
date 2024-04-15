@@ -9,7 +9,7 @@
         >
           <img
             src="/about_us_page/cover.png"
-            class="object-cover md:object-fit brightness-50 backdrop-contrast-50 backdrop-hue-rotate-90 w-[1920px] h-[180px] md:w-[1920px] md:h-[620px]"
+            class="object-cover md:object-fit brightness-50 backdrop-contrast-50 backdrop-hue-rotate-90 w-[1920px] h-[180px] md:w-[1920px] md:h-[720px]"
           />
         </div>
 
@@ -45,7 +45,7 @@
     class="max-w-[110rem] max-h-screen px-8 py-2 sm:px-6 lg:px-16 lg:py-14 mx-auto"
   >
     <!-- Grid -->
-    <div class="mt-5 lg:mt-10 grid lg:grid-cols-3 gap-8 lg:gap-12">
+    <div class="mt-5 lg:mt-36 grid lg:grid-cols-3 gap-8 lg:gap-12">
       <div class="lg:col-span-1">
         <h2
           class="font-bold text-base md:text-3xl text-gray-800 dark:text-gray-200"
