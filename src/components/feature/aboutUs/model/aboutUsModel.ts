@@ -45,3 +45,12 @@ export async function fetchPSMEImages() {
   );
   return urls;
 }
+
+export async function fetchCETImages() {
+  const storageReference = storageRef(storage, "organizations/cet");
+  const result = await listAll(storageReference);
+  const urls = await Promise.all(
+    result.items.map((item: any) => getDownloadURL(item))
+  );
+  return urls;
+}

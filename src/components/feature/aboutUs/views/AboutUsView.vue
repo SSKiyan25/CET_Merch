@@ -8,7 +8,7 @@
           class="before:absolute before:inset-x-0 before:size-full before:bg-gradient-to-t before:from-gray-900/[.7] before:z-[1]"
         >
           <img
-            src="/about_us_page/cover.jpg"
+            src="/about_us_page/cover.png"
             class="object-cover md:object-fit brightness-50 backdrop-contrast-50 backdrop-hue-rotate-90 w-[1920px] h-[180px] md:w-[1920px] md:h-[620px]"
           />
         </div>
@@ -33,7 +33,7 @@
           </p>
           <button
             class="bg-white p-2 md:p-4 transform transition-all rounded-md duration-500 hover:scale-110 text-black text-[10px] md:text-xl font-bold"
-            v-scroll-to="'#products'"
+            v-scroll-to="'#promotional'"
           >
             Know Us
           </button>
@@ -277,14 +277,14 @@
         <div class="aspect-w-16 aspect-h-9">
           <img
             class="w-full max-h-[16rem] object-cover rounded-xl"
-            src="/Featured_Events/CET-Update.jpg"
+            src="/about_us_page/rebranding.png"
             alt="Image Description"
           />
         </div>
         <h3
           class="mt-2 text-lg font-medium text-gray-800 group-hover:text-blue-600"
         >
-          CET Updates
+          CET-SSC Logo Rebranding
         </h3>
         <p class="mt-2 text-sm text-gray-600">A.S.Y 2023-2024</p>
       </a>
