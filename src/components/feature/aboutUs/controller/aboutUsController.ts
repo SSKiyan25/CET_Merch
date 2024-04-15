@@ -4,6 +4,7 @@ import {
   fetchGEPImages,
   fetchPICEImages,
   fetchPSMEImages,
+  fetchCETImages,
 } from "../model/aboutUsModel";
 
 export async function displayMetSocImages() {
@@ -29,4 +30,9 @@ export async function displayPICEImages() {
 export async function displayPSMEImages() {
   const psmeUrls = await fetchPSMEImages();
   return psmeUrls;
+}
+
+export async function displayCETImages() {
+  const cetUrls = await fetchCETImages();
+  return cetUrls;
 }

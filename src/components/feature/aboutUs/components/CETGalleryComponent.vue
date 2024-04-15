@@ -2,22 +2,30 @@
   <div
     id="custom-controls-gallery"
     class="relative w-full pb-4"
-    data-carousel="slide"
+    data-carousel="static"
   >
     <!-- Carousel wrapper -->
+    <div id="promotional" class="flex justify-center mx-auto">
+      <h2 class="font-extrabold text-xl md:text-3xl uppercase text-primary">
+        Promotional Videos
+      </h2>
+    </div>
+
     <div class="relative h-[20rem] overflow-hidden rounded-lg md:h-[44rem]">
-      <!-- Images -->
+      <!-- Videos -->
       <div
-        v-for="index in 5"
+        v-for="(link, index) in ['u2eSru5ADUY', 'zzmhAzvpyY4', 'tGxEK9vBXgU']"
         :key="index"
         class="hidden duration-700 ease-in-out"
         data-carousel-item
       >
-        <img
-          :src="`/about_us_page/cet-featured-event-${index}.jpg`"
+        <iframe
+          :src="`https://www.youtube.com/embed/${link}`"
           class="absolute block h-[20rem] w-full md:w-4/5 md:h-[42rem] object-fit -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 rounded-sm"
-          alt=""
-        />
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
       </div>
     </div>
     <div class="flex justify-center items-center pt-2">
@@ -128,6 +136,22 @@
           <img
             v-for="(url, index) in allUrls"
             @click.prevent="selectedAllImageIndex = index"
+            class="w-[24rem] h-[6rem] md:h-[24rem] md:w-full rounded-lg object-cover brightness-75 hover:drop-shadow-xl hover:opacity-90 cursor-pointer"
+            :src="url"
+            alt=""
+          />
+        </div>
+      </TabsContent>
+      <TabsContent value="cet">
+        <div v-if="isLoading" class="grid grid-cols-3 gap-4">
+          <Skeleton class="h-[250px] w-[350px] rounded-xl" />
+          <Skeleton class="h-[250px] w-[350px] rounded-xl" />
+          <Skeleton class="h-[250px] w-[350px] rounded-xl" />
+        </div>
+        <div v-else class="grid grid-cols-3 gap-2 md:gap-4">
+          <img
+            v-for="(url, index) in cetUrls"
+            @click.prevent="selectedCETImageIndex = index"
             class="w-[24rem] h-[6rem] md:h-[24rem] md:w-full rounded-lg object-cover brightness-75 hover:drop-shadow-xl hover:opacity-90 cursor-pointer"
             :src="url"
             alt=""
@@ -313,6 +337,108 @@
     </div>
     <button
       @click.prevent="selectedAllImageIndex = null"
+      class="absolute top-0 right-0 m-4 text-white"
+    >
+      <span class="material-symbols-outlined"> cancel </span>
+    </button>
+  </div>
+
+  <!--CET Image Carousel-->
+  <div
+    ref="outerDiv"
+    v-if="selectedCETImageIndex !== null"
+    class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+    @click.prevent="checkOutsideClick"
+  >
+    <div
+      ref="innerDiv"
+      id="gallery"
+      class="relative w-full py-2"
+      data-carousel="slide"
+    >
+      <!-- Carousel wrapper -->
+      <div class="relative max-h-56 rounded-lg md:h-[36rem]">
+        <!-- Items -->
+        <div
+          v-for="(url, index) in cetUrls"
+          :class="{
+            'hidden duration-700 ease-in-out': index !== selectedCETImageIndex,
+          }"
+          data-carousel-item
+        >
+          <div class="flex justify-center items-center">
+            <img
+              :src="url"
+              class="absolute block w-[16rem] md:w-[56rem] -translate-y-1/2 top-1/2 h-[16rem] md:h-[42rem] rounded-sm object-cover"
+              alt=""
+            />
+          </div>
+        </div>
+      </div>
+      <!-- Slider controls -->
+      <button
+        type="button"
+        @click.prevent="
+          selectedCETImageIndex =
+            ((selectedCETImageIndex || 0) - 1 + cetUrls.length) % cetUrls.length
+        "
+        class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+        data-carousel-prev
+      >
+        <span
+          class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none"
+        >
+          <svg
+            class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 6 10"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 1 1 5l4 4"
+            />
+          </svg>
+          <span class="sr-only">Previous</span>
+        </span>
+      </button>
+      <button
+        type="button"
+        @click.prevent="
+          selectedCETImageIndex =
+            ((selectedCETImageIndex || 0) + 1) % cetUrls.length
+        "
+        class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+        data-carousel-next
+      >
+        <span
+          class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none"
+        >
+          <svg
+            class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 6 10"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 9 4-4-4-4"
+            />
+          </svg>
+          <span class="sr-only">Next</span>
+        </span>
+      </button>
+    </div>
+    <button
+      @click.prevent="selectedCETImageIndex = null"
       class="absolute top-0 right-0 m-4 text-white"
     >
       <span class="material-symbols-outlined"> cancel </span>
@@ -844,6 +970,7 @@ import {
   displayGEPImages,
   displayPICEImages,
   displayPSMEImages,
+  displayCETImages,
 } from "../controller/aboutUsController";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -852,6 +979,7 @@ const cs3Urls = ref<string[]>([]);
 const gepUrls = ref<string[]>([]);
 const piceUrls = ref<string[]>([]);
 const psmeUrls = ref<string[]>([]);
+const cetUrls = ref<string[]>([]);
 const allUrls = ref<string[]>([]);
 const outerDiv = ref<HTMLElement | null>(null);
 const innerDiv = ref<HTMLElement | null>(null);
@@ -863,9 +991,11 @@ onMounted(async () => {
   cs3Urls.value = await displayCS3Images();
   metSocUrls.value = await displayMetSocImages();
   gepUrls.value = await displayGEPImages();
+  cetUrls.value = await displayCETImages();
   piceUrls.value = await displayPICEImages();
   psmeUrls.value = await displayPSMEImages();
   allUrls.value = [
+    ...cetUrls.value,
     ...cs3Urls.value,
     ...metSocUrls.value,
     ...gepUrls.value,
@@ -880,6 +1010,7 @@ onMounted(async () => {
   startGEPCarousel();
   startPICECarousel();
   startPSMECarousel();
+  startCETCarousel();
   window.addEventListener("keydown", checkEscPress);
 });
 
@@ -898,6 +1029,18 @@ const startAllCarousel = () => {
     if (selectedAllImageIndex.value !== null) {
       selectedAllImageIndex.value =
         (selectedAllImageIndex.value + 1) % allUrls.value.length;
+    }
+  }, 5000) as unknown as number;
+};
+
+//CET Image Carousel
+const selectedCETImageIndex = ref<number | null>(null);
+let carouselCETInterval: number | null = null;
+const startCETCarousel = () => {
+  carouselCETInterval = setInterval(() => {
+    if (selectedCETImageIndex.value !== null) {
+      selectedCETImageIndex.value =
+        (selectedCETImageIndex.value + 1) % cetUrls.value.length;
     }
   }, 5000) as unknown as number;
 };
@@ -970,6 +1113,7 @@ onUpdated(() => {
 
 const checkOutsideClick = (event: any) => {
   if (innerDiv.value && !innerDiv.value.contains(event.target)) {
+    selectedCETImageIndex.value = null;
     selectedMetSocImageIndex.value = null;
     selectedCS3ImageIndex.value = null;
     selectedGEPImageIndex.value = null;
@@ -981,6 +1125,7 @@ const checkOutsideClick = (event: any) => {
 
 const checkEscPress = (event: any) => {
   if (event.key === "Escape") {
+    selectedCETImageIndex.value = null;
     selectedMetSocImageIndex.value = null;
     selectedCS3ImageIndex.value = null;
     selectedGEPImageIndex.value = null;
@@ -993,6 +1138,9 @@ const checkEscPress = (event: any) => {
 onBeforeUnmount(() => {
   if (carouselAllImageIndex !== null) {
     clearInterval(carouselAllImageIndex);
+  }
+  if (carouselCETInterval !== null) {
+    clearInterval(carouselCETInterval);
   }
   if (carouselCS3Interval !== null) {
     clearInterval(carouselCS3Interval);
