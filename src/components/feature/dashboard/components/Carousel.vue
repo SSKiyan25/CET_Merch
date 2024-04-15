@@ -28,7 +28,7 @@
                 <img
                   :src="url"
                   alt="Carousel image"
-                  class="object-cover md:object-fit brightness-50 backdrop-contrast-50 backdrop-hue-rotate-90 w-[1920px] h-[360px] md:h-[620px] md:w-[1920px]"
+                  class="object-cover md:object-fit brightness-50 backdrop-contrast-50 backdrop-hue-rotate-90 w-[1920px] h-[360px] md:h-[720px] md:w-[1920px]"
                 />
               </CardContent>
             </Card>
