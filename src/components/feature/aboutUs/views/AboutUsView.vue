@@ -219,7 +219,7 @@
     <!-- Grid -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
       <!-- Card -->
-      <a class="group block rounded-xl" href="#">
+      <div class="group block rounded-xl cursor-pointer">
         <div class="aspect-w-16 aspect-h-9">
           <img
             class="w-full max-h-[16rem] object-cover rounded-xl"
@@ -233,11 +233,11 @@
           Mr. & Ms. CET 2024
         </h3>
         <p class="mt-2 text-sm text-gray-600">February 9, 2024</p>
-      </a>
+      </div>
       <!-- End Card -->
 
       <!-- Card -->
-      <a class="group block rounded-xl" href="#">
+      <div class="group block rounded-xl cursor-pointer">
         <div class="aspect-w-16 aspect-h-9">
           <img
             class="w-full max-h-[16rem] object-cover rounded-xl"
@@ -251,11 +251,11 @@
           Chair Donation Drive for Marcos Elementary School
         </h3>
         <p class="mt-2 text-sm text-gray-600">November 15, 2023</p>
-      </a>
+      </div>
       <!-- End Card -->
 
       <!-- Card -->
-      <a class="group block rounded-xl" href="#">
+      <div class="group block rounded-xl cursor-pointer">
         <div class="aspect-w-16 aspect-h-9">
           <img
             class="w-full max-h-[16rem] object-cover rounded-xl"
@@ -269,11 +269,11 @@
           CET Month 2024 - Sportsfest
         </h3>
         <p class="mt-2 text-sm text-gray-600">February 24, 2024</p>
-      </a>
+      </div>
       <!-- End Card -->
 
       <!-- Card -->
-      <a class="group block rounded-xl" href="#">
+      <div class="group block rounded-xl cursor-pointer">
         <div class="aspect-w-16 aspect-h-9">
           <img
             class="w-full max-h-[16rem] object-cover rounded-xl"
@@ -287,7 +287,7 @@
           CET-SSC Logo Rebranding
         </h3>
         <p class="mt-2 text-sm text-gray-600">A.S.Y 2023-2024</p>
-      </a>
+      </div>
       <!-- End Card -->
     </div>
     <!-- End Grid -->

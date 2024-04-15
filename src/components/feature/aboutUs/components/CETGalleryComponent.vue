@@ -86,7 +86,7 @@
 
   <div
     id="gallery"
-    class="flex items-center justify-center py-4 md:py-4 flex-wrap"
+    class="flex flex-col items-center justify-center py-4 md:py-4 flex-wrap"
   >
     <Tabs
       default-value="all"
@@ -121,16 +121,20 @@
         </TabsTrigger>
       </TabsList>
       <TabsContent value="all">
-        <div v-if="isLoading" class="grid grid-cols-3 gap-4">
-          <Skeleton
-            class="h-[100px] w-[120px] md:h-[250px] md:w-[350px] rounded-xl"
-          />
-          <Skeleton
-            class="h-[100px] w-[120px] md:h-[250px] md:w-[350px] rounded-xl"
-          />
-          <Skeleton
-            class="h-[100px] w-[120px] md:h-[250px] md:w-[350px] rounded-xl"
-          />
+        <div v-if="isLoading">
+          <div
+            class="flex flex-row justify-center space-x-4 pt-4 md:space-x-8 w-full"
+          >
+            <Skeleton
+              class="h-[100px] w-[120px] md:h-[250px] md:w-[350px] rounded-xl"
+            />
+            <Skeleton
+              class="h-[100px] w-[120px] md:h-[250px] md:w-[350px] rounded-xl"
+            />
+            <Skeleton
+              class="h-[100px] w-[120px] md:h-[250px] md:w-[350px] rounded-xl"
+            />
+          </div>
         </div>
         <div v-else class="grid grid-cols-3 gap-2 md:gap-4">
           <img
