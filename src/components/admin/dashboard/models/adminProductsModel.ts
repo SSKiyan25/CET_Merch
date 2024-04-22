@@ -20,6 +20,33 @@ import {
   deleteObject,
 } from "firebase/storage";
 
+export interface SizeInfo {
+  dateAdded?: string;
+  price?: number;
+  reserved_stocks?: number;
+  stocks?: number;
+  dateModified?: string;
+  remaining_stocks?: number;
+}
+
+export interface Product {
+  category: string;
+  coverPhoto: string;
+  dateCreated: string;
+  description: string;
+  faction: string;
+  id: string;
+  isArchived: boolean;
+  isPublished: boolean;
+  lastModified: string;
+  name: string;
+  photos: string[];
+  sizes: Record<string, SizeInfo[]>;
+  totalOrders: number;
+  totalSales: number;
+  views: number;
+}
+
 export const fetchProducts = async (
   faction: string,
   startAfterDoc: DocumentSnapshot | null = null,
@@ -211,36 +238,6 @@ export const updateProduct = async (
     }
   }
 
-  // Update the product price
-  const productSnapshot = await getDoc(productRef);
-  const product = productSnapshot.data();
-
-  if (product && product.price && product.price.length > 0) {
-    const latestPrice = product.price[product.price.length - 1];
-
-    // Check if prices have changed and are not undefined
-    if (
-      productData.originalPrice !== undefined &&
-      productData.discountedPrice !== undefined &&
-      (productData.originalPrice !== latestPrice.originalPrice ||
-        productData.discountedPrice !== latestPrice.discountedPrice)
-    ) {
-      // Create new price object
-      const newPrice = {
-        originalPrice: productData.originalPrice,
-        discountedPrice: productData.discountedPrice,
-        dateCreated: new Date().toISOString(),
-      };
-
-      // Add new price to productData.price array
-      if (!productData.price) {
-        productData.price = [newPrice];
-      } else {
-        productData.price.push(newPrice);
-      }
-    }
-  }
-
   // Update the product dateModified
   productData.lastModified = new Date().toISOString();
 
@@ -286,3 +283,10 @@ export const deletePhoto = async (photoURL: string, productId: string) => {
     await updateDoc(productRef, { photos: updatedPhotos });
   }
 };
+
+export interface Size {
+  dateAdded: string;
+  price: number;
+  stocks: number;
+  reserved_stocks: number;
+}

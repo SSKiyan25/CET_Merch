@@ -10,28 +10,29 @@ import {
   limit,
 } from "firebase/firestore";
 
+export interface SizeType {
+  dateAdded: string;
+  price: number;
+  reserved_stocks: number;
+  stocks: number | string;
+  remaining_stocks: number;
+}
+
 export interface Product {
   category: string;
   coverPhoto: string;
   dateCreated: string;
   description: string;
-  discountedPrice: number;
   faction: string;
+  sizes: Record<string, SizeType[]>;
   id: string;
   isArchived: boolean;
   isPublished: boolean;
   lastModified: string;
   name: string;
-  originalPrice: number;
   photos: string[];
-  price: {
-    dateCreated: string;
-    discountedPrice: number;
-    originalPrice: number;
-  }[];
-  sizes: { stocks: number; value: string }[];
-  status: string;
   totalOrders: number;
+  totalSales: number;
   views: number;
 }
 

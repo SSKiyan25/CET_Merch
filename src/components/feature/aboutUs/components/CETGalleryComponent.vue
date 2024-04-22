@@ -11,7 +11,9 @@
       </h2>
     </div>
 
-    <div class="relative h-[20rem] overflow-hidden rounded-lg md:h-[44rem]">
+    <div
+      class="relative h-[20rem] w-11/12 overflow-hidden rounded-lg md:h-[44rem] px-4 mx-auto"
+    >
       <!-- Videos -->
       <div
         v-for="(link, index) in ['u2eSru5ADUY', 'zzmhAzvpyY4', 'tGxEK9vBXgU']"
@@ -19,13 +21,17 @@
         class="hidden duration-700 ease-in-out"
         data-carousel-item
       >
-        <iframe
-          :src="`https://www.youtube.com/embed/${link}`"
-          class="absolute block h-[20rem] w-full md:w-4/5 md:h-[42rem] object-fit -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 rounded-sm"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
+        <div class="flex justify-center pt-4 h-full">
+          <iframe
+            class="w-full h-full"
+            :src="`https://www.youtube.com/embed/${link}`"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe>
+        </div>
       </div>
     </div>
     <div class="flex justify-center items-center pt-2">

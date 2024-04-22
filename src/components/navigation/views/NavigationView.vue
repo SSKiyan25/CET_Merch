@@ -244,9 +244,6 @@
                                   <label v-if="product.size !== 'N/A'"
                                     >Size: {{ product.size }}
                                   </label>
-                                  <label
-                                    >Total Price: {{ product.totalPrice }}
-                                  </label>
                                 </div>
                               </AccordionContent>
                             </AccordionItem>

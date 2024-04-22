@@ -21,8 +21,8 @@
       </div>
       <div class="p-1" v-if="product">
         <form @submit.prevent="editProduct(product.id)">
-          <div class="flex flex-row">
-            <div class="flex flex-col w-1/2 pr-2">
+          <div class="flex flex-col md:flex-row">
+            <div class="flex flex-col w-full md:w-1/2 pr-2">
               <label for="product-name" class="text-sm font-medium py-2">
                 Product Name*
               </label>
@@ -30,14 +30,14 @@
                 type="text"
                 id="product-name"
                 v-model="product.name"
-                class="p-2 border-2 text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
+                class="p-2 border-2 text-xs md:text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
                 placeholder="{{ product.name }}"
                 required
               />
             </div>
             <div
               v-if="userData && userData.faction === 'all'"
-              class="flex flex-col w-1/2 pl-2"
+              class="flex flex-col w-full md:w-1/2 md:pl-2"
             >
               <label for="product-faction" class="text-sm font-medium py-2">
                 Product Faction
@@ -60,7 +60,7 @@
           </div>
 
           <div class="flex mt-4">
-            <div class="flex flex-col w-1/2 pr-2">
+            <div class="flex flex-col w-full md:w-1/2 pr-2">
               <label for="product-category" class="text-sm font-medium py-2">
                 Product Category*
                 <span class="text-xs text-secondary-foreground/70"
@@ -82,141 +82,8 @@
                 </option>
               </select>
             </div>
-            <div class="flex flex-row w-1/2 space-x-1">
-              <div class="flex flex-col w-1/2 pl-2">
-                <label
-                  for="product-original-price"
-                  class="text-sm font-medium py-2"
-                >
-                  Product Price*
-                </label>
-                <input
-                  type="number"
-                  id="product-original-price"
-                  v-model="latestPrice.originalPrice"
-                  step="0.01"
-                  class="p-2 border-2 text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
-                  placeholder="{{ latestPrice.originalPrice }}"
-                  required
-                />
-              </div>
-              <div class="flex flex-col w-1/2 pr-2">
-                <label
-                  for="product-discounted-price"
-                  class="text-sm font-medium py-2"
-                >
-                  Discounted Price
-                  <span class="text-xs opacity-50">(Optional)</span>
-                </label>
-                <input
-                  type="number"
-                  id="product-discounted-price"
-                  v-model="latestPrice.discountedPrice"
-                  step="0.01"
-                  class="p-2 border-2 text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
-                  placeholder="{{ latestPrice.discountedPrice }}"
-                  required
-                />
-              </div>
-            </div>
           </div>
-          <div class="flex flex-col mt-4">
-            <label for="product-quantity" class="text-sm font-medium py-2">
-              Sizes
-            </label>
-            <div class="flex flex-row">
-              <div class="flex items-center me-4">
-                <input
-                  id="inline-checkbox-s"
-                  type="checkbox"
-                  value="S"
-                  v-model="naChecked"
-                  class="w-4 h-4 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2"
-                />
-                <label
-                  for="inline-checkbox-s"
-                  class="ms-2 text-sm font-medium text-secondary-foreground"
-                  >N/A</label
-                >
-              </div>
-              <div class="flex flex-wrap">
-                <div
-                  v-for="(size, index) in allSizes"
-                  :key="index"
-                  class="flex flex-row flex-wrap items-center me-4"
-                >
-                  <div class="flex flex-row flex-wrap items-center space-x-1">
-                    <div
-                      :class="`flex flex-row space-x-1 border p-2 rounded-sm borrder-primary items-center me-4 mb-2 ${
-                        naChecked ? 'opacity-50' : ''
-                      }`"
-                    >
-                      <label class="text-sm">{{ index + 1 }}-</label>
-                      <label class="text-xs">Size: </label>
-                      <input
-                        type="text"
-                        v-model="size.value"
-                        v-bind:disabled="naChecked"
-                        class="w-16 h-8 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
-                        pattern="\S+"
-                        title="This field should not contain spaces."
-                      />
-                      <label class="text-xs">Stocks:</label>
 
-                      <input
-                        type="number"
-                        v-model="size.stocks"
-                        v-bind:disabled="naChecked"
-                        min="0"
-                        class="w-16 h-8 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
-                      />
-                      <button
-                        title="Click to add more options"
-                        class="py-2 px-4 bg-red-600 rounded-sm"
-                        @click.prevent="removeSize(index)"
-                        v-bind:disabled="naChecked"
-                      >
-                        <span class="text-xs text-white font-semibold"
-                          >Remove</span
-                        >
-                      </button>
-                      <button
-                        title="Click to add more options"
-                        class="py-2 px-4 bg-emerald-600 rounded-sm"
-                        @click.prevent="addSize"
-                        v-bind:disabled="naChecked"
-                      >
-                        <span class="text-xs text-white font-semibold"
-                          >Add</span
-                        >
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="pt-4 flex-flex-col items-center">
-              <label class="text-xs opacity-70 italic"
-                >*Accessible if N/A checkbox is clicked</label
-              >
-              <div
-                class="flex flex-row border w-1/5 items-center rounded-sm p-2 space-x-2"
-                :class="`flex flex-row border w-1/5 items-center rounded-sm p-2 space-x-2 ${
-                  !naChecked ? 'opacity-50' : ''
-                }`"
-              >
-                <label class="text-sm">General Stocks:</label>
-                <input
-                  type="number"
-                  min="1"
-                  max="2000"
-                  v-model="product.generalStocks"
-                  v-bind:disabled="!naChecked"
-                  class="rounded-sm p-2 text-xs"
-                />
-              </div>
-            </div>
-          </div>
           <div class="flex flex-col mt-4">
             <label for="product-description" class="text-sm font-medium py-2">
               Product Description
@@ -350,6 +217,7 @@
       </div>
     </div>
   </div>
+  <div class="h-16"></div>
 </template>
 
 <script setup lang="ts">
@@ -358,9 +226,7 @@ import AdminSidebar from "../AdminSidebar.vue";
 import { Button } from "@/components/ui/button";
 import { setup as setupProductController } from "@/components/admin/dashboard/controllers/adminProductsController";
 import { useRouter } from "vue-router";
-import { ref, computed, watch, nextTick } from "vue";
-
-const naChecked = ref(false);
+import { ref } from "vue";
 const router = useRouter();
 const {
   product,
@@ -374,40 +240,6 @@ const {
 const additionalPhotosInput = ref<HTMLInputElement | null>(null);
 
 let isLoading = ref(false);
-const allSizes = ref([{ value: "", stocks: 0 }]);
-
-const addSize = () => {
-  allSizes.value = [...allSizes.value, { value: "", stocks: 0 }];
-};
-
-let originalSizes = ref<any[]>([]);
-
-watch(product, async (newValue) => {
-  if (newValue && newValue.sizes) {
-    allSizes.value = newValue.sizes;
-    originalSizes.value = [...newValue.sizes];
-  } else {
-    allSizes.value = [{ value: "", stocks: 0 }];
-    await nextTick();
-  }
-});
-
-watch(naChecked, (newValue) => {
-  if (newValue) {
-    allSizes.value = [{ value: "", stocks: 0 }];
-  } else {
-    allSizes.value =
-      originalSizes.value.length > 0
-        ? [...originalSizes.value]
-        : [{ value: "", stocks: 0 }];
-  }
-});
-
-const removeSize = (index: number) => {
-  if (allSizes.value.length > 1) {
-    allSizes.value.splice(index, 1);
-  }
-};
 
 const factions = [
   { value: "CET", label: "CET" },
@@ -438,31 +270,14 @@ const deletePhotoFromProduct = async (index: number) => {
   }
 };
 
-const latestPrice = computed(() => {
-  if (product.value.price && product.value.price.length > 0) {
-    return product.value.price[product.value.price.length - 1];
-  }
-  return { originalPrice: "", discountedPrice: "" };
-});
-
 const editProduct = async (id: string) => {
   try {
     isLoading.value = true;
-    let sizes = allSizes.value
-      .filter((size) => size.value.trim() !== "")
-      .map((size) => ({ value: size.value, stocks: size.stocks }));
-
-    // Remove duplicates
-    sizes = Array.from(new Set(sizes.map((size) => JSON.stringify(size)))).map(
-      (size) => JSON.parse(size)
-    );
 
     const productData = {
       ...product.value,
-      sizes: sizes,
-      originalPrice: latestPrice.value.originalPrice,
-      discountedPrice: latestPrice.value.discountedPrice,
     };
+
     const additionalPhotosFiles = additionalPhotosInput.value?.files || null;
     await editProductController(id, productData, additionalPhotosFiles);
     console.log("Product update was successful");

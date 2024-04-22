@@ -64,3 +64,23 @@ export async function deleteProductFromCart(orderId: string, index: number) {
 
   return newCartArray;
 }
+
+export async function updateOrderInDatabase(order: any) {
+  const orderDocRef = doc(db, "userOrder", order.id);
+
+  // Update the order in the database
+  await updateDoc(orderDocRef, {
+    cart: order.cart,
+  });
+
+  // Return the updated order
+  return order;
+}
+
+export const updateOrderInDatabaseAfterConfirm = async (order: any) => {
+  const orderRef = doc(db, "userOrder", order.id);
+  await updateDoc(orderRef, {
+    totalPrice: order.totalPrice,
+  });
+  return order;
+};

@@ -47,41 +47,38 @@
                 {{ product.name }}
               </span>
             </div>
-            <div
-              class="flex flex-col flex-wrap py-6"
-              v-if="product.sizes.length > 0 && product.sizes[0].value !== ''"
-            >
-              <span class="text-sm"> Available Sizes</span>
+            <div class="flex flex-col flex-wrap py-6" v-if="hasAvailableStocks">
+              <span class="text-sm"> Available Sizes & Stocks</span>
               <div class="flex flex-row flex-wrap py-4 pl-4 space-x-1">
                 <Button
-                  v-for="size in product.sizes"
-                  :key="size.value"
+                  v-for="sizeName in Object.keys(product.sizes)"
+                  :key="sizeName"
                   :variant="
-                    selectedSize.value === size.value ? 'default' : 'secondary'
+                    selectedSize.size === sizeName ? 'default' : 'secondary'
                   "
-                  @click.prevent="selectSize(size)"
+                  @click.prevent="selectSize(sizeName)"
                   class="mb-2"
-                  v-bind:disabled="
-                    size.stocks === 0 || newAddToCartData.isPreOrdered
-                  "
+                  :disabled="isButtonDisabled(sizeName)"
                 >
-                  {{ size.value }} - {{ size.stocks }}
+                  {{ sizeName }} -
+                  <template v-if="product.sizes[sizeName]">
+                    <template
+                      v-if="findAvailableSizeItem(product.sizes[sizeName])"
+                    >
+                      {{
+                        findAvailableSizeItem(product.sizes[sizeName])
+                          ?.remaining_stocks
+                      }}
+                    </template>
+                  </template>
                 </Button>
               </div>
             </div>
-            <div v-else class="py-4">
-              <div>
-                <span class="text-sm"
-                  >Stocks:
-                  <span class="underline font-bold">{{
-                    product.generalStocks
-                  }}</span>
-                </span>
-              </div>
-            </div>
+
+            <!--Size Pre Order-->
             <div
               class="flex flex-col space-y-2"
-              v-if="product.sizes.length > 0 && product.sizes[0].value !== ''"
+              v-if="Object.keys(product.sizes)[0] !== 'N/A'"
             >
               <div class="flex flex-row items-center">
                 <span class="text-xs"
@@ -115,11 +112,21 @@
                 class="flex flex-row space-x-2 text-xs items-center"
               >
                 <label>Size: </label>
-                <input
+                <select
                   v-model="newAddToCartData.size"
-                  type="text"
                   class="p-2 w-24 h-8 text-xs rounded-sm"
-                />
+                >
+                  <option value="XXS">XXS</option>
+                  <option value="XS">XS</option>
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                  <option value="2XL">2XL</option>
+                  <option value="3XL">3XL</option>
+                  <option value="4XL">4XL</option>
+                  <option value="5XL">5XL</option>
+                </select>
                 <button
                   @click.prevent="
                     newAddToCartData.isPreOrdered = false;
@@ -131,6 +138,7 @@
                 </button>
               </div>
             </div>
+            <!--N/A Pre Order Div-->
             <div v-else class="pb-4">
               <div class="flex flex-row items-center">
                 <span class="text-xs"
@@ -138,11 +146,6 @@
                   <button
                     class="p-2 rounded-sm bg-emerald-700 text-white"
                     @click.prevent="newAddToCartData.isPreOrdered = true"
-                    v-bind:disabled="product.generalStocks > 0"
-                    :class="{
-                      'cursor-not-allowed opacity-50':
-                        product.generalStocks > 0,
-                    }"
                   >
                     Pre-Order
                   </button>
@@ -163,7 +166,7 @@
                   </HoverCard>
                 </span>
               </div>
-              <!--Pre-Order Input Field-->
+              <!--Pre-Order N/A Field-->
               <div
                 v-show="newAddToCartData.isPreOrdered"
                 class="flex flex-row pt-4 space-x-2 text-xs items-center"
@@ -179,7 +182,9 @@
             </div>
 
             <div class="flex flex-row pt-4">
-              <span class="pt-2.5 pr-2 text-xs md:text-sm"> Quantity : </span>
+              <span class="pt-2.5 pr-2 text-[10px] md:text-xs">
+                Quantity :
+              </span>
               <div class="relative flex items-center max-w-[8rem]">
                 <button
                   type="button"
@@ -205,13 +210,24 @@
                   </svg>
                 </button>
                 <input
-                  type="text"
+                  type="number"
                   id="quantity-input"
                   data-input-counter
                   aria-describedby="helper-text-explanation"
-                  class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5"
+                  class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-xs md:text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5"
                   placeholder="999"
-                  v-model="newAddToCartData.quantity"
+                  v-model.number="newAddToCartData.quantity"
+                  :disabled="
+                    !selectedSize.size || !newAddToCartData.isPreOrdered
+                  "
+                  :min="1"
+                  :max="
+                    newAddToCartData.isPreOrdered
+                      ? undefined
+                      : selectedSize.data.stocks
+                      ? Number(selectedSize.data.stocks)
+                      : undefined
+                  "
                   required
                 />
                 <button
@@ -238,17 +254,28 @@
                   </svg>
                 </button>
               </div>
-              <span class="pt-2.5 px-2 text-xs md:text-sm"
-                >Initial Price :</span
-              >
-              <span class="pt-2.5 text-sm text-primary">
-                {{ product.price[product.price.length - 1].originalPrice }}
-              </span>
-              <span
-                class="material-symbols-outlined text-sm pt-2.5 pl-1 opacity-80"
-              >
-                help
-              </span>
+              <div class="flex flex-col md:flex-row px-2 items-center">
+                <span class="pt-2.5 px-1 md:px-2 text-[10px] md:text-xs"
+                  >Initial Price :</span
+                >
+                <div class="flex flex-row items-center">
+                  <span class="text-[10px] md:text-xs text-primary">
+                    {{ selectedSize.data.price * newAddToCartData.quantity }}
+                  </span>
+                  <HoverCard>
+                    <HoverCardTrigger>
+                      <span
+                        class="material-symbols-outlined text-sm pt-1 pl-1 opacity-80 hover:course-pointer"
+                      >
+                        help
+                      </span>
+                    </HoverCardTrigger>
+                    <HoverCardContent>
+                      <span class="text-xs"> Prices may vary over time. </span>
+                    </HoverCardContent>
+                  </HoverCard>
+                </div>
+              </div>
             </div>
           </div>
           <SheetFooter
@@ -314,7 +341,6 @@
                         <label v-if="product.size !== ''"
                           >Size: {{ product.size }}</label
                         >
-                        <label>Total Price: {{ product.totalPrice }} </label>
                       </div>
                     </AccordionContent>
                   </AccordionItem>
@@ -340,7 +366,7 @@
                 <router-link
                   :to="{
                     name: 'confirmOrder',
-                    params: { id: order.id },
+                    query: { id: order.id },
                   }"
                 >
                   <button
@@ -417,26 +443,36 @@ const router = useRouter();
 const orderData = ref<OrderDataType[] | null>(null);
 const ifCartEmpty = ref(true);
 
-type PriceType = {
-  dateCreated: string;
-  discountedPrice: number;
-  originalPrice: number;
+type SizeItem = {
+  dateAdded: string;
+  price: number;
+  reserved_stocks: number;
+  stocks: number;
+  remaining_stocks: number;
 };
 
-type sizesData = {
-  value: string;
-  stocks: number;
+type SizesData = {
+  [size: string]: SizeItem[];
 };
 
 type ProductType = {
   id: string;
   name: string;
   category: string;
-  price: PriceType[];
-  sizes: sizesData[];
-  generalStocks: number;
+  coverPhoto: string;
+  dateCreated: string;
+  description: string;
   faction: string;
+  isArchived: boolean;
+  isPublished: boolean;
+  lastModified: string;
+  photos: string[];
+  sizes: SizesData;
+  totalOrders: number;
+  totalSales: number;
+  views: number;
 };
+
 type GetProductByIdType = (id: string) => ProductType;
 const getProductById = inject("getProductById") as GetProductByIdType;
 const selectedTab = ref("cart");
@@ -452,7 +488,12 @@ const props = defineProps({
 
 // Define the increment function
 const increment = () => {
-  newAddToCartData.value.quantity++;
+  if (
+    newAddToCartData.value.isPreOrdered ||
+    newAddToCartData.value.quantity < Number(selectedSize.value.data.stocks)
+  ) {
+    newAddToCartData.value.quantity++;
+  }
 };
 
 // Define the decrement function
@@ -502,18 +543,12 @@ const handleFormCartSubmit = async () => {
     newAddToCartData.value = {
       productId: product.value.id,
       quantity: newAddToCartData.value.quantity,
-      totalPrice: parseFloat(
-        (
-          product.value.price[product.value.price.length - 1].originalPrice *
-          newAddToCartData.value.quantity
-        ).toFixed(2)
-      ),
-      size: newAddToCartData.value.isPreOrdered
-        ? newAddToCartData.value.size
-        : product.value.sizes.length > 0
-        ? selectedSize.value.value
-        : newAddToCartData.value.size,
+      size:
+        newAddToCartData.value.isPreOrdered && newAddToCartData.value.size
+          ? newAddToCartData.value.size
+          : selectedSize.value.size,
       isPreOrdered: newAddToCartData.value.isPreOrdered,
+      totalPrice: 0,
     };
     await handleAddToCartSubmit(newAddToCartData.value);
 
@@ -524,9 +559,9 @@ const handleFormCartSubmit = async () => {
     newAddToCartData.value = {
       productId: "",
       quantity: 0,
-      totalPrice: 0,
       size: "",
       isPreOrdered: false,
+      totalPrice: 0,
     };
 
     // Fetch the updated order data
@@ -558,16 +593,48 @@ const handleFormCartSubmit = async () => {
   }
 };
 
-let _selectedSize = ref({ value: "", stocks: 0 });
+let _selectedSize = ref({
+  size: "",
+  data: {
+    dateAdded: "",
+    price: 0,
+    reserved_stocks: 0,
+    stocks: 0,
+    remaining_stocks: 0,
+  },
+});
+
+const findAvailableSizeItem = (sizeItems: SizeItem[]): SizeItem | null => {
+  for (let i = 0; i < sizeItems.length; i++) {
+    const sizeItem = sizeItems[i];
+    if (Number(sizeItem.remaining_stocks) > 0) {
+      return sizeItem;
+    }
+  }
+  return null;
+};
 
 const selectedSize = computed({
   get: () => {
     if (
       product.value &&
       product.value.sizes &&
-      _selectedSize.value.value === ""
+      Object.keys(_selectedSize.value.data).length === 0
     ) {
-      _selectedSize.value = product.value.sizes[0];
+      const sizes: Record<string, SizeItem> = {};
+      for (let sizeName in product.value.sizes) {
+        const sizeItems = product.value.sizes[sizeName];
+        const availableSizeItem = findAvailableSizeItem(sizeItems);
+        if (availableSizeItem) {
+          sizes[sizeName] = availableSizeItem;
+          break;
+        }
+      }
+      const firstSizeKey = Object.keys(sizes)[0];
+      _selectedSize.value = {
+        size: firstSizeKey,
+        data: sizes[firstSizeKey],
+      };
     }
     return _selectedSize.value;
   },
@@ -576,8 +643,35 @@ const selectedSize = computed({
   },
 });
 
-const selectSize = (size: sizesData) => {
-  selectedSize.value = size;
+const selectSize = (size: any) => {
+  const sizeItems = product.value.sizes[size];
+  if (sizeItems) {
+    const availableSizeItem = findAvailableSizeItem(sizeItems);
+    if (availableSizeItem && Number(availableSizeItem.remaining_stocks) > 0) {
+      selectedSize.value = { size: size, data: availableSizeItem };
+    }
+  }
+};
+
+const hasAvailableStocks = computed(() => {
+  for (let sizeData of Object.values(product.value.sizes)) {
+    if (findAvailableSizeItem(sizeData)) {
+      return true;
+    }
+  }
+  return false;
+});
+
+const isButtonDisabled = (sizeName: string) => {
+  const sizeItems = product.value.sizes[sizeName];
+  if (!sizeItems) {
+    return true;
+  }
+  const availableSizeItem = findAvailableSizeItem(sizeItems);
+  return (
+    newAddToCartData.value.isPreOrdered ||
+    (availableSizeItem && Number(availableSizeItem.remaining_stocks) === 0)
+  );
 };
 
 const totalOrdersOnQueue = ref(0);

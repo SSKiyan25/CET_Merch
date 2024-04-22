@@ -148,23 +148,28 @@
                 class="block mb-2 text-sm text-secondary-foreground font-medium"
                 >Products:</label
               >
-              <div
-                v-for="product in products"
-                :key="product.productId"
-                class="pl-4"
-              >
-                <label class="text-sm opacity-80"
-                  >{{ product.details.name }} ({{ product.quantity }}) -
-                  {{ product.totalPrice }}</label
+              <div v-if="order">
+                <div
+                  v-for="item in order.cart"
+                  :key="item.productId"
+                  class="pl-4"
                 >
+                  <label class="text-sm opacity-80">
+                    {{ item.productName }} - {{ item.quantity }} - P{{
+                      item.totalPrice
+                    }}
+                  </label>
+                </div>
               </div>
             </div>
             <div>
               <label
                 class="block mb-2 text-sm text-secondary-foreground font-medium"
               >
-                Total Amount:
-                <span class="text-primary underline"> {{ totalPrice }}</span>
+                Total Order Amount:
+                <span class="text-primary underline" v-if="order">
+                  {{ order.totalPrice }}
+                </span>
               </label>
             </div>
           </div>
@@ -235,7 +240,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { db, auth } from "@/firebase/init";
 import {
@@ -268,11 +273,15 @@ const formData = ref({
 
 const fetchProductDetails = async (productId: string) => {
   try {
+    if (cache.has(productId)) {
+      return cache.get(productId);
+    }
     const docRef = doc(db, "products", productId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      //console.log(docSnap.data());
-      return docSnap.data();
+      const productData = docSnap.data();
+      cache.set(productId, productData);
+      return productData;
     } else {
       console.log("No such document!");
     }
@@ -300,27 +309,6 @@ const fetchOrder = async (orderId: string) => {
     console.error("Error getting document:", error);
   }
 };
-
-const totalPrice = computed(() => {
-  if (order.value && order.value.cart) {
-    return parseFloat(
-      order.value.cart
-        .reduce(
-          (
-            total: number,
-            item: { details: { price: any[] }; quantity: number }
-          ) =>
-            total +
-            item.details.price[item.details.price.length - 1].originalPrice *
-              item.quantity,
-          0
-        )
-        .toFixed(2)
-    );
-  } else {
-    return 0;
-  }
-});
 
 const productFaction = computed(() => {
   if (products.value.length > 0) {
@@ -374,11 +362,44 @@ async function generateOrderRefNum() {
 
 let orderRefNumDisplay = ref("");
 
+async function updateProductStocks(
+  productId: string,
+  size: string,
+  quantity: number
+) {
+  const productRef = doc(db, "products", productId);
+  const productSnap = await getDoc(productRef);
+  if (productSnap.exists()) {
+    const productData = productSnap.data();
+    const sizeArray = productData.sizes[size];
+    let remainingQuantity = quantity;
+
+    for (let sizeData of sizeArray) {
+      if (remainingQuantity <= 0) break;
+
+      if (sizeData.remaining_stocks >= remainingQuantity) {
+        sizeData.remaining_stocks -= remainingQuantity;
+        sizeData.reserved_stocks += remainingQuantity;
+        remainingQuantity = 0;
+      } else {
+        remainingQuantity -= sizeData.remaining_stocks;
+        sizeData.reserved_stocks += sizeData.remaining_stocks;
+        sizeData.remaining_stocks = 0;
+      }
+    }
+
+    await updateDoc(productRef, { sizes: productData.sizes });
+  }
+}
+
 const submitOrder = async (formData: any) => {
   try {
     loading.value = true;
     const userId = auth.currentUser?.uid;
-    const orderId = String(route.params.id);
+    let orderId = route.params.orderId;
+    if (Array.isArray(orderId)) {
+      orderId = orderId[0];
+    }
     if (!userId) throw new Error("User not logged in");
 
     const userRef = doc(db, "users", userId);
@@ -392,13 +413,21 @@ const submitOrder = async (formData: any) => {
         userName: formData.lastName + ", " + formData.firstName,
         userContactNumber: formData.phoneNumber,
         studentId: formData.studentId,
-        totalPrice: totalPrice.value,
         userEmailAddress: formData.email,
         paymentMethod: formData.paymentMethod,
         paymentStatus: "pending",
         orderStatus: "processing",
         dateOrdered: new Date().toISOString(),
       });
+
+      for (let product of products.value) {
+        await updateProductStocks(
+          product.productId,
+          product.size,
+          product.quantity
+        );
+      }
+
       orderRefNumDisplay.value = orderRefNumValue;
       loading.value = false;
       2500;
@@ -419,8 +448,13 @@ onMounted(async () => {
     const userSnap = await getDoc(userRef);
     if (userSnap.exists()) {
       const userData = userSnap.data();
-      formData.value.firstName = userData.name.split(", ")[1] || "";
-      formData.value.lastName = userData.name.split(", ")[0] || "";
+      if (userData.name) {
+        const nameParts = userData.name
+          .split(",")
+          .map((part: string) => part.trim());
+        formData.value.lastName = nameParts[0] || "";
+        formData.value.firstName = nameParts[1] || "";
+      }
       formData.value.email = userData.email || "";
       formData.value.phoneNumber = userData.phoneNumber || "";
       formData.value.studentId = userData.studentId || "";
@@ -428,23 +462,24 @@ onMounted(async () => {
   }
 });
 
-watch(
-  () => route.params.id,
-  async (newId, oldId) => {
-    loading.value = true;
-    if (typeof newId === "string" && newId !== oldId) {
-      if (cache.has(newId)) {
-        order.value = cache.get(newId);
-      } else {
-        const fetchedOrder = await fetchOrder(newId);
-        if (fetchedOrder) {
-          order.value = fetchedOrder;
-          cache.set(newId, order.value);
+onMounted(async () => {
+  let orderId = route.params.orderId;
+  if (Array.isArray(orderId)) {
+    orderId = orderId[0];
+  }
+  console.log("Order ID: ", orderId);
+  if (orderId) {
+    const fetchedOrder = await fetchOrder(orderId);
+    if (fetchedOrder && fetchedOrder.cart) {
+      for (let item of fetchedOrder.cart) {
+        const product = await fetchProductDetails(item.productId);
+        if (product) {
+          item.productName = product.name;
         }
       }
+      order.value = fetchedOrder;
+      console.log("Order: ", order.value);
     }
-    loading.value = false;
-  },
-  { immediate: true }
-);
+  }
+});
 </script>

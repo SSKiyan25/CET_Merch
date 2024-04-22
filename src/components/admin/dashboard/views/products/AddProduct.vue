@@ -24,9 +24,12 @@
       </div>
       <div class="p-1">
         <form @submit.prevent="handleFormSubmit">
-          <div class="flex flex-row">
-            <div class="flex flex-col w-1/2 pr-2">
-              <label for="product-name" class="text-sm font-medium py-2">
+          <div class="flex flex-col md:flex-row">
+            <div class="flex flex-col w-full md:w-1/2 pr-2">
+              <label
+                for="product-name"
+                class="text-xs md:text-sm font-medium py-2"
+              >
                 Product Name
                 <span class="text-red-400 font-bold text-sm">*</span>
               </label>
@@ -34,23 +37,26 @@
                 type="text"
                 id="product-name"
                 v-model="newProduct.name"
-                class="p-2 border text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
+                class="p-2 border text-xs md:text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
                 placeholder="Enter product name"
                 required
               />
             </div>
             <div
               v-if="userData && userData.isAdmin"
-              class="flex flex-col w-1/2 pl-2"
+              class="flex flex-col w-full md:w-1/2 md:pl-2"
             >
-              <label for="product-faction" class="text-sm font-medium py-2">
+              <label
+                for="product-faction"
+                class="text-xs md:text-sm font-medium py-2"
+              >
                 Product Faction
-                <span class="text-red-400 font-bold text-sm">*</span>
+                <span class="text-red-400 font-bold text-xs md:text-sm">*</span>
               </label>
               <select
                 id="product-faction"
                 v-model="newProduct.faction"
-                class="p-2 border text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
+                class="p-2 border text-xs md:text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
                 required
               >
                 <option disabled value="">Please select a faction</option>
@@ -65,10 +71,13 @@
             </div>
           </div>
           <div class="flex mt-4">
-            <div class="flex flex-col w-1/2 pr-2">
-              <label for="product-category" class="text-sm font-medium py-2">
+            <div class="flex flex-col w-full pr-2">
+              <label
+                for="product-category"
+                class="text-xs md:text-sm font-medium py-2"
+              >
                 Product Category
-                <span class="text-red-400 font-bold text-sm">*</span>
+                <span class="text-red-400 font-bold text-xs md:text-sm">*</span>
                 <span class="text-xs text-secondary-foreground/70"
                   >(T-Shirt, Polo-Shirt, Hoodie, Stickers, Other)</span
                 >
@@ -76,7 +85,7 @@
               <select
                 id="product-category"
                 v-model="newProduct.category"
-                class="p-2 border text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
+                class="p-2 border text-xs md:text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
                 required
               >
                 <option disabled value="">Please select a category</option>
@@ -88,125 +97,74 @@
                 <option value="Other">Other</option>
               </select>
             </div>
-            <div class="flex flex-row w-1/2">
-              <div class="flex flex-col w-1/2 pl-2">
-                <label for="product-price" class="text-sm font-medium py-2">
-                  Product Price
-                  <span class="text-red-400 font-bold text-sm">*</span>
-                </label>
-                <input
-                  type="number"
-                  id="product-original-price"
-                  v-model="newProduct.price[0].originalPrice"
-                  step="0.01"
-                  class="p-2 border text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
-                  placeholder="Enter product price"
-                  required
-                />
-              </div>
-              <div class="flex flex-col w-1/2 pl-2">
-                <label
-                  for="product-discounted-price"
-                  class="text-sm font-medium py-2"
-                >
-                  Discounted Price
-                  <span class="text-xs opacity-50">(Optional)</span>
-                </label>
-                <input
-                  type="number"
-                  id="product-discounted-price"
-                  v-model="newProduct.price[0].discountedPrice"
-                  step="0.01"
-                  class="p-2 border text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
-                  placeholder="Enter discounted price (optional)"
-                />
-              </div>
-            </div>
           </div>
           <div class="flex flex-col mt-4">
-            <label for="product-quantity" class="text-sm font-medium py-2">
+            <label
+              for="product-quantity"
+              class="text-xs md:text-sm font-medium py-2"
+            >
               Sizes
               <span class="opacity-50 text-xs"
-                >(One at a Time if adding other sizes)</span
+                >(One at a Time if adding sizes)</span
               >
             </label>
-            <div class="flex flex-row items-center">
-              <div class="flex flex-col me-4">
-                <div class="flex items-center">
-                  <input
-                    id="inline-checkbox-na"
-                    type="checkbox"
-                    value="none"
-                    v-model="naChecked"
-                    class="w-4 h-4 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2"
-                  />
-                  <label
-                    for="inline-checkbox-xs"
-                    class="ms-2 text-sm font-medium text-secondary-foreground"
-                    >N/A</label
-                  >
-                </div>
-              </div>
-              <div class="flex flex-row flex-wrap">
-                <div
-                  v-for="(size, index) in otherSizes"
-                  :key="index"
-                  class="flex flex-row space-x-1 items-center"
-                >
-                  <div
-                    :class="`flex flex-row space-x-1 border p-2 rounded-sm borrder-primary items-center me-4 mb-2 ${
-                      naChecked ? 'opacity-50' : ''
-                    }`"
-                  >
-                    <label class="text-sm">{{ index + 1 }}-</label>
-                    <label class="text-xs">Size: </label>
-                    <input
-                      type="text"
-                      v-model="size.value"
-                      v-bind:disabled="naChecked"
-                      class="w-48 h-8 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2 text-[10px]"
-                      pattern="\S+"
-                      title="This field should not contain spaces."
-                    />
-                    <label class="text-xs">Stocks: </label>
-                    <input
-                      type="number"
-                      min="0"
-                      v-model="size.stocks"
-                      class="w-16 h-8 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2 text-xs"
-                    />
-                    <button
-                      title="Click to add more options"
-                      variant="default"
-                      class="py-2 px-4 bg-emerald-600 rounded-sm"
-                      @click.prevent="addSize"
-                      v-bind:disabled="naChecked"
-                    >
-                      <span class="text-xs text-white font-semibold">Add</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="pt-4 flex-flex-col items-center">
-              <label class="text-xs opacity-70 italic"
-                >*Accessible if N/A checkbox is clicked</label
-              >
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div
-                class="flex flex-row border w-1/5 items-center rounded-sm p-2 space-x-2"
-                :class="`flex flex-row border w-1/5 items-center rounded-sm p-2 space-x-2 ${
-                  !naChecked ? 'opacity-50' : ''
-                }`"
+                v-for="size in [
+                  'N/A',
+                  'XXS',
+                  'XS',
+                  'S',
+                  'M',
+                  'L',
+                  'XL',
+                  '2XL',
+                  '3XL',
+                  '4XL',
+                  '5XL',
+                ]"
+                :key="size"
+                class="flex flex-row space-x-2 border w-full p-4 rounded-sm items-center justify-start font-medium text-sm"
               >
-                <label class="text-sm">General Stocks:</label>
                 <input
-                  type="number"
-                  min="1"
-                  max="2000"
-                  v-model="newProduct.generalStocks"
-                  v-bind:disabled="!naChecked"
-                  class="rounded-sm p-2 text-xs"
+                  type="checkbox"
+                  :id="size"
+                  :value="size"
+                  v-model="selectedSizes[size]"
+                  :class="{
+                    'opacity-50': size !== 'N/A' && selectedSizes['N/A'],
+                  }"
+                  class="p-3 bg-background text-primary/80 border-primary/40 rounded focus:ring-primary focus:ring-2"
+                  @change="size === 'N/A' && handleNA(size)"
+                  :disabled="size !== 'N/A' && selectedSizes['N/A']"
                 />
+                <label
+                  :for="size"
+                  :class="{
+                    'opacity-50': size !== 'N/A' && selectedSizes['N/A'],
+                  }"
+                  >{{ size }}</label
+                >
+
+                <div
+                  v-if="selectedSizes[size] && sizeData[size]"
+                  class="grid grid-row-1 pl-2 text-[10px] md:text-xs gap-2"
+                >
+                  <label>Stocks: </label>
+                  <input
+                    type="number"
+                    v-model="sizeData[size].stocks"
+                    placeholder="Stocks"
+                    class="border text-xs md:text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
+                  />
+                  <label>Price: </label>
+                  <input
+                    type="number"
+                    v-model="sizeData[size].price"
+                    placeholder="Price"
+                    class="border text-xs md:text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -324,12 +282,21 @@
   <div v-if="isOpening">
     <LoadingComponent />
   </div>
+  <div class="h-12"></div>
 </template>
 
 <script setup lang="ts">
 import NavBar from "../AdminNavBar.vue";
 import AdminSidebar from "../AdminSidebar.vue";
-import { onMounted, ref, watchEffect, watch } from "vue";
+import {
+  onMounted,
+  ref,
+  watchEffect,
+  Ref,
+  computed,
+  reactive,
+  ComputedRef,
+} from "vue";
 import { initFlowbite } from "flowbite";
 import { storage, db, auth } from "@/firebase/init";
 import {
@@ -354,6 +321,18 @@ import LoadingComponent from "@/components/feature/misc/LoadingComponent.vue";
 
 const router = useRouter();
 const isOpening = ref(false);
+const coverPhotoInput = ref<HTMLInputElement | null>(null);
+const productPhotosInput = ref<HTMLInputElement | null>(null);
+
+let isLoading = ref(false);
+let isUploadSuccessful = ref(false);
+
+watchEffect((cleanupFn) => {
+  const timer = setTimeout(() => (progress.value = 66), 500);
+  cleanupFn(() => clearTimeout(timer));
+});
+
+const progress = ref(13);
 let userData = ref<{
   faction?: string;
   products?: string[];
@@ -382,15 +361,13 @@ onMounted(async () => {
   isOpening.value = false;
 });
 
-type priceData = {
-  originalPrice: number;
-  discountedPrice: number;
-  dateCreated: string;
-};
-
 type sizeData = {
-  value: string;
-  stocks: number;
+  sizeName?: string;
+  dateAdded?: string;
+  reserved_stocks?: number;
+  remaining_stocks?: number;
+  stocks?: number;
+  price?: number;
 };
 
 interface ProductData {
@@ -398,8 +375,7 @@ interface ProductData {
   name: string;
   category: string;
   faction: string;
-  price: priceData[];
-  sizes: sizeData[];
+  sizes: Map<string, Array<sizeData>>;
   description: string;
   coverPhoto: File;
   photos: File[];
@@ -410,26 +386,13 @@ interface ProductData {
   dateCreated: string;
   lastModified: string;
   totalSales: number;
-  generalStocks: number;
 }
 
 const newProduct = ref<ProductData>({
   name: "",
   category: "",
   faction: "",
-  price: [
-    {
-      originalPrice: 0,
-      discountedPrice: 0,
-      dateCreated: "",
-    },
-  ],
-  sizes: [
-    {
-      value: "",
-      stocks: 0,
-    },
-  ],
+  sizes: new Map<string, Array<sizeData>>(),
   description: "",
   coverPhoto: new File([], ""),
   photos: [],
@@ -440,52 +403,65 @@ const newProduct = ref<ProductData>({
   dateCreated: "",
   lastModified: "",
   totalSales: 0,
-  generalStocks: 0,
 });
 
-const coverPhotoInput = ref<HTMLInputElement | null>(null);
-const productPhotosInput = ref<HTMLInputElement | null>(null);
-
-let isLoading = ref(false);
-let isUploadSuccessful = ref(false);
-
-const progress = ref(13);
-
-watchEffect((cleanupFn) => {
-  const timer = setTimeout(() => (progress.value = 66), 500);
-  cleanupFn(() => clearTimeout(timer));
+let selectedSizes: Ref<Record<string, boolean>> = ref({
+  "N/A": false,
+  XXS: false,
+  XS: false,
+  S: false,
+  M: false,
+  L: false,
+  XL: false,
+  "2XL": false,
+  "3XL": false,
+  "4XL": false,
+  "5XL": false,
 });
 
-const naChecked = ref(false);
-const otherSizes = ref<sizeData[]>([{ value: "", stocks: 0 }]);
+function getSizeData(size: string): ComputedRef<SizeData> {
+  return computed(() => {
+    if (selectedSizes.value[size] && newProduct.value.sizes.has(size)) {
+      let sizeArray = newProduct.value.sizes.get(size);
+      if (sizeArray && sizeArray.length > 0) {
+        return sizeArray[0];
+      }
+    }
+    return { stocks: 0, price: 0 }; // default value
+  });
+}
 
-let newSizeValue = ref("");
-
-const addSize = () => {
-  newSizeValue.value = newSizeValue.value.trim();
-
-  const sizeExists = otherSizes.value.some(
-    (size) => size.value === newSizeValue.value
-  );
-
-  if (sizeExists) {
-    alert("Size already existed");
-  } else {
-    //console.log("Adding new size");
-    const newSize = { value: newSizeValue.value, stocks: 0 };
-    otherSizes.value = [...otherSizes.value, newSize];
-  }
-  newSizeValue.value = "";
+type SizeData = {
+  sizeName?: string;
+  dateAdded?: string;
+  reserved_stocks?: number;
+  stocks?: number;
+  price?: number;
 };
 
-watch(
-  () => naChecked.value,
-  (newNaChecked) => {
-    if (newNaChecked) {
-      otherSizes.value = [{ value: "", stocks: 0 }];
+let sizeData: Record<string, SizeData> = reactive({
+  "N/A": getSizeData("N/A").value,
+  XXS: getSizeData("XXS").value,
+  XS: getSizeData("XS").value,
+  S: getSizeData("S").value,
+  M: getSizeData("M").value,
+  L: getSizeData("L").value,
+  XL: getSizeData("XL").value,
+  "2XL": getSizeData("2XL").value,
+  "3XL": getSizeData("3XL").value,
+  "4XL": getSizeData("4XL").value,
+  "5XL": getSizeData("5XL").value,
+});
+
+const handleNA = (size: string) => {
+  if (size === "N/A") {
+    for (let key in selectedSizes.value) {
+      if (key !== "N/A") {
+        selectedSizes.value[key] = false;
+      }
     }
   }
-);
+};
 
 //console.log(userData);
 const handleFormSubmit = async (): Promise<boolean> => {
@@ -613,17 +589,35 @@ const handleFormSubmit = async (): Promise<boolean> => {
 
     const photosURLs = await Promise.all(photosUploadPromises);
 
+    for (let size in selectedSizes.value) {
+      // If the size is selected and its price and stocks are not zero
+      if (
+        selectedSizes.value[size] &&
+        sizeData[size].stocks !== 0 &&
+        sizeData[size].price !== 0
+      ) {
+        // Add an entry in the sizes map
+        newProduct.value.sizes.set(size, [
+          {
+            dateAdded: new Date().toISOString(),
+            stocks: sizeData[size].stocks,
+            price: sizeData[size].price,
+            reserved_stocks: 0,
+            remaining_stocks: sizeData[size].stocks,
+          },
+        ]);
+      }
+    }
+
+    // Convert sizes to an object
+    const sizesObject = Object.fromEntries(newProduct.value.sizes.entries());
+
     //Upload Product Data to the Firestore Database
-    newProduct.value.price = newProduct.value.price.map((price) => ({
-      ...price,
-      dateCreated: new Date().toISOString(),
-    }));
     const productData = {
       name: newProduct.value.name,
       category: newProduct.value.category,
       faction: newProduct.value.faction,
-      price: newProduct.value.price,
-      sizes: otherSizes.value.filter((size) => size.value.trim() !== ""),
+      sizes: sizesObject,
       description: newProduct.value.description,
       coverPhoto: coverPhotoURL,
       photos: photosURLs,
@@ -634,30 +628,18 @@ const handleFormSubmit = async (): Promise<boolean> => {
       dateCreated: new Date().toISOString(),
       lastModified: "",
       totalSales: 0,
-      generalStocks: newProduct.value.generalStocks,
     };
 
     const docRef = await addDoc(collection(db, "products"), productData);
     await setDoc(docRef, { id: docRef.id }, { merge: true });
 
     // Reset form
+
     newProduct.value = {
       name: "",
       category: "",
       faction: "",
-      price: [
-        {
-          originalPrice: 0,
-          discountedPrice: 0,
-          dateCreated: "",
-        },
-      ],
-      sizes: [
-        {
-          value: "",
-          stocks: 0,
-        },
-      ],
+      sizes: new Map<string, Array<sizeData>>(),
       description: "",
       coverPhoto: new File([], ""),
       photos: [],
@@ -668,7 +650,6 @@ const handleFormSubmit = async (): Promise<boolean> => {
       dateCreated: "",
       lastModified: "",
       totalSales: 0,
-      generalStocks: 0,
     };
     isLoading.value = false;
     isUploadSuccessful.value = true;

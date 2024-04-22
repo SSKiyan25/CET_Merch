@@ -194,15 +194,24 @@
                         {{ product.name }}
                       </span>
                       <div class="flex flex-row items-center">
-                        <span
-                          class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
-                        >
-                          P
-                          {{
-                            product.price[product.price.length - 1]
-                              .originalPrice
-                          }}
-                        </span>
+                        <HoverCard>
+                          <HoverCardTrigger>
+                            <span
+                              class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary hover:underline hover:cursor-pointer"
+                            >
+                              P
+                              {{ product.displayPrice }}
+                            </span>
+                          </HoverCardTrigger>
+                          <HoverCardContent
+                            v-if="Object.keys(product.sizes)[0] !== 'N/A'"
+                          >
+                            <span class="text-xs">
+                              Prices may vary depending on the size of the
+                              product.
+                            </span>
+                          </HoverCardContent>
+                        </HoverCard>
                         <span class="pl-2 opacity-80 text-[10px] md:text-xs">
                           ({{ product.totalOrders }} Sold)
                         </span>
@@ -266,6 +275,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Popover, PopoverContent, PopoverTrigger } from "../../../ui/popover";
 import { Filter } from "lucide-vue-next";
 import { setup as setupProductsController } from "../controllers/productsController";

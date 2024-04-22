@@ -57,18 +57,27 @@
                     </span></router-link
                   >
                   <div class="flex flex-row items-center">
-                    <span
-                      class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
-                    >
-                      P
-                      {{
-                        product.price[product.price.length - 1].originalPrice
-                      }}
-                      <span
-                        class="pl-1 opacity-80 text-xs capitalize md:text-sm text-black"
+                    <HoverCard>
+                      <HoverCardTrigger>
+                        <span
+                          class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary hover:underline hover:cursor-pointer"
+                        >
+                          P
+                          {{ product.displayPrice }}
+                        </span>
+                      </HoverCardTrigger>
+                      <HoverCardContent
+                        v-if="Object.keys(product.sizes)[0] !== 'N/A'"
                       >
-                        ({{ product.totalOrders }} Sold)
-                      </span>
+                        <span class="text-xs">
+                          Prices may vary depending on the size of the product.
+                        </span>
+                      </HoverCardContent>
+                    </HoverCard>
+                    <span
+                      class="pl-1 opacity-80 text-xs capitalize md:text-sm text-black"
+                    >
+                      ({{ product.totalOrders }} Sold)
                     </span>
                   </div>
                   <div
@@ -97,6 +106,11 @@
 <script setup lang="ts">
 import { setup as setupBestSellingProductsController } from "../controllers/bestSellingProductsController";
 import { setup as setupProductViews } from "@/components/feature/product/controllers/productsController";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 const { products, isLoading } = setupBestSellingProductsController();
 const { incrementViewCount } = setupProductViews();

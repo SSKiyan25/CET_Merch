@@ -68,8 +68,23 @@ export const addToCart = async (newAddToCart: cartData) => {
     // If an order exists, add the product to the existing order
     const existingOrder = orderSnapshot.docs[0];
     const existingOrderData = existingOrder.data();
-    existingOrderData.cart.push(newAddToCart);
-    existingOrderData.totalPrice += newAddToCart.totalPrice;
+
+    // Check if the product with the same size already exists in the cart
+    const existingCartItemIndex = existingOrderData.cart.findIndex(
+      (item: cartData) =>
+        item.productId === newAddToCart.productId &&
+        item.size === newAddToCart.size
+    );
+
+    if (existingCartItemIndex !== -1) {
+      // If it does, add the quantity from the newAddToCart data to the existing one
+      existingOrderData.cart[existingCartItemIndex].quantity +=
+        newAddToCart.quantity;
+    } else {
+      // If it doesn't, add the newAddToCart data to the cart
+      existingOrderData.cart.push(newAddToCart);
+    }
+
     await updateDoc(doc(db, "userOrder", existingOrder.id), existingOrderData);
   } else {
     // If no order exists, create a new order
@@ -80,7 +95,7 @@ export const addToCart = async (newAddToCart: cartData) => {
       userName: "",
       userContactNumber: "",
       cart: [newAddToCart],
-      totalPrice: newAddToCart.totalPrice,
+      totalPrice: 0,
       paymentStatus: "",
       paymentMethod: "",
       orderStatus: "OnQueue",

@@ -1,18 +1,21 @@
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { initFlowbite } from "flowbite";
 import { useRouter, useRoute } from "vue-router";
 import {
   fetchProducts,
-  fetchProduct,
   updateProduct,
   deleteProduct,
   deletePhoto,
+  Size,
+  Product,
 } from "../models/adminProductsModel";
 import {
   DocumentReference,
   DocumentSnapshot,
   getDoc,
   doc,
+  updateDoc,
+  onSnapshot,
 } from "firebase/firestore";
 import { auth, db } from "@/firebase/init";
 import { fetchUser } from "../models/userModel";
@@ -36,6 +39,7 @@ export const setup = () => {
   let userData = ref<UserData>(null);
 
   onMounted(async () => {
+    3;
     initFlowbite();
     loadingPage.value = true;
     const user = await fetchUser();
@@ -57,7 +61,20 @@ export const setup = () => {
     // Check if route has id parameter
     if (route.params.id) {
       const id = route.params.id as string;
-      product.value = await fetchProduct(id);
+      const productRef = doc(db, "products", id);
+      onSnapshot(
+        productRef,
+        (doc) => {
+          if (doc.exists()) {
+            product.value = doc.data() as Product;
+          } else {
+            product.value = null;
+          }
+        },
+        (error) => {
+          console.error("Failed to fetch product:", error);
+        }
+      );
     }
 
     const userForEdit = auth.currentUser;
@@ -154,9 +171,214 @@ export const setup = () => {
     isDeletingPhoto.value = false;
   };
 
+  const productStocks = async (id: string) => {
+    router.push({ name: "adminProductStocks", params: { id } });
+  };
+
+  const fetchProductData = (id: string) => {
+    loadingPage.value = true;
+    const productRef = doc(db, "products", id);
+
+    // Listen to real-time updates
+    const unsubscribe = onSnapshot(productRef, (doc) => {
+      if (doc.exists()) {
+        product.value = doc.data() as Product;
+        loadingPage.value = false;
+      } else {
+        console.log("No such document!");
+        loadingPage.value = false;
+      }
+    });
+
+    // Return the unsubscribe function so you can stop listening to updates when necessary
+    return unsubscribe;
+  };
+
+  const sortedSizes = computed(() => {
+    const sizes = { ...product.value.sizes };
+    for (const size in sizes) {
+      sizes[size].sort(
+        (a: Size, b: Size) =>
+          new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()
+      );
+    }
+    return sizes;
+  });
+
+  const addStocks = async (
+    productId: string,
+    sizeName: any,
+    newStock: number | string,
+    newPrice: number
+  ) => {
+    loadingPage.value = true;
+    const newStockNumber =
+      typeof newStock === "string" ? parseInt(newStock, 10) : newStock;
+    const newStockInfo = {
+      dateAdded: new Date().toISOString(),
+      price: newPrice,
+      reserved_stocks: 0,
+      stocks: newStockNumber,
+      remaining_stocks: newStockNumber,
+    };
+
+    try {
+      const productRef = doc(db, "products", productId);
+      const productSnapshot = await getDoc(productRef);
+      if (productSnapshot.exists()) {
+        const productData = productSnapshot.data() as Product;
+        const updatedSizes = { ...productData.sizes };
+        if (updatedSizes[sizeName]) {
+          updatedSizes[sizeName] = [...updatedSizes[sizeName], newStockInfo];
+        } else {
+          updatedSizes[sizeName] = [newStockInfo];
+        }
+        await updateDoc(productRef, { sizes: updatedSizes });
+        console.log("Product updated successfully");
+        await fetchProductData(productId);
+      } else {
+        console.error("Product does not exist");
+      }
+    } catch (error) {
+      console.error("Failed to update product:", error);
+    } finally {
+      loadingPage.value = false;
+    }
+  };
+
+  const editStock = async (
+    productId: string,
+    sizeName: any,
+    index: number,
+    newStock: number,
+    newPrice: number
+  ) => {
+    loadingPage.value = true;
+
+    try {
+      const productRef = doc(db, "products", productId);
+      const productSnapshot = await getDoc(productRef);
+      if (productSnapshot.exists()) {
+        const productData = productSnapshot.data() as Product;
+        const updatedSizes = { ...productData.sizes };
+        if (updatedSizes[sizeName] && updatedSizes[sizeName][index]) {
+          updatedSizes[sizeName][index].stocks = newStock;
+          updatedSizes[sizeName][index].price = newPrice;
+          updatedSizes[sizeName][index].dateModified = new Date().toISOString();
+          await updateDoc(productRef, { sizes: updatedSizes });
+          console.log("Product updated successfully");
+          await fetchProductData(productId);
+        } else {
+          console.error("Size or index does not exist");
+        }
+      } else {
+        console.error("Product does not exist");
+      }
+    } catch (error) {
+      console.error("Failed to update product:", error);
+    } finally {
+      loadingPage.value = false;
+    }
+  };
+
+  const removeStocks = async (
+    productId: string,
+    sizeName: any,
+    index: number
+  ) => {
+    loadingPage.value = true;
+    try {
+      const productRef = doc(db, "products", productId);
+      const productSnapshot = await getDoc(productRef);
+      if (productSnapshot.exists()) {
+        const productData = productSnapshot.data() as Product;
+
+        // Make sure the size exists and the index is valid
+        if (
+          productData.sizes[sizeName] &&
+          index >= 0 &&
+          index < productData.sizes[sizeName].length
+        ) {
+          // Remove the stock at the specified index
+          productData.sizes[sizeName].splice(index, 1);
+
+          // Update the document with the modified sizes
+          await updateDoc(productRef, { sizes: productData.sizes });
+        }
+      }
+    } catch (err) {
+      console.error("Failed to update product:", err);
+    } finally {
+      loadingPage.value = false;
+    }
+  };
+
+  type SizeData = {
+    sizeName?: string;
+    dateAdded?: string;
+    reserved_stocks?: number;
+    stocks?: number;
+    price?: number;
+  };
+
+  const addSize = async (
+    productId: string,
+    sizes: Array<{ size: string; data: SizeData }>
+  ) => {
+    loadingPage.value = true;
+    try {
+      const productRef = doc(db, "products", productId);
+      const productSnapshot = await getDoc(productRef);
+      if (productSnapshot.exists()) {
+        const productData = productSnapshot.data() as Product;
+
+        // Iterate over each size in the sizes array
+        for (let item of sizes) {
+          // Ensure item.data.price and item.data.stocks are numbers
+          let price = typeof item.data.price === "number" ? item.data.price : 0;
+          let stocks =
+            typeof item.data.stocks === "number" ? item.data.stocks : 0;
+
+          // Create a new size object
+          let newSize = {
+            dateAdded: new Date().toISOString(),
+            price: price,
+            reserved_stocks: 0,
+            stocks: stocks,
+            remaining_stocks: stocks,
+          };
+
+          // If the size already exists in the product, push the new size data to the array
+          // Otherwise, initialize the size with an array containing the new size data
+          if (productData.sizes[item.size]) {
+            productData.sizes[item.size].push(newSize);
+          } else {
+            productData.sizes[item.size] = [newSize];
+          }
+        }
+
+        // Update the document with the modified sizes
+        await updateDoc(productRef, { sizes: productData.sizes });
+
+        // Manually update product.value
+        product.value = productData;
+      }
+    } catch (err) {
+      console.error("Failed to update product:", err);
+    } finally {
+      loadingPage.value = false;
+    }
+  };
+
   return {
+    fetchProductData,
+    removeStocks,
     products,
     product,
+    productStocks,
+    addStocks,
+    editStock,
+    addSize,
     editProductController,
     handleFileUpload,
     deleteProductController,
@@ -169,5 +391,6 @@ export const setup = () => {
     totalProducts,
     loadingPage,
     userData,
+    sortedSizes,
   };
 };

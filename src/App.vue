@@ -27,6 +27,7 @@ provide("toggleSidebar", toggleSidebar);
         $route.name === 'adminAddProduct' ||
         $route.name === 'adminEditProduct' ||
         $route.name === 'adminOrders' ||
+        $route.name === 'adminProductStocks' ||
         $route.name === 'adminInbox',
     }"
   />
@@ -48,6 +49,7 @@ provide("toggleSidebar", toggleSidebar);
         $route.name === 'products' ||
         $route.name === 'submitOrder' ||
         $route.name === 'aboutUs' ||
+        $route.name === 'adminProductStocks' ||
         $route.name === 'contactUs',
     }"
   />
@@ -64,6 +66,7 @@ provide("toggleSidebar", toggleSidebar);
         $route.name === 'adminOrders' ||
         $route.name === 'adminInbox' ||
         $route.name === 'userDashboard' ||
+        $route.name === 'adminProductStocks' ||
         $route.name === 'userOrders',
     }"
   />
