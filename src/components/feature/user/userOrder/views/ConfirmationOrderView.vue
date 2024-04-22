@@ -117,9 +117,9 @@
                       <div v-if="!sizeDetail.notEnoughStocks" class="text-sm">
                         <span
                           v-if="sizeDetail.quantity !== 0"
-                          class="text-[6px] font-bold md:font-medium md:text-sm"
-                          >|| {{ sizeDetail.quantity }} Stocks Available
-                          ||</span
+                          class="text-[6px] font-bold md:font-medium md:text-xs"
+                          >|| {{ sizeDetail.quantity }} stocks ready for
+                          purchase ||</span
                         >
                       </div>
                       <div
@@ -257,8 +257,8 @@
                       <div v-if="!sizeDetail.notEnoughStocks">
                         <span
                           v-if="sizeDetail.quantity !== 0"
-                          class="text-[8px] md:text-sm"
-                          >|| {{ sizeDetail.price }} ||</span
+                          class="text-[8px] md:text-xs"
+                          >|| {{ sizeDetail.price }} each ||</span
                         >
                       </div>
                     </div>
@@ -526,7 +526,6 @@ import { doc, getDoc } from "firebase/firestore";
 const route = useRoute();
 const router = useRouter();
 
-// Get orderId from the query parameters
 // Get orderId from the route parameters
 let orderIdasRouter =
   typeof route.params.id === "string" && route.params.id !== ""
@@ -534,8 +533,7 @@ let orderIdasRouter =
     : "";
 
 const handleProcess = () => {
-  // Check if orderIdasRouter is a string and not empty
-  console.log("Router: ", orderIdasRouter);
+  //console.log("Router: ", orderIdasRouter);
   if (!orderIdasRouter) {
     console.error("orderId is not a string or not defined");
     return;
@@ -590,7 +588,7 @@ const updateCartDetails = async () => {
   for (let item of cart.value) {
     const productDetails = await fetchProductDetails(item.productId);
     if (productDetails === null) {
-      continue; // Skip this iteration if productDetails is null
+      continue;
     }
     let sizeData = productDetails.sizes[item.size];
     let quantity = item.quantity;
@@ -599,26 +597,27 @@ const updateCartDetails = async () => {
     let sizeDetails = [];
 
     if (item.isPreOrdered) {
-      if (!sizeData) {
-        // If size doesn't match, get the last size and its last price
-        const lastSizeName = Object.keys(productDetails.sizes).pop();
-        if (lastSizeName) {
-          sizeData = productDetails.sizes[lastSizeName];
-        } else {
-          continue;
-        }
+      // If size doesn't match, get the last size and its last price
+      const lastSizeName = Object.keys(productDetails.sizes).pop();
+      if (lastSizeName) {
+        sizeData = productDetails.sizes[lastSizeName];
+      } else {
+        continue;
       }
       const price = sizeData[sizeData.length - 1].price;
       totalPrice = price * quantity;
       sizeDetails.push({ quantity, price });
     } else {
+      // Loop through each size data
       for (let i = 0; i < sizeData.length; i++) {
+        // If the remaining stocks are enough to fulfill the quantity
         if (quantity <= sizeData[i].remaining_stocks) {
           totalPrice += sizeData[i].price * quantity;
           sizeDetails.push({ quantity, price: sizeData[i].price });
           quantity = 0;
           break;
         } else {
+          // If the remaining stocks are not enough
           totalPrice += sizeData[i].price * sizeData[i].remaining_stocks;
           sizeDetails.push({
             quantity: sizeData[i].remaining_stocks,
@@ -628,6 +627,7 @@ const updateCartDetails = async () => {
         }
       }
 
+      // If there are still items left in the quantity after going through all the stocks
       if (quantity > 0) {
         notEnoughStocks = quantity;
         sizeDetails.push({ quantity, price: 0, notEnoughStocks: true });
@@ -659,7 +659,6 @@ const decrement = () => {
 const currentProductIndex = ref(0);
 
 const totalPrice = ref(0);
-//Temporary Compute Total price
 
 const calculateTotalPrice = async () => {
   let total = 0;

@@ -155,9 +155,9 @@
                   class="pl-4"
                 >
                   <label class="text-sm opacity-80">
-                    {{ item.productName }} - {{ item.quantity }} - P{{
-                      item.totalPrice
-                    }}
+                    {{ item.productName }} - {{ item.size }} -
+                    {{ item.quantity }} - P{{ item.totalPrice }}
+                    <span v-if="item.isPreOrdered"> (Pre-Order) </span>
                   </label>
                 </div>
               </div>
@@ -365,7 +365,8 @@ let orderRefNumDisplay = ref("");
 async function updateProductStocks(
   productId: string,
   size: string,
-  quantity: number
+  quantity: number,
+  isPreOrdered: boolean
 ) {
   const productRef = doc(db, "products", productId);
   const productSnap = await getDoc(productRef);
@@ -374,17 +375,20 @@ async function updateProductStocks(
     const sizeArray = productData.sizes[size];
     let remainingQuantity = quantity;
 
-    for (let sizeData of sizeArray) {
-      if (remainingQuantity <= 0) break;
+    // Only update stocks if the item is not pre-ordered
+    if (!isPreOrdered) {
+      for (let sizeData of sizeArray) {
+        if (remainingQuantity <= 0) break;
 
-      if (sizeData.remaining_stocks >= remainingQuantity) {
-        sizeData.remaining_stocks -= remainingQuantity;
-        sizeData.reserved_stocks += remainingQuantity;
-        remainingQuantity = 0;
-      } else {
-        remainingQuantity -= sizeData.remaining_stocks;
-        sizeData.reserved_stocks += sizeData.remaining_stocks;
-        sizeData.remaining_stocks = 0;
+        if (sizeData.remaining_stocks >= remainingQuantity) {
+          sizeData.remaining_stocks -= remainingQuantity;
+          sizeData.reserved_stocks += remainingQuantity;
+          remainingQuantity = 0;
+        } else {
+          remainingQuantity -= sizeData.remaining_stocks;
+          sizeData.reserved_stocks += sizeData.remaining_stocks;
+          sizeData.remaining_stocks = 0;
+        }
       }
     }
 
@@ -424,7 +428,8 @@ const submitOrder = async (formData: any) => {
         await updateProductStocks(
           product.productId,
           product.size,
-          product.quantity
+          product.quantity,
+          product.isPreOrdered
         );
       }
 

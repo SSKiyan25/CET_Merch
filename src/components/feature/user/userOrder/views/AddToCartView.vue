@@ -486,7 +486,6 @@ const props = defineProps({
 
 //console.log("productId in Cart component: ", props.productId);
 
-// Define the increment function
 const increment = () => {
   if (
     newAddToCartData.value.isPreOrdered ||
@@ -496,7 +495,6 @@ const increment = () => {
   }
 };
 
-// Define the decrement function
 const decrement = () => {
   if (newAddToCartData.value.quantity > 0) {
     newAddToCartData.value.quantity--;
@@ -532,7 +530,7 @@ let isUploadSuccessful = ref(false);
 const handleFormCartSubmit = async () => {
   isLoading.value = true;
   if (newAddToCartData.value.quantity === 0) {
-    alert("Please enter a valid number of quantity");
+    //alert("Please enter a valid number of quantity");
     console.error("Quantity cannot be 0");
     isLoading.value = false;
     return;
