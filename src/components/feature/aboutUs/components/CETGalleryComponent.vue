@@ -282,6 +282,29 @@
             />
           </div>
         </div>
+        <div
+          class="absolute flex justify-center md:justify-end w-full bottom-[16rem] md:bottom-0 md:top-[16rem] content-end h-full"
+        >
+          <div class="md:pr-8 md:pt-36">
+            <span v-if="!isAllDisabled"
+              ><button
+                @click.prevent="toggleAutoplay"
+                class="px-4 py-2 rounded-sm bg-white text-black"
+              >
+                Disable Autoplay
+              </button>
+            </span>
+            <span v-else>
+              <button
+                v-if="isAllDisabled"
+                @click.prevent="toggleAutoplay"
+                class="px-4 py-2 rounded-sm bg-white text-black"
+              >
+                Able Autoplay
+              </button></span
+            >
+          </div>
+        </div>
       </div>
       <!-- Slider controls -->
       <button
@@ -1024,6 +1047,17 @@ onMounted(async () => {
   window.addEventListener("keydown", checkEscPress);
 });
 
+const toggleAutoplay = () => {
+  isAllDisabled.value = !isAllDisabled.value;
+  if (isAllDisabled.value) {
+    if (carouselAllImageIndex !== null) {
+      clearInterval(carouselAllImageIndex);
+    }
+  } else {
+    startAllCarousel();
+  }
+};
+
 function shuffleArray(array: any[]) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -1032,6 +1066,7 @@ function shuffleArray(array: any[]) {
 }
 
 //All Image Carousel
+const isAllDisabled = ref(false);
 const selectedAllImageIndex = ref<number | null>(null);
 let carouselAllImageIndex: number | null = null;
 const startAllCarousel = () => {
@@ -1122,7 +1157,11 @@ onUpdated(() => {
 });
 
 const checkOutsideClick = (event: any) => {
-  if (innerDiv.value && !innerDiv.value.contains(event.target)) {
+  if (
+    event.target.id !== "autoplay-button" &&
+    innerDiv.value &&
+    !innerDiv.value.contains(event.target)
+  ) {
     selectedCETImageIndex.value = null;
     selectedMetSocImageIndex.value = null;
     selectedCS3ImageIndex.value = null;
