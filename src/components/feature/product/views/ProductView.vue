@@ -309,6 +309,17 @@
           </div>
         </div>
       </div>
+      <div
+        v-if="!isLoading && sellerProducts.length === 0"
+        class="flex justify-center text-center items-center mx-auto w-full"
+      >
+        <div class="flex justify-center pb-16">
+          Nothing else to see
+          <span class="pl-1 material-symbols-outlined">
+            sentiment_dissatisfied
+          </span>
+        </div>
+      </div>
     </div>
   </div>
   <div class="pb-16"></div>
