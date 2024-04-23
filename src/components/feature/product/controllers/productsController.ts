@@ -1,5 +1,5 @@
 import { ref, onMounted, computed } from "vue";
-import { useRoute, onBeforeRouteLeave } from "vue-router";
+import { useRoute } from "vue-router";
 import {
   fetchProducts,
   fetchProductById,
@@ -81,18 +81,18 @@ export const setup = () => {
     }
   };
 
-  onBeforeRouteLeave((__, ___, next) => {
-    if (route.name === "product") {
-      const product = products.value.find((p) => p.id === route.params.id);
-      if (product) {
-        incrementViewCount(product).then(() => next());
-      } else {
-        next();
-      }
-    } else {
-      next();
-    }
-  });
+  // onBeforeRouteLeave((__, ___, next) => {
+  //   if (route.name === "product") {
+  //     const product = products.value.find((p) => p.id === route.params.id);
+  //     if (product) {
+  //       incrementViewCount(product).then(() => next());
+  //     } else {
+  //       next();
+  //     }
+  //   } else {
+  //     next();
+  //   }
+  // });
 
   return {
     products,

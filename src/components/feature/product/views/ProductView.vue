@@ -265,11 +265,11 @@
         class="grid grid-cols-2 md:grid-cols-4 gap-4 xl:gap-18 pb-8 px-4 md:px-16"
       >
         <div
-          v-for="product in sellerProducts"
+          v-for="product in filteredSellerProducts"
           v-if="!isLoading"
           :key="product.id"
         >
-          <div v-if="product.id !== route.params.id">
+          <div>
             <div
               class="flex flex-col bg-white shadow-lg border border-primary/20 rounded-sm hover:drop-shadow-xl w-full h-auto md:w-full md:h-[22rem]"
             >
@@ -362,9 +362,19 @@ import { DocumentData } from "firebase/firestore";
 
 const route = useRoute();
 const { product, loading, displayPrice } = setupProduct(route);
-const currentId = route.params.id as string;
+let currentId = ref(route.params.id as string);
 
 //console.log("product: ", product);
+
+watch(route, (newRoute) => {
+  currentId.value = newRoute.params.id as string;
+});
+
+const filteredSellerProducts = computed(() => {
+  return sellerProducts.value.filter(
+    (product) => product.id !== currentId.value
+  );
+});
 
 const {
   products,

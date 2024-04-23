@@ -174,8 +174,8 @@
               </div>
             </div>
 
-            <div class="flex flex-row pt-4">
-              <span class="pt-2.5 pr-2 text-[10px] md:text-xs">
+            <div class="flex flex-col pt-4">
+              <span class="py-2.5 pr-2 text-[10px] md:text-xs">
                 Quantity :
               </span>
               <div class="relative flex items-center max-w-[8rem]">
@@ -247,18 +247,16 @@
                   </svg>
                 </button>
               </div>
-              <div class="flex flex-col md:flex-row px-2 items-center">
-                <span class="pt-2.5 px-1 md:px-2 text-[10px] md:text-xs"
-                  >Initial Price :</span
-                >
+              <div class="flex flex-row items-center justify-start pt-2.5">
+                <span class="text-[10px] md:text-xs">Initial Price :</span>
                 <div class="flex flex-row items-center">
-                  <span class="text-[10px] md:text-xs text-primary">
+                  <span class="pl-1 text-[10px] md:text-xs text-primary">
                     {{ selectedSize.data.price * newAddToCartData.quantity }}
                   </span>
                   <HoverCard>
                     <HoverCardTrigger>
                       <span
-                        class="material-symbols-outlined text-sm pt-1 pl-1 opacity-80 hover:course-pointer"
+                        class="material-symbols-outlined text-sm pl-1 opacity-80 hover:course-pointer"
                       >
                         help
                       </span>
