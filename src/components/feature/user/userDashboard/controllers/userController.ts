@@ -20,6 +20,6 @@ export const getUserOrders = async () => {
   return orders;
 };
 
-export const cancelOrder = async (order: any) => {
-  await cancelUserOrder(order);
+export const cancelOrder = async (order: any, remarks: string) => {
+  await cancelUserOrder(order, remarks);
 };

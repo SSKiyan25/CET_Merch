@@ -29,27 +29,22 @@ export interface Order {
   remarks?: string;
 }
 
-type priceData = {
-  originalPrice: number;
-  discountedPrice: number;
-  dateCreated: string;
-};
-
-type sizeData = {
-  value: string;
+export interface SizeData {
+  dateAdded: string;
+  price: number;
+  remaining_stocks: number;
+  reserved_stocks: number;
   stocks: number;
-};
+}
 
 export interface ProductData {
   id?: string;
   name: string;
   category: string;
   faction: string;
-  price: priceData[];
-  sizes: sizeData[];
   description: string;
   coverPhoto: File;
-  photos: File[];
+  photos: string[];
   isPublished: boolean;
   isArchived: boolean;
   status: string;
@@ -58,6 +53,7 @@ export interface ProductData {
   dateCreated: string;
   lastModified: string;
   totalSales: number;
+  sizes: { [key: string]: SizeData[] };
 }
 
 export const getProductDetails = async (productId: string) => {

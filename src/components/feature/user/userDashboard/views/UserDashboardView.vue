@@ -202,7 +202,11 @@
                     >
                     <template v-if="tempRemarks !== ''">
                       <AlertDialogAction>
-                        <button @click.prevent="cancelOrder(recentOrder)">
+                        <button
+                          @click.prevent="
+                            cancelUserOrder(recentOrder, tempRemarks)
+                          "
+                        >
                           Cancel Order
                         </button>
                       </AlertDialogAction>
@@ -276,7 +280,7 @@
               <Button
                 v-else-if="recentOrder.orderStatus === 'cancelled'"
                 variant="default"
-                class="cursor-default capitalize"
+                class="cursor-default capitalize mr-1"
               >
                 <span>{{ recentOrder.orderStatus }}</span>
               </Button>
@@ -296,7 +300,7 @@
                 <DialogTrigger>
                   <span
                     v-if="recentOrder.orderStatus === 'declined'"
-                    class="text-xs font-bold hover:underline hover:cursor-pointer"
+                    class="text-xs font-bold underline hover:cursor-pointer text-blue-600"
                   >
                     Read Why
                   </span>
@@ -333,8 +337,44 @@
                 class="px-2"
                 >Payment Status:</span
               >
+              <Dialog>
+                <DialogTrigger>
+                  <span
+                    v-if="recentOrder.orderStatus === 'cancelled'"
+                    class="text-xs font-bold underline hover:cursor-pointer text-blue-600"
+                  >
+                    Your Reason
+                  </span>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle class="border-b pb-1"
+                      >Order Cancelled</DialogTitle
+                    >
+                    <DialogDescription>
+                      <div class="flex flex-col text-black text-xs">
+                        <span>
+                          Your order was cancelled due to the following reason
+                          you stated:
+                        </span>
+                        <p class="indent-2 pt-2 font-semibold">
+                          {{ recentOrder.remarks }}
+                        </p>
+                      </div>
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogTrigger>
+                      <Button variant="outline"> Close </Button>
+                    </DialogTrigger>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
               <button
-                v-if="recentOrder.paymentStatus === 'pending'"
+                v-if="
+                  recentOrder.paymentStatus === 'pending' &&
+                  recentOrder.orderStatus !== 'cancelled'
+                "
                 class="p-2 bg-red-600 text-white rounded-sm cursor-default capitalize"
               >
                 Pending
@@ -479,6 +519,14 @@ const editUserProfile = async () => {
 const saveChanges = () => {
   editUserProfile();
   isEditing.value = false;
+};
+
+const cancelUserOrder = async (order: any, remarks: string) => {
+  isLoading.value = true;
+  await cancelOrder(order, remarks);
+  tempRemarks.value = "";
+  orders.value = await getUserOrders();
+  isLoading.value = false;
 };
 
 watch(orders, (newOrders) => {

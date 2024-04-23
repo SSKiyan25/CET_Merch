@@ -170,7 +170,7 @@
                         </span>
                       </th>
 
-                      <th scope="col" class="py-2 w-2/12 text-start">
+                      <th scope="col" class="py-2 w-3/12 text-start">
                         <span
                           class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
@@ -196,13 +196,6 @@
                           class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
                           Payment Status
-                        </span>
-                      </th>
-                      <th scope="col" class="py-2 text-start">
-                        <span
-                          class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
-                        >
-                          Payment Method
                         </span>
                       </th>
                       <th scope="col" class="py-2 text-start">
@@ -294,17 +287,6 @@
                           </span>
                         </div>
                       </td>
-                      <td class="p-4">
-                        <div
-                          class="flex items-center justify-end pr-16 h-full w-full"
-                        >
-                          <span
-                            class="material-symbols-outlined text-2xl text-primary animate-spin"
-                          >
-                            autorenew
-                          </span>
-                        </div>
-                      </td>
                     </tr>
                     <tr
                       v-else
@@ -350,71 +332,68 @@
                         </div>
                       </td>
                       <td>
-                        <div class="text-[12px] text-white font-medium">
+                        <div class="text-[12px] text-black font-medium">
                           <button
                             v-if="order.orderStatus === 'processing'"
-                            class="rounded-lg bg-amber-700 p-2.5 cursor-auto"
+                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
                           >
                             Processing
                           </button>
                           <button
                             v-else-if="order.orderStatus === 'ready'"
-                            class="rounded-lg bg-blue-700 ml-1.5 p-2.5 cursor-auto"
+                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
                           >
                             Ready
                           </button>
                           <button
                             v-else-if="order.orderStatus === 'done'"
-                            class="rounded-lg bg-emerald-700 ml-2 p-2.5 cursor-auto"
+                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
                           >
                             Fulfilled
                           </button>
                           <button
                             v-else-if="order.orderStatus === 'cancelled'"
-                            class="rounded-lg bg-red-700 p-2.5 cursor-auto"
+                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
                           >
                             Cancelled
                           </button>
                           <button
                             v-else-if="order.orderStatus === 'declined'"
-                            class="rounded-lg bg-red-900 p-2.5 ml-2 cursor-auto"
+                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
                           >
                             Declined
                           </button>
                         </div>
                       </td>
                       <td>
-                        <div class="pl-2.5 py-3 flex flex-row">
-                          <div v-if="order.paymentStatus === 'pending'">
-                            <button
-                              class="rounded-lg bg-amber-700 py-1.5 px-4 cursor-auto"
-                            >
-                              <span class="text-xs font-medium text-white pb-1">
-                                Pending
-                              </span>
-                            </button>
-                          </div>
-                          <div v-if="order.paymentStatus === 'declined'">
-                            <button
-                              class="rounded-lg bg-red-900 py-1.5 px-4 cursor-auto"
-                            >
-                              <span class="text-xs font-medium text-white pb-1">
-                                Declined
-                              </span>
-                            </button>
-                          </div>
-                          <div
-                            v-if="order.paymentStatus === 'paid'"
-                            class="pl-2"
+                        <div class="pl-2 py-2">
+                          <button
+                            v-if="order.paymentStatus === 'pending'"
+                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white items-center"
                           >
-                            <button
-                              class="rounded-lg bg-green-700 py-1.5 px-4 cursor-auto"
-                            >
-                              <span class="text-xs font-medium text-white pb-1">
-                                Paid
-                              </span>
-                            </button>
-                          </div>
+                            <span class="text-xs font-medium"> Pending </span>
+                          </button>
+
+                          <button
+                            v-if="order.paymentStatus === 'declined'"
+                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white items-center"
+                          >
+                            <span class="text-xs font-medium"> Declined </span>
+                          </button>
+
+                          <button
+                            v-if="order.paymentStatus === 'cancelled'"
+                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white items-center"
+                          >
+                            <span class="text-xs font-medium"> Cancelled </span>
+                          </button>
+
+                          <button
+                            v-if="order.paymentStatus === 'paid'"
+                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white items-center"
+                          >
+                            <span class="text-xs font-medium"> Paid </span>
+                          </button>
 
                           <button
                             class="text-secondary-foreground/60 hover:text-secondary-foreground"
@@ -429,13 +408,7 @@
                           </button>
                         </div>
                       </td>
-                      <td>
-                        <div class="p-10 py-3">
-                          <span class="text-xs text-secondary-foreground"
-                            >{{ order.paymentMethod }}
-                          </span>
-                        </div>
-                      </td>
+
                       <td>
                         <div
                           class="hs-dropdown relative inline-block [--placement:bottom-right] py-1"
@@ -542,7 +515,7 @@
                               class="flex flex-col relative bg-white rounded-lg"
                             >
                               <div
-                                class="flex flex-col border-b border-secondary-foreground/50 py-4 bg-slate-300 -space-y-3"
+                                class="flex flex-col border-b border-secondary-foreground/50 py-2 pb-4 bg-slate-300 -space-y-3"
                               >
                                 <div class="flex flex-row items-center">
                                   <span
@@ -574,7 +547,9 @@
                                 <div
                                   class="flex flex-col pl-2 md:pl-8 space-y-2 text-xs md:text-sm opacity-80"
                                 >
-                                  <div class="flex flex-row justify-between">
+                                  <div
+                                    class="flex flex-row justify-between text-xs"
+                                  >
                                     <div class="flex flex-row">
                                       <span class="font-bold">Name: </span>
                                       <span class="pl-2">
@@ -594,7 +569,7 @@
                                     </div>
                                   </div>
                                   <div
-                                    class="flex flex-col md:flex-row justify-between space-y-2"
+                                    class="flex flex-col md:flex-row justify-between space-y-1 text-xs"
                                   >
                                     <div class="flex flex-row">
                                       <span class="font-bold">Email: </span>
@@ -707,6 +682,34 @@
                                     class="text-xs font-semibold"
                                     >Mark order as ready to get
                                   </span>
+                                </div>
+                                <div v-else class="flex flex-col">
+                                  <div>
+                                    <label class="text-sm font-semibold"
+                                      >Order Remarks -
+                                    </label>
+                                    <span
+                                      v-if="order.orderStatus === 'declined'"
+                                      class="font-bold text-primary text-xs"
+                                    >
+                                      Declined</span
+                                    >
+                                    <span
+                                      v-if="order.orderStatus === 'cancelled'"
+                                      class="font-bold text-primary text-xs"
+                                    >
+                                      Declined</span
+                                    >
+                                  </div>
+                                  <div class="indent-4 text-xs py-2">
+                                    <p class="pl-4 pt-2">
+                                      {{
+                                        order.remarks
+                                          ? order.remarks
+                                          : "No remarks"
+                                      }}
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
                               <div

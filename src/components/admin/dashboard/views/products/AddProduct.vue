@@ -160,6 +160,7 @@
                   <label>Price: </label>
                   <input
                     type="number"
+                    min="1"
                     v-model="sizeData[size].price"
                     placeholder="Price"
                     class="border text-xs md:text-sm rounded-lg bg-background border-primary/40 text-secondary-foreground"
@@ -313,6 +314,9 @@ import {
   getDoc,
   DocumentReference,
   DocumentSnapshot,
+  query,
+  where,
+  getDocs,
 } from "firebase/firestore";
 import { useRouter } from "vue-router";
 import { Progress } from "@/components/ui/progress";
@@ -487,6 +491,21 @@ const handleFormSubmit = async (): Promise<boolean> => {
     throw new Error("User not found");
   }
 
+  // Query the products collection for a product with the entered name
+  const q = query(
+    collection(db, "products"),
+    where("name", "==", newProduct.value.name)
+  );
+  const querySnapshot = await getDocs(q);
+
+  // If a product with the entered name already exists, show an error message and prevent the form from being submitted
+  if (!querySnapshot.empty) {
+    alert(
+      "A product with this name already exists. Please enter a different name."
+    );
+    return false;
+  }
+
   try {
     if (user && userData && userData.faction) {
       if (user && userData.faction !== "all") {
@@ -591,11 +610,7 @@ const handleFormSubmit = async (): Promise<boolean> => {
 
     for (let size in selectedSizes.value) {
       // If the size is selected and its price and stocks are not zero
-      if (
-        selectedSizes.value[size] &&
-        sizeData[size].stocks !== 0 &&
-        sizeData[size].price !== 0
-      ) {
+      if (selectedSizes.value[size] && sizeData[size].price !== 0) {
         // Add an entry in the sizes map
         newProduct.value.sizes.set(size, [
           {
