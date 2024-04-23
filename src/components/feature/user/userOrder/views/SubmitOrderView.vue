@@ -155,7 +155,7 @@
                   class="pl-4"
                 >
                   <label class="text-sm opacity-80">
-                    {{ item.productName }} - {{ item.size }} -
+                    {{ item.productName }} - {{ item.size }} x
                     {{ item.quantity }} - P{{ item.totalPrice }}
                     <span v-if="item.isPreOrdered"> (Pre-Order) </span>
                   </label>
@@ -226,12 +226,14 @@
           <router-link
             to="/contactUs"
             class="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg hover:bg-background/70 hover:text-secondary-foreground/80"
-            ><span class="text-secondary-foreground"> Contact Us </span>
+            ><span class="text-secondary-foreground font-semibold">
+              Contact Us
+            </span>
           </router-link>
           <router-link
             to="/"
             class="bg-primary/80 text-primary/90 px-4 py-2 rounded-lg hover:bg-primary/90 hover:text-primary/80"
-            ><span class="text-primary-foreground"> Done </span>
+            ><span class="text-primary-foreground font-semibold"> Done </span>
           </router-link>
         </div>
       </div>
