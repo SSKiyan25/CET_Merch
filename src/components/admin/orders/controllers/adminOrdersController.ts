@@ -106,6 +106,40 @@ export const setup = () => {
       remarks: order.remarks,
     });
 
+    // Iterate over the cart items and update the product sizes
+    for (const item of order.cart) {
+      // Skip if the item is pre-ordered
+      if (item.isPreOrdered) continue;
+
+      const productData = await getProductDetails(item.productId);
+      if (productData) {
+        if (item.size && productData.sizes[item.size]) {
+          // Iterate over the size indices and update the remaining_stocks and reserved_stocks
+          for (const [sizeIndex, quantity] of Object.entries(
+            item.sizeIndices
+          )) {
+            const sizeData = productData.sizes[item.size][sizeIndex];
+            if (sizeData) {
+              sizeData.remaining_stocks += Number(quantity);
+              sizeData.reserved_stocks -= Number(quantity);
+            }
+          }
+        } else {
+          // If the size is an empty string or "N/A", update the stocks and remaining_stocks of each index
+          for (const [sizeIndex, quantity] of Object.entries(
+            item.sizeIndices
+          )) {
+            const sizeData = productData.sizes["N/A"][sizeIndex];
+            if (sizeData) {
+              sizeData.remaining_stocks += Number(quantity);
+              sizeData.reserved_stocks -= Number(quantity);
+            }
+          }
+        }
+        await updateProduct(item.productId, productData);
+      }
+    }
+
     // Refresh the orders
     orders.value = await fetchOrders();
     loadingPage.value = false;

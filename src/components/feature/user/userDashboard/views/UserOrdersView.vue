@@ -149,19 +149,44 @@
                   <AlertDialogHeader>
                     <AlertDialogTitle> Cancel Order </AlertDialogTitle>
                     <AlertDialogDescription class="text-black">
-                      Are you sure you want to cancel this order? This action
-                      cannot be undone.
+                      <div class="flex flex-col text-xs space-y-2">
+                        <p class="indent-1">
+                          Are you sure you want to cancel this order? This
+                          action cannot be undone.
+                        </p>
+                        <input
+                          id="order-remarks"
+                          type="text"
+                          v-model="tempRemarks"
+                          class="p-3 border rounded-sm text-xs bg-background border-primary/40 text-secondary-foreground"
+                          placeholder="Give your reasons..."
+                          required
+                        />
+                      </div>
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogAction
-                      as="button"
                       class="bg-background text-black hover:bg-gray-300"
-                      >Close</AlertDialogAction
                     >
-                    <AlertDialogAction @click.prevent="cancelOrder(order)">
-                      Cancel Order
-                    </AlertDialogAction>
+                      Close</AlertDialogAction
+                    >
+                    <template v-if="tempRemarks !== ''">
+                      <AlertDialogAction>
+                        <button @click.prevent="cancelOrder(order)">
+                          Cancel Order
+                        </button>
+                      </AlertDialogAction>
+                    </template>
+                    <template v-else>
+                      <div
+                        class="opacity-50 hover:cursor-not-allowed items-center"
+                      >
+                        <Button variant="ghost" disabled class="items-center">
+                          Cancel Order
+                        </Button>
+                      </div>
+                    </template>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
@@ -189,7 +214,9 @@
                   class="flex flex-col text-[10px] font-semibold space-y-2 whitespace-normal text-wrap"
                 >
                   <span>Product Name: {{ item.productDetails.name }}</span>
-                  <span>Size: {{ item.size }}</span>
+                  <span v-if="item.size && item.size !== ''"
+                    >Size: {{ item.size }}</span
+                  >
                   <span>Quantity: {{ item.quantity }}</span>
                   <span>Total Amount: P{{ item.totalPrice }}</span>
                 </div>
@@ -374,13 +401,14 @@ onMounted(async () => {
 const open = ref(false);
 const value = ref<string>("all");
 const searchTerm = ref<string>("");
+const tempRemarks = ref("");
 
 const frameworks = [
   { value: "all", label: "Show All" },
   { value: "paid", label: "Paid" },
   { value: "pending", label: "Pending" },
   { value: "ready", label: "Ready to Get" },
-  { value: "decline", label: "Declined" },
+  { value: "declined", label: "Declined" },
   { value: "cancelled", label: "Cancelled" },
 ];
 
@@ -388,7 +416,7 @@ const filteredUserOrders = computed(() => {
   let filtered = orders.value;
 
   // Filter by orderStatus
-  if (["decline", "cancelled", "done", "ready"].includes(value.value)) {
+  if (["declined", "cancelled", "done", "ready"].includes(value.value)) {
     filtered = filtered.filter((order) => order.orderStatus === value.value);
   }
 

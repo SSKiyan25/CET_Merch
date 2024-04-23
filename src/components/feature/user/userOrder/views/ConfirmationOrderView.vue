@@ -38,14 +38,14 @@
             <table class="text-secondary-foreground w-full overflow-auto">
               <thead>
                 <tr
-                  class="uppercase md:tracking-wide text-[10px] md:text-sm text-primary/90"
+                  class="uppercase md:tracking-wide text-[10px] md:text-xs text-primary/90"
                 >
                   <th class="p-2 text-left md:w-2/12"></th>
                   <th class="p-2 text-left md:w-3/12">Product Name</th>
-                  <th class="p-2 text-left">Size</th>
+                  <th class="p-2 text-left">Size x Quantity</th>
                   <th class="p-2 text-center pr-4 md:pr-12">
                     <div class="flex flex-row items-center justify-center">
-                      <span class="align-middle"> Quantity</span>
+                      <span class="align-middle"> Stocks</span>
                       <HoverCard>
                         <HoverCardTrigger>
                           <span
@@ -105,10 +105,14 @@
                   >
                     {{ product.details?.name }}
                   </td>
-                  <td class="p-2 md:pl-4">{{ product.size }}</td>
+                  <td class="p-2 md:pl-4">
+                    {{ product.size }} x {{ product.quantity }}
+                  </td>
                   <td class="p-2 pl-2 md:pl-10 text-wrap whitespace-normal">
-                    <span v-if="product.isPreOrdered"> Pre-Ordered - </span>
-                    <span>{{ product.quantity }}</span>
+                    <span v-if="product.isPreOrdered">
+                      Pre-Ordered - {{ product.quantity }}
+                    </span>
+
                     <div
                       v-for="(sizeDetail, index) in product.sizeDetails"
                       v-if="!product.isPreOrdered"
@@ -263,7 +267,7 @@
                       </div>
                     </div>
                   </td>
-                  <td class="p-2 md:pl-8">
+                  <td class="p-2 md:pl-6">
                     <div
                       v-for="(sizeDetail, index) in product.sizeDetails"
                       :key="index"
@@ -271,7 +275,7 @@
                       <div v-if="!sizeDetail.notEnoughStocks">
                         <span
                           v-if="sizeDetail.quantity !== 0"
-                          class="text-[8px] md:text-sm"
+                          class="text-[8px] md:text-xs"
                           >||
                           {{ sizeDetail.price * sizeDetail.quantity }} ||</span
                         >
@@ -437,13 +441,12 @@
             <div
               class="flex flex-row items-center justify-center space-x-2 pl-2"
             >
-              <router-link to="/"
-                ><button
-                  class="bg-primary text-white text-xs md:text-sm rounded-sm p-2"
-                >
-                  Back
-                </button>
-              </router-link>
+              <button
+                class="bg-primary text-white text-xs md:text-sm rounded-sm p-2"
+                @click.prevent="$router.go(-1)"
+              >
+                Back
+              </button>
               <div>
                 <button
                   class="p-2 bg-emerald-800 rounded-sm hover:bg-emerald-700 text-xs md:text-base text-background font-semibold flex items-center"

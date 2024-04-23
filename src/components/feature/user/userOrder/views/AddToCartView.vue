@@ -62,14 +62,7 @@
                 >
                   {{ sizeName }} -
                   <template v-if="product.sizes[sizeName]">
-                    <template
-                      v-if="findAvailableSizeItem(product.sizes[sizeName])"
-                    >
-                      {{
-                        findAvailableSizeItem(product.sizes[sizeName])
-                          ?.remaining_stocks
-                      }}
-                    </template>
+                    {{ calculateTotalRemainingStocks(product.sizes[sizeName]) }}
                   </template>
                 </Button>
               </div>
@@ -366,7 +359,7 @@
                 <router-link
                   :to="{
                     name: 'confirmOrder',
-                    query: { id: order.id },
+                    params: { id: order.id },
                   }"
                 >
                   <button
@@ -487,9 +480,11 @@ const props = defineProps({
 //console.log("productId in Cart component: ", props.productId);
 
 const increment = () => {
+  const sizeItems = product.value.sizes[selectedSize.value.size];
+  const totalRemainingStocks = calculateTotalRemainingStocks(sizeItems);
   if (
     newAddToCartData.value.isPreOrdered ||
-    newAddToCartData.value.quantity < Number(selectedSize.value.data.stocks)
+    newAddToCartData.value.quantity < totalRemainingStocks
   ) {
     newAddToCartData.value.quantity++;
   }
@@ -644,9 +639,16 @@ const selectedSize = computed({
 const selectSize = (size: any) => {
   const sizeItems = product.value.sizes[size];
   if (sizeItems) {
+    const totalRemainingStocks = sizeItems.reduce(
+      (total, sizeItem) => total + Number(sizeItem.remaining_stocks),
+      0
+    );
     const availableSizeItem = findAvailableSizeItem(sizeItems);
-    if (availableSizeItem && Number(availableSizeItem.remaining_stocks) > 0) {
-      selectedSize.value = { size: size, data: availableSizeItem };
+    if (availableSizeItem) {
+      selectedSize.value = {
+        size: size,
+        data: { ...availableSizeItem, remaining_stocks: totalRemainingStocks },
+      };
     }
   }
 };
@@ -660,16 +662,23 @@ const hasAvailableStocks = computed(() => {
   return false;
 });
 
+const calculateTotalRemainingStocks = (sizeItems: SizeItem[]): number => {
+  return sizeItems.reduce(
+    (total, sizeItem) => total + Number(sizeItem.remaining_stocks),
+    0
+  );
+};
+
 const isButtonDisabled = (sizeName: string) => {
   const sizeItems = product.value.sizes[sizeName];
   if (!sizeItems) {
     return true;
   }
-  const availableSizeItem = findAvailableSizeItem(sizeItems);
-  return (
-    newAddToCartData.value.isPreOrdered ||
-    (availableSizeItem && Number(availableSizeItem.remaining_stocks) === 0)
+  const totalRemainingStocks = sizeItems.reduce(
+    (total, sizeItem) => total + Number(sizeItem.remaining_stocks),
+    0
   );
+  return newAddToCartData.value.isPreOrdered || totalRemainingStocks === 0;
 };
 
 const totalOrdersOnQueue = ref(0);

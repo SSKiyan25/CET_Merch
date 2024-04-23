@@ -189,16 +189,26 @@
               <div>
                 <span>Sizes | Price:</span>
                 <div
+                  v-if="
+                    !product?.sizes || Object.keys(product.sizes).length === 0
+                  "
+                  class="indent-4 font-semibold pt-2 flex flex-row items-center"
+                >
+                  No Available Stocks at the moment.
+                  <span class="material-symbols-outlined">
+                    sentiment_dissatisfied
+                  </span>
+                </div>
+                <div
                   class="grid grid-cols-4 gap-4 pl-8 py-4 text-xs md:text-sm text-secondary-foreground/70"
                 >
-                  <span
+                  <template
                     v-if="
-                      !product?.sizes || Object.keys(product.sizes).length === 0
+                      product &&
+                      product.sizes &&
+                      Object.keys(product.sizes).length > 0
                     "
                   >
-                    No Available Size
-                  </span>
-                  <template v-else>
                     <template v-for="(sizeItem, sizeName) in selectedSizes">
                       <span>
                         {{ sizeName !== "N/A" ? sizeName + ":" : "" }} P
@@ -255,54 +265,59 @@
         class="grid grid-cols-2 md:grid-cols-4 gap-4 xl:gap-18 pb-8 px-4 md:px-16"
       >
         <div
-          v-if="!isLoading"
           v-for="product in sellerProducts"
+          v-if="!isLoading"
           :key="product.id"
-          class="flex flex-col bg-white shadow-lg border border-primary/20 rounded-sm hover:drop-shadow-xl w-full h-auto md:w-full md:h-[22rem]"
         >
-          <div class="overflow-hidden border-b-2 border-primary/60">
-            <div class="flex flex-col justify-center items-center">
-              <router-link
-                :to="{ name: 'product', params: { id: product.id } }"
-                @click.prevent="incrementViewCount(product)"
-              >
-                <img
-                  :src="product.coverPhoto"
-                  class="transform transition-all duration-500 hover:scale-110 w-full md:w-full h-[8rem] md:h-[16rem] object-cover rounded-t-sm"
-                />
-              </router-link>
-            </div>
-          </div>
-          <div class="p-2 md:p-4 w-full">
-            <div class="flex flex-col w-full whitespace-normal">
-              <p
-                @click.prevent="incrementViewCount(product)"
-                class="truncate cursor-pointer"
-              >
-                <span
-                  class="w-full text-xs md:text-base font-bold text-secondary-foreground truncate hover:underline"
-                >
-                  {{ product.name }}
-                </span>
-              </p>
-              <span
-                class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
-              >
-                P
-                {{ displayPrice }}
-              </span>
-              <div
-                class="flex flex-row justify-between items-center text-[8px] md:text-xs"
-              >
-                <div>
-                  <span> {{ product.totalOrders }} Sold | </span>
-                  <span> {{ product.views }} Views</span>
+          <div v-if="product.id !== route.params.id">
+            <div
+              class="flex flex-col bg-white shadow-lg border border-primary/20 rounded-sm hover:drop-shadow-xl w-full h-auto md:w-full md:h-[22rem]"
+            >
+              <div class="overflow-hidden border-b-2 border-primary/60">
+                <div class="flex flex-col justify-center items-center">
+                  <router-link
+                    :to="{ name: 'product', params: { id: product.id } }"
+                    @click.prevent="incrementViewCount(product)"
+                  >
+                    <img
+                      :src="product.coverPhoto"
+                      class="transform transition-all duration-500 hover:scale-110 w-full md:w-full h-[8rem] md:h-[16rem] object-cover rounded-t-sm"
+                    />
+                  </router-link>
                 </div>
-                <div>
-                  <span>
-                    <span> {{ product.category }} | </span>
-                    <span> {{ product.faction }} </span>
+              </div>
+              <div class="p-2 md:p-4 w-full">
+                <div class="flex flex-col w-full whitespace-normal">
+                  <p
+                    @click.prevent="incrementViewCount(product)"
+                    class="truncate cursor-pointer"
+                  >
+                    <span
+                      class="w-full text-xs md:text-base font-bold text-secondary-foreground truncate hover:underline"
+                    >
+                      {{ product.name }}
+                    </span>
+                  </p>
+                  <span
+                    class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
+                  >
+                    P
+                    {{ displayPrice }}
                   </span>
+                  <div
+                    class="flex flex-row justify-between items-center text-[8px] md:text-xs"
+                  >
+                    <div>
+                      <span> {{ product.totalOrders }} Sold | </span>
+                      <span> {{ product.views }} Views</span>
+                    </div>
+                    <div>
+                      <span>
+                        <span> {{ product.category }} | </span>
+                        <span> {{ product.faction }} </span>
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

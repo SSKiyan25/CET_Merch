@@ -245,7 +245,9 @@
                   class="flex flex-col text-[10px] font-semibold space-y-2 whitespace-normal text-wrap"
                 >
                   <span>Product Name: {{ item.productDetails.name }}</span>
-                  <span>Size: {{ item.size }}</span>
+                  <span v-if="item.size && item.size !== ''"
+                    >Size: {{ item.size }}</span
+                  >
                   <span>Quantity: {{ item.quantity }}</span>
                   <span>Total Amount: P{{ item.totalPrice }}</span>
                 </div>

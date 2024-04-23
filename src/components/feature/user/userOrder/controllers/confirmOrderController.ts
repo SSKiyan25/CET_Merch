@@ -124,6 +124,7 @@ const processOrder = async (orderId: string, router: any) => {
         let sizeData = productDetails.sizes[item.size];
         let quantity = item.quantity;
         let totalPrice = 0;
+        let sizeIndices: Record<number, number> = {};
 
         if (item.isPreOrdered) {
           if (!sizeData) {
@@ -137,14 +138,17 @@ const processOrder = async (orderId: string, router: any) => {
           }
           const price = sizeData[sizeData.length - 1].price;
           totalPrice = price * quantity;
+          sizeIndices[sizeData.length - 1] = quantity; // Store the quantity fetched from this index
         } else {
           for (let i = 0; i < sizeData.length; i++) {
             if (quantity <= sizeData[i].remaining_stocks) {
               totalPrice += sizeData[i].price * quantity;
+              sizeIndices[i] = quantity; // Store the quantity fetched from this index
               quantity = 0;
               break;
             } else {
               totalPrice += sizeData[i].price * sizeData[i].remaining_stocks;
+              sizeIndices[i] = sizeData[i].remaining_stocks; // Store the quantity fetched from this index
               quantity -= sizeData[i].remaining_stocks;
             }
           }
@@ -157,6 +161,7 @@ const processOrder = async (orderId: string, router: any) => {
           quantity: item.quantity,
           isPreOrdered: item.isPreOrdered,
           totalPrice: totalPrice,
+          sizeIndices: sizeIndices,
         };
         newCart.push(newItem);
         overallTotalPrice += totalPrice;

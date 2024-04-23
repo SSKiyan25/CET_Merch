@@ -40,9 +40,15 @@
             to="/admin/inbox"
             class="flex items-center p-2 text-secondary-foreground rounded-lg hover:bg-primary/10 hover:text-primary group"
             active-class="active-link"
+            :class="{
+              'text-white bg-primary/80': $route.path === '/admin/inbox',
+            }"
           >
             <svg
               class="flex-shrink-0 w-5 h-5 text-secondary-foreground transition duration-75 group-hover:text-primary"
+              :class="{
+                'text-white': $route.path === '/admin/inbox',
+              }"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"

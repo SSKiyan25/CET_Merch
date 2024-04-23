@@ -166,7 +166,7 @@
               <label
                 class="block mb-2 text-sm text-secondary-foreground font-medium"
               >
-                Total Order Amount:
+                Total Order Payment Amount:
                 <span class="text-primary underline" v-if="order">
                   {{ order.totalPrice }}
                 </span>
@@ -338,28 +338,40 @@ function getFactionPrefix(faction: string) {
 async function generateOrderRefNum() {
   const now = new Date();
   const months = [
-    "J", // January
-    "F", // February
-    "M", // March
-    "A", // April
-    "M", // May
-    "J", // June
-    "J", // July
-    "A", // August
-    "S", // September
-    "O", // October
-    "N", // November
-    "D", // December
+    "A", // January
+    "B", // February
+    "C", // March
+    "D", // April
+    "E", // May
+    "F", // June
+    "G", // July
+    "H", // August
+    "I", // September
+    "J", // October
+    "K", // November
+    "L", // December
   ];
   const year = now.getFullYear().toString().slice(-2);
   const month = months[now.getMonth()];
-  const day = now.getDate();
+  const day = now.getDate().toString(16); // Convert to hexadecimal
 
-  const numberOfOrders = await getNumberOfOrders(order.value?.faction);
   const factionPrefix = getFactionPrefix(order.value?.faction);
 
+  // Get the number of orders for the given faction
+  const numberOfOrders = await getNumberOfOrders(factionPrefix);
+  const orderCount = numberOfOrders.toString(16); // Convert to hexadecimal
+
+  // Get the orderNumber from the order
+  const orderNumber = order.value?.orderNumber.toString(16); // Convert to hexadecimal
+
+  // Generate a unique part using current timestamp and a random number
+  const uniquePart = (Math.random() * 0xfffff * 1000000).toString(16);
+
   // Combine all parts and return as a string
-  return `${factionPrefix}-${month}${day}${year}-${numberOfOrders + 1}`;
+  return `${factionPrefix}${month}${day}${year}${orderCount}${orderNumber}${uniquePart}`.slice(
+    0,
+    10
+  );
 }
 
 let orderRefNumDisplay = ref("");

@@ -55,9 +55,7 @@ export const setup = () => {
         product.value = await fetchProductById(id);
         const fetchedSellerProducts = await fetchSellerProducts(id);
         if (fetchedSellerProducts) {
-          sellerProducts.value = fetchedSellerProducts.filter(
-            (product) => product.id !== id
-          );
+          sellerProducts.value = fetchedSellerProducts;
         }
       }
     } finally {

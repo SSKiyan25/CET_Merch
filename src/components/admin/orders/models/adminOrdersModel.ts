@@ -113,7 +113,7 @@ export const fetchOrders = async () => {
           "done",
           "ready",
           "cancelled",
-          "decline",
+          "declined",
         ])
       )
     );
