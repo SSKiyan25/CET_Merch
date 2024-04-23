@@ -130,7 +130,7 @@
                 <AlertDialogTrigger>
                   <button
                     v-bind:disabled="
-                      order.orderStatus === 'declined' ||
+                      order.orderStatus === 'decline' ||
                       order.orderStatus === 'cancelled'
                     "
                   >
@@ -138,7 +138,7 @@
                       class="text-[10px] pl-2 font-semibold text-blue-900 hover:underline"
                       :class="{
                         'opacity-50 cursor-not-allowed':
-                          order.orderStatus === 'declined' ||
+                          order.orderStatus === 'decline' ||
                           order.orderStatus === 'cancelled',
                       }"
                       >Cancel Order?
@@ -209,8 +209,8 @@
                 <span>{{ order.orderStatus }}</span>
               </button>
               <button
-                v-else-if="order.orderStatus === 'declined'"
-                class="p-2 bg-red-900 text-white rounded-sm cursor-default capitalize mr-1"
+                v-else-if="order.orderStatus === 'decline'"
+                class="p-2 bg-red-900 text-white rounded-sm cursor-default capitalize"
               >
                 <span>Declined</span>
               </button>
@@ -232,54 +232,19 @@
               >
                 <span>{{ order.orderStatus }} to get!</span>
               </button>
-
-              <Dialog>
-                <DialogTrigger>
-                  <span
-                    v-if="order.orderStatus === 'declined'"
-                    class="text-xs font-bold hover:underline hover:cursor-pointer"
-                  >
-                    Read Why
-                  </span>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle class="border-b pb-1">
-                      Order Declined
-                    </DialogTitle>
-                    <DialogDescription>
-                      <div class="flex flex-col text-black text-xs">
-                        <span>
-                          Your order was declined due to the following reason:
-                        </span>
-                        <p class="indent-2 pt-2 font-semibold">
-                          {{ order.remarks }}
-                        </p>
-                      </div>
-                    </DialogDescription>
-                  </DialogHeader>
-                  <DialogFooter>
-                    <DialogTrigger>
-                      <Button variant="outline"> Close</Button>
-                    </DialogTrigger>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-              <span
-                v-if="
-                  order.paymentStatus !== 'declined' &&
-                  order.paymentStatus !== 'cancelled'
-                "
-                class="px-2"
-                >Payment Status:</span
-              >
+              <span class="px-2">Payment Status:</span>
               <button
                 v-if="order.paymentStatus === 'pending'"
                 class="p-2 bg-amber-600 text-white rounded-sm cursor-default capitalize"
               >
                 Pending
               </button>
-
+              <button
+                v-if="order.paymentStatus === 'decline'"
+                class="p-2 bg-red-900 text-white rounded-sm cursor-default capitalize"
+              >
+                Declined
+              </button>
               <button
                 v-else-if="order.paymentStatus === 'paid'"
                 class="p-2 bg-emerald-600 text-white rounded-sm cursor-default capitalize"
@@ -351,15 +316,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 const orders = ref<DocumentData[]>([]);
 const isLoading = ref(false);

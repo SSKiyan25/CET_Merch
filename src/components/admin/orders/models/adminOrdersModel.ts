@@ -26,7 +26,6 @@ export interface Order {
   studentId: string;
   showDetails?: boolean;
   purchaseDate?: string;
-  remarks?: string;
 }
 
 type priceData = {
@@ -98,7 +97,7 @@ export const fetchOrders = async () => {
           "done",
           "ready",
           "cancelled",
-          "declined",
+          "decline",
         ])
       )
     );

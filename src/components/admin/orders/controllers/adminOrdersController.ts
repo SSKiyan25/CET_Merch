@@ -38,9 +38,16 @@ export const setup = () => {
       for (const item of order.cart) {
         const productData = await getProductDetails(item.productId);
         if (productData) {
+          const sizeIndex = productData.sizes.findIndex(
+            (size: any) => size.value === item.size
+          );
+          if (sizeIndex !== -1) {
+            productData.sizes[sizeIndex].stocks += item.quantity;
+          }
           productUpdateData = {
             totalOrders: productData.totalOrders - item.quantity,
             totalSales: (productData.totalSales || 0) - item.totalPrice,
+            sizes: productData.sizes,
           };
           await updateProduct(item.productId, productUpdateData);
         }
@@ -56,9 +63,16 @@ export const setup = () => {
       for (const item of order.cart) {
         const productData = await getProductDetails(item.productId);
         if (productData) {
+          const sizeIndex = productData.sizes.findIndex(
+            (size: any) => size.value === item.size
+          );
+          if (sizeIndex !== -1) {
+            productData.sizes[sizeIndex].stocks -= item.quantity;
+          }
           productUpdateData = {
             totalOrders: productData.totalOrders + item.quantity,
             totalSales: (productData.totalSales || 0) + item.totalPrice,
+            sizes: productData.sizes,
           };
           await updateProduct(item.productId, productUpdateData);
         }
@@ -91,24 +105,15 @@ export const setup = () => {
     loadingCheckbox.value = false;
   };
 
-  const declineOrder = async (order: Order, remarks: string) => {
-    loadingPage.value = true;
-
-    // Check if the order already has a remarks field
-    if (!("remarks" in order)) {
-      order.remarks = remarks;
-    }
-
-    // Set the paymentStatus to "decline" and update remarks
+  const declineOrder = async (order: Order) => {
+    // Set the paymentStatus to "decline"
     await updateOrder(order.id, {
-      paymentStatus: "declined",
-      orderStatus: "declined",
-      remarks: order.remarks,
+      paymentStatus: "decline",
+      orderStatus: "decline",
     });
 
     // Refresh the orders
     orders.value = await fetchOrders();
-    loadingPage.value = false;
   };
 
   return {

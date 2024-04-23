@@ -256,6 +256,7 @@
     ref="outerDiv"
     v-if="selectedAllImageIndex !== null"
     class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+    @click.prevent="checkOutsideClick"
   >
     <div
       ref="innerDiv"
@@ -380,6 +381,7 @@
     ref="outerDiv"
     v-if="selectedCETImageIndex !== null"
     class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+    @click.prevent="checkOutsideClick"
   >
     <div
       ref="innerDiv"
@@ -403,29 +405,6 @@
               class="absolute block w-[16rem] md:w-[56rem] -translate-y-1/2 top-1/2 h-[16rem] md:h-[42rem] rounded-sm object-cover"
               alt=""
             />
-          </div>
-        </div>
-        <div
-          class="absolute flex justify-center md:justify-end w-full bottom-[16rem] md:bottom-0 md:top-[16rem] content-end h-full"
-        >
-          <div class="md:pr-8 md:pt-36">
-            <span v-if="!isAllDisabled"
-              ><button
-                @click.prevent="toggleAutoplay"
-                class="px-4 py-2 rounded-sm bg-white text-black"
-              >
-                Disable Autoplay
-              </button>
-            </span>
-            <span v-else>
-              <button
-                v-if="isAllDisabled"
-                @click.prevent="toggleAutoplay"
-                class="px-4 py-2 rounded-sm bg-white text-black"
-              >
-                Able Autoplay
-              </button></span
-            >
           </div>
         </div>
       </div>
@@ -504,6 +483,7 @@
     ref="outerDiv"
     v-if="selectedCS3ImageIndex !== null"
     class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+    @click.prevent="checkOutsideClick"
   >
     <div
       ref="innerDiv"
@@ -527,29 +507,6 @@
               class="absolute block w-[16rem] md:w-[56rem] -translate-y-1/2 top-1/2 h-[16rem] md:h-[42rem] rounded-sm object-cover"
               alt=""
             />
-          </div>
-        </div>
-        <div
-          class="absolute flex justify-center md:justify-end w-full bottom-[16rem] md:bottom-0 md:top-[16rem] content-end h-full"
-        >
-          <div class="md:pr-8 md:pt-36">
-            <span v-if="!isAllDisabled"
-              ><button
-                @click.prevent="toggleAutoplay"
-                class="px-4 py-2 rounded-sm bg-white text-black"
-              >
-                Disable Autoplay
-              </button>
-            </span>
-            <span v-else>
-              <button
-                v-if="isAllDisabled"
-                @click.prevent="toggleAutoplay"
-                class="px-4 py-2 rounded-sm bg-white text-black"
-              >
-                Able Autoplay
-              </button></span
-            >
           </div>
         </div>
       </div>
@@ -628,6 +585,7 @@
     ref="outerDiv"
     v-if="selectedMetSocImageIndex !== null"
     class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+    @click.prevent="checkOutsideClick"
   >
     <div
       ref="innerDiv"
@@ -652,29 +610,6 @@
               class="absolute block w-[16rem] md:w-[56rem] -translate-y-1/2 top-1/2 h-[16rem] md:h-[42rem] rounded-sm object-cover"
               alt=""
             />
-          </div>
-        </div>
-        <div
-          class="absolute flex justify-center md:justify-end w-full bottom-[16rem] md:bottom-0 md:top-[16rem] content-end h-full"
-        >
-          <div class="md:pr-8 md:pt-36">
-            <span v-if="!isAllDisabled"
-              ><button
-                @click.prevent="toggleAutoplay"
-                class="px-4 py-2 rounded-sm bg-white text-black"
-              >
-                Disable Autoplay
-              </button>
-            </span>
-            <span v-else>
-              <button
-                v-if="isAllDisabled"
-                @click.prevent="toggleAutoplay"
-                class="px-4 py-2 rounded-sm bg-white text-black"
-              >
-                Able Autoplay
-              </button></span
-            >
           </div>
         </div>
       </div>
@@ -754,6 +689,7 @@
     ref="outerDiv"
     v-if="selectedGEPImageIndex !== null"
     class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+    @click.prevent="checkOutsideClick"
   >
     <div
       ref="innerDiv"
@@ -777,29 +713,6 @@
               class="absolute block w-[16rem] md:w-[56rem] -translate-y-1/2 top-1/2 h-[16rem] md:h-[42rem] rounded-sm object-cover"
               alt=""
             />
-          </div>
-        </div>
-        <div
-          class="absolute flex justify-center md:justify-end w-full bottom-[16rem] md:bottom-0 md:top-[16rem] content-end h-full"
-        >
-          <div class="md:pr-8 md:pt-36">
-            <span v-if="!isAllDisabled"
-              ><button
-                @click.prevent="toggleAutoplay"
-                class="px-4 py-2 rounded-sm bg-white text-black"
-              >
-                Disable Autoplay
-              </button>
-            </span>
-            <span v-else>
-              <button
-                v-if="isAllDisabled"
-                @click.prevent="toggleAutoplay"
-                class="px-4 py-2 rounded-sm bg-white text-black"
-              >
-                Able Autoplay
-              </button></span
-            >
           </div>
         </div>
       </div>
@@ -878,6 +791,7 @@
     ref="outerDiv"
     v-if="selectedPICEImageIndex !== null"
     class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+    @click.prevent="checkOutsideClick"
   >
     <div
       ref="innerDiv"
@@ -901,29 +815,6 @@
               class="absolute block w-[16rem] md:w-[56rem] -translate-y-1/2 top-1/2 h-[16rem] md:h-[42rem] rounded-sm object-cover"
               alt=""
             />
-          </div>
-        </div>
-        <div
-          class="absolute flex justify-center md:justify-end w-full bottom-[16rem] md:bottom-0 md:top-[16rem] content-end h-full"
-        >
-          <div class="md:pr-8 md:pt-36">
-            <span v-if="!isAllDisabled"
-              ><button
-                @click.prevent="toggleAutoplay"
-                class="px-4 py-2 rounded-sm bg-white text-black"
-              >
-                Disable Autoplay
-              </button>
-            </span>
-            <span v-else>
-              <button
-                v-if="isAllDisabled"
-                @click.prevent="toggleAutoplay"
-                class="px-4 py-2 rounded-sm bg-white text-black"
-              >
-                Able Autoplay
-              </button></span
-            >
           </div>
         </div>
       </div>
@@ -1003,6 +894,7 @@
     ref="outerDiv"
     v-if="selectedPSMEImageIndex !== null"
     class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+    @click.prevent="checkOutsideClick"
   >
     <div
       ref="innerDiv"
@@ -1026,29 +918,6 @@
               class="absolute block w-[16rem] md:w-[56rem] -translate-y-1/2 top-1/2 h-[16rem] md:h-[42rem] rounded-sm object-cover"
               alt=""
             />
-          </div>
-        </div>
-        <div
-          class="absolute flex justify-center md:justify-end w-full bottom-[16rem] md:bottom-0 md:top-[16rem] content-end h-full"
-        >
-          <div class="md:pr-8 md:pt-36">
-            <span v-if="!isAllDisabled"
-              ><button
-                @click.prevent="toggleAutoplay"
-                class="px-4 py-2 rounded-sm bg-white text-black"
-              >
-                Disable Autoplay
-              </button>
-            </span>
-            <span v-else>
-              <button
-                v-if="isAllDisabled"
-                @click.prevent="toggleAutoplay"
-                class="px-4 py-2 rounded-sm bg-white text-black"
-              >
-                Able Autoplay
-              </button></span
-            >
           </div>
         </div>
       </div>
@@ -1125,7 +994,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, onBeforeUnmount } from "vue";
+import { onMounted, ref, onBeforeUnmount, onUpdated } from "vue";
 import { initFlowbite } from "flowbite";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -1184,32 +1053,8 @@ const toggleAutoplay = () => {
     if (carouselAllImageIndex !== null) {
       clearInterval(carouselAllImageIndex);
     }
-    if (carouselCETInterval !== null) {
-      clearInterval(carouselCETInterval);
-    }
-    if (carouselCS3Interval !== null) {
-      clearInterval(carouselCS3Interval);
-    }
-    if (carouselMetSocInterval !== null) {
-      clearInterval(carouselMetSocInterval);
-    }
-    if (carouselGEPInterval !== null) {
-      clearInterval(carouselGEPInterval);
-    }
-    if (carouselPICEInterval !== null) {
-      clearInterval(carouselPICEInterval);
-    }
-    if (carouselPSMEInterval !== null) {
-      clearInterval(carouselPSMEInterval);
-    }
   } else {
     startAllCarousel();
-    startCETCarousel();
-    startCS3Carousel();
-    startMetSocCarousel();
-    startGEPCarousel();
-    startPICECarousel();
-    startPSMECarousel();
   }
 };
 
@@ -1305,27 +1150,27 @@ const startPSMECarousel = () => {
   }, 5000) as unknown as number;
 };
 
-// onUpdated(() => {
-//   if (outerDiv.value) {
-//     outerDiv.value.addEventListener("click", checkOutsideClick);
-//   }
-// });
+onUpdated(() => {
+  if (outerDiv.value) {
+    outerDiv.value.addEventListener("click", checkOutsideClick);
+  }
+});
 
-// const checkOutsideClick = (event: any) => {
-//   if (
-//     event.target.id !== "autoplay-button" &&
-//     innerDiv.value &&
-//     !innerDiv.value.contains(event.target)
-//   ) {
-//     selectedCETImageIndex.value = null;
-//     selectedMetSocImageIndex.value = null;
-//     selectedCS3ImageIndex.value = null;
-//     selectedGEPImageIndex.value = null;
-//     selectedPICEImageIndex.value = null;
-//     selectedPSMEImageIndex.value = null;
-//     selectedAllImageIndex.value = null;
-//   }
-// };
+const checkOutsideClick = (event: any) => {
+  if (
+    event.target.id !== "autoplay-button" &&
+    innerDiv.value &&
+    !innerDiv.value.contains(event.target)
+  ) {
+    selectedCETImageIndex.value = null;
+    selectedMetSocImageIndex.value = null;
+    selectedCS3ImageIndex.value = null;
+    selectedGEPImageIndex.value = null;
+    selectedPICEImageIndex.value = null;
+    selectedPSMEImageIndex.value = null;
+    selectedAllImageIndex.value = null;
+  }
+};
 
 const checkEscPress = (event: any) => {
   if (event.key === "Escape") {
@@ -1362,8 +1207,8 @@ onBeforeUnmount(() => {
     clearInterval(carouselPSMEInterval);
   }
   window.removeEventListener("keydown", checkEscPress);
-  // if (outerDiv.value) {
-  //   outerDiv.value.removeEventListener("click", checkOutsideClick);
-  // }
+  if (outerDiv.value) {
+    outerDiv.value.removeEventListener("click", checkOutsideClick);
+  }
 });
 </script>

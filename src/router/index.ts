@@ -65,7 +65,7 @@ async function requireAdminAuth(
       if (user) {
         const docRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(docRef);
-        // console.log(user);
+        console.log(user);
         if (docSnap.exists()) {
           userRole = docSnap.data().role;
           resolve(null);

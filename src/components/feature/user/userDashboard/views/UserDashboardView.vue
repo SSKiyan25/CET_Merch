@@ -166,7 +166,7 @@
                     <span
                       class="text-[10px] pl-2 font-semibold text-blue-900 hover:underline"
                       :class="{
-                        'opacity-50 cursor-not-allowed hover:no-underline':
+                        'opacity-50 cursor-not-allowed':
                           recentOrder.orderStatus === 'decline' ||
                           recentOrder.orderStatus === 'cancelled',
                       }"
@@ -178,20 +178,8 @@
                   <AlertDialogHeader>
                     <AlertDialogTitle> Cancel Order </AlertDialogTitle>
                     <AlertDialogDescription class="text-black">
-                      <div class="flex flex-col text-xs space-y-2">
-                        <p class="indent-1">
-                          Are you sure you want to cancel this order? This
-                          action cannot be undone.
-                        </p>
-                        <input
-                          id="order-remarks"
-                          type="text"
-                          v-model="tempRemarks"
-                          class="p-3 border rounded-sm text-xs bg-background border-primary/40 text-secondary-foreground"
-                          placeholder="Give your reasons..."
-                          required
-                        />
-                      </div>
+                      Are you sure you want to cancel this order? This action
+                      cannot be undone.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
@@ -200,22 +188,11 @@
                     >
                       Close</AlertDialogAction
                     >
-                    <template v-if="tempRemarks !== ''">
-                      <AlertDialogAction>
-                        <button @click.prevent="cancelOrder(recentOrder)">
-                          Cancel Order
-                        </button>
-                      </AlertDialogAction>
-                    </template>
-                    <template v-else>
-                      <div
-                        class="opacity-50 hover:cursor-not-allowed items-center"
-                      >
-                        <Button variant="ghost" disabled class="items-center">
-                          Cancel Order
-                        </Button>
-                      </div>
-                    </template>
+                    <AlertDialogAction>
+                      <button @click.prevent="cancelOrder(recentOrder)">
+                        Cancel Order
+                      </button>
+                    </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
@@ -267,9 +244,9 @@
               <Button
                 v-else-if="recentOrder.orderStatus === 'declined'"
                 variant="default"
-                class="cursor-default capitalize mr-1"
+                class="cursor-default capitalize"
               >
-                <span>declined</span>
+                <span>{{ recentOrder.orderStatus }}</span>
               </Button>
               <Button
                 v-else-if="recentOrder.orderStatus === 'cancelled'"
@@ -290,47 +267,7 @@
               >
                 <span>{{ recentOrder.orderStatus }} to get!</span>
               </button>
-              <Dialog>
-                <DialogTrigger>
-                  <span
-                    v-if="recentOrder.orderStatus === 'declined'"
-                    class="text-xs font-bold hover:underline hover:cursor-pointer"
-                  >
-                    Read Why
-                  </span>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle class="border-b pb-1"
-                      >Order Declined</DialogTitle
-                    >
-                    <DialogDescription>
-                      <div class="flex flex-col text-black text-xs">
-                        <span>
-                          Your order was declined due to the following reason:
-                        </span>
-                        <p class="indent-2 pt-2 font-semibold">
-                          {{ recentOrder.remarks }}
-                        </p>
-                      </div>
-                    </DialogDescription>
-                  </DialogHeader>
-                  <DialogFooter>
-                    <DialogTrigger>
-                      <Button variant="outline"> Close </Button>
-                    </DialogTrigger>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-
-              <span
-                v-if="
-                  recentOrder.orderStatus !== 'declined' &&
-                  recentOrder.orderStatus !== 'cancelled'
-                "
-                class="px-2"
-                >Payment Status:</span
-              >
+              <span class="px-2">Payment Status:</span>
               <button
                 v-if="recentOrder.paymentStatus === 'pending'"
                 class="p-2 bg-red-600 text-white rounded-sm cursor-default capitalize"
@@ -404,22 +341,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 const orders = ref<DocumentData[]>([]);
 const isLoading = ref(false);
 const recentOrder = ref<DocumentData | null>(null);
 const isEditing = ref(false);
 const editLoading = ref(false);
-const tempRemarks = ref("");
 
 const formData = ref({
   username: "",
