@@ -418,6 +418,8 @@ const selectedSizes = computed(() => {
       if (Number(sizeItem.remaining_stocks) > 0) {
         sizes[sizeName] = sizeItem;
         break;
+      } else {
+        sizes[sizeName] = sizeItem;
       }
     }
   }

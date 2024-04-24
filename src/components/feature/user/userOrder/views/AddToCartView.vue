@@ -58,6 +58,7 @@
                   "
                   @click.prevent="selectSize(sizeName)"
                   class="mb-2"
+                  :class="{ 'opacity-50': isButtonDisabled(sizeName) }"
                   :disabled="isButtonDisabled(sizeName)"
                 >
                   {{ sizeName }} -
@@ -211,7 +212,7 @@
                   placeholder="999"
                   v-model.number="newAddToCartData.quantity"
                   :disabled="
-                    !selectedSize.size || !newAddToCartData.isPreOrdered
+                    !selectedSize.size && !newAddToCartData.isPreOrdered
                   "
                   :min="1"
                   :max="
@@ -478,13 +479,16 @@ const props = defineProps({
 //console.log("productId in Cart component: ", props.productId);
 
 const increment = () => {
-  const sizeItems = product.value.sizes[selectedSize.value.size];
-  const totalRemainingStocks = calculateTotalRemainingStocks(sizeItems);
-  if (
-    newAddToCartData.value.isPreOrdered ||
-    newAddToCartData.value.quantity < totalRemainingStocks
-  ) {
+  if (newAddToCartData.value.isPreOrdered) {
     newAddToCartData.value.quantity++;
+  } else {
+    const sizeItems = product.value.sizes[selectedSize.value.size];
+    if (sizeItems) {
+      const totalRemainingStocks = calculateTotalRemainingStocks(sizeItems);
+      if (newAddToCartData.value.quantity < totalRemainingStocks) {
+        newAddToCartData.value.quantity++;
+      }
+    }
   }
 };
 
@@ -653,7 +657,10 @@ const selectSize = (size: any) => {
 
 const hasAvailableStocks = computed(() => {
   for (let sizeData of Object.values(product.value.sizes)) {
-    if (findAvailableSizeItem(sizeData)) {
+    if (
+      findAvailableSizeItem(sizeData) ||
+      sizeData.some((sizeItem) => sizeItem.price > 0)
+    ) {
       return true;
     }
   }
@@ -676,6 +683,7 @@ const isButtonDisabled = (sizeName: string) => {
     (total, sizeItem) => total + Number(sizeItem.remaining_stocks),
     0
   );
+  //const hasPrice = sizeItems.some((sizeItem) => sizeItem.price > 0);
   return newAddToCartData.value.isPreOrdered || totalRemainingStocks === 0;
 };
 
