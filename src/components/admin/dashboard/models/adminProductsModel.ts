@@ -169,10 +169,8 @@ export const updateProduct = async (
     throw new Error("User not found");
   }
 
-  if (userData?.isAdmin) {
-    // All the code that updates the product
-  } else {
-    throw new Error("Only admins can update products");
+  if (!userData) {
+    throw new Error("User data not found");
   }
 
   if (coverPhotoFile) {
