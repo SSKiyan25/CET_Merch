@@ -23,7 +23,7 @@
           <span class="material-symbols-outlined text-sm pt-0.5">
             navigate_next
           </span>
-          <span class="text-xs text-primary/50">{{ product?.category }} </span>
+          <span class="text-xs text-primary/50">{{ product?.faction }} </span>
           <span class="material-symbols-outlined text-sm pt-0.5">
             navigate_next
           </span>

@@ -87,7 +87,16 @@ export const fetchProducts = async (
   const lastDoc = productSnapshot.docs[productSnapshot.docs.length - 1];
 
   // Query to get total number of products
-  const totalQuery = query(productCollection, where("isArchived", "==", false));
+  let totalQuery;
+  if (faction === "all") {
+    totalQuery = query(productCollection, where("isArchived", "==", false));
+  } else {
+    totalQuery = query(
+      productCollection,
+      where("isArchived", "==", false),
+      where("faction", "==", faction)
+    );
+  }
   const totalSnapshot = await getDocs(totalQuery);
   const totalProducts = totalSnapshot.docs.length;
 
