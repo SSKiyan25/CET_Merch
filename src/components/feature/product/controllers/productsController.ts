@@ -39,7 +39,7 @@ export const setup = () => {
             // Iterate over each item in the size array
             for (const sizeItem of sizeArray) {
               // Check if remaining_stocks is not zero
-              if (Number(sizeItem.remaining_stocks) > 0) {
+              if (Number(sizeItem.price) > 0) {
                 // Return the price of this item
                 return sizeItem.price;
               }
