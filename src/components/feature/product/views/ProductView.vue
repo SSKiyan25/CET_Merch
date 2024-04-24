@@ -325,7 +325,7 @@
         </div>
       </div>
       <div
-        v-if="!isLoading && sellerProducts.length === 0"
+        v-if="!isLoading && filteredSellerProducts.length === 0"
         class="flex justify-center text-center items-center mx-auto w-full"
       >
         <div class="flex justify-center pb-16">
