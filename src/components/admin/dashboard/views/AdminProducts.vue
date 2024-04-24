@@ -22,7 +22,7 @@
         <div class="flex flex-row">
           <h1 class="font-bold text-xl tracking-wide mt-1">Products</h1>
         </div>
-        <div class="flex flex-row">
+        <div class="flex flex-col md:flex-row">
           <router-link to="/admin/products/addproduct"
             ><button
               class="bg-green-500 px-3 py-2 rounded-lg mr-2 mb-2 hover:bg-green-400"
@@ -155,19 +155,11 @@
                           <span
                             class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                           >
-                            Price
+                            Sizes | Stocks | Price
                           </span>
                         </div>
                       </th>
-                      <th scope="col" class="px-6 py-3 text-start">
-                        <div class="flex items-center gap-x-2">
-                          <span
-                            class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
-                          >
-                            Sizes | Stocks
-                          </span>
-                        </div>
-                      </th>
+
                       <th scope="col" class="px-6 py-3 text-end justify-end">
                         <div class="flex text-end justify-end pr-10 gap-x-2">
                           <span
@@ -182,17 +174,6 @@
 
                   <tbody class="divide-y divide-primary/50">
                     <tr v-if="loadingPage">
-                      <td class="p-4">
-                        <div
-                          class="flex items-center justify-start pl-4 h-full w-full"
-                        >
-                          <span
-                            class="material-symbols-outlined text-2xl text-primary animate-spin"
-                          >
-                            autorenew
-                          </span>
-                        </div>
-                      </td>
                       <td class="p-4">
                         <div
                           class="flex items-center justify-start pl-4 h-full w-full"
@@ -297,64 +278,17 @@
                         </div>
                       </td>
 
-                      <td class="size-px whitespace-nowrap">
+                      <td class="size-4/12 whitespace-nowrap">
                         <div class="px-6 py-3">
-                          <div class="flex flex-row items-center gap-x-2">
-                            <div class="grow text-xs flex flex-col space-y-2">
-                              <span class="text-secondary-foreground/80">
-                                Original Price: P
-                                {{
-                                  product.price[product.price.length - 1]
-                                    .originalPrice
-                                }}
-                              </span>
-                              <span class="text-secondary-foreground/80">
-                                Discounted Price: P
-                                {{
-                                  product.price[product.price.length - 1]
-                                    .discountedPrice
-                                }}
-                              </span>
-                              <span class="text-secondary-foreground/80">
-                                Last Modified:
-                                {{
-                                  formatDate(
-                                    product.price[product.price.length - 1]
-                                      .dateCreated
-                                  )
-                                }}
-                              </span>
-                            </div>
+                          <div class="w-full whitespace-normal">
+                            <button @click.prevent="productStocks(product.id)">
+                              <span
+                                class="text-xs text-primary font-medium hover:underline"
+                              >
+                                View Full Details</span
+                              >
+                            </button>
                           </div>
-                        </div>
-                      </td>
-
-                      <td class="size-2/12 whitespace-nowrap">
-                        <div class="px-6 py-3">
-                          <p class="w-full whitespace-normal">
-                            <span
-                              v-for="(size, index) in product.sizes"
-                              :key="index"
-                              class="text-xs text-secondary-foreground/80"
-                            >
-                              {{ size.value }}- {{ size.stocks
-                              }}<span v-if="index < product.sizes.length - 1">
-                                |
-                              </span>
-                            </span>
-                            <span
-                              v-if="
-                                (product.sizes[0] === '' &&
-                                  product.sizes.length === 1) ||
-                                (product.sizes.length === 0 &&
-                                  product.generalStocks > 0) ||
-                                product.generalStocks
-                              "
-                              class="text-xs text-secondary-foreground/80"
-                            >
-                              {{ product.generalStocks }}
-                            </span>
-                          </p>
                         </div>
                       </td>
                       <td class="size-1/12 text-start whitespace-nowrap px-2.5">
@@ -410,8 +344,7 @@
                                       class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
                                     >
                                       <div
-                                        class="relative p-4 w-full max-w-4xl max-h-full bg-background rounded-lg shadow overflow-y-auto"
-                                        style="max-height: 90vh"
+                                        class="relative p-4 w-full max-w-4xl max-h-screen bg-background rounded-lg shadow overflow-y-auto"
                                       >
                                         <div
                                           class="modal-header flex items-center justify-between p-4 md:p-5 border-b rounded-t border-secondary-foreground/90"
@@ -467,84 +400,20 @@
                                               >
                                             </p>
                                             <p
-                                              class="whitespace-normal text-xs pt-2 pl-4 text-secondary-foreground text-justify"
+                                              class="whitespace-normal text-[10px] md:text-xs pt-2 md:pl-4 text-secondary-foreground text-justify"
                                             >
                                               {{ product.description }}
                                             </p>
-                                            <span
-                                              class="font-bold text-base text-primary/90 pt-4"
-                                              >Price:</span
-                                            >
-                                            <div
-                                              v-for="(
-                                                price, index
-                                              ) in product.price"
-                                              :key="index"
-                                              class="pt-4 flex flex-col items-start"
-                                            >
-                                              <p>
-                                                <span
-                                                  class="text-secondary-foreground/80"
-                                                >
-                                                  Original Price: P{{
-                                                    price.originalPrice
-                                                  }}
-                                                </span>
-                                              </p>
-                                              <p>
-                                                <span
-                                                  class="text-secondary-foreground/80"
-                                                >
-                                                  Discounted Price: P{{
-                                                    price.discountedPrice
-                                                  }}
-                                                </span>
-                                              </p>
-                                              <p>
-                                                <span
-                                                  class="text-secondary-foreground/80"
-                                                >
-                                                  Last Modified:
-                                                  {{
-                                                    formatDate(
-                                                      price.dateCreated
-                                                    )
-                                                  }}
-                                                </span>
-                                              </p>
+
+                                            <div class="pt-4">
+                                              <span
+                                                class="font-normal text-sm md:text-base text-primary/90"
+                                                >Sizes with its Stocks
+                                                Available:</span
+                                              >
                                             </div>
-                                            <p class="pt-4">
-                                              <span
-                                                class="font-normal text-base text-primary/90"
-                                                >Sizes Available:
-                                              </span>
-                                              <span
-                                                v-for="(
-                                                  size, index
-                                                ) in product.sizes"
-                                                :key="index"
-                                                class="text-xs text-secondary-foreground"
-                                              >
-                                                {{ size.value }}-{{ size.stocks
-                                                }}<span
-                                                  v-if="
-                                                    index <
-                                                    product.sizes.length - 1
-                                                  "
-                                                  >,
-                                                </span>
-                                              </span>
-                                              <span
-                                                v-if="
-                                                  product.sizes[0] === '' &&
-                                                  product.sizes.length === 1
-                                                "
-                                              >
-                                                No Available Size
-                                              </span>
-                                            </p>
                                             <p
-                                              class="py-4 text-xs text-secondary-foreground/80"
+                                              class="py-4 text-[10px] md:text-xs text-secondary-foreground/80 text-wrap"
                                             >
                                               <span v-if="product.isPublished"
                                                 >This product is currently
@@ -573,6 +442,7 @@
                                             />
                                           </div>
                                         </div>
+                                        <div class="h-16"></div>
                                       </div>
                                     </div>
                                   </div>
@@ -644,9 +514,13 @@
                       -
                       <span
                         class="font-semibold text-gray-800 dark:text-gray-200"
-                        >{{ totalProducts }}</span
+                        >{{ currentPage + 1 < 5 ? totalProducts : 5 }}</span
                       >
                       results
+                      <span
+                        class="font-semibold text-gray-800 dark:text-gray-200"
+                        >out of {{ totalProducts }} total Products</span
+                      >
                     </p>
                   </div>
 
@@ -711,6 +585,7 @@
   <div v-if="isDeleting">
     <LoadingComponent />
   </div>
+  <div class="h-32"></div>
 </template>
 
 <script setup lang="ts">
@@ -764,6 +639,7 @@ let selectedCategory = ref("All");
 
 const {
   products,
+  productStocks,
   totalProducts,
   editProductController,
   deleteProductController,

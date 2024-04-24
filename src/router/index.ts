@@ -22,6 +22,7 @@ import UserDashboard from "../components/feature/user/userDashboard/views/UserDa
 import UserOrders from "../components/feature/user/userDashboard/views/UserOrdersView.vue";
 import AllProducts from "../components/feature/product/views/AllProductsView.vue";
 import AboutUs from "../components/feature/aboutUs/views/AboutUsView.vue";
+import AdminProductStocks from "../components/admin/dashboard/views/products/ProductStocks.vue";
 import { ref } from "vue";
 import { auth, db } from "../firebase/init";
 import { DocumentData, getDoc, doc } from "firebase/firestore";
@@ -64,7 +65,7 @@ async function requireAdminAuth(
       if (user) {
         const docRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(docRef);
-        console.log(user);
+        // console.log(user);
         if (docSnap.exists()) {
           userRole = docSnap.data().role;
           resolve(null);
@@ -131,6 +132,12 @@ const routes: RouteRecordRaw[] = [
     beforeEnter: requireAdminAuth,
   },
   {
+    path: "/admin/products/productstocks/:id",
+    name: "adminProductStocks",
+    component: AdminProductStocks,
+    beforeEnter: requireAdminAuth,
+  },
+  {
     path: "/admin/orders",
     name: "adminOrders",
     component: AdminOrders,
@@ -154,7 +161,7 @@ const routes: RouteRecordRaw[] = [
     beforeEnter: requireAuth,
   },
   {
-    path: "/submitorder/:id",
+    path: "/submitorder/:orderId",
     name: "submitOrder",
     component: SubmitOrder,
     beforeEnter: requireAuth,

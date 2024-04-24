@@ -104,9 +104,7 @@
                   <div class="flex flex-row">
                     <span class="text-2xl font-semibold text-primary">
                       P
-                      {{
-                        product?.price[product.price.length - 1].originalPrice
-                      }}</span
+                      {{ displayPrice }}</span
                     >
                     <span class="text-xl pl-2">(</span>
                     <div class="flex items-center">
@@ -187,23 +185,40 @@
                   {{ product?.description }}
                 </p>
               </div>
+
               <div>
-                <span>Available Sizes:</span>
-                <p class="pl-8 py-4 text-secondary-foreground/70">
-                  <span
-                    v-if="product?.sizes.every((size : string) => size === '') || product?.sizes.length === 0"
+                <span>Sizes | Price:</span>
+                <div
+                  v-if="
+                    !product?.sizes || Object.keys(product.sizes).length === 0
+                  "
+                  class="indent-4 font-semibold pt-2 flex flex-row items-center"
+                >
+                  No Available Stocks at the moment.
+                  <span class="material-symbols-outlined">
+                    sentiment_dissatisfied
+                  </span>
+                </div>
+                <div
+                  class="grid grid-cols-4 gap-4 pl-8 py-4 text-xs md:text-sm text-secondary-foreground/70"
+                >
+                  <template
+                    v-if="
+                      product &&
+                      product.sizes &&
+                      Object.keys(product.sizes).length > 0
+                    "
                   >
-                    No Available Size
-                  </span>
-                  <span v-else v-for="size in product?.sizes" :key="size.value"
-                    >{{ size.value }} |
-                  </span>
-                </p>
+                    <template v-for="(sizeItem, sizeName) in selectedSizes">
+                      <span>
+                        {{ sizeName !== "N/A" ? sizeName + ":" : "" }} P
+                        {{ sizeItem.price }}
+                      </span>
+                    </template>
+                  </template>
+                </div>
               </div>
-              <div>
-                <span class="pr-2">Seller:</span>
-                <span class="font-bold">{{ product?.faction }}</span>
-              </div>
+
               <div class="flex justify-center md:justify-start">
                 <Sheet>
                   <SheetTrigger as-child
@@ -250,59 +265,74 @@
         class="grid grid-cols-2 md:grid-cols-4 gap-4 xl:gap-18 pb-8 px-4 md:px-16"
       >
         <div
+          v-for="product in filteredSellerProducts"
           v-if="!isLoading"
-          v-for="product in sellerProducts"
           :key="product.id"
-          class="flex flex-col bg-white shadow-lg border border-primary/20 rounded-sm hover:drop-shadow-xl w-full h-auto md:w-full md:h-[22rem]"
         >
-          <div class="overflow-hidden border-b-2 border-primary/60">
-            <div class="flex flex-col justify-center items-center">
-              <router-link
-                :to="`product/${product.id}`"
-                @click.prevent="incrementViewCount(product)"
-              >
-                <img
-                  :src="product.coverPhoto"
-                  class="transform transition-all duration-500 hover:scale-110 w-full md:w-full h-[8rem] md:h-[16rem] object-cover rounded-t-sm"
-                />
-              </router-link>
-            </div>
-          </div>
-          <div class="p-2 md:p-4 w-full">
-            <div class="flex flex-col w-full whitespace-normal">
-              <router-link
-                :to="`/product/${product.id}`"
-                @click.prevent="incrementViewCount(product)"
-                class="truncate"
-              >
-                <span
-                  class="w-full text-xs md:text-base font-bold text-secondary-foreground truncate hover:underline"
-                >
-                  {{ product.name }}
-                </span>
-              </router-link>
-              <span
-                class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
-              >
-                P
-                {{ product.price[product.price.length - 1].originalPrice }}
-              </span>
-              <div
-                class="flex flex-row justify-between items-center text-[8px] md:text-xs"
-              >
-                <div>
-                  <span> {{ product.totalOrders }} Sold | </span>
-                  <span> {{ product.views }} Views</span>
+          <div>
+            <div
+              class="flex flex-col bg-white shadow-lg border border-primary/20 rounded-sm hover:drop-shadow-xl w-full h-auto md:w-full md:h-[22rem]"
+            >
+              <div class="overflow-hidden border-b-2 border-primary/60">
+                <div class="flex flex-col justify-center items-center">
+                  <router-link
+                    :to="{ name: 'product', params: { id: product.id } }"
+                    @click.prevent="incrementViewCount(product)"
+                  >
+                    <img
+                      :src="product.coverPhoto"
+                      class="transform transition-all duration-500 hover:scale-110 w-full md:w-full h-[8rem] md:h-[16rem] object-cover rounded-t-sm"
+                    />
+                  </router-link>
                 </div>
-                <div>
-                  <span>
-                    <span> {{ product.category }} | </span>
-                    <span> {{ product.faction }} </span>
+              </div>
+              <div class="p-2 md:p-4 w-full">
+                <div class="flex flex-col w-full whitespace-normal">
+                  <p
+                    @click.prevent="incrementViewCount(product)"
+                    class="truncate cursor-pointer"
+                  >
+                    <span
+                      class="w-full text-xs md:text-base font-bold text-secondary-foreground truncate hover:underline"
+                    >
+                      {{ product.name }}
+                    </span>
+                  </p>
+                  <span
+                    class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
+                  >
+                    P
+                    {{ displayPrice }}
                   </span>
+                  <div
+                    class="flex flex-row justify-between items-center text-[8px] md:text-xs"
+                  >
+                    <div>
+                      <span> {{ product.totalOrders }} Sold | </span>
+                      <span> {{ product.views }} Views</span>
+                    </div>
+                    <div>
+                      <span>
+                        <span> {{ product.category }} | </span>
+                        <span> {{ product.faction }} </span>
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div
+        v-if="!isLoading && sellerProducts.length === 0"
+        class="flex justify-center text-center items-center mx-auto w-full"
+      >
+        <div class="flex justify-center pb-16">
+          Nothing else to see
+          <span class="pl-1 material-symbols-outlined">
+            sentiment_dissatisfied
+          </span>
         </div>
       </div>
     </div>
@@ -311,7 +341,7 @@
 </template>
 
 <script setup lang="ts">
-import { provide, ref, watch, Ref } from "vue";
+import { provide, ref, watch, Ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { Button } from "@/components/ui/button";
 import {
@@ -327,16 +357,32 @@ import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import Loading from "@/components/feature/misc/LoadingComponent.vue";
 import { setup as setupProductController } from "../controllers/productsController";
 import { setupProductController as setupProduct } from "../controllers/productController";
+import { SizeType } from "../models/productsModel";
 import { DocumentData } from "firebase/firestore";
 
 const route = useRoute();
-const { product, loading } = setupProduct(route);
-const currentId = route.params.id as string;
+const { product, loading, displayPrice } = setupProduct(route);
+let currentId = ref(route.params.id as string);
 
 //console.log("product: ", product);
 
-const { products, sellerProducts, isLoading, incrementViewCount } =
-  setupProductController();
+watch(route, (newRoute) => {
+  currentId.value = newRoute.params.id as string;
+});
+
+const filteredSellerProducts = computed(() => {
+  return sellerProducts.value.filter(
+    (product) => product.id !== currentId.value
+  );
+});
+
+const {
+  products,
+  sellerProducts,
+  isLoading,
+
+  incrementViewCount,
+} = setupProductController();
 
 const getProductById = (id: string) => {
   return products.value.find((product) => product.id === id);
@@ -364,6 +410,19 @@ featuredPhoto.value = allPhotos.value[0] || null;
 const updateFeaturedPhoto = (newPhoto: string) => {
   featuredPhoto.value = newPhoto;
 };
+
+const selectedSizes = computed(() => {
+  const sizes: Record<string, SizeType> = {};
+  for (let sizeName in product.value?.sizes) {
+    for (let sizeItem of product.value.sizes[sizeName]) {
+      if (Number(sizeItem.remaining_stocks) > 0) {
+        sizes[sizeName] = sizeItem;
+        break;
+      }
+    }
+  }
+  return sizes;
+});
 
 //console.log("product: ", product);
 </script>

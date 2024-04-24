@@ -239,7 +239,6 @@ import { setup as setupControllerFeatured } from "../controllers/adminUploadFeat
 import { useRouter } from "vue-router";
 import AdminSidebar from "../views/AdminSidebar.vue";
 import {
-  fetchProductsForSeller,
   fetchTotalPendingOrders,
   fetchTotalUnreadMessages,
   fetchDashboardProducts,
@@ -261,11 +260,11 @@ let products: Ref<
 > = ref([]);
 
 const fetchTotalProducts = async () => {
-  const result = await fetchProductsForSeller();
+  const result = await fetchDashboardProducts();
   if (result) {
-    totalProducts.value = result.totalProducts;
+    totalProducts.value = result.length;
   } else {
-    console.error("Failed to fetch products");
+    console.error("Failed to fetch dashboard products");
   }
 };
 

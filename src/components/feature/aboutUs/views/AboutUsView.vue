@@ -301,6 +301,8 @@
       <!-- Card -->
       <a
         class="group flex gap-y-6 size-full hover:bg-gray-100 rounded-lg p-5 transition-all"
+        target="_blank"
+        rel="noopener noreferrer"
         href="https://www.facebook.com/VSUCSCube"
       >
         <img
@@ -345,6 +347,8 @@
       <!-- Card -->
       <a
         class="group flex gap-y-6 size-full hover:bg-gray-100 rounded-lg p-5 transition-all"
+        target="_blank"
+        rel="noopener noreferrer"
         href="https://www.facebook.com/GEPVSUSC"
       >
         <img
@@ -389,6 +393,8 @@
       <!-- Card -->
       <a
         class="group flex gap-y-6 size-full hover:bg-gray-100 rounded-lg p-5 transition-all"
+        target="_blank"
+        rel="noopener noreferrer"
         href="https://www.facebook.com/VSUMetSoc"
       >
         <img
@@ -410,7 +416,7 @@
           <p
             class="mt-3 inline-flex items-center gap-x-1 text-sm font-semibold text-gray-800"
           >
-            Visit Page
+            Visit FB Page
             <svg
               class="flex-shrink-0 size-4 transition ease-in-out group-hover:translate-x-1"
               xmlns="http://www.w3.org/2000/svg"
@@ -434,6 +440,8 @@
       <!-- Card -->
       <a
         class="group flex gap-y-6 size-full hover:bg-gray-100 rounded-lg p-5 transition-all"
+        target="_blank"
+        rel="noopener noreferrer"
         href="https://www.facebook.com/picevsusc"
       >
         <img
@@ -478,6 +486,8 @@
       <!-- Card -->
       <a
         class="group flex gap-y-6 size-full hover:bg-gray-100 rounded-lg p-5 transition-all"
+        target="_blank"
+        rel="noopener noreferrer"
         href="https://www.facebook.com/psabevsusc"
       >
         <img
@@ -521,6 +531,8 @@
       <!-- Card -->
       <a
         class="group flex gap-y-6 size-full hover:bg-gray-100 rounded-lg p-5 transition-all"
+        target="_blank"
+        rel="noopener noreferrer"
         href="https://www.facebook.com/psmevsu"
       >
         <img

@@ -1,7 +1,7 @@
 <template>
   <NavBar />
   <AdminSidebar />
-  <div class="p-4 bg-slate-100 h-screen ml-2 sm:ml-64 pb-16">
+  <div class="p-4 h-screen ml-2 sm:ml-64 pb-16">
     <div class="flex flex-row justify-start py-10">
       <div class="flex">
         <span class="material-symbols-outlined p-2 text-5xl"> mail </span>
@@ -14,7 +14,7 @@
         </p>
       </div>
     </div>
-    <div class="flex flex-col p-4 border-2 rounded-lg py-5">
+    <div class="flex flex-col p-4 border-2 rounded-lg py-5 bg-slate-200">
       <div
         class="flex flex-col md:flex-row justify-between border-b-2 pb-2 space-y-2 md:space-y-0"
       >
@@ -112,7 +112,7 @@
         <div class="flex flex-col">
           <div class="overflow-x-auto">
             <div class="min-w-full inline-block align-middle">
-              <div class="bg-slate-200 border-t-2 shadow-sm overflow-hidden">
+              <div class="border-t-2 shadow-sm overflow-hidden">
                 <table class="min-w-full divide-y divide-primary/50">
                   <thead class="bg-slate-300">
                     <tr>
@@ -157,7 +157,7 @@
                     <tr
                       v-for="(message, index) in statusFilteredInboxMessages"
                       :key="message.id"
-                      class="hover:bg-primary/10"
+                      class="hover:bg-primary/10 bg-white"
                     >
                       <td>
                         <div class="pl-5 py-3">

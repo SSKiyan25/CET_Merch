@@ -1,5 +1,5 @@
-import { ref, onMounted } from "vue";
-import { useRoute, onBeforeRouteLeave } from "vue-router";
+import { ref, onMounted, computed } from "vue";
+import { useRoute } from "vue-router";
 import {
   fetchProducts,
   fetchProductById,
@@ -13,10 +13,13 @@ import {
 interface User {
   lastViewed: Record<string, number>;
 }
+interface ProductWithDisplayPrice extends Product {
+  displayPrice: ReturnType<typeof computed>;
+}
 
 export const setup = () => {
   const route = useRoute();
-  const products = ref<Product[]>([]);
+  const products = ref<ProductWithDisplayPrice[]>([]);
   const product = ref<Product | null>(null);
   const isLoading = ref(false);
   const user = ref<User | null>(null);
@@ -25,7 +28,27 @@ export const setup = () => {
   onMounted(async () => {
     isLoading.value = true;
     try {
-      products.value = await fetchProducts();
+      const fetchedProducts = await fetchProducts();
+      products.value = fetchedProducts.map((product) => ({
+        ...product,
+        displayPrice: computed(() => {
+          // Iterate over each size in the product
+          for (const sizeName in product.sizes) {
+            const sizeArray = product.sizes[sizeName];
+
+            // Iterate over each item in the size array
+            for (const sizeItem of sizeArray) {
+              // Check if remaining_stocks is not zero
+              if (Number(sizeItem.remaining_stocks) > 0) {
+                // Return the price of this item
+                return sizeItem.price;
+              }
+            }
+          }
+          // If no size has non-zero remaining_stocks, return 0
+          return 0;
+        }),
+      }));
       user.value = (await fetchUser()) as User;
       if (route.params.id) {
         const id = route.params.id as string;
@@ -58,14 +81,24 @@ export const setup = () => {
     }
   };
 
-  onBeforeRouteLeave((to) => {
-    if (to.name === "Product") {
-      const product = products.value.find((p) => p.id === to.params.id);
-      if (product) {
-        incrementViewCount(product);
-      }
-    }
-  });
+  // onBeforeRouteLeave((__, ___, next) => {
+  //   if (route.name === "product") {
+  //     const product = products.value.find((p) => p.id === route.params.id);
+  //     if (product) {
+  //       incrementViewCount(product).then(() => next());
+  //     } else {
+  //       next();
+  //     }
+  //   } else {
+  //     next();
+  //   }
+  // });
 
-  return { products, product, isLoading, incrementViewCount, sellerProducts };
+  return {
+    products,
+    product,
+    isLoading,
+    incrementViewCount,
+    sellerProducts,
+  };
 };

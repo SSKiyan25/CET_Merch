@@ -148,23 +148,28 @@
                 class="block mb-2 text-sm text-secondary-foreground font-medium"
                 >Products:</label
               >
-              <div
-                v-for="product in products"
-                :key="product.productId"
-                class="pl-4"
-              >
-                <label class="text-sm opacity-80"
-                  >{{ product.details.name }} ({{ product.quantity }}) -
-                  {{ product.totalPrice }}</label
+              <div v-if="order">
+                <div
+                  v-for="item in order.cart"
+                  :key="item.productId"
+                  class="pl-4"
                 >
+                  <label class="text-sm opacity-80">
+                    {{ item.productName }} - {{ item.size }} x
+                    {{ item.quantity }} - P{{ item.totalPrice }}
+                    <span v-if="item.isPreOrdered"> (Pre-Order) </span>
+                  </label>
+                </div>
               </div>
             </div>
             <div>
               <label
                 class="block mb-2 text-sm text-secondary-foreground font-medium"
               >
-                Total Amount:
-                <span class="text-primary underline"> {{ totalPrice }}</span>
+                Total Order Payment Amount:
+                <span class="text-primary underline" v-if="order">
+                  {{ order.totalPrice }}
+                </span>
               </label>
             </div>
           </div>
@@ -221,12 +226,14 @@
           <router-link
             to="/contactUs"
             class="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg hover:bg-background/70 hover:text-secondary-foreground/80"
-            ><span class="text-secondary-foreground"> Contact Us </span>
+            ><span class="text-secondary-foreground font-semibold">
+              Contact Us
+            </span>
           </router-link>
           <router-link
             to="/"
             class="bg-primary/80 text-primary/90 px-4 py-2 rounded-lg hover:bg-primary/90 hover:text-primary/80"
-            ><span class="text-primary-foreground"> Done </span>
+            ><span class="text-primary-foreground font-semibold"> Done </span>
           </router-link>
         </div>
       </div>
@@ -235,7 +242,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { db, auth } from "@/firebase/init";
 import {
@@ -268,11 +275,15 @@ const formData = ref({
 
 const fetchProductDetails = async (productId: string) => {
   try {
+    if (cache.has(productId)) {
+      return cache.get(productId);
+    }
     const docRef = doc(db, "products", productId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      //console.log(docSnap.data());
-      return docSnap.data();
+      const productData = docSnap.data();
+      cache.set(productId, productData);
+      return productData;
     } else {
       console.log("No such document!");
     }
@@ -301,27 +312,6 @@ const fetchOrder = async (orderId: string) => {
   }
 };
 
-const totalPrice = computed(() => {
-  if (order.value && order.value.cart) {
-    return parseFloat(
-      order.value.cart
-        .reduce(
-          (
-            total: number,
-            item: { details: { price: any[] }; quantity: number }
-          ) =>
-            total +
-            item.details.price[item.details.price.length - 1].originalPrice *
-              item.quantity,
-          0
-        )
-        .toFixed(2)
-    );
-  } else {
-    return 0;
-  }
-});
-
 const productFaction = computed(() => {
   if (products.value.length > 0) {
     return products.value[0].details.faction;
@@ -348,37 +338,86 @@ function getFactionPrefix(faction: string) {
 async function generateOrderRefNum() {
   const now = new Date();
   const months = [
-    "J", // January
-    "F", // February
-    "M", // March
-    "A", // April
-    "M", // May
-    "J", // June
-    "J", // July
-    "A", // August
-    "S", // September
-    "O", // October
-    "N", // November
-    "D", // December
+    "A", // January
+    "B", // February
+    "C", // March
+    "D", // April
+    "E", // May
+    "F", // June
+    "G", // July
+    "H", // August
+    "I", // September
+    "J", // October
+    "K", // November
+    "L", // December
   ];
   const year = now.getFullYear().toString().slice(-2);
   const month = months[now.getMonth()];
-  const day = now.getDate();
+  const day = now.getDate().toString(16); // Convert to hexadecimal
 
-  const numberOfOrders = await getNumberOfOrders(order.value?.faction);
   const factionPrefix = getFactionPrefix(order.value?.faction);
 
+  // Get the number of orders for the given faction
+  const numberOfOrders = await getNumberOfOrders(factionPrefix);
+  const orderCount = numberOfOrders.toString(16); // Convert to hexadecimal
+
+  // Get the orderNumber from the order
+  const orderNumber = order.value?.orderNumber.toString(16); // Convert to hexadecimal
+
+  // Generate a unique part using current timestamp and a random number
+  const uniquePart = (Math.random() * 0xfffff * 1000000).toString(16);
+
   // Combine all parts and return as a string
-  return `${factionPrefix}-${month}${day}${year}-${numberOfOrders + 1}`;
+  return `${factionPrefix}${month}${day}${year}${orderCount}${orderNumber}${uniquePart}`.slice(
+    0,
+    10
+  );
 }
 
 let orderRefNumDisplay = ref("");
+
+async function updateProductStocks(
+  productId: string,
+  size: string,
+  quantity: number,
+  isPreOrdered: boolean
+) {
+  const productRef = doc(db, "products", productId);
+  const productSnap = await getDoc(productRef);
+  if (productSnap.exists()) {
+    const productData = productSnap.data();
+    const sizeArray = productData.sizes[size];
+    let remainingQuantity = quantity;
+
+    // Only update stocks if the item is not pre-ordered
+    if (!isPreOrdered) {
+      for (let sizeData of sizeArray) {
+        if (remainingQuantity <= 0) break;
+
+        if (sizeData.remaining_stocks >= remainingQuantity) {
+          sizeData.remaining_stocks -= remainingQuantity;
+          sizeData.reserved_stocks += remainingQuantity;
+          remainingQuantity = 0;
+        } else {
+          remainingQuantity -= sizeData.remaining_stocks;
+          sizeData.reserved_stocks += sizeData.remaining_stocks;
+          sizeData.remaining_stocks = 0;
+        }
+      }
+    }
+
+    await updateDoc(productRef, { sizes: productData.sizes });
+  }
+}
 
 const submitOrder = async (formData: any) => {
   try {
     loading.value = true;
     const userId = auth.currentUser?.uid;
-    const orderId = String(route.params.id);
+    let orderId = route.params.orderId;
+    if (Array.isArray(orderId)) {
+      orderId = orderId[0];
+    }
     if (!userId) throw new Error("User not logged in");
 
     const userRef = doc(db, "users", userId);
@@ -392,13 +431,22 @@ const submitOrder = async (formData: any) => {
         userName: formData.lastName + ", " + formData.firstName,
         userContactNumber: formData.phoneNumber,
         studentId: formData.studentId,
-        totalPrice: totalPrice.value,
         userEmailAddress: formData.email,
         paymentMethod: formData.paymentMethod,
         paymentStatus: "pending",
         orderStatus: "processing",
         dateOrdered: new Date().toISOString(),
       });
+
+      for (let product of products.value) {
+        await updateProductStocks(
+          product.productId,
+          product.size,
+          product.quantity,
+          product.isPreOrdered
+        );
+      }
+
       orderRefNumDisplay.value = orderRefNumValue;
       loading.value = false;
       2500;
@@ -419,8 +467,13 @@ onMounted(async () => {
     const userSnap = await getDoc(userRef);
     if (userSnap.exists()) {
       const userData = userSnap.data();
-      formData.value.firstName = userData.name.split(", ")[1] || "";
-      formData.value.lastName = userData.name.split(", ")[0] || "";
+      if (userData.name) {
+        const nameParts = userData.name
+          .split(",")
+          .map((part: string) => part.trim());
+        formData.value.lastName = nameParts[0] || "";
+        formData.value.firstName = nameParts[1] || "";
+      }
       formData.value.email = userData.email || "";
       formData.value.phoneNumber = userData.phoneNumber || "";
       formData.value.studentId = userData.studentId || "";
@@ -428,23 +481,24 @@ onMounted(async () => {
   }
 });
 
-watch(
-  () => route.params.id,
-  async (newId, oldId) => {
-    loading.value = true;
-    if (typeof newId === "string" && newId !== oldId) {
-      if (cache.has(newId)) {
-        order.value = cache.get(newId);
-      } else {
-        const fetchedOrder = await fetchOrder(newId);
-        if (fetchedOrder) {
-          order.value = fetchedOrder;
-          cache.set(newId, order.value);
+onMounted(async () => {
+  let orderId = route.params.orderId;
+  if (Array.isArray(orderId)) {
+    orderId = orderId[0];
+  }
+  console.log("Order ID: ", orderId);
+  if (orderId) {
+    const fetchedOrder = await fetchOrder(orderId);
+    if (fetchedOrder && fetchedOrder.cart) {
+      for (let item of fetchedOrder.cart) {
+        const product = await fetchProductDetails(item.productId);
+        if (product) {
+          item.productName = product.name;
         }
       }
+      order.value = fetchedOrder;
+      console.log("Order: ", order.value);
     }
-    loading.value = false;
-  },
-  { immediate: true }
-);
+  }
+});
 </script>

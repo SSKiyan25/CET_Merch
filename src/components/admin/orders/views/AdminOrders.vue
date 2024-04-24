@@ -169,14 +169,8 @@
                           Date
                         </span>
                       </th>
-                      <th scope="col" class="px-3 py-2 w-3/12 text-start">
-                        <span
-                          class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
-                        >
-                          Product/s
-                        </span>
-                      </th>
-                      <th scope="col" class="py-2 w-1/12 text-start">
+
+                      <th scope="col" class="py-2 w-3/12 text-start">
                         <span
                           class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
@@ -202,13 +196,6 @@
                           class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
                           Payment Status
-                        </span>
-                      </th>
-                      <th scope="col" class="py-2 text-start">
-                        <span
-                          class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
-                        >
-                          Payment Method
                         </span>
                       </th>
                       <th scope="col" class="py-2 text-start">
@@ -266,31 +253,10 @@
                           </span>
                         </div>
                       </td>
+
                       <td class="p-4">
                         <div
                           class="flex items-center justify-start pl-4 h-full w-full"
-                        >
-                          <span
-                            class="material-symbols-outlined text-2xl text-primary animate-spin"
-                          >
-                            autorenew
-                          </span>
-                        </div>
-                      </td>
-                      <td class="p-4">
-                        <div
-                          class="flex items-center justify-start pl-4 h-full w-full"
-                        >
-                          <span
-                            class="material-symbols-outlined text-2xl text-primary animate-spin"
-                          >
-                            autorenew
-                          </span>
-                        </div>
-                      </td>
-                      <td class="p-4">
-                        <div
-                          class="flex items-center justify-end pr-16 h-full w-full"
                         >
                           <span
                             class="material-symbols-outlined text-2xl text-primary animate-spin"
@@ -344,34 +310,17 @@
                           >
                         </div>
                       </td>
+
                       <td>
-                        <div
-                          v-for="product in order.cart"
-                          :key="product"
-                          class="px-2 text-wrap whitespace-normal items-center"
-                        >
+                        <div class="flex flex-col space-y-1">
                           <span
-                            class="text-xs text-secondary-foreground/80 truncate"
-                          >
-                            |
-                            {{ product.quantity }}
-                            |
-                            {{ product.details.name }} -
-                            {{ product.size }}</span
-                          >
-                          <span
-                            v-if="product.isPreOrdered"
-                            class="text-[10px] text-primary truncate"
-                          >
-                            (Pre-order)
+                            class="text-xs text-secondary-foreground font-semibold truncate"
+                            >{{ order.userName }}
                           </span>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="">
                           <span
                             class="text-xs text-secondary-foreground/60 truncate"
-                            >{{ order.userName }}
+                          >
+                            {{ order.userEmailAddress }}
                           </span>
                         </div>
                       </td>
@@ -383,71 +332,68 @@
                         </div>
                       </td>
                       <td>
-                        <div class="text-[12px] text-white font-medium">
+                        <div class="text-[12px] text-black font-medium">
                           <button
                             v-if="order.orderStatus === 'processing'"
-                            class="rounded-lg bg-amber-700 p-2.5 cursor-auto"
+                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
                           >
                             Processing
                           </button>
                           <button
                             v-else-if="order.orderStatus === 'ready'"
-                            class="rounded-lg bg-blue-700 ml-1.5 p-2.5 cursor-auto"
+                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
                           >
                             Ready
                           </button>
                           <button
                             v-else-if="order.orderStatus === 'done'"
-                            class="rounded-lg bg-emerald-700 ml-2 p-2.5 cursor-auto"
+                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
                           >
-                            Done
+                            Fulfilled
                           </button>
                           <button
                             v-else-if="order.orderStatus === 'cancelled'"
-                            class="rounded-lg bg-red-700 p-2.5 cursor-auto"
+                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
                           >
                             Cancelled
                           </button>
                           <button
-                            v-else-if="order.orderStatus === 'decline'"
-                            class="rounded-lg bg-red-900 p-2.5 cursor-auto"
+                            v-else-if="order.orderStatus === 'declined'"
+                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
                           >
                             Declined
                           </button>
                         </div>
                       </td>
                       <td>
-                        <div class="pl-2.5 py-3 flex flex-row">
-                          <div v-if="order.paymentStatus === 'pending'">
-                            <button
-                              class="rounded-lg bg-amber-700 py-1.5 px-4 cursor-auto"
-                            >
-                              <span class="text-xs font-medium text-white pb-1">
-                                Pending
-                              </span>
-                            </button>
-                          </div>
-                          <div v-if="order.paymentStatus === 'decline'">
-                            <button
-                              class="rounded-lg bg-red-900 py-1.5 px-4 cursor-auto"
-                            >
-                              <span class="text-xs font-medium text-white pb-1">
-                                Declined
-                              </span>
-                            </button>
-                          </div>
-                          <div
-                            v-if="order.paymentStatus === 'paid'"
-                            class="pl-2"
+                        <div class="pl-2 py-2">
+                          <button
+                            v-if="order.paymentStatus === 'pending'"
+                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white items-center"
                           >
-                            <button
-                              class="rounded-lg bg-green-700 py-1.5 px-4 cursor-auto"
-                            >
-                              <span class="text-xs font-medium text-white pb-1">
-                                Paid
-                              </span>
-                            </button>
-                          </div>
+                            <span class="text-xs font-medium"> Pending </span>
+                          </button>
+
+                          <button
+                            v-if="order.paymentStatus === 'declined'"
+                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white items-center"
+                          >
+                            <span class="text-xs font-medium"> Declined </span>
+                          </button>
+
+                          <button
+                            v-if="order.paymentStatus === 'cancelled'"
+                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white items-center"
+                          >
+                            <span class="text-xs font-medium"> Cancelled </span>
+                          </button>
+
+                          <button
+                            v-if="order.paymentStatus === 'paid'"
+                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white items-center"
+                          >
+                            <span class="text-xs font-medium"> Paid </span>
+                          </button>
 
                           <button
                             class="text-secondary-foreground/60 hover:text-secondary-foreground"
@@ -462,13 +408,7 @@
                           </button>
                         </div>
                       </td>
-                      <td>
-                        <div class="p-10 py-3">
-                          <span class="text-xs text-secondary-foreground"
-                            >{{ order.paymentMethod }}
-                          </span>
-                        </div>
-                      </td>
+
                       <td>
                         <div
                           class="hs-dropdown relative inline-block [--placement:bottom-right] py-1"
@@ -490,12 +430,17 @@
                                     class="bg-red-600 text-white p-2 rounded-sm"
                                     title="Decline Order"
                                     v-bind:disabled="
-                                      order.orderStatus === 'done'
+                                      order.orderStatus === 'done' ||
+                                      order.orderStatus === 'cancelled' ||
+                                      order.orderStatus === 'declined'
                                     "
                                     :class="{
                                       'cursor-not-allowed opacity-50':
-                                        order.orderStatus === 'done',
+                                        order.orderStatus === 'done' ||
+                                        order.orderStatus === 'cancelled' ||
+                                        order.orderStatus === 'declined',
                                     }"
+                                    @click.prevent="openDeclineModal"
                                   >
                                     <span
                                       :class="{
@@ -510,12 +455,31 @@
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
                                   <AlertDialogHeader>
-                                    <AlertDialogTitle>
+                                    <AlertDialogTitle class="border-b">
                                       Decline Order
                                     </AlertDialogTitle>
                                     <AlertDialogDescription class="text-black">
-                                      Are you sure you want to decline this
-                                      order?
+                                      <div
+                                        class="flex flex-col justify-center space-y-2"
+                                      >
+                                        <p>
+                                          Are you sure you want to decline this
+                                          order?
+                                        </p>
+                                        <p
+                                          class="text-xs text-primary font-bold"
+                                        >
+                                          If yes, why?
+                                        </p>
+                                        <input
+                                          type="text"
+                                          id="order-remarks"
+                                          v-model="tempRemarks"
+                                          class="p-3 border rounded-sm text-xs bg-background border-primary/40 text-secondary-foreground"
+                                          placeholder="Give your reasons..."
+                                          required
+                                        />
+                                      </div>
                                     </AlertDialogDescription>
                                   </AlertDialogHeader>
                                   <AlertDialogFooter>
@@ -525,8 +489,10 @@
                                       Cancel
                                     </AlertDialogAction>
                                     <AlertDialogAction
-                                      @click.prevent="declineOrder(order)"
-                                      class="bg-red-600 hover:bg-red-700 text-white"
+                                      @click.prevent="
+                                        declineOrder(order, tempRemarks)
+                                      "
+                                      class="bg-red-800 hover:bg-red-900 text-white"
                                     >
                                       Decline
                                     </AlertDialogAction>
@@ -542,35 +508,48 @@
                           class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-80"
                         >
                           <div
-                            class="relative w-full max-w-xl max-h-full bg-background rounded-lg shadow overflow-y-auto p-4"
+                            class="relative w-full max-w-xl max-h-full bg-white rounded-lg shadow overflow-y-auto"
                             style="max-height: 90vh"
                           >
                             <div
-                              class="flex flex-col relative bg-background rounded-lg"
+                              class="flex flex-col relative bg-white rounded-lg"
                             >
                               <div
-                                class="border-b border-secondary-foreground/50 py-3"
+                                class="flex flex-col border-b border-secondary-foreground/50 py-2 pb-4 bg-slate-300 -space-y-3"
                               >
-                                <span class="font-bold text-primary text-xl"
-                                  >Order number:
-                                </span>
-                                <span
-                                  class="font-bold text-secondary-foreground text-xl underline"
-                                  >{{ order.orderRefNum }}</span
+                                <div class="flex flex-row items-center">
+                                  <span
+                                    class="font-bold text-primary text-xl p-4"
+                                    >Order ID:
+                                  </span>
+                                  <span
+                                    class="font-bold text-secondary-foreground text-xl underline"
+                                    >{{ order.orderRefNum }}</span
+                                  >
+                                </div>
+                                <div
+                                  class="flex flex-row items-center opacity-70 px-4 space-x-2"
                                 >
+                                  <span class="font-bold text-sm">Date: </span>
+                                  <span class="font-semibold text-xs">
+                                    {{ formatDate(order.dateOrdered) }}
+                                  </span>
+                                </div>
                               </div>
                               <div
                                 class="flex flex-col p-4 space-y-2 border-b border-secondary-foreground/20"
                               >
                                 <div>
                                   <span class="font-semibold"
-                                    >Customer Details</span
+                                    >Customer Information</span
                                   >
                                 </div>
                                 <div
                                   class="flex flex-col pl-2 md:pl-8 space-y-2 text-xs md:text-sm opacity-80"
                                 >
-                                  <div class="flex flex-row justify-between">
+                                  <div
+                                    class="flex flex-row justify-between text-xs"
+                                  >
                                     <div class="flex flex-row">
                                       <span class="font-bold">Name: </span>
                                       <span class="pl-2">
@@ -590,7 +569,7 @@
                                     </div>
                                   </div>
                                   <div
-                                    class="flex flex-col md:flex-row justify-between space-y-2"
+                                    class="flex flex-col md:flex-row justify-between space-y-1 text-xs"
                                   >
                                     <div class="flex flex-row">
                                       <span class="font-bold">Email: </span>
@@ -652,14 +631,14 @@
                                     <span class="px-2 font-bold text-primary">
                                       Size: {{ product.size }}
                                     </span>
-                                    <span class="opacity-80">-- </span
+                                    <span class="opacity-80">x </span
                                     ><span class="font-bold text-primary px-1">
                                       {{ product.quantity }}</span
                                     >
                                     <span class="opacity-80">--</span>
 
                                     <span class="pl-2 opacity-80"
-                                      >Amount: {{ product.totalPrice }}</span
+                                      >P {{ product.totalPrice }}</span
                                     >
                                     <span
                                       v-if="product.isPreOrdered"
@@ -675,7 +654,11 @@
                                     'opacity-50 cursor-not-allowed':
                                       order.orderStatus === 'cancelled',
                                   }"
-                                  v-if="order.orderStatus !== 'done'"
+                                  v-if="
+                                    order.orderStatus !== 'done' &&
+                                    order.orderStatus !== 'declined' &&
+                                    order.orderStatus !== 'cancelled'
+                                  "
                                 >
                                   <input
                                     type="checkbox"
@@ -696,9 +679,37 @@
                                       'cursor-not-allowed':
                                         order.orderStatus === 'cancelled',
                                     }"
-                                    class="text-sm"
+                                    class="text-xs font-semibold"
                                     >Mark order as ready to get
                                   </span>
+                                </div>
+                                <div v-else class="flex flex-col">
+                                  <div>
+                                    <label class="text-sm font-semibold"
+                                      >Order Remarks -
+                                    </label>
+                                    <span
+                                      v-if="order.orderStatus === 'declined'"
+                                      class="font-bold text-primary text-xs"
+                                    >
+                                      Declined</span
+                                    >
+                                    <span
+                                      v-if="order.orderStatus === 'cancelled'"
+                                      class="font-bold text-primary text-xs"
+                                    >
+                                      Declined</span
+                                    >
+                                  </div>
+                                  <div class="indent-4 text-xs py-2">
+                                    <p class="pl-4 pt-2">
+                                      {{
+                                        order.remarks
+                                          ? order.remarks
+                                          : "No remarks"
+                                      }}
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
                               <div
@@ -743,7 +754,8 @@
                                   class="flex flex-row items-center justify-start"
                                   :class="{
                                     'opacity-50 cursor-not-allowed':
-                                      order.orderStatus === 'cancelled',
+                                      order.orderStatus === 'cancelled' ||
+                                      order.orderStatus === 'declined',
                                   }"
                                 >
                                   <input
@@ -752,11 +764,13 @@
                                     class="w-6 h-6 text-primary/80 bg-background border-primary/40 rounded focus:ring-primary focus:ring-2"
                                     :class="{
                                       'cursor-not-allowed':
-                                        order.orderStatus === 'cancelled',
+                                        order.orderStatus === 'cancelled' ||
+                                        order.orderStatus === 'declined',
                                     }"
                                     :checked="order.paymentStatus === 'paid'"
                                     v-bind:disabled="
-                                      order.orderStatus === 'cancelled'
+                                      order.orderStatus === 'cancelled' ||
+                                      order.orderStatus === 'declined'
                                     "
                                     @change="markAsPaid(order)"
                                   />
@@ -766,7 +780,7 @@
                                         order.orderStatus === 'cancelled',
                                     }"
                                     for="checkbox"
-                                    class="pl-2 text-sm"
+                                    class="pl-2 text-xs font-semibold"
                                     >Mark Status as Paid
                                   </label>
                                 </div>
@@ -1005,5 +1019,11 @@ const formatDate = (dateString: string) => {
   const formattedDate = (date.toLocaleDateString as any)([], dateOptions);
   const formattedTime = (date.toLocaleTimeString as any)([], timeOptions);
   return `${formattedDate} (${formattedTime})`;
+};
+
+let tempRemarks = ref("");
+
+const openDeclineModal = () => {
+  tempRemarks.value = "";
 };
 </script>

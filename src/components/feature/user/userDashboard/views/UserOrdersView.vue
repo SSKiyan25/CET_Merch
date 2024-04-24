@@ -130,7 +130,7 @@
                 <AlertDialogTrigger>
                   <button
                     v-bind:disabled="
-                      order.orderStatus === 'decline' ||
+                      order.orderStatus === 'declined' ||
                       order.orderStatus === 'cancelled'
                     "
                   >
@@ -138,7 +138,7 @@
                       class="text-[10px] pl-2 font-semibold text-blue-900 hover:underline"
                       :class="{
                         'opacity-50 cursor-not-allowed':
-                          order.orderStatus === 'decline' ||
+                          order.orderStatus === 'declined' ||
                           order.orderStatus === 'cancelled',
                       }"
                       >Cancel Order?
@@ -149,19 +149,46 @@
                   <AlertDialogHeader>
                     <AlertDialogTitle> Cancel Order </AlertDialogTitle>
                     <AlertDialogDescription class="text-black">
-                      Are you sure you want to cancel this order? This action
-                      cannot be undone.
+                      <div class="flex flex-col text-xs space-y-2">
+                        <p class="indent-1">
+                          Are you sure you want to cancel this order? This
+                          action cannot be undone.
+                        </p>
+                        <input
+                          id="order-remarks"
+                          type="text"
+                          v-model="tempRemarks"
+                          class="p-3 border rounded-sm text-xs bg-background border-primary/40 text-secondary-foreground"
+                          placeholder="Give your reasons..."
+                          required
+                        />
+                      </div>
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogAction
-                      as="button"
                       class="bg-background text-black hover:bg-gray-300"
-                      >Close</AlertDialogAction
                     >
-                    <AlertDialogAction @click.prevent="cancelOrder(order)">
-                      Cancel Order
-                    </AlertDialogAction>
+                      Close</AlertDialogAction
+                    >
+                    <template v-if="tempRemarks !== ''">
+                      <AlertDialogAction>
+                        <button
+                          @click.prevent="cancelUserOrder(order, tempRemarks)"
+                        >
+                          Cancel Order
+                        </button>
+                      </AlertDialogAction>
+                    </template>
+                    <template v-else>
+                      <div
+                        class="opacity-50 hover:cursor-not-allowed items-center"
+                      >
+                        <Button variant="ghost" disabled class="items-center">
+                          Cancel Order
+                        </Button>
+                      </div>
+                    </template>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
@@ -189,7 +216,9 @@
                   class="flex flex-col text-[10px] font-semibold space-y-2 whitespace-normal text-wrap"
                 >
                   <span>Product Name: {{ item.productDetails.name }}</span>
-                  <span>Size: {{ item.size }}</span>
+                  <span v-if="item.size && item.size !== ''"
+                    >Size: {{ item.size }}</span
+                  >
                   <span>Quantity: {{ item.quantity }}</span>
                   <span>Total Amount: P{{ item.totalPrice }}</span>
                 </div>
@@ -209,14 +238,14 @@
                 <span>{{ order.orderStatus }}</span>
               </button>
               <button
-                v-else-if="order.orderStatus === 'decline'"
-                class="p-2 bg-red-900 text-white rounded-sm cursor-default capitalize"
+                v-else-if="order.orderStatus === 'declined'"
+                class="p-2 bg-red-900 text-white rounded-sm cursor-default capitalize mr-1"
               >
                 <span>Declined</span>
               </button>
               <button
                 v-else-if="order.orderStatus === 'cancelled'"
-                class="p-2 bg-red-700 text-white rounded-sm cursor-default capitalize"
+                class="p-2 bg-red-700 text-white rounded-sm cursor-default capitalize mr-2"
               >
                 <span>Cancelled</span>
               </button>
@@ -232,19 +261,90 @@
               >
                 <span>{{ order.orderStatus }} to get!</span>
               </button>
-              <span class="px-2">Payment Status:</span>
+
+              <Dialog>
+                <DialogTrigger>
+                  <span
+                    v-if="order.orderStatus === 'declined'"
+                    class="text-xs font-bold underline hover:cursor-pointer text-blue-600"
+                  >
+                    Read Why
+                  </span>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle class="border-b pb-1">
+                      Order Declined
+                    </DialogTitle>
+                    <DialogDescription>
+                      <div class="flex flex-col text-black text-xs">
+                        <span>
+                          Your order was declined due to the following reason:
+                        </span>
+                        <p class="indent-2 pt-2 font-semibold">
+                          {{ order.remarks }}
+                        </p>
+                      </div>
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogTrigger>
+                      <Button variant="outline"> Close</Button>
+                    </DialogTrigger>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+              <span
+                v-if="
+                  order.paymentStatus !== 'declined' &&
+                  order.orderStatus !== 'cancelled'
+                "
+                class="px-2"
+                >Payment Status:</span
+              >
+              <Dialog>
+                <DialogTrigger>
+                  <span
+                    v-if="order.orderStatus === 'cancelled'"
+                    class="text-xs font-bold underline hover:cursor-pointer text-blue-600"
+                  >
+                    Your Reason
+                  </span>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle class="border-b pb-1">
+                      Order Cancelled
+                    </DialogTitle>
+                    <DialogDescription>
+                      <div class="flex flex-col text-black text-xs">
+                        <span>
+                          Your order was cancelled due to the following reason
+                          you stated:
+                        </span>
+                        <p class="indent-2 pt-2 font-semibold">
+                          {{ order.remarks }}
+                        </p>
+                      </div>
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogTrigger>
+                      <Button variant="outline"> Close</Button>
+                    </DialogTrigger>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
               <button
-                v-if="order.paymentStatus === 'pending'"
+                v-if="
+                  order.paymentStatus === 'pending' &&
+                  order.orderStatus !== 'cancelled'
+                "
                 class="p-2 bg-amber-600 text-white rounded-sm cursor-default capitalize"
               >
                 Pending
               </button>
-              <button
-                v-if="order.paymentStatus === 'decline'"
-                class="p-2 bg-red-900 text-white rounded-sm cursor-default capitalize"
-              >
-                Declined
-              </button>
+
               <button
                 v-else-if="order.paymentStatus === 'paid'"
                 class="p-2 bg-emerald-600 text-white rounded-sm cursor-default capitalize"
@@ -316,6 +416,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const orders = ref<DocumentData[]>([]);
 const isLoading = ref(false);
@@ -330,13 +439,14 @@ onMounted(async () => {
 const open = ref(false);
 const value = ref<string>("all");
 const searchTerm = ref<string>("");
+const tempRemarks = ref("");
 
 const frameworks = [
   { value: "all", label: "Show All" },
   { value: "paid", label: "Paid" },
   { value: "pending", label: "Pending" },
   { value: "ready", label: "Ready to Get" },
-  { value: "decline", label: "Declined" },
+  { value: "declined", label: "Declined" },
   { value: "cancelled", label: "Cancelled" },
 ];
 
@@ -344,7 +454,7 @@ const filteredUserOrders = computed(() => {
   let filtered = orders.value;
 
   // Filter by orderStatus
-  if (["decline", "cancelled", "done", "ready"].includes(value.value)) {
+  if (["declined", "cancelled", "done", "ready"].includes(value.value)) {
     filtered = filtered.filter((order) => order.orderStatus === value.value);
   }
 
@@ -362,6 +472,14 @@ const filteredUserOrders = computed(() => {
 
   return filtered;
 });
+
+const cancelUserOrder = async (order: any, remarks: string) => {
+  isLoading.value = true;
+  await cancelOrder(order, remarks);
+  tempRemarks.value = "";
+  orders.value = await getUserOrders();
+  isLoading.value = false;
+};
 
 const formatDate = (dateString: string) => {
   const dateOptions = { year: "numeric", month: "long", day: "numeric" };
