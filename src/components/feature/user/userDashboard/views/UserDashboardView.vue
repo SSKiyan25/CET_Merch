@@ -147,14 +147,17 @@
           v-if="recentOrder && !isLoading"
           class="flex flex-col border pt-2 pb-4"
         >
-          <div class="flex flex-row justify-between items-center py-2 px-3">
+          <div
+            class="flex flex-col md:flex-row justify-start md:justify-between items-start md:items-center py-2 px-3"
+          >
             <div>
-              <span class="text-sm font-semibold"
+              <span class="text-xs md:text-sm font-semibold"
                 >Order Reference Number:
               </span>
-              <span class="pl-2 text-primary font-semibold">{{
-                recentOrder.orderRefNum
-              }}</span>
+              <span
+                class="pl-2 text-xs md:text-sm text-primary font-semibold"
+                >{{ recentOrder.orderRefNum }}</span
+              >
               <AlertDialog>
                 <AlertDialogTrigger>
                   <button
@@ -225,12 +228,12 @@
               </AlertDialog>
             </div>
             <div>
-              <span class="text-xs">{{
-                formatDate(recentOrder.dateOrdered)
-              }}</span>
+              <span class="text-xs"
+                >Date: {{ formatDate(recentOrder.dateOrdered) }}</span
+              >
             </div>
           </div>
-          <div class="flex flex-row flex-wrap">
+          <div class="flex flex-col md:flex-row flex-wrap">
             <div
               class="px-2"
               v-for="(item, itemIndex) in recentOrder.cart"
@@ -260,7 +263,7 @@
           </div>
 
           <div
-            class="flex flex-row justify-between pt-4 px-4 text-xs items-center"
+            class="flex flex-col md:flex-row justify-between pt-4 px-4 text-xs items-start md:items-center space-y-4"
           >
             <div>
               <span>Order Status: </span>
@@ -425,7 +428,7 @@
       </div>
     </div>
   </div>
-  <div class="pb-12"></div>
+  <div class="h-32"></div>
 </template>
 
 <script setup lang="ts">

@@ -31,7 +31,7 @@
                     :variant="'outline'"
                     :class="
                       cn(
-                        'w-[210px] md:w-[300px] justify-start text-left font-normal',
+                        'w-[210px] md:w-[300px] justify-start text-left font-normal text-xs md:text-sm',
                         !date && 'text-muted-foreground'
                       )
                     "
@@ -66,7 +66,7 @@
                 id="search"
                 type="text"
                 placeholder="Search..."
-                class="pl-10"
+                class="pl-10 text-xs md:text-sm"
                 v-model="searchTerm"
               />
               <span
@@ -157,14 +157,14 @@
                     <tr>
                       <th scope="col" class="pl-4 w-1/12 py-2 text-start">
                         <span
-                          class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
+                          class="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
                           Order ID
                         </span>
                       </th>
-                      <th scope="col" class="px-4 py-2 text-start">
+                      <th scope="col" class="w-2/12 px-4 py-2 text-start">
                         <span
-                          class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
+                          class="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
                           Date
                         </span>
@@ -172,35 +172,35 @@
 
                       <th scope="col" class="py-2 w-3/12 text-start">
                         <span
-                          class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
+                          class="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
                           Customer
                         </span>
                       </th>
                       <th scope="col" class="pr-4 py-2 text-start">
                         <span
-                          class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
+                          class="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
                           Total
                         </span>
                       </th>
-                      <th scope="col" class="py-2 text-start">
+                      <th scope="col" class="pl-4 md:pl-0 py-2 text-start">
                         <span
-                          class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
+                          class="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
                           Order Status
                         </span>
                       </th>
-                      <th scope="col" class="py-2 text-start">
+                      <th scope="col" class="pl-4 md:pl-0 py-2 text-start">
                         <span
-                          class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
+                          class="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
                           Payment Status
                         </span>
                       </th>
                       <th scope="col" class="py-2 text-start">
                         <span
-                          class="text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
+                          class="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
                         >
                           Actions
                         </span>
@@ -295,30 +295,30 @@
                       class="hover:bg-primary/10"
                     >
                       <td>
-                        <div class="pl-5 py-3">
+                        <div class="pl-5 py-6">
                           <span
-                            class="text-xs font-semibold text-primary/80 underline"
+                            class="text-[10px] md:text-xs font-semibold text-primary/80 underline"
                             >{{ order.orderRefNum }}
                           </span>
                         </div>
                       </td>
                       <td>
-                        <div class="p-3">
+                        <div class="p-3 w-40 md:pr-0">
                           <span
-                            class="text-xs font-medium text-secondary-foreground/80"
+                            class="text-[10px] md:text-xs font-medium text-secondary-foreground/80"
                             >{{ formatDate(order.dateOrdered) }}</span
                           >
                         </div>
                       </td>
 
                       <td>
-                        <div class="flex flex-col space-y-1">
+                        <div class="flex flex-col pr-8 md:pr-0 space-y-1">
                           <span
-                            class="text-xs text-secondary-foreground font-semibold truncate"
+                            class="text-[10px] md:text-xs text-secondary-foreground font-semibold truncate"
                             >{{ order.userName }}
                           </span>
                           <span
-                            class="text-xs text-secondary-foreground/60 truncate"
+                            class="text-[10px] md:text-xs text-secondary-foreground/60 truncate"
                           >
                             {{ order.userEmailAddress }}
                           </span>
@@ -326,73 +326,84 @@
                       </td>
                       <td>
                         <div class="">
-                          <span class="text-xs text-secondary-foreground/60"
+                          <span
+                            class="text-[10px] md:text-xs text-secondary-foreground/60"
                             >P{{ order.totalPrice }}
                           </span>
                         </div>
                       </td>
                       <td>
-                        <div class="text-[12px] text-black font-medium">
+                        <div
+                          class="text-[10px] md:text-[12px] text-black font-medium pl-3 md:pl-0 pr-8 md:pr-0"
+                        >
                           <button
                             v-if="order.orderStatus === 'processing'"
-                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
+                            class="w-16 h-8 rounded-lg border cursor-auto md:ml-2 hover:bg-zinc-600 hover:text-white"
                           >
                             Processing
                           </button>
                           <button
                             v-else-if="order.orderStatus === 'ready'"
-                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
+                            class="w-16 h-8 rounded-lg border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
                           >
                             Ready
                           </button>
                           <button
                             v-else-if="order.orderStatus === 'done'"
-                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
+                            class="w-16 h-8 rounded-lg border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
                           >
                             Fulfilled
                           </button>
                           <button
                             v-else-if="order.orderStatus === 'cancelled'"
-                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
+                            class="w-16 h-8 rounded-lg border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
                           >
                             Cancelled
                           </button>
                           <button
                             v-else-if="order.orderStatus === 'declined'"
-                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
+                            class="w-16 h-8 rounded-lg border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white"
                           >
                             Declined
                           </button>
                         </div>
                       </td>
                       <td>
-                        <div class="pl-2 py-2">
+                        <div class="w-40 pl-4 md:pl-2 py-2">
                           <button
                             v-if="order.paymentStatus === 'pending'"
-                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white items-center"
+                            class="w-16 h-8 rounded-lg border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white items-center"
                           >
-                            <span class="text-xs font-medium"> Pending </span>
+                            <span class="text-[10px] md:text-xs font-medium">
+                              Pending
+                            </span>
                           </button>
 
                           <button
                             v-if="order.paymentStatus === 'declined'"
-                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white items-center"
+                            class="w-16 h-8 rounded-lg border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white items-center"
                           >
-                            <span class="text-xs font-medium"> Declined </span>
+                            <span class="text-[10px] md:text-xs font-medium">
+                              Declined
+                            </span>
                           </button>
 
                           <button
                             v-if="order.paymentStatus === 'cancelled'"
-                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white items-center"
+                            class="w-16 h-8 rounded-lg border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white items-center"
                           >
-                            <span class="text-xs font-medium"> Cancelled </span>
+                            <span class="text-[10px] md:text-xs font-medium">
+                              Cancelled
+                            </span>
                           </button>
 
                           <button
                             v-if="order.paymentStatus === 'paid'"
-                            class="w-20 h-10 rounded-lg p-2.5 border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white items-center"
+                            class="w-16 h-8 rounded-lg border cursor-auto ml-2 hover:bg-zinc-600 hover:text-white items-center"
                           >
-                            <span class="text-xs font-medium"> Paid </span>
+                            <span class="text-[10px] md:text-xs font-medium">
+                              Paid
+                            </span>
                           </button>
 
                           <button
@@ -411,7 +422,7 @@
 
                       <td>
                         <div
-                          class="hs-dropdown relative inline-block [--placement:bottom-right] py-1"
+                          class="hs-dropdown relative inline-block py-1 w-24 pr-8 md:pr-8"
                         >
                           <div class="flex flex-row text-sm justify-end">
                             <div class="rounded-sm cursor-pointer space-x-1">
@@ -888,6 +899,7 @@
       </div>
     </div>
   </div>
+  <div class="h-32"></div>
 </template>
 
 <script setup lang="ts">

@@ -18,92 +18,90 @@
       </div>
     </div>
     <div class="flex flex-col p-4 border-2 rounded-lg py-5 bg-slate-200">
-      <div class="flex flex-row justify-between border-b-2">
+      <div class="flex flex-col md:flex-row justify-between border-b-2">
         <div class="flex flex-row">
           <h1 class="font-bold text-xl tracking-wide mt-1">Products</h1>
-        </div>
-        <div class="flex flex-col md:flex-row">
           <router-link to="/admin/products/addproduct"
             ><button
-              class="bg-green-500 px-3 py-2 rounded-lg mr-2 mb-2 hover:bg-green-400"
+              class="bg-green-500 px-3 py-2 rounded-lg mr-2 mb-2 hover:bg-green-400 ml-1"
               type="button"
               title="Add Product"
             >
               <Plus class="text-white" /></button
           ></router-link>
-
-          <form>
-            <div class="flex relative w-full items-center space-x-1">
-              <Input
-                id="search"
-                type="text"
-                placeholder="Search..."
-                class="pl-10"
-                v-model="searchInput"
-              />
-              <span
-                class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
-              >
-                <MagnifyingGlassIcon class="size-6 text-foreground" />
-              </span>
-              <Popover v-model:open="open">
-                <PopoverTrigger as-child>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    :aria-expanded="open"
-                    class="w-[200px] justify-between"
-                  >
-                    {{
-                      selectedCategory !== "All"
-                        ? frameworks.find(
-                            (framework) => framework.value === selectedCategory
-                          )?.label
-                        : "Select Category"
-                    }}
-                    <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent class="w-[200px] p-0">
-                  <Command>
-                    <CommandInput class="h-9" placeholder="Search Category" />
-                    <CommandEmpty>No framework found.</CommandEmpty>
-                    <CommandList>
-                      <CommandGroup>
-                        <CommandItem
-                          v-for="framework in frameworks"
-                          :key="framework.value"
-                          :value="framework.value"
-                          @select="
-                            (ev) => {
-                              if (typeof ev.detail.value === 'string') {
-                                selectedCategory = ev.detail.value;
-                              }
-                              open = false;
-                            }
-                          "
-                          class="cursor-pointer"
-                        >
-                          {{ framework.label }}
-                          <Check
-                            :class="
-                              cn(
-                                'ml-auto h-4 w-4',
-                                selectedCategory === framework.value
-                                  ? 'opacity-100'
-                                  : 'opacity-0'
-                              )
-                            "
-                          />
-                        </CommandItem>
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-            </div>
-          </form>
         </div>
+
+        <form>
+          <div class="flex relative w-full items-center space-x-1 pb-2">
+            <Input
+              id="search"
+              type="text"
+              placeholder="Search..."
+              class="pl-10 text-[10px] md:text-xs"
+              v-model="searchInput"
+            />
+            <span
+              class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
+            >
+              <MagnifyingGlassIcon class="size-6 text-foreground pb-1" />
+            </span>
+            <Popover v-model:open="open">
+              <PopoverTrigger as-child>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  :aria-expanded="open"
+                  class="w-[200px] justify-between text-xs md:text-sm"
+                >
+                  {{
+                    selectedCategory !== "All"
+                      ? frameworks.find(
+                          (framework) => framework.value === selectedCategory
+                        )?.label
+                      : "Select Category"
+                  }}
+                  <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent class="w-[200px] p-0">
+                <Command>
+                  <CommandInput class="h-9" placeholder="Search Category" />
+                  <CommandEmpty>No framework found.</CommandEmpty>
+                  <CommandList>
+                    <CommandGroup>
+                      <CommandItem
+                        v-for="framework in frameworks"
+                        :key="framework.value"
+                        :value="framework.value"
+                        @select="
+                          (ev) => {
+                            if (typeof ev.detail.value === 'string') {
+                              selectedCategory = ev.detail.value;
+                            }
+                            open = false;
+                          }
+                        "
+                        class="cursor-pointer"
+                      >
+                        {{ framework.label }}
+                        <Check
+                          :class="
+                            cn(
+                              'ml-auto h-4 w-4',
+                              selectedCategory === framework.value
+                                ? 'opacity-100'
+                                : 'opacity-0'
+                            )
+                          "
+                        />
+                      </CommandItem>
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
+          </div>
+        </form>
       </div>
 
       <!-- Table Section -->
@@ -237,9 +235,11 @@
                       class="hover:bg-primary/10"
                     >
                       <td>
-                        <div class="pl-4 py-3">
+                        <div class="pl-4 w-48 py-3">
                           <p class="w-full whitespace-normal">
-                            <span class="text-sm text-secondary-foreground">
+                            <span
+                              class="text-xs md:text-sm text-secondary-foreground"
+                            >
                               {{ product.name }}</span
                             >
                           </p>
@@ -247,7 +247,7 @@
                       </td>
                       <td>
                         <div
-                          class="py-3 px-5 flex items-center justify-start gap-x-2 text-white"
+                          class="py-3 px-4 w-36 md:px-5 flex items-center justify-start gap-x-2 text-white"
                         >
                           <div
                             v-if="product.isPublished"
@@ -279,11 +279,11 @@
                       </td>
 
                       <td class="size-4/12 whitespace-nowrap">
-                        <div class="px-6 py-3">
+                        <div class="px-6 w-48 py-3">
                           <div class="w-full whitespace-normal">
                             <button @click.prevent="productStocks(product.id)">
                               <span
-                                class="text-xs text-primary font-medium hover:underline"
+                                class="text-xs pl-4 text-primary font-medium hover:underline"
                               >
                                 View Full Details</span
                               >
