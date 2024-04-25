@@ -3,7 +3,7 @@
     <div
       class="p-7 sm:w-full md:w-1/2 lg:w-1/2 items-center justify-center bg-slate-100 border border-primary/20 rounded-xl shadow-sm"
     >
-      <div class="text-center border-b pb-2 border-secondary-foreground/20">
+      <div class="text-center pb-2">
         <h1 class="block text-4xl font-bold text-black">Sign up</h1>
         <p class="py-2 text-sm text-secondary-foreground">
           Already have an account?
@@ -345,12 +345,29 @@
                     </p>
                     <p class="text-xs">Phone Number: 0975 524 0400</p>
                     <p class="text-xs">Email: cet.ssc@vsu.edu.ph</p>
-                    <p class="text-xs">
-                      FB Page: https://www.facebook.com/VSUCETSSCofficial
-                    </p>
-                    <p class="text-xs">
-                      Instagram: https://www.instagram.com/vsu.cetssc
-                    </p>
+                    <a
+                      href="https://www.facebook.com/VSUCETSSCofficial"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <p class="text-xs">
+                        FB Page:
+                        <span class="text-blue-600 underline"
+                          >https://www.facebook.com/VSUCETSSCofficial</span
+                        >
+                      </p>
+                    </a>
+                    <a
+                      href="https://www.instagram.com/vsu.cetssc"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      ><p class="text-xs">
+                        Instagram:
+                        <span class="text-blue-600 underline"
+                          >https://www.instagram.com/vsu.cetssc</span
+                        >
+                      </p></a
+                    >
                   </div>
                   <div
                     class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600"
@@ -363,6 +380,7 @@
                       I accept
                     </button>
                     <button
+                      @click.prevent=""
                       data-modal-hide="terms-modal"
                       type="button"
                       class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
@@ -407,7 +425,6 @@ import {
   phoneNumber,
   loading,
 } from "../models/SignUpModel";
-
 import LoadingComponent from "../../misc/LoadingComponent.vue";
 
 const router = useRouter();
@@ -415,6 +432,7 @@ const router = useRouter();
 const handleSignUpAccount = () => {
   handleSignup(router);
 };
+
 onMounted(() => {
   initFlowbite();
 });
