@@ -509,18 +509,25 @@
                       Showing
                       <span
                         class="font-semibold text-gray-800 dark:text-gray-200"
-                        >{{ currentPage + 1 }}</span
                       >
+                        {{ currentPage * 5 + 1 }}
+                      </span>
                       -
                       <span
                         class="font-semibold text-gray-800 dark:text-gray-200"
-                        >{{ currentPage + 1 < 5 ? totalProducts : 5 }}</span
                       >
+                        {{
+                          (currentPage + 1) * 5 > totalProducts
+                            ? totalProducts
+                            : (currentPage + 1) * 5
+                        }}
+                      </span>
                       results
                       <span
                         class="font-semibold text-gray-800 dark:text-gray-200"
-                        >out of {{ totalProducts }} total Products</span
                       >
+                        out of {{ totalProducts }} total Products
+                      </span>
                     </p>
                   </div>
 

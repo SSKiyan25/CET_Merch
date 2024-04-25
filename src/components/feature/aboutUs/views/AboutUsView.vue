@@ -395,6 +395,7 @@
         class="group flex gap-y-6 size-full hover:bg-gray-100 rounded-lg p-5 transition-all"
         target="_blank"
         rel="noopener noreferrer"
+        disabled
         href="https://www.facebook.com/VSUMetSoc"
       >
         <img
