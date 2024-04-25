@@ -125,6 +125,7 @@
                   @click.prevent="
                     newAddToCartData.isPreOrdered = false;
                     newAddToCartData.size = '';
+                    newAddToCartData.quantity = 0;
                   "
                   class="p-2 rounded-sm bg-red-700 text-white"
                 >
@@ -167,7 +168,7 @@
               >
                 <label class="font-bold text-sm">Pre-Ordered!</label>
                 <button
-                  @click.prevent="newAddToCartData.isPreOrdered = false"
+                  @click.prevent="undoPreOrder"
                   class="p-2 rounded-sm bg-red-700 text-white"
                 >
                   Undo
@@ -479,7 +480,10 @@ const props = defineProps({
 //console.log("productId in Cart component: ", props.productId);
 
 const increment = () => {
-  if (newAddToCartData.value.isPreOrdered) {
+  if (
+    newAddToCartData.value.isPreOrdered &&
+    newAddToCartData.value.size !== ""
+  ) {
     newAddToCartData.value.quantity++;
   } else {
     const sizeItems = product.value.sizes[selectedSize.value.size];
@@ -523,6 +527,11 @@ const product = computed(() => injectedGetProductById(props.productId));
 
 let isLoading = ref(false);
 let isUploadSuccessful = ref(false);
+
+const undoPreOrder = () => {
+  newAddToCartData.value.isPreOrdered = false;
+  newAddToCartData.value.quantity = 0;
+};
 
 const handleFormCartSubmit = async () => {
   isLoading.value = true;
