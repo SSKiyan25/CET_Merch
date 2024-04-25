@@ -23,7 +23,7 @@ export const setup = () => {
   const product = ref<Product | null>(null);
   const isLoading = ref(false);
   const user = ref<User | null>(null);
-  const sellerProducts = ref<Product[]>([]);
+  const sellerProducts = ref<ProductWithDisplayPrice[]>([]);
 
   onMounted(async () => {
     isLoading.value = true;
@@ -55,7 +55,26 @@ export const setup = () => {
         product.value = await fetchProductById(id);
         const fetchedSellerProducts = await fetchSellerProducts(id);
         if (fetchedSellerProducts) {
-          sellerProducts.value = fetchedSellerProducts;
+          sellerProducts.value = fetchedSellerProducts.map((product) => ({
+            ...product,
+            displayPrice: computed(() => {
+              // Iterate over each size in the product
+              for (const sizeName in product.sizes) {
+                const sizeArray = product.sizes[sizeName];
+
+                // Iterate over each item in the size array
+                for (const sizeItem of sizeArray) {
+                  // Check if remaining_stocks is not zero
+                  if (Number(sizeItem.price) > 0) {
+                    // Return the price of this item
+                    return sizeItem.price;
+                  }
+                }
+              }
+              // If no size has non-zero remaining_stocks, return 0
+              return 0;
+            }),
+          }));
         }
       }
     } finally {

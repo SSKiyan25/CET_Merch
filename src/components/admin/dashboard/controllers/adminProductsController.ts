@@ -102,7 +102,7 @@ export const setup = () => {
     const faction = user.role === "admin" ? "all" : user.faction;
     if ((currentPage.value + 1) * 5 < totalProducts.value) {
       loadingPage.value = true;
-      currentPage.value = currentPage.value + 5;
+      currentPage.value = currentPage.value + 1;
       const startAfterDoc = lastDocs.value[currentPage.value - 1];
       const { products: newProducts, lastDoc } = await fetchProducts(
         faction,
@@ -123,7 +123,7 @@ export const setup = () => {
     const faction = user.role === "admin" ? "all" : user.faction;
     if (currentPage.value > 0) {
       loadingPage.value = true;
-      currentPage.value = currentPage.value - 5;
+      currentPage.value = currentPage.value - 1;
       const startAfterDoc =
         currentPage.value > 0 ? lastDocs.value[currentPage.value - 1] : null;
       const { products: newProducts } = await fetchProducts(

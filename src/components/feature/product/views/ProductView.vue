@@ -302,7 +302,7 @@
                     class="block pb-2 pt-1 text-base md:text-2xl font-bold uppercase text-primary"
                   >
                     P
-                    {{ displayPrice }}
+                    {{ product.displayPrice }}
                   </span>
                   <div
                     class="flex flex-row justify-between items-center text-[8px] md:text-xs"
@@ -418,7 +418,7 @@ const selectedSizes = computed(() => {
       if (Number(sizeItem.remaining_stocks) > 0) {
         sizes[sizeName] = sizeItem;
         break;
-      } else {
+      } else if (Number(sizeItem.price) > 0) {
         sizes[sizeName] = sizeItem;
       }
     }
