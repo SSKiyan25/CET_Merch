@@ -1,7 +1,9 @@
 import { ref } from "vue";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "@/firebase/init";
-import { getDoc, doc } from "firebase/firestore";
+import { getDoc, doc, setDoc } from "firebase/firestore";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { useRouter } from "vue-router";
 
 export const email = ref("");
 export const password = ref("");
@@ -9,6 +11,8 @@ export const isInvalid = ref(true);
 export const loading = ref(false);
 export const passwordError = ref(false);
 export const emailError = ref(false);
+const router = useRouter();
+const provider = new GoogleAuthProvider();
 const guestEmail = "guest@gmail.com";
 const guestPassword = "guest123";
 
@@ -75,4 +79,46 @@ export const handleLogin = (router: any) => {
     .finally(() => {
       loading.value = false;
     });
+};
+
+export const loginWithGoogle = async () => {
+  try {
+    const userCredential = await signInWithPopup(auth, provider);
+    const user = userCredential.user;
+
+    // If the user's email is null, throw an error
+    if (!user.email) {
+      throw new Error("User does not have an email");
+    }
+
+    // If the user's display name is null, use the local part of the email as the name
+    const name = user.displayName || user.email.split("@")[0];
+
+    const userDocRef = doc(db, "users", user.uid);
+    const userDoc = await getDoc(userDocRef);
+
+    // Only add a new document to the users collection if it doesn't already exist
+    if (!userDoc.exists()) {
+      try {
+        await setDoc(userDocRef, {
+          name: name,
+          email: user.email,
+          uid: user.uid,
+          role: "user",
+          department: "", // Default value
+          faction: "", // Default value
+          lastViewed: {}, // Default value
+          studentId: "", // Default value
+          username: "", // Default value
+        });
+      } catch (error) {
+        console.error("Error adding user to Firestore:", error);
+      }
+    }
+
+    // Navigate to the dashboard
+    router.push("/");
+  } catch (error) {
+    console.error("Error logging in with Google:", error);
+  }
 };
