@@ -11,21 +11,30 @@ export function setupProductController(route: any) {
     // Check if product.value is defined
     if (!product.value) return 0;
 
+    // Initialize lowestPrice to Infinity. This is a special value in JavaScript that's greater than any other number.
+    // We use it here so that any price we compare it to at first will be lower.
+    let lowestPrice = Infinity;
+
     // Iterate over each size in the product
     for (const sizeName in product.value.sizes) {
       const sizeArray = product.value.sizes[sizeName];
 
       // Iterate over each item in the size array
       for (const sizeItem of sizeArray) {
-        // Check if remaining_stocks is not zero
-        if (Number(sizeItem.price) > 0) {
-          // Return the price of this item
-          return sizeItem.price;
+        // Check if price is not zero and is less than the current lowestPrice
+        if (
+          Number(sizeItem.price) > 0 &&
+          Number(sizeItem.price) < lowestPrice
+        ) {
+          // If it is, update lowestPrice to this new lower price
+          lowestPrice = Number(sizeItem.price);
         }
       }
     }
-    // If no size has non-zero remaining_stocks, return 0
-    return 0;
+
+    // After checking all prices, if lowestPrice is still Infinity, it means we didn't find any price > 0.
+    // In this case, we return 0. Otherwise, we return the lowest price we found.
+    return isFinite(lowestPrice) ? lowestPrice : 0;
   });
 
   watch(
