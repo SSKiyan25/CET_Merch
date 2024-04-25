@@ -30,7 +30,7 @@
               >Add Size?</label
             >
           </SheetTrigger>
-          <SheetContent side="bottom" class="h-[350px] md:h-[300px]">
+          <SheetContent side="bottom" class="h-[800px] md:h-[300px]">
             <SheetHeader>
               <SheetTitle>
                 <div class="text-center text-xl pb-2 border-b">
@@ -39,7 +39,7 @@
               </SheetTitle>
               <SheetDescription></SheetDescription>
             </SheetHeader>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
               <div
                 v-for="size in product.sizes['N/A']
                   ? ['N/A']
@@ -105,7 +105,7 @@
                 </div>
               </div>
             </div>
-            <SheetFooter>
+            <SheetFooter class="pt-2">
               <SheetClose as-child>
                 <Button
                   @click.prevent="addSize(product.id, selectedSizesData)"

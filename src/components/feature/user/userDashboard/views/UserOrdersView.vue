@@ -16,9 +16,11 @@
       </div>
     </div>
     <div class="flex flex-col p-4 border-2 rounded-lg py-5">
-      <div class="flex flex-row justify-between border-b-2">
-        <div class="flex flex-row">
-          <h1 class="font-bold text-xl text-primary tracking-wide mt-1">
+      <div class="flex flex-col md:flex-row justify-between border-b-2">
+        <div class="flex flex-row pb-2">
+          <h1
+            class="font-bold text-base md:text-xl text-primary tracking-wide mt-1"
+          >
             Order History
           </h1>
         </div>
@@ -118,14 +120,15 @@
         :key="index"
       >
         <div class="flex flex-col border pt-2 pb-4 overflow-auto">
-          <div class="flex flex-row justify-between py-2 px-3">
+          <div class="flex flex-col md:flex-row justify-between py-2 px-3">
             <div>
-              <span class="text-sm font-semibold"
+              <span class="text-xs md:text-sm font-semibold"
                 >Order Reference Number:
               </span>
-              <span class="pl-2 text-primary font-semibold">{{
-                order.orderRefNum
-              }}</span>
+              <span
+                class="pl-1 md:pl-2 text-primary text-xs md:text-sm font-semibold"
+                >{{ order.orderRefNum }}</span
+              >
               <AlertDialog v-if="order.orderStatus !== 'done'">
                 <AlertDialogTrigger>
                   <button
@@ -194,10 +197,12 @@
               </AlertDialog>
             </div>
             <div>
-              <span class="text-xs">{{ formatDate(order.dateOrdered) }}</span>
+              <span class="text-[10px] md:text-xs"
+                >Date: {{ formatDate(order.dateOrdered) }}</span
+              >
             </div>
           </div>
-          <div class="flex flex-row flex-wrap">
+          <div class="flex flex-col md:flex-row flex-wrap">
             <div
               class="px-2"
               v-for="(item, itemIndex) in order.cart"
@@ -227,9 +232,9 @@
           </div>
 
           <div
-            class="flex flex-row justify-between text-xs items-center pt-4 px-4"
+            class="flex flex-col md:flex-row justify-between text-xs items-start md:items-center pt-4 px-4 space-y-2"
           >
-            <div>
+            <div class="text-[10px] md:text-xs">
               <span>Order Status: </span>
               <button
                 v-if="order.orderStatus === 'processing'"
@@ -380,6 +385,7 @@
       </div>
     </div>
   </div>
+  <div class="h-48 md:h-28"></div>
 </template>
 
 <script setup lang="ts">

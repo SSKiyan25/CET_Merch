@@ -192,7 +192,7 @@
       <div class="p-5 overflow-auto">
         <table class="min-w-full divide-y divide-primary/50">
           <thead>
-            <tr>
+            <tr class="text-xs md:text-sm">
               <th class="text-left p-2">Product Name</th>
               <th class="text-center p-2">Category</th>
               <th class="text-center p-2">Views</th>
@@ -201,7 +201,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="product in products" class="py-4 text-xs">
+            <tr v-for="product in products" class="py-4 text-[10px] md:text-xs">
               <td class="text-left p-2">{{ product?.name }}</td>
               <td class="text-center p-2">{{ product?.category }}</td>
               <td class="text-center p-2">{{ product?.views }}</td>
@@ -213,6 +213,7 @@
       </div>
     </div>
   </div>
+  <div class="h-40 md:h-12"></div>
 </template>
 
 <script setup lang="ts">
