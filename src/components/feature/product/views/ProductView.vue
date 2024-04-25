@@ -399,13 +399,12 @@ watch(
   (newValue: DocumentData | null | undefined) => {
     if (newValue && "coverPhoto" in newValue && "photos" in newValue) {
       allPhotos.value = [newValue.coverPhoto, ...newValue.photos];
+      // Update the featuredPhoto to be the coverPhoto when product.value changes
+      featuredPhoto.value = newValue.coverPhoto;
     }
   },
   { immediate: true }
 );
-
-// Update the initial value of featuredPhoto
-featuredPhoto.value = allPhotos.value[0] || null;
 
 const updateFeaturedPhoto = (newPhoto: string) => {
   featuredPhoto.value = newPhoto;
