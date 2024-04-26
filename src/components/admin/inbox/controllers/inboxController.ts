@@ -43,7 +43,7 @@ let loadingPage = { value: false };
 export let inbox: Inbox[] = [];
 
 export const fetchInboxMessages = async (
-  currentPageValue: number,
+  currentPageValue: number | null = null,
   startAfterDoc: DocumentSnapshot | null = null
 ): Promise<Inbox[]> => {
   let inboxCollection = collection(db, "inbox");
@@ -90,7 +90,9 @@ export const fetchInboxMessages = async (
 
   // Save the last document from the results
   let lastDoc = inboxSnapshot.docs[inboxSnapshot.docs.length - 1];
-  lastDocs[currentPageValue] = lastDoc;
+  if (typeof currentPageValue === "number") {
+    lastDocs[currentPageValue] = lastDoc;
+  }
 
   return inboxMessages;
 };
