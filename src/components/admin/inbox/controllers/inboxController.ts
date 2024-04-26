@@ -6,6 +6,9 @@ import {
   doc,
   getDoc,
   updateDoc,
+  limit,
+  startAfter,
+  DocumentSnapshot,
 } from "firebase/firestore";
 import { db, auth } from "@/firebase/init";
 import { Inbox } from "../models/inboxModel";
@@ -32,7 +35,17 @@ const fetchUser = async () => {
   }
 };
 
-export const fetchInboxMessages = async (): Promise<Inbox[]> => {
+let lastDocs: (DocumentSnapshot | null)[] = [];
+
+let currentPage = { value: 0 };
+let totalInboxMessages = { value: 0 };
+let loadingPage = { value: false };
+export let inbox: Inbox[] = [];
+
+export const fetchInboxMessages = async (
+  currentPageValue: number,
+  startAfterDoc: DocumentSnapshot | null = null
+): Promise<Inbox[]> => {
   let inboxCollection = collection(db, "inbox");
   let inboxQuery;
   let userFaction;
@@ -49,6 +62,12 @@ export const fetchInboxMessages = async (): Promise<Inbox[]> => {
     inboxQuery = inboxCollection;
   } else {
     inboxQuery = query(inboxCollection, where("faction", "==", userFaction));
+  }
+
+  // Add limit and startAfter to the query for pagination
+  inboxQuery = query(inboxQuery, limit(10));
+  if (startAfterDoc) {
+    inboxQuery = query(inboxQuery, startAfter(startAfterDoc));
   }
 
   const inboxSnapshot = await getDocs(inboxQuery);
@@ -69,7 +88,36 @@ export const fetchInboxMessages = async (): Promise<Inbox[]> => {
     });
   });
 
+  // Save the last document from the results
+  let lastDoc = inboxSnapshot.docs[inboxSnapshot.docs.length - 1];
+  lastDocs[currentPageValue] = lastDoc;
+
   return inboxMessages;
+};
+
+export const nextPage = async (): Promise<Inbox[]> => {
+  if ((currentPage.value + 1) * 5 < totalInboxMessages.value) {
+    loadingPage.value = true;
+    currentPage.value = currentPage.value + 1;
+    const startAfterDoc = lastDocs[currentPage.value - 1];
+    const newInbox = await fetchInboxMessages(currentPage.value, startAfterDoc);
+    loadingPage.value = false;
+    return newInbox;
+  }
+  return [];
+};
+
+export const prevPage = async (): Promise<Inbox[]> => {
+  if (currentPage.value > 0) {
+    loadingPage.value = true;
+    currentPage.value = currentPage.value - 1;
+    const startAfterDoc =
+      currentPage.value > 0 ? lastDocs[currentPage.value - 1] : null;
+    const newInbox = await fetchInboxMessages(currentPage.value, startAfterDoc);
+    loadingPage.value = false;
+    return newInbox;
+  }
+  return [];
 };
 
 export const updateInboxMessage = async (inbox: Inbox): Promise<void> => {
