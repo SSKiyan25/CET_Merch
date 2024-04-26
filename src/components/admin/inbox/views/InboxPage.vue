@@ -28,7 +28,7 @@
                   :variant="'outline'"
                   :class="
                     cn(
-                      'w-[210px] md:w-[300px] justify-start text-left font-normal',
+                      'w-[210px] md:w-[300px] justify-start text-left font-normal text-xs md:text-sm',
                       !date && 'text-muted-foreground'
                     )
                   "
@@ -62,7 +62,7 @@
               id="search"
               type="text"
               placeholder="Search..."
-              class="pl-10"
+              class="pl-10 text-xs md:text-sm"
               v-model="searchQuery"
             />
             <span
@@ -162,7 +162,7 @@
                       <td>
                         <div class="pl-5 py-3">
                           <span
-                            class="text-xs text-secondary-foreground/60 whitespace-nowrap"
+                            class="text-[10px] md:text-xs text-secondary-foreground/80 whitespace-nowrap"
                           >
                             {{ formatDate(message.dateSent) }}
                           </span>
@@ -285,15 +285,37 @@
                   class="px-6 py-4 grod gap-3 md:flex md:justify-between md:items-center border-t border-primary/20"
                 >
                   <div>
-                    <p class="text-sm">
-                      <span class="font-semibold"> 1-N </span>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                      Showing
+                      <span
+                        class="font-semibold text-gray-800 dark:text-gray-200"
+                      >
+                        {{ (currentPage - 1) * 10 + 1 }}
+                      </span>
+                      -
+                      <span
+                        class="font-semibold text-gray-800 dark:text-gray-200"
+                      >
+                        {{
+                          currentPage * 10 > totalInboxMessages
+                            ? totalInboxMessages
+                            : currentPage * 10
+                        }}
+                      </span>
                       results
+                      <span
+                        class="font-semibold text-gray-800 dark:text-gray-200"
+                      >
+                        out of {{ totalInboxMessages }} total messages
+                      </span>
                     </p>
                   </div>
+
                   <div>
                     <div class="inline-flex gap-x-2">
                       <button
                         type="button"
+                        @click.prevent="prevPage"
                         class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-primary/20 bg-secondary text-secondary-foreground shadow-sm hover:bg-primary/50 hover:border-muted disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
                       >
                         <svg
@@ -315,6 +337,7 @@
 
                       <button
                         type="button"
+                        @click.prevent="nextPage"
                         class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-primary/20 bg-secondary text-secondary-foreground shadow-sm hover:bg-primary/50 hover:border-muted disabled:opacity-50 disabled:pointer-events-none dark:focus:ring-1 focus:ring-primary/60"
                       >
                         Next
@@ -343,6 +366,7 @@
       </div>
     </div>
   </div>
+  <div class="h-56 md:h-28"></div>
 </template>
 
 <script setup lang="ts">
@@ -366,6 +390,8 @@ import { Inbox } from "../models/inboxModel";
 import {
   fetchInboxMessages,
   updateInboxMessage,
+  nextPage as nextPageInbox,
+  prevPage as prevPageInbox,
 } from "../controllers/inboxController";
 import {
   Popover,
@@ -390,9 +416,23 @@ const done = ref<Checked>(false);
 const all = ref<Checked>(true);
 
 const inboxMessages = ref<Inbox[]>([]);
+const currentPage = ref(1);
+
 onMounted(async () => {
-  inboxMessages.value = await fetchInboxMessages();
+  inboxMessages.value = await fetchInboxMessages(currentPage.value);
 });
+
+const nextPage = async () => {
+  currentPage.value++;
+  inboxMessages.value = await nextPageInbox();
+};
+
+const prevPage = async () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+    inboxMessages.value = await prevPageInbox();
+  }
+};
 
 const inboxFullDetails = ref(inboxMessages.value.map(() => false));
 
@@ -460,6 +500,10 @@ const statusFilteredInboxMessages = computed(() => {
 
   return messages;
 });
+
+const totalInboxMessages = computed(
+  () => statusFilteredInboxMessages.value.length
+);
 
 const formatDate = (dateString: string) => {
   const dateOptions = { year: "numeric", month: "long", day: "numeric" };
