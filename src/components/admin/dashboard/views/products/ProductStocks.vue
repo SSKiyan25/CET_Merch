@@ -141,7 +141,7 @@
                       :variant="'outline'"
                       :class="
                         cn(
-                          'w-[210px] md:w-[300px] justify-start text-left font-normal',
+                          'w-[210px] md:w-[300px] justify-start text-left font-normal text-xs md:text-sm',
                           !date && 'text-muted-foreground'
                         )
                       "
@@ -175,7 +175,7 @@
                   id="search"
                   type="text"
                   placeholder="Search Size..."
-                  class="pl-10"
+                  class="pl-10 text-xs md:text-sm"
                   v-model="searchSize"
                 />
                 <span
