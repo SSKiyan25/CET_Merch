@@ -3,7 +3,6 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "@/firebase/init";
 import { getDoc, doc, setDoc } from "firebase/firestore";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { useRouter } from "vue-router";
 
 export const email = ref("");
 export const password = ref("");
@@ -11,7 +10,6 @@ export const isInvalid = ref(true);
 export const loading = ref(false);
 export const passwordError = ref(false);
 export const emailError = ref(false);
-const router = useRouter();
 const provider = new GoogleAuthProvider();
 const guestEmail = "guest@gmail.com";
 const guestPassword = "guest123";
@@ -81,7 +79,8 @@ export const handleLogin = (router: any) => {
     });
 };
 
-export const loginWithGoogle = async () => {
+export const loginWithGoogle = async (router: any) => {
+  console.log("accessed");
   try {
     const userCredential = await signInWithPopup(auth, provider);
     const user = userCredential.user;
@@ -109,7 +108,7 @@ export const loginWithGoogle = async () => {
           faction: "", // Default value
           lastViewed: {}, // Default value
           studentId: "", // Default value
-          username: "", // Default value
+          username: user.email.split("@")[0], // Default value
         });
       } catch (error) {
         console.error("Error adding user to Firestore:", error);
@@ -117,7 +116,7 @@ export const loginWithGoogle = async () => {
     }
 
     // Navigate to the dashboard
-    router.push("/");
+    router.push({ name: "launchPage" });
   } catch (error) {
     console.error("Error logging in with Google:", error);
   }
