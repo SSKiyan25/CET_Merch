@@ -192,7 +192,7 @@
               </Button>
               <button
                 type="submit"
-                class="p-2 bg-emerald-700 text-sm text-primary-foreground hover:bg-primary/80 font-semibold rounded-lg"
+                class="p-2 bg-emerald-700 text-sm text-primary-foreground hover:bg-emerald-800 font-semibold rounded-lg"
               >
                 Update Product
               </button>
@@ -262,9 +262,20 @@ const categories = [
 
 const deletePhotoFromProduct = async (index: number) => {
   try {
-    const photoURL = product.value.photos[index];
+    // Make a copy of the photos array
+    const photosCopy = [...product.value.photos];
+
+    // Get the URL of the photo to delete
+    const photoURL = photosCopy[index];
+
+    // Delete the photo
     await deletePhotoController(photoURL, product.value.id);
-    product.value.photos.splice(index, 1);
+
+    // Remove the photo from the original photos array
+    const photoIndexInOriginalArray = product.value.photos.indexOf(photoURL);
+    if (photoIndexInOriginalArray !== -1) {
+      product.value.photos.splice(photoIndexInOriginalArray, 1);
+    }
   } catch (error) {
     console.error("Failed to delete photo:", error);
   }

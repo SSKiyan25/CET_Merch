@@ -201,7 +201,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="product in products" class="py-4 text-[10px] md:text-xs">
+            <tr
+              v-for="product in products"
+              class="py-4 text-[10px] md:text-xs hover:bg-primary/10"
+            >
               <td class="text-left p-2">{{ product?.name }}</td>
               <td class="text-center p-2">{{ product?.category }}</td>
               <td class="text-center p-2">{{ product?.views }}</td>

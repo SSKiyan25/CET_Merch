@@ -8,6 +8,8 @@ import {
   deletePhoto,
   Size,
   Product,
+  fetchSellerProducts,
+  fetchAllArchivedProducts,
 } from "../models/adminProductsModel";
 import {
   DocumentReference,
@@ -93,6 +95,60 @@ export const setup = () => {
     loadingPage.value = false;
   });
 
+  const fetchProductsBySearchController = async (search: string) => {
+    try {
+      const user = await fetchUser();
+      if (!user) {
+        console.error("User not found");
+        return;
+      }
+      // Fetch all products
+      let products = await fetchSellerProducts(user.faction, user.role);
+
+      // Apply search filter in application code
+      if (search) {
+        products = products.filter((product) =>
+          product.name.toLowerCase().includes(search.toLowerCase())
+        );
+      }
+
+      return products;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  const fetchProductsByCategoryController = async (category: string) => {
+    try {
+      const user = await fetchUser();
+      if (!user) {
+        console.error("User not found");
+        return;
+      }
+      // Fetch all products
+      let products = await fetchSellerProducts(user.faction, user.role);
+
+      // Apply category filter in application code
+      if (category && category !== "All") {
+        products = products.filter((product) => product.category === category);
+      }
+
+      return products;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  const fetchAllArchivedProductsForAdmin = async () => {
+    const user = await fetchUser();
+    if (!user || user.role !== "admin") {
+      console.error("User not authorized");
+      return;
+    }
+    const products = await fetchAllArchivedProducts();
+    return products;
+  };
+
   const nextPage = async () => {
     const user = await fetchUser();
     if (!user) {
@@ -100,7 +156,7 @@ export const setup = () => {
       return;
     }
     const faction = user.role === "admin" ? "all" : user.faction;
-    if ((currentPage.value + 1) * 5 < totalProducts.value) {
+    if ((currentPage.value + 1) * 10 < totalProducts.value) {
       loadingPage.value = true;
       currentPage.value = currentPage.value + 1;
       const startAfterDoc = lastDocs.value[currentPage.value - 1];
@@ -392,5 +448,8 @@ export const setup = () => {
     loadingPage,
     userData,
     sortedSizes,
+    fetchProductsByCategoryController,
+    fetchProductsBySearchController,
+    fetchAllArchivedProductsForAdmin,
   };
 };

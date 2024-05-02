@@ -631,13 +631,14 @@
                                     <span class="opacity-80">
                                       {{ index + 1 }} |</span
                                     >
-                                    <span class="pl-2 truncate opacity-80">
+                                    <span
+                                      class="pl-2 truncate opacity-80 underline underline-offset-2"
+                                    >
                                       {{
                                         product.details.name
                                           ? product.details.name
                                           : "Product not found"
                                       }}
-                                      --
                                     </span>
                                     <span class="px-2 font-bold text-primary">
                                       Size: {{ product.size }}
