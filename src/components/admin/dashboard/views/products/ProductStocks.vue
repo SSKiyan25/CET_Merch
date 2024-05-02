@@ -30,7 +30,10 @@
               >Add Size?</label
             >
           </SheetTrigger>
-          <SheetContent side="bottom" class="h-[800px] md:h-[300px]">
+          <SheetContent
+            side="bottom"
+            class="h-[800px] md:h-[320px] overflow-auto"
+          >
             <SheetHeader>
               <SheetTitle>
                 <div class="text-center text-xl pb-2 border-b">
@@ -112,7 +115,7 @@
                   type="submit"
                   :class="{
                     'opacity-50': selectedSizesData.some(
-                      (item:any) => item.data.stocks === 0 || item.data.price === 0
+                      (item:any) =>  item.data.price === 0
                     ),
                   }"
                 >

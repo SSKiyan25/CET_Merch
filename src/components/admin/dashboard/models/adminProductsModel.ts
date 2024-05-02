@@ -50,7 +50,7 @@ export interface Product {
 export const fetchProducts = async (
   faction: string,
   startAfterDoc: DocumentSnapshot | null = null,
-  limitCount = 5
+  limitCount = 10
 ) => {
   const productCollection = collection(db, "products");
   let q;
@@ -111,6 +111,48 @@ export const fetchProduct = async (id: string) => {
     return data ? { id: singleProductSnapshot.id, ...data } : null;
   }
   return null;
+};
+
+export const fetchSellerProducts = async (
+  userFaction: string,
+  userRole: string
+) => {
+  const productCollection = collection(db, "products");
+  let q;
+
+  if (userRole === "admin") {
+    // Fetch all products if user is an admin
+    q = query(
+      productCollection,
+      where("isArchived", "==", false),
+      where("isPublished", "==", true)
+    );
+  } else {
+    // Fetch products with the same faction if user is not an admin
+    q = query(
+      productCollection,
+      where("faction", "==", userFaction),
+      where("isArchived", "==", false),
+      where("isPublished", "==", true)
+    );
+  }
+
+  const productsSnapshot = await getDocs(q);
+  return productsSnapshot.docs.map((doc: any) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Product[];
+};
+
+export const fetchAllArchivedProducts = async () => {
+  // Fetch all products where isArchived is true
+  const productCollection = collection(db, "products");
+  const q = query(productCollection, where("isArchived", "==", true));
+  const productsSnapshot = await getDocs(q);
+  return productsSnapshot.docs.map((doc: any) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Product[];
 };
 
 async function uploadFileToFirebase(

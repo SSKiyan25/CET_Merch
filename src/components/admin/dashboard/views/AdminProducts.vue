@@ -31,77 +31,75 @@
           ></router-link>
         </div>
 
-        <form>
-          <div class="flex relative w-full items-center space-x-1 pb-2">
-            <Input
-              id="search"
-              type="text"
-              placeholder="Search..."
-              class="pl-10 text-[10px] md:text-xs"
-              v-model="searchInput"
-            />
-            <span
-              class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
-            >
-              <MagnifyingGlassIcon class="size-6 text-foreground pb-1" />
-            </span>
-            <Popover v-model:open="open">
-              <PopoverTrigger as-child>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  :aria-expanded="open"
-                  class="w-[200px] justify-between text-xs md:text-sm"
-                >
-                  {{
-                    selectedCategory !== "All"
-                      ? frameworks.find(
-                          (framework) => framework.value === selectedCategory
-                        )?.label
-                      : "Select Category"
-                  }}
-                  <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent class="w-[200px] p-0">
-                <Command>
-                  <CommandInput class="h-9" placeholder="Search Category" />
-                  <CommandEmpty>No framework found.</CommandEmpty>
-                  <CommandList>
-                    <CommandGroup>
-                      <CommandItem
-                        v-for="framework in frameworks"
-                        :key="framework.value"
-                        :value="framework.value"
-                        @select="
-                          (ev) => {
-                            if (typeof ev.detail.value === 'string') {
-                              selectedCategory = ev.detail.value;
-                            }
-                            open = false;
+        <div class="flex relative w-full md:w-2/5 items-center space-x-1 pb-2">
+          <Input
+            id="search"
+            type="text"
+            placeholder="Search..."
+            class="pl-10 text-[10px] md:text-xs"
+            v-model="searchInput"
+          />
+          <span
+            class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
+          >
+            <MagnifyingGlassIcon class="size-6 text-foreground pb-1" />
+          </span>
+          <Popover v-model:open="open">
+            <PopoverTrigger as-child>
+              <Button
+                variant="outline"
+                role="combobox"
+                :aria-expanded="open"
+                class="w-[200px] justify-between text-xs md:text-sm"
+              >
+                {{
+                  selectedCategory !== "All"
+                    ? frameworks.find(
+                        (framework) => framework.value === selectedCategory
+                      )?.label
+                    : "Select Category"
+                }}
+                <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent class="w-[200px] p-0">
+              <Command>
+                <CommandInput class="h-9" placeholder="Search Category" />
+                <CommandEmpty>No framework found.</CommandEmpty>
+                <CommandList>
+                  <CommandGroup>
+                    <CommandItem
+                      v-for="framework in frameworks"
+                      :key="framework.value"
+                      :value="framework.value"
+                      @select="
+                        (ev) => {
+                          if (typeof ev.detail.value === 'string') {
+                            selectedCategory = ev.detail.value;
                           }
+                          open = false;
+                        }
+                      "
+                      class="cursor-pointer"
+                    >
+                      {{ framework.label }}
+                      <Check
+                        :class="
+                          cn(
+                            'ml-auto h-4 w-4',
+                            selectedCategory === framework.value
+                              ? 'opacity-100'
+                              : 'opacity-0'
+                          )
                         "
-                        class="cursor-pointer"
-                      >
-                        {{ framework.label }}
-                        <Check
-                          :class="
-                            cn(
-                              'ml-auto h-4 w-4',
-                              selectedCategory === framework.value
-                                ? 'opacity-100'
-                                : 'opacity-0'
-                            )
-                          "
-                        />
-                      </CommandItem>
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
-          </div>
-        </form>
+                      />
+                    </CommandItem>
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </div>
       </div>
 
       <!-- Table Section -->
@@ -230,12 +228,12 @@
                     </tr>
                     <tr
                       v-else
-                      v-for="(product, index) in filteredProducts"
+                      v-for="(product, index) in products"
                       :key="product.id"
                       class="hover:bg-primary/10"
                     >
                       <td>
-                        <div class="pl-4 w-48 py-3">
+                        <div class="pl-4 w-48 md:w-96 py-3">
                           <p class="w-full whitespace-normal">
                             <span
                               class="text-xs md:text-sm text-secondary-foreground"
@@ -344,7 +342,7 @@
                                       class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
                                     >
                                       <div
-                                        class="relative p-4 w-full max-w-4xl max-h-screen bg-background rounded-lg shadow overflow-y-auto"
+                                        class="relative p-4 w-full max-w-4xl max-h-[600px] bg-background rounded-lg shadow overflow-y-auto"
                                       >
                                         <div
                                           class="modal-header flex items-center justify-between p-4 md:p-5 border-b rounded-t border-secondary-foreground/90"
@@ -505,28 +503,22 @@
                   class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-t border-primary/20"
                 >
                   <div>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                    <p class="text-sm text-gray-600">
                       Showing
-                      <span
-                        class="font-semibold text-gray-800 dark:text-gray-200"
-                      >
-                        {{ currentPage * 5 + 1 }}
+                      <span class="font-semibold text-gray-800">
+                        {{ currentPage * 10 + 1 }}
                       </span>
                       -
-                      <span
-                        class="font-semibold text-gray-800 dark:text-gray-200"
-                      >
+                      <span class="font-semibold text-gray-800">
                         {{
-                          (currentPage + 1) * 5 > totalProducts
-                            ? totalProducts
-                            : (currentPage + 1) * 5
+                          (currentPage + 1) * 10 > filteredProductsCount
+                            ? filteredProductsCount
+                            : (currentPage + 1) * 10
                         }}
                       </span>
                       results
-                      <span
-                        class="font-semibold text-gray-800 dark:text-gray-200"
-                      >
-                        out of {{ totalProducts }} total Products
+                      <span class="font-semibold text-gray-800">
+                        out of {{ filteredProductsCount }} total Products
                       </span>
                     </p>
                   </div>
@@ -655,21 +647,39 @@ const {
   prevPage,
   currentPage,
   loadingPage,
+  fetchProductsBySearchController,
+  fetchProductsByCategoryController,
 } = setupProductController();
 const showProductModal = ref(products.value.map(() => false));
 
-let filteredProducts = ref<any[]>([]);
+//let filteredProducts = ref<any[]>([]);
 
-watchEffect(() => {
-  filteredProducts.value = products.value.filter((product) => {
-    const isNameMatch = product.name
-      .toLowerCase()
-      .includes(searchInput.value.toLowerCase());
-    const isCategoryMatch =
-      selectedCategory.value === "All" ||
-      product.category === selectedCategory.value;
-    return isNameMatch && isCategoryMatch;
-  });
+let filteredProductsCount = ref(totalProducts.value);
+
+watchEffect(async () => {
+  if (selectedCategory.value !== "All") {
+    const fetchedProducts = await fetchProductsByCategoryController(
+      selectedCategory.value
+    );
+    console.log(`Fetched products: ${JSON.stringify(fetchedProducts)}`);
+    products.value = fetchedProducts || [];
+    filteredProductsCount.value = products.value.length;
+  } else {
+    filteredProductsCount.value = totalProducts.value;
+  }
+});
+
+watchEffect(async () => {
+  if (searchInput.value) {
+    const fetchedProducts = await fetchProductsBySearchController(
+      searchInput.value
+    );
+    console.log(`Fetched products: ${JSON.stringify(fetchedProducts)}`);
+    products.value = fetchedProducts || [];
+    filteredProductsCount.value = products.value.length;
+  } else {
+    filteredProductsCount.value = totalProducts.value;
+  }
 });
 
 const formatDate = (dateString: string) => {
