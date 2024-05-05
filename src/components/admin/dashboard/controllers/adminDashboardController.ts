@@ -1,7 +1,10 @@
 import { fetchUser } from "../models/userModel";
 import { fetchPendingOrdersCount } from "../../orders/models/adminOrdersModel";
 import { fetchInboxMessages } from "../../inbox/controllers/inboxController";
-import { fetchSellerProducts } from "../models/adminDashboardModel";
+import {
+  fetchSellerProducts,
+  fetchSellers,
+} from "../models/adminDashboardModel";
 
 export const fetchTotalPendingOrders = async () => {
   const totalPendingOrders = await fetchPendingOrdersCount();
@@ -26,4 +29,9 @@ export const fetchTotalUnreadMessages = async () => {
 export const fetchDashboardProducts = async () => {
   const products = await fetchSellerProducts();
   return products;
+};
+
+export const fetchDashboardSellers = async () => {
+  const sellers = await fetchSellers();
+  return sellers;
 };

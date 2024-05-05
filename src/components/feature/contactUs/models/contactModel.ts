@@ -12,3 +12,11 @@ export interface Inbox {
   dateSent: string;
   status: string;
 }
+
+export interface Seller {
+  contactEmail: string;
+  phoneNumber: string;
+  faction: string;
+  fbLink: string;
+  role: string;
+}

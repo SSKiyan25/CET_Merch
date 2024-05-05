@@ -197,7 +197,7 @@
               aria-hidden="true"
               class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
             >
-              <div class="relative p-4 w-full max-w-2xl max-h-full">
+              <div class="relative p-4 w-full max-w-3xl max-h-full">
                 <div
                   class="relative bg-white rounded-lg shadow dark:bg-gray-700"
                 >
@@ -244,17 +244,19 @@
                       agree to be bound by these Terms.
                     </p>
                     <h3 class="font-semibold text-lg">II. User Data</h3>
-                    <p class="text-[10px] md:text-xs p-2 text-justify indent-4">
+                    <p
+                      class="text-[10px] md:text-xs px-2 text-justify indent-4"
+                    >
                       The Website collects the following data from users during
                       the checkout process:
-                      <span class="font-bold">
-                        <p class="text-xs">____</p>
+                      <div class="flex-col font-bold pb-2">
+                        
                         <p class="text-xs">Name</p>
                         <p class="text-xs">Phone</p>
                         <p class="text-xs">Number</p>
                         <p class="text-xs">Email Address</p>
-                        <p class="text-xs">_____</p>
-                      </span>
+                        
+                      </div>
                       Student ID Department This data is used solely for
                       record-keeping purposes and to facilitate the reservation
                       process. It functions similarly to a face-to-face
