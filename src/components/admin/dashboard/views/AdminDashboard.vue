@@ -82,13 +82,198 @@
         </div>
       </div>
     </div>
+    <div v-if="!isAdmin" class="flex flex-col p-4 border-2 rounded-lg py-5">
+      <div class="flex flex-row border-b-2">
+        <h3 class="font-bold text-xl tracking-wide">Contact Information</h3>
+      </div>
+      <div class="p-4 pt-8">
+        <div class="grid md:grid-cols-2 gaps-8">
+          <div class="flex flex-row space-x-2 items-center">
+            <label class="font-semibold text-[10px] md:text-xs"
+              >Contact Email Address:</label
+            >
+            <input
+              type="email"
+              id="email"
+              class="p-1.5 text-[10px] md:text-xs min-w-48 border border-primary rounded-sm"
+              v-bind:disabled="!isEditing"
+              :class="{ 'opacity-50 border border-gray-400': !isEditing }"
+              placeholder="Enter Email Address"
+              v-model="formData.contactEmail"
+            />
+          </div>
+          <div class="flex flex-row space-x-2 items-center">
+            <label class="font-semibold text-[10px] md:text-xs"
+              >Phone Number:</label
+            >
+            <input
+              type="text"
+              id="phone_number"
+              class="p-1.5 text-[10px] md:text-xs min-w-48 border border-primary rounded-sm"
+              v-bind:disabled="!isEditing"
+              :class="{ 'opacity-50 border border-gray-400': !isEditing }"
+              placeholder="No Existing Contact Number"
+              v-model="formData.phoneNumber"
+            />
+          </div>
+          <div class="flex flex-row space-x-2 items-center pt-4">
+            <label class="font-semibold text-[10px] md:text-xs"
+              >Facebook Page Link:</label
+            >
+            <input
+              type="text"
+              id="fb_link"
+              v-bind:disabled="!isEditing"
+              :class="{ 'opacity-50 border border-gray-400': !isEditing }"
+              class="p-1.5 text-[10px] md:text-xs min-w-48 border border-primary rounded-sm"
+              placeholder="No Existing Fb Page Link"
+              v-model="formData.fbLink"
+            />
+          </div>
+        </div>
+        <div
+          v-if="editLoading"
+          class="flex items-center justify-center absolute inset-0 z-50 bg-black w-auto h-auto bg-opacity-10"
+        >
+          <span
+            class="material-symbols-outlined text-6xl text-primary animate-spin opacity-90"
+          >
+            autorenew
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-row border-t pt-2 pr-2 justify-end items-center">
+        <button
+          v-if="!isEditing"
+          @click.prevent="isEditing = true"
+          class="py-2 px-4 text-xs rounded-sm text-white bg-red-800"
+        >
+          Edit
+        </button>
+        <button
+          v-if="isEditing"
+          @click.prevent="saveChanges"
+          class="py-2 px-4 text-xs rounded-sm text-white bg-emerald-800"
+        >
+          Save Changes
+        </button>
+      </div>
+    </div>
 
     <div v-if="isAdmin" class="flex flex-col p-4 border-2 rounded-lg py-5">
+      <div
+        class="flex flex-col justify-start items-start md:flex-row just md:justify-between md:items-center border-b-2 pb-4 space-y-4"
+      >
+        <div>
+          <h3 class="font-bold text-xl tracking-wide">
+            Seller Contact Information
+          </h3>
+        </div>
+        <div>
+          <Select v-model="selectedDepartment">
+            <SelectTrigger class="w-[250px] md:w-[200px]">
+              <SelectValue placeholder="Select department" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel class="border-b">Departments</SelectLabel>
+                <SelectItem value="CET">CET</SelectItem>
+                <SelectItem value="BSCS">BSCS</SelectItem>
+                <SelectItem value="BSCE">BSCE</SelectItem>
+                <SelectItem value="BSABE">BSABE</SelectItem>
+                <SelectItem value="BSGE">BSGE</SelectItem>
+                <SelectItem value="BSME">BSME</SelectItem>
+                <SelectItem value="BSMet">BSMet</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+      <div class="p-4 pt-8">
+        <div>
+          <h3 class="font-bold pb-4">
+            Department: {{ selectedDepartment || "" }}
+          </h3>
+        </div>
+        <div class="grid md:grid-cols-2 gaps-8">
+          <div class="flex flex-row space-x-2 items-center pb-4">
+            <label class="font-semibold text-[8px] md:text-xs"
+              >Contact Email Address:</label
+            >
+            <input
+              type="email"
+              id="email"
+              class="p-1.5 text-[10px] md:text-xs min-w-48 border border-primary rounded-sm"
+              v-bind:disabled="!isEditing"
+              :class="{ 'opacity-50 border border-gray-400': !isEditing }"
+              placeholder="Enter Email Address"
+              v-model="formData.contactEmail"
+            />
+          </div>
+          <div class="flex flex-row space-x-2 items-center">
+            <label class="font-semibold text-[8px] md:text-xs"
+              >Phone Number:</label
+            >
+            <input
+              type="text"
+              id="phone_number"
+              class="p-1.5 text-[10px] md:text-xs min-w-48 border border-primary rounded-sm"
+              v-bind:disabled="!isEditing"
+              :class="{ 'opacity-50 border border-gray-400': !isEditing }"
+              placeholder="No Existing Contact Number"
+              v-model="formData.phoneNumber"
+            />
+          </div>
+          <div class="flex flex-row space-x-2 items-center pt-4">
+            <label class="font-semibold text-[8px] md:text-xs"
+              >Facebook Page Link:</label
+            >
+            <input
+              type="text"
+              id="fb_link"
+              v-bind:disabled="!isEditing"
+              :class="{ 'opacity-50 border border-gray-400': !isEditing }"
+              class="p-1.5 text-[8px] md:text-xs w-3/5 md:w-64 border border-primary rounded-sm"
+              placeholder="No Existing Fb Page Link"
+              v-model="formData.fbLink"
+            />
+          </div>
+        </div>
+        <div
+          v-if="editLoading"
+          class="flex items-center justify-center absolute inset-0 z-50 bg-black w-auto h-auto bg-opacity-10"
+        >
+          <span
+            class="material-symbols-outlined text-6xl text-primary animate-spin opacity-90"
+          >
+            autorenew
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-row border-t pt-2 pr-2 justify-end items-center">
+        <button
+          v-if="!isEditing && !isFormDisabled"
+          @click.prevent="isEditing = true"
+          class="py-2 px-4 text-xs rounded-sm text-white bg-red-800"
+        >
+          Edit
+        </button>
+        <button
+          v-if="isEditing && !isFormDisabled"
+          @click.prevent="saveDepartmentChanges"
+          class="py-2 px-4 text-xs rounded-sm text-white bg-emerald-800"
+        >
+          Save Changes
+        </button>
+      </div>
+    </div>
+
+    <div v-if="isAdmin" class="flex flex-col p-4 border-2 rounded-lg py-5 mt-8">
       <div class="flex flex-row border-b-2">
         <h1 class="font-bold text-xl tracking-wide">Featured Images</h1>
         <div class="p-1">
           <!-- Upload Featured Image -->
-          <Popover v-model="isUploadPopoverOpen">
+          <Popover>
             <PopoverTrigger>
               <button title="Add an Image to be Featured">
                 <span class="material-symbols-outlined text-emerald-300">
@@ -220,7 +405,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, Ref } from "vue";
+import { ref, onMounted, Ref, watch, computed, onUnmounted } from "vue";
+import { db, auth } from "@/firebase/init";
+import { doc, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
 import NavBar from "../views/AdminNavBar.vue";
 import {
   Popover,
@@ -238,6 +425,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { setup as setupControllerFeatured } from "../controllers/adminUploadFeaturedController";
 import { useRouter } from "vue-router";
@@ -246,11 +442,21 @@ import {
   fetchTotalPendingOrders,
   fetchTotalUnreadMessages,
   fetchDashboardProducts,
+  fetchDashboardSellers,
 } from "../controllers/adminDashboardController";
+import { Seller } from "../models/adminDashboardModel";
 
 let totalProducts = ref(0);
 let totalPendingOrders = ref(0);
 let totalUnreadMessages = ref(0);
+const isEditing = ref(false);
+const editLoading = ref(false);
+
+const formData = ref({
+  contactEmail: "",
+  phoneNumber: "",
+  fbLink: "",
+});
 
 let products: Ref<
   ({
@@ -302,6 +508,111 @@ onMounted(async () => {
     console.error("Failed to fetch dashboard products");
   }
 });
+
+type SellerWithId = Seller & { id: string };
+
+let sellers: Ref<SellerWithId[]> = ref([]);
+
+const fetchSellersData = async () => {
+  const result = await fetchDashboardSellers();
+  if (result) {
+    sellers.value = result as SellerWithId[];
+  } else {
+    console.error("Failed to fetch sellers");
+  }
+};
+
+onMounted(async () => {
+  await fetchSellersData();
+});
+
+let selectedDepartment: Ref<string | undefined> = ref(undefined);
+const isFormDisabled = computed(() => selectedDepartment.value === undefined);
+let unsubscribeSnapshot: Ref<(() => void) | null> = ref(null);
+
+watch(selectedDepartment, (newVal) => {
+  // Unsubscribe from the previous snapshot listener, if any
+  if (unsubscribeSnapshot.value) {
+    unsubscribeSnapshot.value();
+    unsubscribeSnapshot.value = null;
+  }
+
+  if (newVal) {
+    const departmentData = sellers.value.find(
+      (seller) => seller.faction === newVal
+    );
+    if (departmentData) {
+      const sellerRef = doc(db, "users", departmentData.id);
+      unsubscribeSnapshot.value = onSnapshot(sellerRef, (doc) => {
+        if (doc.exists()) {
+          const updatedSeller = doc.data() as Seller;
+          formData.value.contactEmail = updatedSeller.contactEmail || "";
+          formData.value.phoneNumber = updatedSeller.phoneNumber || "";
+          formData.value.fbLink = updatedSeller.fbLink || "";
+        }
+      });
+    } else {
+      console.error("Failed to fetch department data");
+    }
+  }
+});
+
+const saveDepartmentChanges = async () => {
+  if (selectedDepartment.value) {
+    const sellerToUpdate = sellers.value.find(
+      (seller) => seller.faction === selectedDepartment.value
+    );
+    if (sellerToUpdate) {
+      const sellerRef = doc(db, "users", sellerToUpdate.id);
+      await updateDoc(sellerRef, {
+        contactEmail: formData.value.contactEmail,
+        phoneNumber: formData.value.phoneNumber,
+        fbLink: formData.value.fbLink,
+      });
+    }
+  }
+  isEditing.value = false;
+};
+
+onUnmounted(() => {
+  if (unsubscribeSnapshot.value) {
+    unsubscribeSnapshot.value();
+  }
+});
+
+onMounted(async () => {
+  const userId = auth.currentUser?.uid;
+  if (userId) {
+    const userRef = doc(db, "users", userId);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      const data = userSnap.data();
+      if (data) {
+        formData.value.contactEmail = data.contactEmail || "";
+        formData.value.phoneNumber = data.phoneNumber || "";
+        formData.value.fbLink = data.fbLink || "";
+      }
+    }
+  }
+});
+
+const editContactInfo = async () => {
+  const userId = auth.currentUser?.uid;
+  if (userId) {
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, {
+      contactEmail: formData.value.contactEmail,
+      phoneNumber: formData.value.phoneNumber,
+      fbLink: formData.value.fbLink,
+    });
+  }
+};
+
+const saveChanges = () => {
+  editContactInfo();
+  isEditing.value = false;
+};
+
 const {
   onFileChange,
   uploadFeaturedImage,
@@ -312,7 +623,6 @@ const {
 
 const router = useRouter();
 
-let isUploadPopoverOpen = ref(false);
 let isSuccessPopoverOpen = ref(false);
 
 const handleContinueClick = () => {

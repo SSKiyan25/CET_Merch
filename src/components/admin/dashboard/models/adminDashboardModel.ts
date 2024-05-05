@@ -2,6 +2,14 @@ import { db } from "@/firebase/init";
 import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
 import { fetchUser } from "../models/userModel";
 
+export interface Seller {
+  contactEmail: string;
+  phoneNumber: string;
+  faction: string;
+  fbLink: string;
+  role: string;
+}
+
 export const fetchSellerProducts = async () => {
   const productCollection = collection(db, "products");
   let q;
@@ -34,4 +42,17 @@ export const fetchSellerProducts = async () => {
   });
 
   return products;
+};
+
+export const fetchSellers = async (): Promise<Seller[]> => {
+  const userCollection = collection(db, "users");
+  const q = query(userCollection, where("role", "==", "seller"));
+
+  const userSnapshot = await getDocs(q);
+  const sellers = userSnapshot.docs.map((doc) => {
+    const data = doc.data() as Seller;
+    return data ? { id: doc.id, ...data } : null;
+  });
+
+  return sellers.filter(Boolean) as Seller[];
 };

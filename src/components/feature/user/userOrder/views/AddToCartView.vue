@@ -228,7 +228,7 @@
                 <button
                   type="button"
                   id="increment-button"
-                  @click.prevent="increment"
+                  @click.prevent="increment(product)"
                   data-input-counter-increment="quantity-input"
                   class="bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 focus:ring-2 focus:outline-none"
                 >
@@ -479,10 +479,10 @@ const props = defineProps({
 
 //console.log("productId in Cart component: ", props.productId);
 
-const increment = () => {
+const increment = (product: any) => {
   if (
     newAddToCartData.value.isPreOrdered &&
-    newAddToCartData.value.size !== ""
+    (newAddToCartData.value.size !== "" || product.sizes[0] == "N/A")
   ) {
     newAddToCartData.value.quantity++;
   } else {
