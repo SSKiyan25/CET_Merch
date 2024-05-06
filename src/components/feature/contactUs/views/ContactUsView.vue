@@ -642,8 +642,11 @@
   </div>
   <!-- End Contact Us -->
   <div class="pb-12"></div>
-  <div>
-    <LoadingComponent v-if="isLoading" />
+  <div
+    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-80"
+    v-if="isLoading"
+  >
+    <SentSuccessfullyComponent />
   </div>
 </template>
 
@@ -655,10 +658,10 @@ import {
   isLoading,
   fetchSellers,
 } from "../controllers/contactController";
-import LoadingComponent from "../../misc/LoadingComponent.vue";
-import { useRouter } from "vue-router";
+//import LoadingComponent from "../../misc/LoadingComponent.vue";
+import SentSuccessfullyComponent from "../components/SentSuccessfully.vue";
 import { Mail, PhoneCall, Facebook } from "lucide-vue-next";
-const router = useRouter();
+import { useRouter } from "vue-router";
 
 const inbox = ref({
   username: "",
@@ -674,6 +677,7 @@ const inbox = ref({
   status: "unread",
 } as Inbox);
 
+const router = useRouter();
 const sendInquiry = async () => {
   inbox.value.dateSent = new Date().toISOString();
   inbox.value.status = "unread";
