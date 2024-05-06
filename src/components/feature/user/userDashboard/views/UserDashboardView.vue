@@ -10,8 +10,8 @@
         <p
           class="text-xs md:text-sm py-1 text-justify text-secondary-foreground/60"
         >
-          This is your dashboard where you can manage your orders, inbox, and
-          other settings from here.
+          This is your dashboard where you can manage your orders, and personal
+          information from here.
         </p>
       </div>
     </div>
@@ -233,7 +233,7 @@
               >
             </div>
           </div>
-          <div class="flex flex-col md:flex-row flex-wrap">
+          <div class="flex flex-col md:flex-row flex-wrap space-y-2">
             <div
               class="px-2"
               v-for="(item, itemIndex) in recentOrder.cart"
@@ -266,7 +266,9 @@
             class="flex flex-col md:flex-row justify-between pt-4 px-4 text-xs items-start md:items-center space-y-4"
           >
             <div>
-              <span>Order Status: </span>
+              <span class="font-semibold text-[10px] md:text-xs"
+                >Order Status:
+              </span>
               <button
                 v-if="recentOrder.orderStatus === 'processing'"
                 class="p-2 bg-amber-600 text-white rounded-sm cursor-default capitalize"
@@ -337,7 +339,7 @@
                   recentOrder.orderStatus !== 'declined' &&
                   recentOrder.orderStatus !== 'cancelled'
                 "
-                class="px-2"
+                class="font-semibold text-[10px] md:text-xs px-2"
                 >Payment Status:</span
               >
               <Dialog>

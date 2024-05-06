@@ -10,10 +10,10 @@
         </span>
       </div>
       <div class="flex flex-col">
-        <h1 class="text-2xl">Welcome to the Products Page</h1>
+        <h1 class="text-xl md:text-2xl">Welcome to the Products Page</h1>
         <p class="text-sm py-1 text-secondary-foreground/50">
-          This is the admin products page. You can manage your products from
-          here. You can add, edit, and delete products from here.
+          You can manage your products from here. You can add, edit, and delete
+          products from here.
         </p>
       </div>
     </div>

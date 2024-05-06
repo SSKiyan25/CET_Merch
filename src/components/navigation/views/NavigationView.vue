@@ -299,7 +299,7 @@
                     to="/admin"
                     class="block px-4 py-2 text-sm text-black hover:bg-primary/20"
                     role="menuitem"
-                    >Seller Dashboard
+                    >Seller Hub
                   </router-link>
                 </li>
                 <li>
