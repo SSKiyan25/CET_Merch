@@ -202,7 +202,7 @@
               >
             </div>
           </div>
-          <div class="flex flex-col md:flex-row flex-wrap">
+          <div class="flex flex-col md:flex-row flex-wrap space-y-2">
             <div
               class="px-2"
               v-for="(item, itemIndex) in order.cart"
@@ -299,6 +299,7 @@
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
+
               <span
                 v-if="
                   order.paymentStatus !== 'declined' &&

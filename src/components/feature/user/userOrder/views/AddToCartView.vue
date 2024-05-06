@@ -482,11 +482,11 @@ const props = defineProps({
 const increment = (product: any) => {
   if (
     newAddToCartData.value.isPreOrdered &&
-    (newAddToCartData.value.size !== "" || product.sizes[0] == "N/A")
+    (newAddToCartData.value.size !== "" || product.sizes.hasOwnProperty("N/A"))
   ) {
     newAddToCartData.value.quantity++;
   } else {
-    const sizeItems = product.value.sizes[selectedSize.value.size];
+    const sizeItems = product.sizes[selectedSize.value.size];
     if (sizeItems) {
       const totalRemainingStocks = calculateTotalRemainingStocks(sizeItems);
       if (newAddToCartData.value.quantity < totalRemainingStocks) {

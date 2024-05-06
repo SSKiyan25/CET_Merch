@@ -38,7 +38,7 @@
             <table class="text-secondary-foreground w-full overflow-auto">
               <thead>
                 <tr
-                  class="uppercase md:tracking-wide text-[10px] md:text-xs text-primary/90"
+                  class="uppercase md:tracking-wide text-[8px] md:text-xs text-primary/90"
                 >
                   <th class="p-2 text-left md:w-2/12"></th>
                   <th class="p-2 text-left md:w-3/12">Product Name</th>
@@ -108,7 +108,9 @@
                   <td class="p-2 md:pl-4">
                     {{ product.size }} x {{ product.quantity }}
                   </td>
-                  <td class="p-2 pl-2 md:pl-10 text-wrap whitespace-normal">
+                  <td
+                    class="p-2 pl-2 md:pl-10 text-[8px] md:text-sm text-wrap whitespace-normal"
+                  >
                     <span v-if="product.isPreOrdered">
                       Pre-Ordered - {{ product.quantity }}
                     </span>
@@ -122,8 +124,8 @@
                         <span
                           v-if="sizeDetail.quantity !== 0"
                           class="text-[6px] font-bold md:font-medium md:text-xs"
-                          >|| {{ sizeDetail.quantity }} stocks ready for
-                          purchase ||</span
+                          >| {{ sizeDetail.quantity }} stocks ready for purchase
+                          |</span
                         >
                       </div>
                       <div
@@ -262,7 +264,7 @@
                         <span
                           v-if="sizeDetail.quantity !== 0"
                           class="text-[8px] md:text-xs"
-                          >|| {{ sizeDetail.price }} each ||</span
+                          >| {{ sizeDetail.price }} ea. |</span
                         >
                       </div>
                     </div>
@@ -276,8 +278,8 @@
                         <span
                           v-if="sizeDetail.quantity !== 0"
                           class="text-[8px] md:text-xs"
-                          >||
-                          {{ sizeDetail.price * sizeDetail.quantity }} ||</span
+                          >|
+                          {{ sizeDetail.price * sizeDetail.quantity }} |</span
                         >
                       </div>
                     </div>

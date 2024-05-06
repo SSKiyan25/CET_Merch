@@ -10,10 +10,10 @@
         </span>
       </div>
       <div class="flex flex-col">
-        <h1 class="text-2xl">Welcome to the Seller Dashboard</h1>
+        <h1 class="text-2xl">Welcome to the Seller Hub</h1>
         <p class="text-sm py-1 text-secondary-foreground/60">
-          This is the admin dashboard. You can manage your products, users, and
-          other settings from here.
+          This is the seller hub. You can manage your products, orders,
+          messages, and other settings from here.
         </p>
       </div>
     </div>
@@ -87,15 +87,15 @@
         <h3 class="font-bold text-xl tracking-wide">Contact Information</h3>
       </div>
       <div class="p-4 pt-8">
-        <div class="grid md:grid-cols-2 gaps-8">
+        <div class="grid md:grid-cols-2 gap-4">
           <div class="flex flex-row space-x-2 items-center">
-            <label class="font-semibold text-[10px] md:text-xs"
+            <label class="font-semibold text-[8px] md:text-xs"
               >Contact Email Address:</label
             >
             <input
               type="email"
               id="email"
-              class="p-1.5 text-[10px] md:text-xs min-w-48 border border-primary rounded-sm"
+              class="p-1.5 text-[8px] md:text-xs min-w-48 border border-primary rounded-sm"
               v-bind:disabled="!isEditing"
               :class="{ 'opacity-50 border border-gray-400': !isEditing }"
               placeholder="Enter Email Address"
@@ -103,21 +103,21 @@
             />
           </div>
           <div class="flex flex-row space-x-2 items-center">
-            <label class="font-semibold text-[10px] md:text-xs"
+            <label class="font-semibold text-[8px] md:text-xs"
               >Phone Number:</label
             >
             <input
               type="text"
               id="phone_number"
-              class="p-1.5 text-[10px] md:text-xs min-w-48 border border-primary rounded-sm"
+              class="p-1.5 text-[8px] md:text-xs min-w-48 border border-primary rounded-sm"
               v-bind:disabled="!isEditing"
               :class="{ 'opacity-50 border border-gray-400': !isEditing }"
               placeholder="No Existing Contact Number"
               v-model="formData.phoneNumber"
             />
           </div>
-          <div class="flex flex-row space-x-2 items-center pt-4">
-            <label class="font-semibold text-[10px] md:text-xs"
+          <div class="flex flex-row space-x-2 items-center">
+            <label class="font-semibold text-[8px] md:text-xs"
               >Facebook Page Link:</label
             >
             <input
@@ -125,7 +125,7 @@
               id="fb_link"
               v-bind:disabled="!isEditing"
               :class="{ 'opacity-50 border border-gray-400': !isEditing }"
-              class="p-1.5 text-[10px] md:text-xs min-w-48 border border-primary rounded-sm"
+              class="p-1.5 text-[8px] md:text-xs w-3/5 md:w-64 border border-primary rounded-sm"
               placeholder="No Existing Fb Page Link"
               v-model="formData.fbLink"
             />
