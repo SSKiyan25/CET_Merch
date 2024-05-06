@@ -10,8 +10,12 @@ export const createInboxMessage = async (inbox: Inbox, router: any) => {
   inbox.dateSent = new Date().toISOString();
   inbox.status = "unread";
   const docRef = await addDoc(inboxCollection, inbox);
-  isLoading.value = false;
-  router.push({ name: "launchPage" });
+
+  setTimeout(() => {
+    isLoading.value = false;
+    isLoading.value = false;
+    router.push({ name: "launchPage" });
+  }, 1500);
 
   return docRef.id;
 };
