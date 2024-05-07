@@ -30,8 +30,9 @@
             class="flex items-center md:space-x-3 space-x-1 rtl:space-x-reverse"
           >
             <img src="/logo-2.png" class="h-8" alt="Logo" />
-            <span class="self-center text-xl font-semibold whitespace-nowrap"
-              >CET</span
+            <span
+              class="self-center text-xl font-bold whitespace-nowrap uppercase"
+              >CET-Store</span
             >
           </router-link>
         </div>
