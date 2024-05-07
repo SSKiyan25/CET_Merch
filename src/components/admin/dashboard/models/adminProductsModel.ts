@@ -86,7 +86,6 @@ export const fetchProducts = async (
 
   const lastDoc = productSnapshot.docs[productSnapshot.docs.length - 1];
 
-  // Query to get total number of products
   let totalQuery;
   if (faction === "all") {
     totalQuery = query(productCollection, where("isArchived", "==", false));
@@ -175,14 +174,11 @@ async function uploadFileToFirebase(
         console.log("Upload is " + progress + "% done");
       },
       (error) => {
-        // Handle unsuccessful uploads
         console.error(error);
         reject(error);
       },
       async () => {
-        // Handle successful uploads on complete
         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-
         resolve(downloadURL);
       }
     );

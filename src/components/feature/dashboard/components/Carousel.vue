@@ -94,10 +94,9 @@ const fetchImages = async () => {
   imageUrls.value = urls;
   //console.log(imageUrls.value);
 
-  // Add a delay before setting loading back to false
   setTimeout(() => {
     loading.value = false;
-  }, 1000); // Delay of 1 second
+  }, 1000);
 };
 
 const plugin = Autoplay({

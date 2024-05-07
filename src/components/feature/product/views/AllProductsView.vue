@@ -162,15 +162,15 @@
             class="flex flex-row px-2 md:px-4 py-8 justify-center"
           >
             <div
-              class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-2"
+              class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3"
             >
               <div
                 v-if="!isLoading"
                 v-for="product in filteredProducts"
                 :key="product.id"
-                class="max-w-[75rem] justify-center items-center hover:drop-shadow-xl"
+                class="max-w-[75rem] justify-center items-center hover:drop-shadow-xl rounded-t-sm"
               >
-                <div class="group flex flex-col bg-white drop-shadow-lg">
+                <div class="group flex flex-col bg-white">
                   <div class="overflow-hidden border-b-2 border-primary/60">
                     <div
                       class="h-full flex flex-col justify-center items-center max-h-[22rem]"

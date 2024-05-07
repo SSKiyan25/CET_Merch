@@ -73,7 +73,6 @@ export const fetchOrders = async () => {
     throw new Error("User not authenticated");
   }
 
-  // Fetch the current user's data
   const userDoc = doc(db, "users", auth.currentUser.uid);
   const userData = (await getDoc(userDoc)).data();
 
@@ -138,7 +137,6 @@ export const fetchPendingOrdersCount = async () => {
     throw new Error("User not authenticated");
   }
 
-  // Fetch the current user's data
   const userDoc = doc(db, "users", auth.currentUser.uid);
   const userData = (await getDoc(userDoc)).data();
 

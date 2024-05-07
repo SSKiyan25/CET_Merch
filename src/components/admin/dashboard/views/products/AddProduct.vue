@@ -431,7 +431,7 @@ function getSizeData(size: string): ComputedRef<SizeData> {
         return sizeArray[0];
       }
     }
-    return { stocks: 0, price: 0 }; // default value
+    return { stocks: 0, price: 0 };
   });
 }
 
@@ -627,7 +627,6 @@ const handleFormSubmit = async (): Promise<boolean> => {
     // Convert sizes to an object
     const sizesObject = Object.fromEntries(newProduct.value.sizes.entries());
 
-    //Upload Product Data to the Firestore Database
     const productData = {
       name: newProduct.value.name,
       category: newProduct.value.category,

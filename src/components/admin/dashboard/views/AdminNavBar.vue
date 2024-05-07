@@ -60,7 +60,6 @@ auth.onAuthStateChanged(async (currentUser) => {
     user.value = currentUser;
     userEmail.value = currentUser.email || "";
 
-    // Fetch the user's document from Firestore
     const userDoc = doc(db, "users", currentUser.uid);
     const userSnap = await getDoc(userDoc);
 

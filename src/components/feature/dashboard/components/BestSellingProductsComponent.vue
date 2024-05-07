@@ -27,7 +27,7 @@
               v-if="!isLoading"
               v-for="product in products"
               :key="product.id"
-              class="flex flex-col bg-white border border-primary/50 shadow-xl hover:drop-shadow-xl w-full h-auto md:w-[21rem] md:h-[28rem]"
+              class="flex flex-col bg-white hover:drop-shadow-xl w-full h-auto md:w-[21rem] md:h-[28rem]"
             >
               <div class="overflow-hidden border-b">
                 <div

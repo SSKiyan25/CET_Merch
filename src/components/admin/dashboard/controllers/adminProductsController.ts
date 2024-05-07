@@ -349,16 +349,12 @@ export const setup = () => {
       if (productSnapshot.exists()) {
         const productData = productSnapshot.data() as Product;
 
-        // Make sure the size exists and the index is valid
         if (
           productData.sizes[sizeName] &&
           index >= 0 &&
           index < productData.sizes[sizeName].length
         ) {
-          // Remove the stock at the specified index
           productData.sizes[sizeName].splice(index, 1);
-
-          // Update the document with the modified sizes
           await updateDoc(productRef, { sizes: productData.sizes });
         }
       }
@@ -395,7 +391,6 @@ export const setup = () => {
           let stocks =
             typeof item.data.stocks === "number" ? item.data.stocks : 0;
 
-          // Create a new size object
           let newSize = {
             dateAdded: new Date().toISOString(),
             price: price,
@@ -412,11 +407,8 @@ export const setup = () => {
             productData.sizes[item.size] = [newSize];
           }
         }
-
-        // Update the document with the modified sizes
         await updateDoc(productRef, { sizes: productData.sizes });
 
-        // Manually update product.value
         product.value = productData;
       }
     } catch (err) {
