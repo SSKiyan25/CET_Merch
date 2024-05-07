@@ -22,7 +22,7 @@
               </p>
             </div>
           </div>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div
               v-if="!isLoading"
               v-for="product in products"
