@@ -31,7 +31,7 @@
           v-if="!isLoading"
           v-for="product in products"
           :key="product.id"
-          class="flex flex-col bg-white shadow-lg border border-primary/20 rounded-sm hover:drop-shadow-xl w-full h-auto md:w-full md:h-[22rem]"
+          class="flex flex-col bg-white rounded-sm hover:drop-shadow-xl w-full h-auto md:w-full md:h-[22rem]"
         >
           <div class="overflow-hidden border-b-2 border-primary/60">
             <div class="flex flex-col justify-center items-center">

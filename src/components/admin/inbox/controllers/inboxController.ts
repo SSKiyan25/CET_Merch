@@ -64,7 +64,6 @@ export const fetchInboxMessages = async (
     inboxQuery = query(inboxCollection, where("faction", "==", userFaction));
   }
 
-  // Add limit and startAfter to the query for pagination
   inboxQuery = query(inboxQuery, limit(10));
   if (startAfterDoc) {
     inboxQuery = query(inboxQuery, startAfter(startAfterDoc));
