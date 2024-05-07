@@ -2,7 +2,7 @@
   <div class="h-screen">
     <div class="flex pt-12 lg:pt-18 pb-20 justify-center">
       <div
-        class="p-14 sm:w-full md:w-1/2 lg:w-1/3 items-center justify-center bg-slate-100 border border-primary/20 rounded-xl shadow-sm"
+        class="p-14 h-full sm:w-full md:w-1/2 lg:w-1/3 items-center justify-center bg-slate-100 border border-primary/20 rounded-xl shadow-sm"
       >
         <div class="p-4 sm:p-7">
           <div class="text-center">
@@ -189,6 +189,7 @@
   <div v-if="loading">
     <LoadingComponent />
   </div>
+  <div class="h-24"></div>
 </template>
 
 <script setup lang="ts">
