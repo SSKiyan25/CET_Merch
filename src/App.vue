@@ -28,7 +28,8 @@ provide("toggleSidebar", toggleSidebar);
         $route.name === 'adminEditProduct' ||
         $route.name === 'adminOrders' ||
         $route.name === 'adminProductStocks' ||
-        $route.name === 'adminInbox',
+        $route.name === 'adminInbox' ||
+        $route.name === 'submitOrder',
     }"
   />
   <UserSidebar
@@ -69,7 +70,8 @@ provide("toggleSidebar", toggleSidebar);
         $route.name === 'adminProductStocks' ||
         $route.name === 'userOrders' ||
         $route.name === 'login' ||
-        $route.name === 'signup',
+        $route.name === 'signup' ||
+        $route.name === 'submitOrder',
     }"
   />
 </template>

@@ -11,7 +11,7 @@ export function setupProductController(route: any) {
     if (!product.value) return 0;
 
     // Initialize lowestPrice to Infinity. This is a special value in JavaScript that's greater than any other number.
-    // Used it here so that any price to compare it to at first will be lower.
+    //Used it here so that any price to compare it to at first will be lower.
     let lowestPrice = Infinity;
 
     // Iterate over each size in the product

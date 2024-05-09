@@ -1,5 +1,5 @@
 <template>
-  <div class="relative h-screen">
+  <div class="relative h-full">
     <div class="flex pt-12 md:pt-24 pb-36 justify-center">
       <div
         class="p-7 w-full md:w-3/4 lg:w-5/6 items-center justify-center bg-accent border border-primary/20 rounded-xl shadow-sm overflow-auto"
@@ -243,7 +243,7 @@
                                     editOrder(currentProductIndex, tempQuantity)
                                   "
                                   type="submit"
-                                  >Save Cahanges</Button
+                                  >Save Changes</Button
                                 >
                                 <Button variant="outline" class="mb-2">
                                   Close</Button
@@ -386,7 +386,7 @@
                                 editOrder(currentProductIndex, tempQuantity)
                               "
                               type="submit"
-                              >Save Cahanges</Button
+                              >Save Changes</Button
                             >
                             <Button variant="outline" class="mb-2"
                               >Close</Button
