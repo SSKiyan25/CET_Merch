@@ -1,7 +1,7 @@
 <template>
   <NavBar />
   <AdminSidebar />
-  <div class="p-4 h-screen ml-2 sm:ml-64 pb-16">
+  <div class="p-4 h-full ml-2 sm:ml-64 pb-16">
     <div class="flex flex-row justify-start py-10">
       <div class="flex">
         <span class="material-symbols-outlined p-2 text-5xl"> mail </span>
@@ -81,25 +81,25 @@
                 <DropdownMenuSeparator />
                 <DropdownMenuCheckboxItem
                   v-model:checked="all"
-                  @change="checkAll"
+                  @click.prevent="checkAll"
                 >
                   Show All
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem
                   v-model:checked="unread"
-                  @change="checkOther"
+                  @click.prevent="checkOther('unread')"
                 >
                   Unread
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem
                   v-model:checked="starred"
-                  @change="checkOther"
+                  @click.prevent="checkOther('starred')"
                 >
                   Starred
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem
                   v-model:checked="done"
-                  @change="checkOther"
+                  @click.prevent="checkOther('done')"
                 >
                   Done
                 </DropdownMenuCheckboxItem>
@@ -290,23 +290,23 @@
                       <span
                         class="font-semibold text-gray-800 dark:text-gray-200"
                       >
-                        {{ (currentPage - 1) * 10 + 1 }}
+                        {{ currentPage * 10 + 1 }}
                       </span>
                       -
                       <span
                         class="font-semibold text-gray-800 dark:text-gray-200"
                       >
                         {{
-                          currentPage * 10 > totalInboxMessages
-                            ? totalInboxMessages
-                            : currentPage * 10
+                          (currentPage + 1) * 10 > totalMessagesFetched
+                            ? totalMessagesFetched
+                            : (currentPage + 1) * 10
                         }}
                       </span>
                       results
                       <span
                         class="font-semibold text-gray-800 dark:text-gray-200"
                       >
-                        out of {{ totalInboxMessages }} total messages
+                        out of {{ totalMessagesFetched }} total messages
                       </span>
                     </p>
                   </div>
@@ -392,6 +392,8 @@ import {
   updateInboxMessage,
   nextPage as nextPageInbox,
   prevPage as prevPageInbox,
+  getInboxPage,
+  totalMessagesFetched,
 } from "../controllers/inboxController";
 import {
   Popover,
@@ -416,21 +418,26 @@ const done = ref<Checked>(false);
 const all = ref<Checked>(true);
 
 const inboxMessages = ref<Inbox[]>([]);
-const currentPage = ref(1);
+const currentPage = ref(0);
 
 onMounted(async () => {
-  inboxMessages.value = await fetchInboxMessages(currentPage.value);
+  await fetchInboxMessages();
+  inboxMessages.value = getInboxPage(currentPage.value);
 });
 
-const nextPage = async () => {
-  currentPage.value++;
-  inboxMessages.value = await nextPageInbox();
+const nextPage = () => {
+  const nextPageMessages = nextPageInbox();
+  if (nextPageMessages.length > 0) {
+    currentPage.value++;
+    inboxMessages.value = nextPageMessages;
+  }
 };
 
-const prevPage = async () => {
-  if (currentPage.value > 1) {
+const prevPage = () => {
+  const prevPageMessages = prevPageInbox();
+  if (prevPageMessages.length > 0) {
     currentPage.value--;
-    inboxMessages.value = await prevPageInbox();
+    inboxMessages.value = prevPageMessages;
   }
 };
 
@@ -456,14 +463,25 @@ const checkAll = () => {
   }
 };
 
-const checkOther = () => {
-  if (unread.value || starred.value || done.value) {
-    all.value = false;
+const checkOther = (selected: string) => {
+  all.value = false;
+  if (selected === "unread") {
+    unread.value = true;
+    starred.value = false;
+    done.value = false;
+  } else if (selected === "starred") {
+    starred.value = true;
+    unread.value = false;
+    done.value = false;
+  } else if (selected === "done") {
+    done.value = true;
+    unread.value = false;
+    starred.value = false;
   }
 };
 
 const filteredInboxMessages = computed(() => {
-  return inboxMessages.value.filter((message) => {
+  return inboxMessages.value.filter((message: any) => {
     const lowerCaseQuery = searchQuery.value.toLowerCase();
     return (
       message.username.toLowerCase().includes(lowerCaseQuery) ||
@@ -477,7 +495,7 @@ const filteredInboxMessages = computed(() => {
 const statusFilteredInboxMessages = computed(() => {
   let messages = filteredInboxMessages.value;
   if (!all.value) {
-    messages = messages.filter((message) => {
+    messages = messages.filter((message: any) => {
       return (
         (unread.value && message.status === "unread") ||
         (starred.value && message.status === "starred") ||
@@ -492,7 +510,7 @@ const statusFilteredInboxMessages = computed(() => {
     startDate.setHours(0, 0, 0, 0);
     endDate.setHours(23, 59, 59, 999);
 
-    messages = messages.filter((message) => {
+    messages = messages.filter((message: any) => {
       const messageDate = new Date(message.dateSent);
       return messageDate >= startDate && messageDate <= endDate;
     });
@@ -500,10 +518,6 @@ const statusFilteredInboxMessages = computed(() => {
 
   return messages;
 });
-
-const totalInboxMessages = computed(
-  () => statusFilteredInboxMessages.value.length
-);
 
 const formatDate = (dateString: string) => {
   const dateOptions = { year: "numeric", month: "long", day: "numeric" };

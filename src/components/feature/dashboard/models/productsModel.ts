@@ -85,7 +85,7 @@ export const fetchBestSellingProducts = async () => {
     where("isPublished", "==", true),
     where("totalSales", ">", 0),
     orderBy("totalSales", "desc"),
-    limit(4)
+    limit(3)
   );
   const productSnapshot = await getDocs(q);
   return productSnapshot.docs.map((doc) => ({

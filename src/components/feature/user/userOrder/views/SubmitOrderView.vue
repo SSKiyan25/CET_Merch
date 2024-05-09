@@ -1,5 +1,6 @@
 <template>
   <div class="pt-4 md:pt-6 px-2 md:px-8">
+    <!--
     <div class="flex flex-row items-center">
       <router-link to="/" class="cursor-pointer text-primary/50">
         <div class="flex flex-row items-center pt-0.5 hover:text-primary">
@@ -28,6 +29,7 @@
         <span class="text-xs text-primary"> SubmitOrder </span>
       </div>
     </div>
+    -->
   </div>
 
   <div class="max-w-[85rem] px-4 py-4 sm:px-6 lg:px-8 lg:py-8 mx-auto">

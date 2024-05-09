@@ -157,7 +157,7 @@
                 to="/signup"
                 class="bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-lg px-3 py-1 md:px-5 md:py-2.5 items-center"
               >
-                <span class="text-[10px] md:text-sm"> Sign up</span>
+                <span class="text-[10px] -mt-2 md:text-sm"> Sign up</span>
               </router-link>
             </div>
           </div>

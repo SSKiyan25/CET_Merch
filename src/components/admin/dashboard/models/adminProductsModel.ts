@@ -121,18 +121,13 @@ export const fetchSellerProducts = async (
 
   if (userRole === "admin") {
     // Fetch all products if user is an admin
-    q = query(
-      productCollection,
-      where("isArchived", "==", false),
-      where("isPublished", "==", true)
-    );
+    q = query(productCollection, where("isArchived", "==", false));
   } else {
     // Fetch products with the same faction if user is not an admin
     q = query(
       productCollection,
       where("faction", "==", userFaction),
-      where("isArchived", "==", false),
-      where("isPublished", "==", true)
+      where("isArchived", "==", false)
     );
   }
 

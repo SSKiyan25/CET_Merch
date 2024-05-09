@@ -6,9 +6,6 @@ import {
   doc,
   getDoc,
   updateDoc,
-  limit,
-  startAfter,
-  DocumentSnapshot,
 } from "firebase/firestore";
 import { db, auth } from "@/firebase/init";
 import { Inbox } from "../models/inboxModel";
@@ -35,17 +32,13 @@ const fetchUser = async () => {
   }
 };
 
-let lastDocs: (DocumentSnapshot | null)[] = [];
-
 let currentPage = { value: 0 };
-let totalInboxMessages = { value: 0 };
-let loadingPage = { value: false };
+export let totalMessagesFetched = 0;
 export let inbox: Inbox[] = [];
 
-export const fetchInboxMessages = async (
-  currentPageValue: number | null = null,
-  startAfterDoc: DocumentSnapshot | null = null
-): Promise<Inbox[]> => {
+export let allInboxMessages: Inbox[] = [];
+
+export const fetchInboxMessages = async (): Promise<void> => {
   let inboxCollection = collection(db, "inbox");
   let inboxQuery;
   let userFaction;
@@ -64,17 +57,12 @@ export const fetchInboxMessages = async (
     inboxQuery = query(inboxCollection, where("faction", "==", userFaction));
   }
 
-  inboxQuery = query(inboxQuery, limit(10));
-  if (startAfterDoc) {
-    inboxQuery = query(inboxQuery, startAfter(startAfterDoc));
-  }
-
   const inboxSnapshot = await getDocs(inboxQuery);
-  const inboxMessages: Inbox[] = [];
 
+  const tempInboxMessages: Inbox[] = [];
   inboxSnapshot.forEach((doc) => {
     const data = doc.data() as Inbox;
-    inboxMessages.push({
+    tempInboxMessages.push({
       id: doc.id,
       username: data.username,
       email: data.email,
@@ -86,39 +74,35 @@ export const fetchInboxMessages = async (
       studentId: data.studentId,
     });
   });
+  // Update totalMessagesFetched
+  totalMessagesFetched = tempInboxMessages.length;
 
-  // Save the last document from the results
-  let lastDoc = inboxSnapshot.docs[inboxSnapshot.docs.length - 1];
-  if (typeof currentPageValue === "number") {
-    lastDocs[currentPageValue] = lastDoc;
-  }
-
-  return inboxMessages;
+  // Sort the messages by date
+  allInboxMessages = tempInboxMessages.sort(
+    (a, b) => new Date(b.dateSent).getTime() - new Date(a.dateSent).getTime()
+  );
 };
 
-export const nextPage = async (): Promise<Inbox[]> => {
-  if ((currentPage.value + 1) * 5 < totalInboxMessages.value) {
-    loadingPage.value = true;
+export const nextPage = (): Inbox[] => {
+  if ((currentPage.value + 1) * 10 < allInboxMessages.length) {
     currentPage.value = currentPage.value + 1;
-    const startAfterDoc = lastDocs[currentPage.value - 1];
-    const newInbox = await fetchInboxMessages(currentPage.value, startAfterDoc);
-    loadingPage.value = false;
-    return newInbox;
+    return getInboxPage(currentPage.value);
   }
   return [];
 };
 
-export const prevPage = async (): Promise<Inbox[]> => {
+export const prevPage = (): Inbox[] => {
   if (currentPage.value > 0) {
-    loadingPage.value = true;
     currentPage.value = currentPage.value - 1;
-    const startAfterDoc =
-      currentPage.value > 0 ? lastDocs[currentPage.value - 1] : null;
-    const newInbox = await fetchInboxMessages(currentPage.value, startAfterDoc);
-    loadingPage.value = false;
-    return newInbox;
+    return getInboxPage(currentPage.value);
   }
   return [];
+};
+
+export const getInboxPage = (page: number, pageSize: number = 10): Inbox[] => {
+  const start = page * pageSize;
+  const end = Math.min(start + pageSize, allInboxMessages.length);
+  return allInboxMessages.slice(start, end);
 };
 
 export const updateInboxMessage = async (inbox: Inbox): Promise<void> => {

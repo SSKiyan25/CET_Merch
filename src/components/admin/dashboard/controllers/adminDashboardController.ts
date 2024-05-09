@@ -19,9 +19,13 @@ export const fetchTotalUnreadMessages = async () => {
   }
 
   const inboxMessages = await fetchInboxMessages();
-  const totalUnreadMessages = inboxMessages.filter(
-    (message) => message.status === "unread"
-  ).length;
+  let totalUnreadMessages = 0;
+
+  if (Array.isArray(inboxMessages)) {
+    totalUnreadMessages = inboxMessages.filter(
+      (message: any) => message.status === "unread"
+    ).length;
+  }
 
   return totalUnreadMessages;
 };
